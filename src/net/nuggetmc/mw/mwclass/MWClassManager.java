@@ -3,6 +3,7 @@ package net.nuggetmc.mw.mwclass;
 import net.md_5.bungee.api.ChatColor;
 import net.nuggetmc.mw.MegaWalls;
 import net.nuggetmc.mw.mwclass.classes.MWZombie;
+import net.nuggetmc.mw.special.TeamsManager;
 import net.nuggetmc.mw.utils.ItemUtils;
 import net.nuggetmc.mw.utils.WorldUtils;
 import org.bukkit.Bukkit;
@@ -27,6 +28,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scoreboard.Team;
 import org.spigotmc.event.player.PlayerSpawnLocationEvent;
 
 import java.math.BigDecimal;
@@ -85,7 +87,7 @@ public class MWClassManager implements Listener {
         return active;
     }
 
-    public void assign(Player player, MWClass mwclass, boolean items) {
+    public void assign(Player player, MWClass mwclass, TeamsManager.Team team) {
         PlayerInventory inventory = player.getInventory();
         inventory.clear();
 
@@ -96,17 +98,17 @@ public class MWClassManager implements Listener {
             player.setSaturation(20);
 
 
-        if (items) {
-            List<ItemStack> contents = ItemUtils.getAllContents(inventory).stream().filter(i -> !ItemUtils.isKitItem(i)).collect(Collectors.toList());
+            if (team!=null) {
+                List<ItemStack> contents = ItemUtils.getAllContents(inventory).stream().filter(i -> !ItemUtils.isKitItem(i)).collect(Collectors.toList());
 
-            inventory.clear();
+                inventory.clear();
 
-            Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                contents.forEach(i -> ItemUtils.givePlayerItemStack(player, i));
-            }, 1);
+                Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                    contents.forEach(i -> ItemUtils.givePlayerItemStack(player, i));
+                }, 1);
 
-            mwclass.assign(player);
-        }
+                mwclass.assign(player);
+            }
 
         active.put(player, mwclass);
       /*  plugin.getConfig().set("active_classes." + player.getName(), mwclass.getName());
@@ -116,8 +118,9 @@ public class MWClassManager implements Listener {
         }else {
             player.getPlayer().setGameMode(GameMode.SURVIVAL);
         }
+        String str= ((plugin.getTeamsManager().getSymbolOfTeam(team)));
         plugin.getCombatManager().addInCombat(player);
-        player.setPlayerListName(MegaWalls.getInstance().getCombatManager().isInCombat(player)?player.getDisplayName()+ChatColor.GRAY+" ["+plugin.getClassManager().get(player).getShortName()+"]":player.getDisplayName());
+        player.setPlayerListName(str+" "+(MegaWalls.getInstance().getCombatManager().isInCombat(player)?player.getDisplayName()+ChatColor.GRAY+" ["+plugin.getClassManager().get(player).getShortName()+"]":player.getDisplayName()));
         player.sendMessage(ChatColor.YELLOW+"You can use /mwshop and /mwsell to buy and sell items.Use /echest to open your enderchest.");
         if (mwclass.getShortName().equals("ZOM")){
             player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING,9999*20,2));

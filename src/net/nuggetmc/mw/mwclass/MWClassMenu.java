@@ -7,6 +7,7 @@ import net.nuggetmc.mw.mwclass.info.Diamond;
 import net.nuggetmc.mw.mwclass.info.EnumInfoType;
 import net.nuggetmc.mw.mwclass.info.MWClassInfo;
 import net.nuggetmc.mw.mwclass.info.Playstyle;
+import net.nuggetmc.mw.special.TeamsManager;
 import net.nuggetmc.mw.utils.WorldUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Bukkit;
@@ -66,11 +67,13 @@ public class MWClassMenu implements Listener {
         player.sendMessage("You have selected " + mwclass.getColor() + mwclass.getName() + ChatColor.RESET + ".");
         player.closeInventory();
 
+       TeamsManager.Team team= MegaWalls.getInstance().getTeamsManager().randomTeam(player);
         energyManager.clear(player);
         player.getInventory().clear();
-        manager.assign(player, mwclass, true);
-        Location loc=new Location(player.getWorld(),MegaWalls.getInstance().spawnx, MegaWalls.getInstance().spawny, MegaWalls.getInstance().spawnz);
-        player.teleport(WorldUtils.nearby(loc));
+        manager.assign(player, mwclass, team);
+        List<Double> list=MegaWalls.getInstance().getTeamsManager().getSpawnLocOfPlayer(player);
+        Location loc=new Location(player.getWorld(), list.get(0), list.get(1), list.get(2));
+        player.teleport(loc);
     }
 
     @EventHandler

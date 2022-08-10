@@ -12,11 +12,13 @@ import net.nuggetmc.mw.mwclass.MWClassManager;
 import net.nuggetmc.mw.mwclass.MWClassMenu;
 import net.nuggetmc.mw.mwclass.classes.*;
 import net.nuggetmc.mw.special.SpecialEventsManager;
+import net.nuggetmc.mw.special.TeamsManager;
 import net.nuggetmc.mw.utils.ItemUtils;
 import net.nuggetmc.mw.utils.MWHealth;
 import net.nuggetmc.mw.special.SpecialItemUtils;
 import net.nuggetmc.mw.utils.WorldUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.command.TabCompleter;
@@ -26,7 +28,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Level;
 
 public class MegaWalls extends JavaPlugin {
@@ -54,6 +58,13 @@ public class MegaWalls extends JavaPlugin {
     private MWHealth mwhealth;
     private EnergyManager energyManager;
     private CoinsManager coinsManager;
+
+    @Getter
+    public TeamsManager getTeamsManager() {
+        return teamsManager;
+    }
+
+    private TeamsManager teamsManager;
     private SpecialItemUtils specialItemUtils;
 
     @Getter
@@ -93,12 +104,13 @@ public class MegaWalls extends JavaPlugin {
     public CombatManager getCombatManager(){
         return combatManager;
     }
-    private boolean isChinese=(getConfig().get("use_chinese").equals(true));
+    private boolean isChinese;
    public boolean antistealDiamond;
     //it is used to stop players from mining diamonds when there is only themselves.
-    public int spawnx;
-    public int spawny;
-    public int spawnz;
+    public List<Double> redspawn;
+    public List<Double> greenspawn;
+    public List<Double> bluespawn;
+    public List<Double> yellowspawn;
     public static boolean OPBYPASSGM=false;
     @Override
     public void onEnable() {
@@ -108,6 +120,7 @@ public class MegaWalls extends JavaPlugin {
             isChinese=(getConfig().get("use_chinese").equals(true));
         }catch (Exception e){
             getConfig().set("use_chinese",false);
+            isChinese=false;
             saveConfig();
         }
         try {
@@ -118,16 +131,42 @@ public class MegaWalls extends JavaPlugin {
             saveConfig();
         }
         try {
-            spawnx= (int) getConfig().get("spawnloc.x");
-            spawny= (int) getConfig().get("spawnloc.y");
-            spawnz= (int) getConfig().get("spawnloc.z");
+            redspawn= getConfig().getDoubleList("spawnloc.red");
+            greenspawn=  getConfig().getDoubleList("spawnloc.green");
+            bluespawn= getConfig().getDoubleList("spawnloc.blue");
+            yellowspawn=  getConfig().getDoubleList("spawnloc.yellow");
         }catch (Exception e){
-            getServer().getLogger().log(Level.WARNING,"Failed to get spawn location.Generating a new one.");
-            getConfig().set("spawnloc.x",0);
-            getConfig().set("spawnloc.y",0);
-            getConfig().set("spawnloc.z",0);
-            saveConfig();
+
         }
+        if (redspawn==null){
+            getConfig().set("spawnloc.red",new double[]{0,100,0});
+            redspawn= new ArrayList<>(3);
+            redspawn.add(0d);
+            redspawn.add(100d);
+            redspawn.add(0d);
+        }
+        if (greenspawn==null){
+            getConfig().set("spawnloc.green",new double[]{0,100,0});
+            greenspawn=new ArrayList<>(3);
+            greenspawn.add(0d);
+            greenspawn.add(100d);
+            greenspawn.add(0d);
+        }
+        if (bluespawn==null){
+            getConfig().set("spawnloc.blue",new double[]{0,100,0});
+            bluespawn=new ArrayList<>(3);
+            bluespawn.add(0d);
+            bluespawn.add(100d);
+            bluespawn.add(0d);
+        }
+        if (yellowspawn==null){
+            getConfig().set("spawnloc.yellow",new double[]{0,0,0});
+            yellowspawn=new ArrayList<>(3);
+            yellowspawn.add(0d);
+            yellowspawn.add(100d);
+            yellowspawn.add(0d);
+        }
+
         try {
             OPBYPASSGM= (boolean) getConfig().get("opbypassgamemode");
         }catch (Exception e){
@@ -143,6 +182,7 @@ public class MegaWalls extends JavaPlugin {
         this.mwClassMenu = new MWClassMenu(this, "Class Selector");
         this.combatManager=new CombatManager();
         this.specialItemUtils=new SpecialItemUtils();
+        this.teamsManager=new TeamsManager();
         this.mwhealth = new MWHealth();
         this.shopMenu=new ShopMenu();
         this.sellMenu=new SellMenu();
@@ -188,6 +228,7 @@ public class MegaWalls extends JavaPlugin {
             this.shopMenu,
             this.sellMenu,
             this.specialEventsManager,
+            this.teamsManager,
             new WorldUtils()
         );
 
@@ -239,7 +280,7 @@ public class MegaWalls extends JavaPlugin {
             MWClass mwclass = mwClassManager.fetch(name);
             if (mwclass == null) continue;
 
-            mwClassManager.assign(player, mwclass, false);
+            mwClassManager.assign(player, mwclass, null);
 
             if (checkEnergy) {
                 if (sectionEnergy.contains(key)) {

@@ -8,8 +8,11 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.List;
+
 public class SetMWSpawnCommand implements CommandExecutor {
     private final MWClassManager manager;
+    private final MegaWalls  plugin=MegaWalls.getInstance();
 
     public SetMWSpawnCommand() {
         this.manager = MegaWalls.getInstance().getClassManager();
@@ -18,17 +21,33 @@ public class SetMWSpawnCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (sender instanceof Player) {
-            int blockX = ((Player) sender).getLocation().getBlockX();
-            int blockY = ((Player) sender).getLocation().getBlockY();
-            int blockZ = ((Player) sender).getLocation().getBlockZ();
-            MegaWalls.getInstance().spawnx= blockX;
-            MegaWalls.getInstance().spawny= blockY;
-            MegaWalls.getInstance().spawnz= blockZ;
-            MegaWalls.getInstance().getConfig().set("spawnloc.x", blockX);
-            MegaWalls.getInstance().getConfig().set("spawnloc.y", blockY);
-            MegaWalls.getInstance().getConfig().set("spawnloc.z", blockZ);
-            MegaWalls.getInstance().saveConfig();
-           sender.sendMessage("The " + ChatColor.GREEN + "Spawn Location" + ChatColor.RESET + " has been set to " + ChatColor.GREEN + blockX+","+blockY+","+blockZ + ChatColor.RESET + "!");
+            Player player=((Player) sender).getPlayer();
+            if (args.length!=1){
+                sender.sendMessage("Invalid Syntax! Usage: /mwspawn [RED,GREEN,BLUE,YELLOW]");
+            }else {
+                double[] doubles =new double[] {player.getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ()};
+                switch (args[0].toLowerCase()){
+                    case "red":
+                        plugin.getConfig().set("spawnloc.red", doubles);
+                        sender.sendMessage("success!");
+                        break;
+                    case "green":
+                        plugin.getConfig().set("spawnloc.green",doubles);
+                        sender.sendMessage("success!");
+                        break;
+                    case "blue":
+                        plugin.getConfig().set("spawnloc.blue",doubles);
+                        sender.sendMessage("success!");
+                        break;
+                    case "yellow":
+                        plugin.getConfig().set("spawnloc.yellow",doubles);
+                        sender.sendMessage("success!");
+                        break;
+                    default:
+                        sender.sendMessage("Invalid Syntax! Usage: /mwspawn [RED,GREEN,BLUE,YELLOW]");
+                }
+                plugin.saveConfig();
+            }
         }
 
         /*if (manager.getKitLock()) {
