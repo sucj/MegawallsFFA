@@ -149,8 +149,6 @@ public class EnergyManager implements Listener {
 
         if (type == Material.BOW && action.contains("LEFT_CLICK")&&(!(manager.get(player) instanceof MWDriver))) {
             callAbility(player);
-        }if (type == Material.BOW && action.contains("LEFT_CLICK")&&((manager.get(player) instanceof MWDriver))) {
-            ((MWDriver) manager.get(player)).changerideothers(player);
         }
 
         if (type.name().contains("SWORD") && action.contains("RIGHT_CLICK")) {

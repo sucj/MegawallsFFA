@@ -29,7 +29,6 @@ public class MWDriver extends MWClass {
 
     private Set<Player> runnerList=new HashSet<>();
     private Set<Player> abilitycache=new HashSet<>();
-    public final Map<Player, Boolean> rideothers = new HashMap<>();
 
 
     public MWDriver() {
@@ -48,7 +47,7 @@ public class MWDriver extends MWClass {
 
         this.classInfo = new MWClassInfo(
                 "Ride",
-                "Ride the closest player or make the closest player ride you\n when they are in a &a20 &rblocks radius, gaining Strength I,resistance &aI&r and jump_boost &aII&r for &a5 &rseconds,\ngiving the player &a1&r second of slowness in the max(255) level,\nleft click your bow to switch between the two modes.\nCooldown:&a20&rs.",
+                "Make the closest player ride you\n when they are in a &a20 &rblocks radius, gaining Strength I,resistance &aI&r and jump_boost &aII&r for &a5 &rseconds,\ngiving the player &a1&r second of slowness in the max(255) level.\nCooldown:&a20&rs.",
                 "L Runner",
                 "Once you are below 7 HP,you get 5 seconds of Absorption XX(20) , speed &aIII&r and jump boost &aIII&r for 12 seconds.\nIf that damage cause you to be dead,it will be cancelled.\nCooldown: &a50 &rseconds.",
                 "Solo handjob god",
@@ -124,11 +123,7 @@ public class MWDriver extends MWClass {
         }else {
             abilitycache.add(player);
             energyManager.clear(player);
-            if (rideothers.get(player)){
-                target.setPassenger(player);
-            }else {
                 player.setPassenger(target);
-            }
             target.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20,254));
             player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE,5*20,0));
             player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP,5*20,1));
@@ -191,18 +186,11 @@ public class MWDriver extends MWClass {
         }
 
         MWKit.assignItems(player, items);
-        if (!rideothers.containsKey(player)){
-            rideothers.put(player,true);
-        }
         if (runnerList.contains(player)){
             runnerList.remove(player);
         }
         if (abilitycache.contains(player)){
             abilitycache.remove(player);
         }
-    }
-    public void changerideothers(Player player){
-        rideothers.replace(player, !rideothers.get(player));
-        player.sendMessage(this.getColor()+"You now can "+(rideothers.get(player)?"ride on others!":"let others ride you!"));
     }
 }

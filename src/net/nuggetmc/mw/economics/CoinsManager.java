@@ -24,7 +24,6 @@ public class CoinsManager implements Listener {
     }
 
     public void set(Player player, int amount) {
-        if(player.isOp()) return;
         coinsData.put(player, amount);
 
         saveCoins(player, amount);
@@ -36,7 +35,6 @@ public class CoinsManager implements Listener {
     }
 
     public int get(Player player){
-        if(player.isOp()) return 1145141919;
         if (coinsData.containsKey(player)) {
             return coinsData.get(player);
         }
@@ -74,6 +72,9 @@ public class CoinsManager implements Listener {
         Map<String,Integer> data=new HashMap<>();
         ArrayList<String> mapArrayList=new ArrayList<>();
         for (String playername:plugin.getConfig().getConfigurationSection("coins").getKeys(false)){
+            if (playername=="keaidehuangpi"||playername=="Diana0307_"){
+                continue;
+            }
             data.put(playername,(plugin.getOrDefaultFromConfig("coins."+playername,0)));
         }
         for (int i=0;i<data.keySet().toArray().length;i++){
