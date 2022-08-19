@@ -1,7 +1,5 @@
 package net.nuggetmc.mw.command;
 
-import jdk.internal.org.objectweb.asm.commons.Method;
-import net.minecraft.server.v1_8_R3.ChatClickable;
 import net.nuggetmc.mw.MegaWalls;
 import net.nuggetmc.mw.mwclass.MWClassManager;
 import org.bukkit.Bukkit;
@@ -35,37 +33,33 @@ public class EchestCommand implements CommandExecutor {
                     }
                 return true;
             }
-                else if (args.length==1||args.length==2){
+            if(args.length == 1) {
                 if(player.isOp()||player.hasPermission("mw.admin")) {
 
                     String targetplayername = null;
                     Player targetplayer = null;
                     try {
                         targetplayername = args[0];
-                    } catch (ArrayIndexOutOfBoundsException e) {
+                    } catch(ArrayIndexOutOfBoundsException e) {
                         getServer().getLogger().warning("Missing argument on enderchestcommand... " + e);
                     }
-                    if (targetplayername != null) {
+                    if(targetplayername != null) {
                         targetplayer = Bukkit.getPlayerExact(targetplayername);
 
                         // Exceptions vermeiden if possible...
 
-                        if (targetplayer == null) {
+                        if(targetplayer == null) {
                             sender.sendMessage("Player is null!");
                             return true;
                         }
                     }
                     assert targetplayer != null;
-                    if (args.length == 1) {
-                        player.openInventory(targetplayer.getEnderChest());
-                    } else if (args.length == 2 && args[1] == "clear") {
-                        targetplayer.getEnderChest().clear();
-                    }
+                    player.openInventory(targetplayer.getEnderChest());
                     //player.openInventory(Bukkit.getPlayerExact(args[0]).getEnderChest());
                     return true;
-                }
-                }
 
+                }
+            }
 
 
 
@@ -73,5 +67,6 @@ public class EchestCommand implements CommandExecutor {
         }
             sender.sendMessage("this can pnly be used by player!");
             return true;
+
     }
 }
