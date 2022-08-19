@@ -33,8 +33,8 @@ public class ShopMenu implements Listener {
     Good golempot=new Good(specialItemUtils.getGolemPot(),ChatColor.stripColor(specialItemUtils.getGolemPot().getItemMeta().getDisplayName()),25,specialItemUtils.getGolemPot(),null);
    Good diamond=new Good(new ItemStack(Material.DIAMOND,1),"Diamond",50,new ItemStack(Material.DIAMOND,1),null);
    Good ironHelmet=new Good(new ItemStack(Material.IRON_HELMET,1),"Iron Helmet",10,new ItemStack(Material.IRON_HELMET,1),null);
-   Good ironChestplate=new Good(new ItemStack(Material.IRON_CHESTPLATE,1),"Iron CHESTPLATE",10,new ItemStack(Material.IRON_CHESTPLATE,1),null);
-   Good ironLeggings=new Good(new ItemStack(Material.IRON_LEGGINGS,1),"Iron LEGGINGS",10,new ItemStack(Material.IRON_LEGGINGS,1),null);
+   Good ironChestplate=new Good(new ItemStack(Material.IRON_CHESTPLATE,1),"Iron Chestplate",10,new ItemStack(Material.IRON_CHESTPLATE,1),null);
+   Good ironLeggings=new Good(new ItemStack(Material.IRON_LEGGINGS,1),"Iron Leggings",10,new ItemStack(Material.IRON_LEGGINGS,1),null);
    Good ironBoots=new Good(new ItemStack(Material.IRON_BOOTS,1),"Iron Boots",10,new ItemStack(Material.IRON_BOOTS,1),null);
 
     //an example
@@ -68,6 +68,10 @@ public class ShopMenu implements Listener {
        loadPriceOrDefault(this.squpot,30);
        loadPriceOrDefault(this.golempot,50);
        loadPriceOrDefault(this.diamond,100);
+       loadPriceOrDefault(this.ironHelmet,10);
+       loadPriceOrDefault(this.ironChestplate,10);
+       loadPriceOrDefault(this.ironBoots,10);
+       loadPriceOrDefault(this.ironLeggings,10);
     }
     private void loadPriceOrDefault(Good good, int defaulta){
         good.setPrice(plugin.getOrDefaultFromConfig("shop.price."+good.getDisplayName(),defaulta));
@@ -84,6 +88,11 @@ public class ShopMenu implements Listener {
             inv.setItem(12, squpot.getMenuItem());
             inv.setItem(13, golempot.getMenuItem());
             inv.setItem(14, diamond.getMenuItem());
+            inv.setItem(15, ironHelmet.getMenuItem());
+            inv.setItem(16, ironChestplate.getMenuItem());
+
+            inv.setItem(19, ironLeggings.getMenuItem());
+            inv.setItem(20, ironBoots.getMenuItem());
           //  inv.setItem(11, example);
 
 
