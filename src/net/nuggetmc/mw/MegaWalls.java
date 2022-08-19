@@ -105,7 +105,7 @@ public class MegaWalls extends JavaPlugin {
         return combatManager;
     }
     private boolean isChinese;
-   public boolean antistealDiamond;
+    public boolean antistealDiamond;
     //it is used to stop players from mining diamonds when there is only themselves.
     public List<Double> redspawn;
     public List<Double> greenspawn;
@@ -204,35 +204,36 @@ public class MegaWalls extends JavaPlugin {
         setExecutorAndTabCompleter("megawalls", new MegaWallsCommand());
 
         this.registerClasses(
-            new MWCreeper(),
-            new MWDreadlord(),
-            new MWEnderman(),
-            new MWGolem(),
-            new MWHerobrine(),
-            new MWSkeleton(),
-            new MWSpider(),
-            new MWSquid(),
-            new MWZombie(),
-            new MWCow(),
-            new MWDriver(),
-            new MWGuardian()
-           // new MWWereWolf()
+                new MWCreeper(),
+                new MWDreadlord(),
+                new MWEnderman(),
+                new MWGolem(),
+                new MWHerobrine(),
+                new MWSkeleton(),
+                new MWSpider(),
+                new MWSquid(),
+                new MWZombie(),
+                new MWCow(),
+                new MWDriver(),
+                new MWGuardian(),
+                new MWShark()
+                // new MWWereWolf()
         );
 
         this.registerEvents(
-            this.mwClassManager,
-            this.mwClassMenu,
-            this.mwhealth,
-            this.energyManager,
-            this.coinsManager,
-            this.shopMenu,
-            this.sellMenu,
-            this.specialEventsManager,
-            this.teamsManager,
-            new WorldUtils()
+                this.mwClassManager,
+                this.mwClassMenu,
+                this.mwhealth,
+                this.energyManager,
+                this.coinsManager,
+                this.shopMenu,
+                this.sellMenu,
+                this.specialEventsManager,
+                this.teamsManager,
+                new WorldUtils()
         );
 
-       // this.restore();
+        // this.restore();
         this.initEnergy();
 
         ItemUtils.tickMWItems();
@@ -242,7 +243,7 @@ public class MegaWalls extends JavaPlugin {
     public int getOrDefaultFromConfig(String path,int defaulta){
         int result;
         try {
-           result= (int) getConfig().get(path);
+            result= (int) getConfig().get(path);
         }catch (Exception e){
             getConfig().set(path,defaulta);
             result=defaulta;
@@ -324,13 +325,13 @@ public class MegaWalls extends JavaPlugin {
     public void setChinese(boolean chinese) {
         isChinese = chinese;
     }
-  //  @EventHandler
+    //  @EventHandler
     //public void onClearPot(PlayerDropItemEvent e){
 
-                //        e.getPlayer().getInventory().remove(Material.GLASS_BOTTLE);
-         //               return;
+    //        e.getPlayer().getInventory().remove(Material.GLASS_BOTTLE);
+    //               return;
     //Why not working?
-    }
+}
 
 
 
