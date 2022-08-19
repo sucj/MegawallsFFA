@@ -109,7 +109,6 @@ public class MWDreadlord extends MWClass {
                     for (Player target : Bukkit.getOnlinePlayers()) {
                         if (player == target) continue;
                         if (target.getWorld() != pointLoc.getWorld()) continue;
-
                         if (pointLoc.distance(target.getLocation().add(0, 1, 0)) < 1) {
                             witherSkullHit(player, pointLoc, target);
                             pt.remove();
@@ -134,12 +133,13 @@ public class MWDreadlord extends MWClass {
 
     private void witherSkullHit(Player player, Location loc, Player hit) {
         Set<Player> playersToDamage = new HashSet<>();
-        if (hit != null) playersToDamage.add(hit);
+        if ((hit != null)&&plugin.getTeamsManager().isOnSameTeam(player,hit)) playersToDamage.add(hit);
 
         WorldUtils.createNoDamageExplosion(loc, 2);
 
         for (Player target : Bukkit.getOnlinePlayers()) {
             if (player == target) continue;
+            if (plugin.getTeamsManager().isOnSameTeam(player,target)) continue;
             if (playersToDamage.contains(target)) continue;
             if (target.getWorld() != loc.getWorld()) continue;
 
@@ -164,6 +164,7 @@ public class MWDreadlord extends MWClass {
 
     @Override
     public void hit(EntityDamageByEntityEvent event) {
+        super.hit(event);
         if (event.isCancelled()) return;
         Player player = energyManager.validate(event);
         if (player == null) return;

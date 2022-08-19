@@ -66,7 +66,7 @@ public class MWHerobrine extends MWClass {
 
             Location loc = victim.getLocation();
 
-            if (player.getLocation().distance(loc) <= 5 && player != victim && !victim.isDead()) {
+            if (player.getLocation().distance(loc) <= 5 && player != victim && !victim.isDead()&&(!plugin.getTeamsManager().isOnSameTeam(player,victim))) {
                 world.strikeLightningEffect(loc);
                 pass = true;
 
@@ -90,6 +90,7 @@ public class MWHerobrine extends MWClass {
 
     @Override
     public void hit(EntityDamageByEntityEvent event) {
+        super.hit(event);
         if (event.isCancelled()) return;
         Player player = energyManager.validate(event);
         if (player == null) return;

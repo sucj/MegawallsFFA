@@ -75,4 +75,8 @@ public class Good {
 
         return item;
     }
+    @Override
+    public String toString(){
+        return  "Good{"+"name="+this.getDisplayName()+","+"price="+this.getPrice()+","+"theitem="+theItem.toString()+"}";
+    }
 }

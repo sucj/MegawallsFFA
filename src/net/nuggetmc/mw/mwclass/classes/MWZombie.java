@@ -12,10 +12,7 @@ import net.nuggetmc.mw.mwclass.items.MWKit;
 import net.nuggetmc.mw.mwclass.items.MWPotions;
 import net.nuggetmc.mw.utils.ParticleUtils;
 import net.nuggetmc.mw.utils.PotionUtils;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Sound;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
@@ -83,6 +80,19 @@ public class MWZombie extends MWClass {
         ParticleUtils.play(EnumParticle.HEART, loc, 0.5, 0.5, 0.5, 0.15, 12);
 
         player.getWorld().playSound(loc, Sound.LEVEL_UP, 1, 2);
+        for (Player player1 : Bukkit.getOnlinePlayers()){
+            if (player.getWorld() != player1.getWorld()) continue;
+            if (player1.isDead()) continue;
+            if (!plugin.getTeamsManager().isOnSameTeam(player,player1)) continue;
+            if (player==player1) continue;
+            if (player1.getLocation().distance(player.getLocation())>5) continue;
+            double healthh=player1.getHealth()+5;
+            if (healthh>player1.getMaxHealth()){
+                player1.setHealth(player1.getMaxHealth());
+            }else {
+                player1.setHealth(healthh);
+            }
+        }
     }
 
     /**
@@ -100,6 +110,7 @@ public class MWZombie extends MWClass {
 
     @Override
     public void hit(EntityDamageByEntityEvent event) {
+        super.hit(event);
         if (event.isCancelled()) return;
         Player player = energyManager.validate(event);
         if (player == null) return;

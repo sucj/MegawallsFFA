@@ -100,7 +100,15 @@ public abstract class MWClass implements Listener {
     public abstract void ability(Player player);
 
     public abstract void assign(Player player);
-    public abstract void hit(EntityDamageByEntityEvent e);
+    public void hit(EntityDamageByEntityEvent e) {
+        if (e.isCancelled()) return;
+        Player player = energyManager.validate(e);
+        if (player == null) return;
+        Player victim= (Player) e.getEntity();
+        if (MegaWalls.getInstance().getTeamsManager().isOnSameTeam(player,victim)){
+            e.setCancelled(true);
+        }
+    }
     public int getPrice(){
         return 0;
     }

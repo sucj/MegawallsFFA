@@ -90,7 +90,7 @@ public class MWEnderman extends MWClass {
         for (Player target : Bukkit.getOnlinePlayers()) {
             if (world != target.getWorld()) continue;
 
-            if (target != player && !target.isDead() && loc.distance(target.getLocation()) <= 25) {
+            if (target != player && !target.isDead() && loc.distance(target.getLocation()) <= 25&&(!plugin.getTeamsManager().isOnSameTeam(target,player))) {
                 valid.add(target);
             }
         }
@@ -205,6 +205,7 @@ public class MWEnderman extends MWClass {
 
     @Override
     public void hit(EntityDamageByEntityEvent event) {
+        super.hit(event);
         if (event.isCancelled()) return;
         Player player = energyManager.validate(event);
         if (player == null) return;

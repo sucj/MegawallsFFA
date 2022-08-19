@@ -145,6 +145,7 @@ public class MWDriver extends MWClass {
 
     @Override
     public void hit(EntityDamageByEntityEvent event) {
+        super.hit(event);
         if (event.isCancelled()) return;
         Player player = energyManager.validate(event);
         if (player == null) return;

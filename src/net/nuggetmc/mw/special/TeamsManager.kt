@@ -41,6 +41,7 @@ class TeamsManager :Listener {
      * tell if players are in the same team.
      */
     fun isOnSameTeam(player: Player,player1: Player):Boolean{
+        if((!plugin.combatManager.isInCombat(player))||(!plugin.combatManager.isInCombat(player1))) return false;
         return getTeamOfPlayer(player)==getTeamOfPlayer(player1)
     }
     fun isOnSameTeam(array:Array<Player>):Boolean{
