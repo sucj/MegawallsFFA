@@ -32,10 +32,16 @@ public class ShopMenu implements Listener {
     Good squpot=new Good(specialItemUtils.getSquidPot(),ChatColor.stripColor(specialItemUtils.getSquidPot().getItemMeta().getDisplayName()),15,specialItemUtils.getSquidPot(),null);
     Good golempot=new Good(specialItemUtils.getGolemPot(),ChatColor.stripColor(specialItemUtils.getGolemPot().getItemMeta().getDisplayName()),25,specialItemUtils.getGolemPot(),null);
    Good diamond=new Good(new ItemStack(Material.DIAMOND,1),"Diamond",50,new ItemStack(Material.DIAMOND,1),null);
+   Good ironHelmet=new Good(new ItemStack(Material.IRON_HELMET,1),"Iron Helmet",10,new ItemStack(Material.IRON_HELMET,1),null);
+   Good ironChestplate=new Good(new ItemStack(Material.IRON_CHESTPLATE,1),"Iron CHESTPLATE",10,new ItemStack(Material.IRON_CHESTPLATE,1),null);
+   Good ironLeggings=new Good(new ItemStack(Material.IRON_LEGGINGS,1),"Iron LEGGINGS",10,new ItemStack(Material.IRON_LEGGINGS,1),null);
+   Good ironBoots=new Good(new ItemStack(Material.IRON_BOOTS,1),"Iron Boots",10,new ItemStack(Material.IRON_BOOTS,1),null);
 
     //an example
-    private void registergood(Good good){
-        goods.put(good.getDisplayName(),good);
+    private void registergood(Good... GoodArray){
+        for (Good good:GoodArray){
+            goods.put(good.getDisplayName(),good);
+        }
     }
     private Good getGoodByName(String goodname){
         return goods.get(goodname);
@@ -43,11 +49,17 @@ public class ShopMenu implements Listener {
 
     public ShopMenu() {
         reloadPrices();
-        registergood(gapple);
-        registergood(milk);
-        registergood(squpot);
-        registergood(golempot);
-        registergood(diamond);
+        registergood(
+                gapple,
+                milk,
+                squpot,
+                golempot,
+                diamond,
+                ironHelmet,
+                ironChestplate,
+                ironBoots,
+                ironLeggings
+        );
     }
 
     private void reloadPrices() {
