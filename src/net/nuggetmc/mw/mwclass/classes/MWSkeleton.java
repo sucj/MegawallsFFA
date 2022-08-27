@@ -150,6 +150,7 @@ public class MWSkeleton extends MWClass {
 
         if (!cooldownCache.contains(player)) {
             PotionUtils.effect(player, "speed", 7, 1);
+            PotionUtils.effect(player, "regeneration", 7, 0);
 
             player.getWorld().playSound(player.getLocation(), Sound.SKELETON_WALK, 1, 1);
 
