@@ -10,14 +10,17 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockDispenseEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.player.*;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.math.BigDecimal;
+import java.util.Collection;
 
 import static net.nuggetmc.mw.MegaWalls.OPBYPASSGM;
 
@@ -158,6 +161,22 @@ public class SpecialEventsManager implements Listener {
                 return;
 
         }}
+    }
+    ///////////////////////////BREAK BLOCK
+    @EventHandler
+    public void onBreakGet(BlockBreakEvent e){
+        if (!plugin.getCombatManager().isInCombat(e.getPlayer())) return;
+
+        Collection<ItemStack> drops = e.getBlock().getDrops();
+
+
+            for (ItemStack itemStack: drops){
+                e.getPlayer().getInventory().addItem(itemStack);
+            }
+            e.getBlock().setType(Material.AIR);
+
+
+
     }
 
     ///////////////////////////MILK BUCKET

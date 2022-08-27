@@ -1,6 +1,7 @@
 package net.nuggetmc.mw.mwclass.classes
 
 import net.md_5.bungee.api.ChatColor
+import net.nuggetmc.mw.MegaWalls
 import net.nuggetmc.mw.mwclass.MWClass
 import net.nuggetmc.mw.mwclass.info.Diamond
 import net.nuggetmc.mw.mwclass.info.MWClassInfo
@@ -8,20 +9,18 @@ import net.nuggetmc.mw.mwclass.info.Playstyle
 import net.nuggetmc.mw.mwclass.items.MWItem
 import net.nuggetmc.mw.mwclass.items.MWKit
 import net.nuggetmc.mw.mwclass.items.MWPotions
-import net.nuggetmc.mw.utils.ActionBar
 import org.bukkit.Bukkit
 import org.bukkit.Material
+import org.bukkit.block.Block
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
-import org.bukkit.event.block.BlockBreakEvent
-import org.bukkit.event.block.BlockPlaceEvent
+import org.bukkit.event.block.BlockPhysicsEvent
 import org.bukkit.event.block.BlockSpreadEvent
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.inventory.ItemStack
-import org.bukkit.potion.PotionEffect
-import org.bukkit.potion.PotionEffectType
+import org.bukkit.scheduler.BukkitRunnable
 
 class MWShark() : MWClass(){
     var mine: MutableMap<Player, Int> = HashMap()
@@ -60,19 +59,39 @@ class MWShark() : MWClass(){
         var posY=player.location.blockY
         var location=player.getLocation()
         var world=player.world
+        var set=HashSet<Block>()
         for (i in -expand until expand+1){
-            if (world.getBlockAt(location.blockX+i,posY,location.blockZ).isEmpty){
+            val block = world.getBlockAt(location.blockX + i, posY, location.blockZ)
+            if (block.isEmpty){
 
 
-                        world.getBlockAt(location.blockX+i,posY,location.blockZ).setType(Material.STATIONARY_WATER,false)
-
+                        block.setType(Material.STATIONARY_WATER,false)
+                        if (!set.contains(block)) {
+                            set.add(block)
+                        }
                 for (j in -expand until expand+1){
-                    if (world.getBlockAt(location.blockX+i,posY,location.blockZ+j).isEmpty){
+                    val block1 = world.getBlockAt(location.blockX + i, posY, location.blockZ + j)
+                    if (block1.isEmpty){
 
-                        world.getBlockAt(location.blockX+i,posY,location.blockZ+j).setType(Material.STATIONARY_WATER,false)
+                        block1.setType(Material.STATIONARY_WATER,false)
+                        if (!set.contains(block1)){
+                            set.add(block1)
+                        }
                     }
                 }
             }
+        }
+        if (set.isNotEmpty()) {
+            Bukkit.getScheduler().runTaskLater(
+                MegaWalls.getInstance(),
+                {
+                for(i in  0 until set.size){
+                    val block=set.toArray().get(i) as Block
+                    block.setType(Material.AIR)
+                }
+                }
+                ,6*20
+            )
         }
     }
 
@@ -124,6 +143,10 @@ class MWShark() : MWClass(){
 
 
     }
-
+    @EventHandler
+    fun onPhysics(e: BlockPhysicsEvent) {
+        if (e.block.type.equals(Material.STATIONARY_WATER))
+        e.isCancelled=true;
+    }
 
     }
