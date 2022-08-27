@@ -32,7 +32,7 @@ public class MWCow extends MWClass {
     Map<Player,Integer> mine=new HashMap<>();
     final int cowBucketValue=60;
     private final Set<Player> willpowerList = new HashSet<>();
-    int dmgcount=0;
+    Map<Player,Integer> dmgcount=new HashMap<>();
 
     public MWCow() {
         this.name = new String[]{"牛","Cow","COW"};
@@ -103,13 +103,29 @@ public class MWCow extends MWClass {
         if (e.getBlock().getType()!=Material.STONE) return;
         if (mine.get(player)<cowBucketValue){
             mine.replace(player,mine.get(player)+1);
-            ActionBar.send(player,this.getColor()+"Ultra Pasteurized "+ChatColor.WHITE+mine.get(player)+"/"+cowBucketValue);
+            //ActionBar.send(player,this.getColor()+"Ultra Pasteurized "+ChatColor.WHITE+mine.get(player)+"/"+cowBucketValue);
         } else if (mine.get(player)==cowBucketValue) {
             mine.replace(player,0);
             player.getInventory().addItem(plugin.getSpecialItemUtils().getCowBucket(2));
-            ActionBar.send(player,this.getColor()+"Ultra Pasteurized "+ChatColor.GREEN+"✔");
+            //ActionBar.send(player,this.getColor()+"Ultra Pasteurized "+ChatColor.GREEN+"✔");
         }
         //❤❥✔✖✗✘❂⋆✢✭✬✫✪✩✦✥✤✣✮✷➡➧⬅⬇➟➢➙➴➽▄▜▛➝▄⚔
+
+    }
+    @Override
+    public String getActionBar(Player player){
+        String milk="";
+        if (mine.get(player)<cowBucketValue){
+            milk= this.getColor()+"Ultra Pasteurized "+ChatColor.WHITE+mine.get(player)+"/"+cowBucketValue+ChatColor.RESET;
+        } else if (mine.get(player)==cowBucketValue) {
+           milk= this.getColor()+"Ultra Pasteurized "+ChatColor.GREEN+"✔"+ChatColor.RESET;
+        }
+        String milkBarrier;
+        milkBarrier=this.getColor() + "Milk Barrier "+(willpowerList.contains(player)?ChatColor.RED + "✖":ChatColor.GREEN+ "✔")+ChatColor.RESET;
+
+
+        return milkBarrier+"    "+milk;
+
 
     }
 
@@ -149,20 +165,26 @@ public class MWCow extends MWClass {
         }else {
             mine.put(player,0);
         }
-        dmgcount=0;
+        if (dmgcount.containsKey(player)){
+            dmgcount.replace(player,0);
+        }else {
+            dmgcount.put(player,0);
+        }
+
     }
     private void BucketBarrier(Player player, double health, EntityDamageEvent e) {
         if (health <= 20) {
             if (willpowerList.contains(player)) return;
-            if (dmgcount==4) return;
-            if (dmgcount==0) {
+            if (dmgcount.get(player).equals(4)) return;
+            willpowerList.add(player);
+            if (dmgcount.get(player).equals(0)) {
                 player.sendMessage(this.getColor()+"You have activated the Bucket Barrier !");
             }
 
             int n=20;
 
 
-            dmgcount++;
+            dmgcount.replace(player,dmgcount.get(player)+1);
 
             e.setDamage(e.getDamage()*0.75);
             if (player.getHealth()>=player.getMaxHealth()-2) {
@@ -173,7 +195,7 @@ public class MWCow extends MWClass {
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
                 //Cool down finished
                 willpowerList.remove(player);
-                dmgcount=0;
+                dmgcount.replace(player,0);
             }, n * 20);
         }
     }

@@ -4,6 +4,7 @@ import net.nuggetmc.mw.MegaWalls;
 import net.nuggetmc.mw.mwclass.MWClass;
 import net.nuggetmc.mw.mwclass.MWClassManager;
 import net.nuggetmc.mw.mwclass.classes.MWDriver;
+import net.nuggetmc.mw.utils.ActionBar;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Arrow;
@@ -32,6 +33,7 @@ public class EnergyManager implements Listener {
         this.manager = plugin.getClassManager();
 
         Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, this::tick, 20, 20);
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, this::tickActionBar,0,0);
     }
 
     public void tick() {
@@ -48,6 +50,17 @@ public class EnergyManager implements Listener {
                 case "蜘蛛":
                     add(player, 4);
                     break;
+            }
+        }
+    }
+    public void tickActionBar() {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            MWClass mwclass = manager.get(player);
+
+            if (mwclass == null) continue;
+
+            if (manager.get(player).getActionBar(player)!=null){
+                ActionBar.send(player,manager.get(player).getActionBar(player));
             }
         }
     }

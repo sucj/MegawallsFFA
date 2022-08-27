@@ -112,4 +112,7 @@ public abstract class MWClass implements Listener {
     public int getPrice(){
         return 0;
     }
+    public String getActionBar(Player player){
+        return null;
+    }
 }

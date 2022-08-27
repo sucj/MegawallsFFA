@@ -112,7 +112,7 @@ public class ShopMenu implements Listener {
 
     public void select(Player player, Good good) {
         if (plugin.getCoinsManager().get(player)<good.getPrice()){
-            player.sendMessage("not enough price!");
+            player.sendMessage("not enough coins!");
         }else {
             plugin.getCoinsManager().add(player,-good.getPrice());
             player.sendMessage("You have purchased "+ChatColor.YELLOW+good.getDisplayName()+ChatColor.RESET+" with "+ChatColor.GREEN+good.getPrice()+ChatColor.RESET+" coins.");
