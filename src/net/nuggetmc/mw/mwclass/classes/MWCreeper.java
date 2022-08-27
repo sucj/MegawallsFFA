@@ -216,13 +216,13 @@ public class MWCreeper extends MWClass {
 
             if (own) {
                 n = 10;
-                PotionUtils.effect(player, "speed", 4, 1);
+                PotionUtils.effect(player, PotionEffectType.SPEED, 4, 1);
             }
 
             else {
                 n = 20;
-                PotionUtils.effect(player, "regeneration", 12);
-                PotionUtils.effect(player, "speed", 12, 1);
+                PotionUtils.effect(player, PotionEffectType.REGENERATION, 12);
+                PotionUtils.effect(player, PotionEffectType.SPEED, 12, 1);
             }
 
             ParticleUtils.play(EnumParticle.VILLAGER_ANGRY, loc, 0.5, 0.5, 0.5, 0.15, 1);

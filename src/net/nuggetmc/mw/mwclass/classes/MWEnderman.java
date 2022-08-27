@@ -21,6 +21,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
@@ -128,7 +129,7 @@ public class MWEnderman extends MWClass {
             energyManager.clear(player);
             player.teleport(target);
 
-            PotionUtils.effect(player, "speed", 5, 2);
+            PotionUtils.effect(player, PotionEffectType.SPEED, 5, 2);
             Location[] locs = new Location[]{loc, target.getLocation()};
 
             for (Location point : locs) {
@@ -217,7 +218,7 @@ public class MWEnderman extends MWClass {
 
         if (energy >= 80 && energy < 100) {
             if (!cooldownCacheRegen.contains(player)) {
-                PotionUtils.effect(player, "regeneration", 10);
+                PotionUtils.effect(player, PotionEffectType.REGENERATION, 10);
 
                 cooldownCacheRegen.add(player);
 

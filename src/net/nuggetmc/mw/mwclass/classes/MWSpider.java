@@ -73,7 +73,7 @@ public class MWSpider extends MWClass {
     @Override
     public void ability(Player player) {
         energyManager.clear(player);
-        PotionUtils.effect(player, "absorption", 5);
+        PotionUtils.effect(player, PotionEffectType.ABSORPTION, 5);
 
         World world = player.getWorld();
         Location loc = player.getLocation();
@@ -215,7 +215,7 @@ public class MWSpider extends MWClass {
                     ActionBar.send(player, ChatColor.GREEN + ChatColor.stripColor(msg));
                     energyManager.add(player, 20);
 
-                    PotionUtils.effect(player, "speed", 5);
+                    PotionUtils.effect(player, PotionEffectType.SPEED, 5);
 
                     this.cancel();
                     return;
@@ -253,7 +253,7 @@ public class MWSpider extends MWClass {
 
             if (increment.get(player) == 3) {
                 Player victim = (Player) event.getEntity();
-                PotionUtils.effect(victim, "poison", 5);
+                PotionUtils.effect(victim, PotionEffectType.POISON, 5);
             }
         }
 

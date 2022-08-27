@@ -175,7 +175,7 @@ public class MWGolem extends MWClass {
         if (player == null || victim == player) return;
 
         if (manager.get(player) == this) {
-            PotionUtils.effect(player, "absorption", 10, 1);
+            PotionUtils.effect(player, PotionEffectType.ABSORPTION, 10, 1);
         }
     }
 
@@ -194,7 +194,7 @@ public class MWGolem extends MWClass {
 
         if (manager.get(victim) == this) {
             if (event.getDamager() instanceof Arrow) {
-                PotionUtils.effect(victim, "resistance", 9);
+                PotionUtils.effect(victim, PotionEffectType.DAMAGE_RESISTANCE, 9);
             }
         }
     }

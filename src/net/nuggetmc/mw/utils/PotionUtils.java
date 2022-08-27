@@ -2,6 +2,8 @@ package net.nuggetmc.mw.utils;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 public class PotionUtils {
 
@@ -11,11 +13,11 @@ public class PotionUtils {
      * that can do just that, and maybe even ADD to the current effect time ;)
      */
 
-    public static void effect(Player player, String type, int time) {
-        effect(player, type, time, 0);
+    public static void effect(Player player, PotionEffectType potionEffectType, int time) {
+        effect(player, potionEffectType, time, 0);
     }
 
-    public static void effect(Player player, String type, int time, int amplifier) {
-        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "effect " + player.getName() + " " + type + " " + time + " " + amplifier);
+    public static void effect(Player player, PotionEffectType potionEffectType, int time, int amplifier) {
+        player.addPotionEffect(new PotionEffect(potionEffectType,time*20,amplifier),true);
     }
 }

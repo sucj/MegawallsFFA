@@ -17,6 +17,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffectType;
 
 import java.util.*;
 
@@ -104,8 +105,8 @@ public class MWHerobrine extends MWClass {
         }
 
         if (increment.get(player) == 0) {
-            PotionUtils.effect(player, "speed", 3, 1);
-            PotionUtils.effect(player, "regeneration", 5);
+            PotionUtils.effect(player, PotionEffectType.SPEED, 3, 1);
+            PotionUtils.effect(player, PotionEffectType.REGENERATION, 5);
         }
 
         energyManager.add(player, 25);
@@ -119,7 +120,7 @@ public class MWHerobrine extends MWClass {
         if (player == null || victim == player) return;
 
         if (manager.get(player) == this) {
-            PotionUtils.effect(player, "strength", 6);
+            PotionUtils.effect(player, PotionEffectType.INCREASE_DAMAGE, 6);
         }
     }
 

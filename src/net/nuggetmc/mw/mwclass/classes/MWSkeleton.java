@@ -24,6 +24,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
@@ -143,14 +144,14 @@ public class MWSkeleton extends MWClass {
             energyManager.add(player, (int) (25 * force));
         }
 
-        PotionUtils.effect(player, "regeneration", 7);
+        PotionUtils.effect(player, PotionEffectType.REGENERATION, 7);
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "give " + player.getName() + " arrow 2");
 
         mwhealth.feed(player, 4);
 
         if (!cooldownCache.contains(player)) {
-            PotionUtils.effect(player, "speed", 7, 1);
-            PotionUtils.effect(player, "regeneration", 7, 0);
+            PotionUtils.effect(player, PotionEffectType.SPEED, 7, 1);
+            PotionUtils.effect(player, PotionEffectType.REGENERATION, 7, 0);
 
             player.getWorld().playSound(player.getLocation(), Sound.SKELETON_WALK, 1, 1);
 

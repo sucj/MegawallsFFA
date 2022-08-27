@@ -24,6 +24,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
@@ -195,8 +196,8 @@ public class MWDreadlord extends MWClass {
         if (player == null || victim == player) return;
 
         if (manager.get(player) == this) {
-            PotionUtils.effect(player, "strength", 5);
-            PotionUtils.effect(player, "regeneration", 5);
+            PotionUtils.effect(player, PotionEffectType.INCREASE_DAMAGE, 5);
+            PotionUtils.effect(player, PotionEffectType.REGENERATION, 5);
         }
     }
 
