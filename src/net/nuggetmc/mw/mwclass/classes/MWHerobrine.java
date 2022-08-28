@@ -45,7 +45,7 @@ public class MWHerobrine extends MWClass {
             "Wrath",
             "Unleash the wrath of Herobrine, striking all nearby enemies in a 5 block radius for &a4.5 &rtrue damage.",
             "Power",
-            "Killing an emeny grants you Strength I for &a6 &rseconds.",
+            "Killing an enemy grants you Strength I for &a6 &rseconds.",
             "Flurry",
             "Every &a3 &rattacks will grant you Speed II for 3 seconds and Regeneration I for 5 seconds.",
             "Treasure Hunter",

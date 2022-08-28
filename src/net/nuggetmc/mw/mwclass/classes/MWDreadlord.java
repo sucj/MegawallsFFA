@@ -108,6 +108,7 @@ public class MWDreadlord extends MWClass {
                     }, 2);
 
                     for (Player target : Bukkit.getOnlinePlayers()) {
+                        if (plugin.getTeamsManager().isOnSameTeam(player,target)) continue;
                         if (player == target) continue;
                         if (target.getWorld() != pointLoc.getWorld()) continue;
                         if (pointLoc.distance(target.getLocation().add(0, 1, 0)) < 1) {

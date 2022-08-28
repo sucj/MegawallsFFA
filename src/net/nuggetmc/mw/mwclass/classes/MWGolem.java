@@ -72,6 +72,7 @@ public class MWGolem extends MWClass {
         Location locUp = player.getEyeLocation();
 
         for (Player victim : inRange(player, 4.5)) {
+            if (plugin.getTeamsManager().isOnSameTeam(player,victim)) continue;
             victim.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20, 1));
 
             Vector vel = locUp.toVector().subtract(victim.getEyeLocation().toVector());

@@ -139,6 +139,7 @@ public class MWSpider extends MWClass {
         if (dmg > 12) dmg = 12;
 
         for (Player victim : Bukkit.getOnlinePlayers()) {
+            if (plugin.getTeamsManager().isOnSameTeam(player,victim)) continue;
             if (player.getWorld() != victim.getWorld()) continue;
 
             if (player != victim && !victim.isDead() && loc.distance(victim.getLocation()) <= 4) {

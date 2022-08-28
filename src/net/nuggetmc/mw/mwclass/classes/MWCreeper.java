@@ -116,6 +116,7 @@ public class MWCreeper extends MWClass {
         WorldUtils.createNoDamageExplosion(player.getLocation(), 2);
 
         for (Player victim : Bukkit.getOnlinePlayers()) {
+            if (plugin.getTeamsManager().isOnSameTeam(player,victim)) continue;
             if (player.getWorld() != victim.getWorld()) continue;
 
             Location pLoc = player.getLocation();

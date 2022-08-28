@@ -119,6 +119,7 @@ public class MWSkeleton extends MWClass {
 
     public void explosionDamage(Projectile proj, Player player) {
         for (Player victim : Bukkit.getOnlinePlayers()) {
+            if (plugin.getTeamsManager().isOnSameTeam(player,victim)) return;
             if (player.getWorld() != victim.getWorld()) continue;
 
             if (player != victim && !victim.isDead() && proj.getLocation().distance(victim.getLocation()) < 6) {

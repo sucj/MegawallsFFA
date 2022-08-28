@@ -116,6 +116,7 @@ public class MWDriver extends MWClass {
         }
             Player target=null;
             for (Player player1 : player.getWorld().getPlayers()){
+                if (plugin.getTeamsManager().isOnSameTeam(player,player1)) continue;
                 if (!plugin.getCombatManager().isInCombat(player1)||player1.isDead()||player1.getGameMode()==GameMode.CREATIVE||(player1.getLocation().distance(player.getLocation())>20)||player1.equals(player)){
                     continue;
                 }else {

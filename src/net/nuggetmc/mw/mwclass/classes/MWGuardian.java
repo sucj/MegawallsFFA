@@ -100,6 +100,7 @@ public class MWGuardian extends MWClass {
         if (!(e.getEntity() instanceof Player )) return;
         Player player= energyManager.validate(e);
         if (player==null) return;
+        if (plugin.getTeamsManager().isOnSameTeam(player, (Player) e.getEntity())) return;
         if (manager.get(player) != this) {
             return;
         }
