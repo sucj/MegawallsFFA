@@ -76,6 +76,9 @@ public class MWSquid extends MWClass {
         double healedAmount = 0;
 
         for (Player victim : inRange(player, 5)) {
+            if (plugin.getTeamsManager().isOnSameTeam(player,victim)){
+                continue;
+            }
             Vector vel = loc.toVector().subtract(victim.getLocation().toVector());
             double y = vel.getY();
 
@@ -131,6 +134,9 @@ public class MWSquid extends MWClass {
             ParticleUtils.play(EnumParticle.SMOKE_LARGE, loc, 0.5, 0.5, 0.5, 0.1, 50);
 
             for (Player victim : inRange(player, 5)) {
+                if (plugin.getTeamsManager().isOnSameTeam(player,victim)){
+                    continue;
+                }
                 victim.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 3 * 20, 0));
                 ParticleUtils.play(EnumParticle.SMOKE_LARGE, victim.getEyeLocation(), 0.5, 0.5, 0.5, 0.1, 50);
             }

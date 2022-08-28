@@ -61,6 +61,12 @@ public class MWGuardian extends MWClass {
         this.classInfo.addEnergyGainType("Melee", 15);
         this.classInfo.addEnergyGainType("Bow", 15);
     }
+    @Override
+    public String getActionBar(Player player){
+        String ext=this.getColor() + "Extrimity "+(extrimityList.contains(player)?ChatColor.RED + "✖":ChatColor.GREEN+ "✔")+ChatColor.RESET;
+        String rg=this.getColor() + "Ruins Guardian "+(waterList.contains(player)?ChatColor.RED + "✖":ChatColor.GREEN+ "✔")+ChatColor.RESET;
+        return ext+"       "+rg;
+    }
     @EventHandler
     public void onDamage(EntityDamageEvent e){
         if (e.isCancelled()) return;
