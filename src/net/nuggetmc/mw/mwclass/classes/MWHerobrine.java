@@ -18,12 +18,14 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
 
 public class MWHerobrine extends MWClass {
 
     private final Map<Player, Integer> increment = new HashMap<>();
+    private final Set<Player> wrathList=new HashSet<>();
 
     public MWHerobrine() {
         this.name = new String[]{"Herobrine","Herobrine","HBR"};
@@ -56,6 +58,7 @@ public class MWHerobrine extends MWClass {
 
     @Override
     public void ability(Player player) {
+        if (wrathList.contains(player)) return;
         World world = player.getWorld();
 
         boolean pass = false;
@@ -77,12 +80,18 @@ public class MWHerobrine extends MWClass {
 
         if (pass) {
             energyManager.clear(player);
-
+            wrathList.add(player);
             for (Player victim : cache) {
                 mwhealth.trueDamage(victim, 4.5, null);
             }
 
             world.playSound(player.getLocation(), Sound.ENDERMAN_DEATH, 1, (float) 0.5);
+            Bukkit.getScheduler().runTaskLater(plugin, new BukkitRunnable() {
+                @Override
+                public void run() {
+                    wrathList.remove(player);
+                }
+            }, 20);
             return;
         }
 
@@ -152,5 +161,15 @@ public class MWHerobrine extends MWClass {
         }
 
         MWKit.assignItems(player, items);
+        if (wrathList.contains(player)){
+            wrathList.remove(player);
+        }
+    }
+
+    @Override
+    public String getActionBar(Player player) {
+        String wrath=this.getColor() + "Wrath "+ (energyManager.get(player)!=100 ?ChatColor.RED + "✖":ChatColor.GREEN+ "✔")+ChatColor.RESET;
+        String flurry=this.getColor() + "Flurry "+ ((!increment.containsKey(player)||increment.get(player)==0) ?ChatColor.GREEN + "✔":(ChatColor.RED+ String.valueOf(increment.get(player))))+ChatColor.RESET;
+        return wrath+"      "+flurry;
     }
 }

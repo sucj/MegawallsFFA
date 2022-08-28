@@ -104,7 +104,8 @@ public class MWCow extends MWClass {
         if (mine.get(player)<cowBucketValue){
             mine.replace(player,mine.get(player)+1);
             //ActionBar.send(player,this.getColor()+"Ultra Pasteurized "+ChatColor.WHITE+mine.get(player)+"/"+cowBucketValue);
-        } else if (mine.get(player)==cowBucketValue) {
+        }
+        if (mine.get(player)==cowBucketValue) {
             mine.replace(player,0);
             player.getInventory().addItem(plugin.getSpecialItemUtils().getCowBucket(2));
             //ActionBar.send(player,this.getColor()+"Ultra Pasteurized "+ChatColor.GREEN+"✔");
@@ -118,13 +119,14 @@ public class MWCow extends MWClass {
         if (mine.get(player)<cowBucketValue){
             milk= this.getColor()+"Ultra Pasteurized "+ChatColor.WHITE+mine.get(player)+"/"+cowBucketValue+ChatColor.RESET;
         } else if (mine.get(player)==cowBucketValue) {
-           milk= this.getColor()+"Ultra Pasteurized "+ChatColor.GREEN+"✔"+ChatColor.RESET;
+           milk= this.getColor()+"Ultra Pasteurized "+ ChatColor.GREEN +"✔"+ChatColor.RESET;
         }
         String milkBarrier;
+        String grantingMoo=this.getColor() + "Granting Moo "+ (energyManager.get(player)!=100 ?ChatColor.RED + "✖":ChatColor.GREEN+ "✔")+ChatColor.RESET;
         milkBarrier=this.getColor() + "Milk Barrier "+(willpowerList.contains(player)?ChatColor.RED + "✖":ChatColor.GREEN+ "✔")+ChatColor.RESET;
 
 
-        return milkBarrier+"    "+milk;
+        return (grantingMoo +"      "  +milkBarrier+"       "+milk);
 
 
     }
