@@ -14,6 +14,7 @@ import org.bukkit.event.block.BlockDispenseEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -177,6 +178,15 @@ public class SpecialEventsManager implements Listener {
 
 
 
+    }
+    ///////////////////////////DEATH MESSAGE
+    @EventHandler
+    public void onDeath(PlayerDeathEvent e){
+       Player killer = plugin.getEnergyManager().validate(e);
+       if (killer==null) {
+           return;
+       }
+        e.setDeathMessage(ChatColor.GREEN + e.getEntity().getName()+ChatColor.WHITE+" was Killed,Killer: "+ChatColor.RED+killer.getName());
     }
 
     ///////////////////////////MILK BUCKET

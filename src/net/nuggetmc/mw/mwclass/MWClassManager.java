@@ -120,6 +120,10 @@ public class MWClassManager implements Listener {
         }
         String str= ((plugin.getTeamsManager().getSymbolOfTeam(team)));
         plugin.getCombatManager().addInCombat(player);
+        if (plugin.getCombatManager().isInCombat(player)){
+            player.setPlayerListName(player.getName());
+            player.setDisplayName(player.getName());
+        }
         player.setPlayerListName(str+" "+(MegaWalls.getInstance().getCombatManager().isInCombat(player)?player.getDisplayName()+ChatColor.GRAY+" ["+plugin.getClassManager().get(player).getShortName()+"]":player.getDisplayName()));
         player.setDisplayName(str+" "+player.getDisplayName());
         player.sendMessage(ChatColor.YELLOW+"You can use /mwshop and /mwsell to buy and sell items.Use /echest to open your enderchest.");
