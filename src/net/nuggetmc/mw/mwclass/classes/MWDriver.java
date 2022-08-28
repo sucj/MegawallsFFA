@@ -101,6 +101,12 @@ public class MWDriver extends MWClass {
         victim.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,2*20,0));
 
     }
+    @Override
+    public String getActionBar(Player player){
+        String ride=this.getColor() + "Ride "+(abilitycache.contains(player)?ChatColor.RED + "✖":ChatColor.GREEN+ "✔")+ChatColor.RESET;
+        String runner=this.getColor() + "Ultimate Runner "+(runnerList.contains(player)?ChatColor.RED + "✖":ChatColor.GREEN+ "✔")+ChatColor.RESET;
+        return ride+"       "+runner;
+    }
 
 
     @Override
