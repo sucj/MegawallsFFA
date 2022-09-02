@@ -50,7 +50,7 @@ public class MWCow extends MWClass {
 
         this.classInfo = new MWClassInfo(
             "Granting Moo",
-            "Moo, granting Resistance"+ChatColor.GREEN+" II"+ChatColor.RESET+" and Regeneration "+ChatColor.GREEN+"II"+ChatColor.RESET+" to yourself",
+            "Moo, granting Resistance"+ChatColor.GREEN+" I"+ChatColor.RESET+" and Regeneration "+ChatColor.GREEN+"II"+ChatColor.RESET+" to yourself and granting nearby allies in a 7 block radius Regeneration III for 2.5 seconds",
             "Bucket Barrier",
             "Once below "+ChatColor.GREEN+"20 HP"+ChatColor.RESET+", a shield of milk buckets forms around you for 20 seconds,blocking the next 4 sources of damage by "+ChatColor.GREEN+"25%"+ChatColor.RESET+".Whenever damage gets blocked, you will get healed for "+ChatColor.GREEN+"2HP"+ChatColor.RESET,
             "Refreshing Sip",
@@ -66,8 +66,16 @@ public class MWCow extends MWClass {
     @Override
     public void ability(Player player) {
         energyManager.clear(player);
-        player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, (int) (2.5*20),1));
+        player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, (int) (2.5*20),0));
         player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, (int) (2.5*20),1));
+        for(Player target:Bukkit.getOnlinePlayers()){
+            if (player.getWorld() != target.getWorld()) continue;
+            if (target.isDead()) continue;
+            if (!plugin.getTeamsManager().isOnSameTeam(player,target)) continue;
+            if (player==target) continue;
+            if (target.getLocation().distance(player.getLocation())>7) continue;
+            target.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,(int) (2.5*20),2));
+        }
     }
 
 
@@ -146,7 +154,7 @@ public class MWCow extends MWClass {
             swordEnch.put(Enchantment.DURABILITY, 10);
 
             Map<Enchantment, Integer> armorEnch = new HashMap<>();
-            armorEnch.put(Enchantment.PROTECTION_ENVIRONMENTAL, 2);
+            armorEnch.put(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
             armorEnch.put(Enchantment.DURABILITY, 10);
 
             ItemStack sword = MWItem.createSword(this, Material.IRON_SWORD, swordEnch);

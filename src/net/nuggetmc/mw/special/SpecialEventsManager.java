@@ -2,6 +2,7 @@ package net.nuggetmc.mw.special;
 
 import net.md_5.bungee.api.ChatColor;
 import net.nuggetmc.mw.MegaWalls;
+import net.nuggetmc.mw.mwclass.classes.MWCow;
 import net.nuggetmc.mw.utils.WorldUtils;
 import org.bukkit.*;
 import org.bukkit.entity.Arrow;
@@ -35,12 +36,29 @@ public class SpecialEventsManager implements Listener {
     SpecialItemUtils specialItemUtils=new SpecialItemUtils();
     @EventHandler
     public void onCowBucket(PlayerItemConsumeEvent e){
-        if (specialItemUtils.isCowBucket(e.getItem())){
+        if (specialItemUtils.isCowBucket(e.getItem())) {
             Player player = e.getPlayer();
-            player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 5*20, 0));
-            player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 5*20, 1));
+            player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 5 * 20, 0));
+            player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 5 * 20, 1));
             player.setFoodLevel(20);
             player.setSaturation(20);
+            if (plugin.getClassManager().get(player) instanceof MWCow) {
+                for (Player target : Bukkit.getOnlinePlayers()) {
+                    if (player.getWorld() != target.getWorld()) continue;
+                    if (target.isDead()) continue;
+                    if (!plugin.getTeamsManager().isOnSameTeam(player, target)) continue;
+                    if (player == target) continue;
+                    if (target.getLocation().distance(player.getLocation()) > 7) continue;
+                    target.setFoodLevel(20);
+                    target.setSaturation(20);
+                    double health=target.getHealth()+3;
+                    if (health>target.getMaxHealth()){
+                        target.setHealth(target.getMaxHealth());
+                    }else {
+                       target.setHealth(health);
+                    }
+                }
+            }
         }
     }
     ///////////////////////////ENDER CHEST
