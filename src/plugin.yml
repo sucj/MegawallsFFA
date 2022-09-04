@@ -56,6 +56,10 @@ commands:
     description: make a player ride you.
     usage: /mwmakeride
     permission: mw.makeride
+  mwresel:
+    description: make a player reselect kit.
+    usage: /mwresel
+    permission: mw.admin
 permissions:
   mw.*:
     description: MegaWalls parent permission.
