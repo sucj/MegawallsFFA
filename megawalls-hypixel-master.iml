@@ -23,5 +23,6 @@
     <orderEntry type="library" name="libs" level="project" />
     <orderEntry type="library" name="spigot" level="project" />
     <orderEntry type="library" name="KotlinJavaRuntime" level="project" />
+    <orderEntry type="library" name="nametagAPI" level="project" />
   </component>
 </module>

@@ -163,7 +163,7 @@ public class SpecialEventsManager implements Listener {
             event.getPlayer().setGameMode(GameMode.ADVENTURE);
         }
         MegaWalls.getInstance().getCombatManager().removeInCombat(event.getPlayer());
-        player.setPlayerListName(player.getDisplayName());
+        player.setPlayerListName(player.getName());
     }
 
     @EventHandler

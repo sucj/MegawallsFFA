@@ -3,6 +3,7 @@ main: net.nuggetmc.mw.MegaWalls
 version: 1.0
 api-version: 1.16
 author: HorseNuggets
+depend: [NametagAPI]
 commands:
   megawalls:
     description: The MegaWalls base command.

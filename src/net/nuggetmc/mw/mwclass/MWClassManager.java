@@ -1,5 +1,7 @@
 package net.nuggetmc.mw.mwclass;
 
+import io.isles.nametagapi.NametagAPI;
+import io.isles.nametagapi.NametagPlugin;
 import net.md_5.bungee.api.ChatColor;
 import net.nuggetmc.mw.MegaWalls;
 import net.nuggetmc.mw.mwclass.classes.MWZombie;
@@ -26,6 +28,7 @@ import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.plugin.PluginBase;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Team;
@@ -123,9 +126,13 @@ public class MWClassManager implements Listener {
         if (plugin.getCombatManager().isInCombat(player)){
             player.setPlayerListName(player.getName());
             player.setDisplayName(player.getName());
+            NametagAPI.resetNametag(player.getName());
         }
-        player.setPlayerListName(str+" "+(MegaWalls.getInstance().getCombatManager().isInCombat(player)?player.getDisplayName()+ChatColor.GRAY+" ["+plugin.getClassManager().get(player).getShortName()+"]":player.getDisplayName()));
-        player.setDisplayName(str+" "+player.getDisplayName());
+        String prefix = str + " ";
+        String suffix = ChatColor.GRAY + " [" + plugin.getClassManager().get(player).getShortName() + "]";
+        player.setPlayerListName(prefix + player.getDisplayName() + suffix);
+        player.setDisplayName(prefix+player.getDisplayName());
+        NametagAPI.setNametagHard(player.getName(),prefix,suffix);
         player.sendMessage(ChatColor.YELLOW+"You can use /mwshop and /mwsell to buy and sell items.Use /echest to open your enderchest.");
         if (mwclass.getShortName().equals("ZOM")){
             player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING,9999*20,2));
