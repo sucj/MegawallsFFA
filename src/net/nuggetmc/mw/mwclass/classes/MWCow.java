@@ -75,6 +75,7 @@ public class MWCow extends MWClass {
             if (player==target) continue;
             if (target.getLocation().distance(player.getLocation())>7) continue;
             target.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,(int) (2.5*20),2));
+            target.sendMessage("You have been healed by the Granting Moo of "+player.getName()+"!");
         }
     }
 

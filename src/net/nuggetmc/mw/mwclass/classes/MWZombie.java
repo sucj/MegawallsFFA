@@ -92,6 +92,7 @@ public class MWZombie extends MWClass {
             }else {
                 player1.setHealth(healthh);
             }
+            player1.sendMessage("You have been healed by the Healing Aura of "+player.getName()+"!");
         }
     }
 

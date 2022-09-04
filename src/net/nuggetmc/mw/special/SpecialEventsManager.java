@@ -57,6 +57,7 @@ public class SpecialEventsManager implements Listener {
                     }else {
                        target.setHealth(health);
                     }
+                    target.sendMessage("You have been healed by the Refreshing Sip of "+player.getName()+"!");
                 }
             }
         }
