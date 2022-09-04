@@ -1,5 +1,6 @@
 package net.nuggetmc.mw.special;
 
+import io.isles.nametagapi.NametagAPI;
 import net.md_5.bungee.api.ChatColor;
 import net.nuggetmc.mw.MegaWalls;
 import net.nuggetmc.mw.mwclass.classes.MWCow;
@@ -156,7 +157,6 @@ public class SpecialEventsManager implements Listener {
     @EventHandler
     public void onRespawn(PlayerRespawnEvent event) {
         Player player=event.getPlayer();
-        event.setRespawnLocation(WorldUtils.nearby(event.getRespawnLocation()));
         if (event.getPlayer().isOp() && OPBYPASSGM) {
             //
         } else {
@@ -164,6 +164,8 @@ public class SpecialEventsManager implements Listener {
         }
         MegaWalls.getInstance().getCombatManager().removeInCombat(event.getPlayer());
         player.setPlayerListName(player.getName());
+        player.setDisplayName(player.getName());
+        NametagAPI.resetNametag(player.getName());
     }
 
     @EventHandler
