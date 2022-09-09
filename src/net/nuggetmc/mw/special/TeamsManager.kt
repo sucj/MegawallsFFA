@@ -37,6 +37,22 @@ class TeamsManager :Listener {
             YELLOW ->(ChatColor.YELLOW.toString()+"[Y]"+ChatColor.RESET.toString())
         }
     }
+    fun getSymbolOfTeamRaw(team: Team):String{
+        return when(team){
+            RED ->  ("[R]")
+            GREEN ->("[G]")
+            BLUE ->("[B]")
+            YELLOW ->("[Y]")
+        }
+    }
+    fun getColorOfTeam(team: Team):String{
+        return when(team){
+            RED ->  (ChatColor.RED.toString())
+            GREEN ->(ChatColor.GREEN.toString())
+            BLUE ->(ChatColor.BLUE.toString())
+            YELLOW ->(ChatColor.YELLOW.toString())
+        }
+    }
     /**
      * tell if players are in the same team.
      */
@@ -101,7 +117,7 @@ class TeamsManager :Listener {
     /**
      * get team of player
      */
-    public fun getTeamOfPlayer(player: Player): Team? {
+    fun getTeamOfPlayer(player: Player): Team? {
         return teamsMap.get(player);
     }
 

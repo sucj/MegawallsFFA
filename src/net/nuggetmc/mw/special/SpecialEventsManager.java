@@ -188,7 +188,7 @@ public class SpecialEventsManager implements Listener {
     @EventHandler
     public void onBreakGet(BlockBreakEvent e){
         if (!plugin.getCombatManager().isInCombat(e.getPlayer())) return;
-
+        if (!e.getPlayer().getGameMode().equals(GameMode.SURVIVAL)) return;
         Collection<ItemStack> drops = e.getBlock().getDrops();
 
 

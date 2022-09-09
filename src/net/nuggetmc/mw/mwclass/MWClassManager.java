@@ -131,7 +131,7 @@ public class MWClassManager implements Listener {
         String prefix = str + " ";
         String suffix = ChatColor.GRAY + " [" + plugin.getClassManager().get(player).getShortName() + "]";
         player.setPlayerListName(prefix + player.getDisplayName() + suffix);
-        player.setDisplayName(prefix+player.getDisplayName());
+        player.setDisplayName((plugin.getTeamsManager().getColorOfTeam(team)+"["+plugin.getTeamsManager().getTeamOfPlayer(player).name())+"] "+player.getDisplayName()+ChatColor.RESET);
         NametagAPI.setNametagHard(player.getName(),prefix,suffix);
         player.sendMessage(ChatColor.YELLOW+"You can use /mwshop and /mwsell to buy and sell items.Use /echest to open your enderchest.");
         if (mwclass.getShortName().equals("ZOM")){
