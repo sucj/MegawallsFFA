@@ -8,7 +8,6 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerRespawnEvent
-import java.util.*
 
 class TeamsManager :Listener {
     private var teamsMap= HashMap<Player, Team>();
@@ -86,6 +85,7 @@ class TeamsManager :Listener {
     /**
      * randomly put a player in a team.
      */
+    @Deprecated("no longer using this in selecting team")
     fun randomTeam(player: Player): Team? {
        val num= MathUtils.randomIntInRange(0,3)
         val team=when(num){
@@ -97,6 +97,26 @@ class TeamsManager :Listener {
         }
         team?.let { addTeam(player, it) }
         return team
+    }
+    fun putTeam(player: Player): Team {
+       var list= ArrayList<Team>()
+        list.addAll(Team.values())
+        list.sortWith(java.util.Comparator { team, t1 ->
+            if (MegaWalls.getInstance().teamsManager.getTeamMembers(team!!).size < MegaWalls.getInstance().teamsManager.getTeamMembers(
+                    t1!!
+                ).size
+            ) {
+                return@Comparator -1
+            } else if (MegaWalls.getInstance().teamsManager.getTeamMembers(team).size > MegaWalls.getInstance().teamsManager.getTeamMembers(
+                    t1
+                ).size
+            ) {
+                return@Comparator 1
+            }
+            0
+        })
+       addTeam(player, list[0])
+        return list[0]
     }
     /**
      * clear a player's team

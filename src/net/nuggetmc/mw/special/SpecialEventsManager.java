@@ -1,5 +1,6 @@
 package net.nuggetmc.mw.special;
 
+import com.earth2me.essentials.Essentials;
 import io.isles.nametagapi.NametagAPI;
 import net.md_5.bungee.api.ChatColor;
 import net.nuggetmc.mw.MegaWalls;
@@ -24,6 +25,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.math.BigDecimal;
 import java.util.Collection;
+import java.util.Objects;
 
 import static net.nuggetmc.mw.MegaWalls.OPBYPASSGM;
 
@@ -163,9 +165,17 @@ public class SpecialEventsManager implements Listener {
             event.getPlayer().setGameMode(GameMode.ADVENTURE);
         }
         MegaWalls.getInstance().getCombatManager().removeInCombat(event.getPlayer());
-        player.setPlayerListName(player.getName());
-        player.setDisplayName(player.getName());
-        NametagAPI.resetNametag(player.getName());
+        if (Bukkit.getPluginManager().getPlugin("Essentials")!=null&& !Objects.equals(((Essentials) Bukkit.getPluginManager().getPlugin("Essentials")).getUser(player).getNick(), player.getName())) {
+            //player nicked
+            String nickname = ChatColor.stripColor(((Essentials) Bukkit.getPluginManager().getPlugin("Essentials")).getUser(player).getNick());
+            player.setPlayerListName(nickname);
+            player.setDisplayName(nickname);
+            NametagAPI.resetNametag(nickname);
+        }else {
+            player.setPlayerListName(player.getName());
+            player.setDisplayName(player.getName());
+            NametagAPI.resetNametag(player.getName());
+        }
     }
 
     @EventHandler

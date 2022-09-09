@@ -1,5 +1,7 @@
 package net.nuggetmc.mw.mwclass;
 
+import com.earth2me.essentials.Essentials;
+import com.earth2me.essentials.EssentialsPlayerListener;
 import io.isles.nametagapi.NametagAPI;
 import io.isles.nametagapi.NametagPlugin;
 import net.md_5.bungee.api.ChatColor;
@@ -35,10 +37,7 @@ import org.bukkit.scoreboard.Team;
 import org.spigotmc.event.player.PlayerSpawnLocationEvent;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static net.nuggetmc.mw.MegaWalls.OPBYPASSGM;
@@ -128,15 +127,26 @@ public class MWClassManager implements Listener {
             player.setDisplayName(player.getName());
             NametagAPI.resetNametag(player.getName());
         }
-        String prefix = str + " ";
-        String suffix = ChatColor.GRAY + " [" + plugin.getClassManager().get(player).getShortName() + "]";
-        player.setPlayerListName(prefix + player.getDisplayName() + suffix);
-        player.setDisplayName((plugin.getTeamsManager().getColorOfTeam(team)+"["+plugin.getTeamsManager().getTeamOfPlayer(player).name())+"] "+player.getDisplayName()+ChatColor.RESET);
-        NametagAPI.setNametagHard(player.getName(),prefix,suffix);
-        player.sendMessage(ChatColor.YELLOW+"You can use /mwshop and /mwsell to buy and sell items.Use /echest to open your enderchest.");
+        if (Bukkit.getPluginManager().getPlugin("Essentials")!=null&& !Objects.equals(((Essentials) Bukkit.getPluginManager().getPlugin("Essentials")).getUser(player).getNick(), player.getName())){
+            //player nicked
+            String nickname=ChatColor.stripColor(((Essentials) Bukkit.getPluginManager().getPlugin("Essentials")).getUser(player).getNick());
+            String prefix = str + " ";
+            String suffix = ChatColor.GRAY + " [" + plugin.getClassManager().get(player).getShortName() + "]";
+            player.setPlayerListName(prefix + nickname + suffix);
+            player.setDisplayName((plugin.getTeamsManager().getColorOfTeam(team) + "[" + plugin.getTeamsManager().getTeamOfPlayer(player).name()) + "] " + nickname + ChatColor.RESET);
+            NametagAPI.setNametagHard(nickname, prefix, suffix);
+        }else {
+            String prefix = str + " ";
+            String suffix = ChatColor.GRAY + " [" + plugin.getClassManager().get(player).getShortName() + "]";
+            player.setPlayerListName(prefix + player.getDisplayName() + suffix);
+            player.setDisplayName((plugin.getTeamsManager().getColorOfTeam(team) + "[" + plugin.getTeamsManager().getTeamOfPlayer(player).name()) + "] " + player.getDisplayName() + ChatColor.RESET);
+            NametagAPI.setNametagHard(player.getName(), prefix, suffix);
+        }
+        player.sendMessage(ChatColor.YELLOW + "You can use /mwshop and /mwsell to buy and sell items.Use /echest to open your enderchest.");
         if (mwclass.getShortName().equals("ZOM")){
             player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING,9999*20,2));
         }
+
     }
 
     @EventHandler

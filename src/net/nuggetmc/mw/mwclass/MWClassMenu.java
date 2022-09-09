@@ -67,7 +67,7 @@ public class MWClassMenu implements Listener {
         player.sendMessage("You have selected " + mwclass.getColor() + mwclass.getName() + ChatColor.RESET + ".");
         player.closeInventory();
 
-       TeamsManager.Team team= MegaWalls.getInstance().getTeamsManager().randomTeam(player);
+       TeamsManager.Team team= MegaWalls.getInstance().getTeamsManager().putTeam(player);
         energyManager.clear(player);
         player.getInventory().clear();
         manager.assign(player, mwclass, team);
