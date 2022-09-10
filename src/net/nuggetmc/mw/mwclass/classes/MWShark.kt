@@ -23,10 +23,7 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.scheduler.BukkitRunnable
 
 class MWShark() : MWClass(){
-    var mine: MutableMap<Player, Int> = HashMap()
-    val cowBucketValue = 60
-    private val willpowerList: MutableSet<Player> = HashSet()
-    var dmgcount = 0
+
 
     init {
         name = arrayOf("牛", "Shark", "SRK")

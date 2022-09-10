@@ -165,12 +165,12 @@ public class SpecialEventsManager implements Listener {
             event.getPlayer().setGameMode(GameMode.ADVENTURE);
         }
         MegaWalls.getInstance().getCombatManager().removeInCombat(event.getPlayer());
-        if (Bukkit.getPluginManager().getPlugin("Essentials")!=null&& !Objects.equals(((Essentials) Bukkit.getPluginManager().getPlugin("Essentials")).getUser(player).getNick(), player.getName())) {
+        if (Bukkit.getPluginManager().getPlugin("Essentials")!=null&& !Objects.equals(ChatColor.stripColor(((Essentials) Bukkit.getPluginManager().getPlugin("Essentials")).getUser(player).getNick()), player.getName())){
             //player nicked
             String nickname = ChatColor.stripColor(((Essentials) Bukkit.getPluginManager().getPlugin("Essentials")).getUser(player).getNick());
             player.setPlayerListName(nickname);
             player.setDisplayName(nickname);
-            NametagAPI.resetNametag(nickname);
+            NametagAPI.resetNametag(player.getName());
         }else {
             player.setPlayerListName(player.getName());
             player.setDisplayName(player.getName());

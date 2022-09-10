@@ -127,14 +127,14 @@ public class MWClassManager implements Listener {
             player.setDisplayName(player.getName());
             NametagAPI.resetNametag(player.getName());
         }
-        if (Bukkit.getPluginManager().getPlugin("Essentials")!=null&& !Objects.equals(((Essentials) Bukkit.getPluginManager().getPlugin("Essentials")).getUser(player).getNick(), player.getName())){
+        if (Bukkit.getPluginManager().getPlugin("Essentials")!=null&& !Objects.equals(ChatColor.stripColor(((Essentials) Bukkit.getPluginManager().getPlugin("Essentials")).getUser(player).getNick()), player.getName())){
             //player nicked
             String nickname=ChatColor.stripColor(((Essentials) Bukkit.getPluginManager().getPlugin("Essentials")).getUser(player).getNick());
             String prefix = str + " ";
             String suffix = ChatColor.GRAY + " [" + plugin.getClassManager().get(player).getShortName() + "]";
             player.setPlayerListName(prefix + nickname + suffix);
             player.setDisplayName((plugin.getTeamsManager().getColorOfTeam(team) + "[" + plugin.getTeamsManager().getTeamOfPlayer(player).name()) + "] " + nickname + ChatColor.RESET);
-            NametagAPI.setNametagHard(nickname, prefix, suffix);
+            NametagAPI.setNametagHard(player.getName(), prefix+ChatColor.MAGIC,ChatColor.RESET+ suffix);
         }else {
             String prefix = str + " ";
             String suffix = ChatColor.GRAY + " [" + plugin.getClassManager().get(player).getShortName() + "]";
