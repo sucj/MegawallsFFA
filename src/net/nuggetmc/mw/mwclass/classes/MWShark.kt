@@ -16,31 +16,39 @@ import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.block.BlockPhysicsEvent
-import org.bukkit.event.block.BlockSpreadEvent
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityDamageEvent
+import org.bukkit.event.player.PlayerMoveEvent
 import org.bukkit.inventory.ItemStack
-import org.bukkit.scheduler.BukkitRunnable
+import org.bukkit.potion.PotionEffect
+import org.bukkit.potion.PotionEffectType
 
 class MWShark() : MWClass(){
-
+    var waterMap :HashMap<Player,HashSet<Block>> = HashMap()
 
     init {
-        name = arrayOf("牛", "Shark", "SRK")
+        name = arrayOf("鲨鱼", "Shark", "SRK")
         icon = Material.WATER_BUCKET
-        color = ChatColor.LIGHT_PURPLE
+        color = ChatColor.DARK_AQUA
         playstyles = arrayOf(
-            Playstyle.SUPPORT,
-            Playstyle.TANK
+            Playstyle.FIGHTER,
+            Playstyle.SUPPORT
         )
         diamonds = arrayOf(
-            Diamond.CHESTPLATE
+            Diamond.BOOTS
         )
         classInfo = MWClassInfo(
-            "Granting Moo",
-            "Moo, granting Resistance" + ChatColor.GREEN + " II" + ChatColor.RESET + " and Regeneration " + ChatColor.GREEN + "II" + ChatColor.RESET + " to yourself",
-            "Bucket Barrier",
-            "Once below " + ChatColor.GREEN + "20 HP" + ChatColor.RESET + ", a shield of milk buckets forms around you for 20 seconds,blocking the next 4 sources of damage by " + ChatColor.GREEN + "25%" + ChatColor.RESET + ".Whenever damage gets blocked, you will get healed for " + ChatColor.GREEN + "2HP" + ChatColor.RESET,
+            "From the Depths",
+            "§7Create a 7§7 block square area of water §7around you for §a5§7 seconds§7§8 ? §7" +
+                    "You also receive Regeneration I for the §7duration of your ability§7§8 ? §7" +
+                    "If an enemy interracts with your pool of §7water, " +
+                    "they will receive Slowness I until the §7water pool disappears§7§8 ? §7§7",
+            "Blood Rage",
+            "§7§8 ? §7§7If you or an enemy within a 9 block §7radius is under 15 HP," +
+                    " you deal +§a21.5%§7 damage\n§7§8 ? §7§7This considers up to a maximum of 5 §7players," +
+                    " or +§a107.5%§7 damage§7§8 ? §7§7You and nearby allies deal +§a0.75§7 §7" +
+                    "extra damage when standing or attacking enemies in" +
+                    " §7the water that comes from your ability.§7§8 ? §7This has a maximum of +1.5 damage.",
             "Refreshing Sip",
             "Drinking any milk bucket grants nearby allies in a 7 block radius " + ChatColor.GREEN + "3 HP" + ChatColor.RESET + ", replenishing both hunger and saturation",
             "Ultra Pasteurized",
@@ -52,7 +60,11 @@ class MWShark() : MWClass(){
 
     override fun ability(player: Player) {
         energyManager.clear(player)
-        var expand=5;
+        if (!waterMap.containsKey(player)){
+            waterMap.put(player, emptySet<Block>().toHashSet())
+        }
+        player.addPotionEffect(PotionEffect(PotionEffectType.REGENERATION,5*20,0))
+        var expand=3;
         var posY=player.location.blockY
         var location=player.getLocation()
         var world=player.world
@@ -63,6 +75,7 @@ class MWShark() : MWClass(){
 
 
                         block.setType(Material.STATIONARY_WATER,false)
+                waterMap.get(player)?.add(block)
                         if (!set.contains(block)) {
                             set.add(block)
                         }
@@ -71,6 +84,7 @@ class MWShark() : MWClass(){
                     if (block1.isEmpty){
 
                         block1.setType(Material.STATIONARY_WATER,false)
+                        waterMap.get(player)?.add(block1)
                         if (!set.contains(block1)){
                             set.add(block1)
                         }
@@ -85,9 +99,10 @@ class MWShark() : MWClass(){
                 for(i in  0 until set.size){
                     val block=set.toArray().get(i) as Block
                     block.setType(Material.AIR)
+                    waterMap.get(player)?.remove(block)
                 }
                 }
-                ,6*20
+                ,5*20
             )
         }
     }
@@ -123,18 +138,18 @@ class MWShark() : MWClass(){
             items = MWKit.fetch(this)
         } else {
             val swordEnch: MutableMap<Enchantment, Int> = HashMap()
-            swordEnch[Enchantment.DURABILITY] = 10
+            swordEnch.put(Enchantment.DURABILITY,10)
             val armorEnch: MutableMap<Enchantment, Int> = HashMap()
-            armorEnch[Enchantment.PROTECTION_ENVIRONMENTAL] = 2
-            armorEnch[Enchantment.DURABILITY] = 10
-            val sword = MWItem.createSword(this, Material.IRON_SWORD, swordEnch)
+            armorEnch.put(Enchantment.DEPTH_STRIDER,3)
+            armorEnch.put(Enchantment.PROTECTION_ENVIRONMENTAL,2)
+            armorEnch.put(Enchantment.DURABILITY,10)
+            val sword = MWItem.createSword(this, Material.DIAMOND_SWORD, swordEnch)
             val bow = MWItem.createBow(this, null)
             val tool = MWItem.createTool(this, Material.DIAMOND_PICKAXE)
-            val chestplate = MWItem.createArmor(this, Material.DIAMOND_CHESTPLATE, armorEnch)
-            val potions = MWPotions.createBasic(this, 1, 10, 2)
-            val extra: MutableList<ItemStack> = ArrayList()
-            extra.add(plugin.specialItemUtils.getCowOwnBucket(3))
-            items = MWKit.generate(this, sword, bow, tool, null, null, potions, null, chestplate, null, null, extra)
+            val boots = MWItem.createArmor(this, Material.DIAMOND_BOOTS, armorEnch)
+            val potions = MWPotions.createBasic(this, 2, 8, 2)
+
+            items = MWKit.generate(this, sword, bow, tool, null, null, potions, null, null, null, boots, null)
         }
         MWKit.assignItems(player, items)
 
@@ -142,8 +157,88 @@ class MWShark() : MWClass(){
     }
     @EventHandler
     fun onPhysics(e: BlockPhysicsEvent) {
-        if (e.block.type.equals(Material.STATIONARY_WATER))
-        e.isCancelled=true;
+        for (player:Player in waterMap.keys){
+            for (block:Block in waterMap.get(player)!!){
+                if (e.block==block){
+                    e.isCancelled=true;
+                    return
+                }
+            }
+        }
     }
+    @EventHandler
+    fun onMove(e:PlayerMoveEvent){
+        if (e.player.location.block.type == Material.WATER || e.player.location.block.type == Material.STATIONARY_WATER){
+            var b=forBlock(e)
+            if (b==null) return
+            if (plugin.teamsManager.isOnSameTeam(e.player,b.get(1) as Player)){
+                return
+            }
+            e.player.addPotionEffect(PotionEffect(PotionEffectType.SLOW,1*20,0))
+        }
+    }
+    @EventHandler
+    fun onBloodRageAllies(event: PlayerMoveEvent) {
+        var player=event.player
+        if (isInAlliesPool(player)){
+            plugin.bloodRageList.add(player)
+        }else{
+            if (plugin.bloodRageList.contains(player)){
+                plugin.bloodRageList.remove(player)
+            }
+        }
 
+    }
+    @EventHandler
+    fun onBloodRageSelf(event: EntityDamageByEntityEvent) {
+        super.hit(event)
+        if (event.isCancelled) return
+        val player = energyManager.validate(event) ?: return
+        if (manager[player] !== this) return
+        var increaceAmount:Double=0.0
+        if (player.health<15) increaceAmount+=0.215
+        for (p in Bukkit.getOnlinePlayers()){
+            if (p.location.distance(player.location)>9){
+                continue
+                //too far
+            }
+            if (plugin.teamsManager.isOnSameTeam(player,p)){
+                continue
+                //we need enemies
+            }
+            if (!plugin.combatManager.isInCombat(p)){
+                continue
+            }
+            if (player.world !== p.world) continue
+            if (p.isDead) continue
+            increaceAmount +=0.215
+        }
+        if (increaceAmount>1.075){
+            increaceAmount=1.075
+        }
+        event.damage=event.damage+event.damage*increaceAmount
+    }
+    fun forBlock(e:PlayerMoveEvent):  Array<Any>?{
+        for (player:Player in waterMap.keys){
+            for (block:Block in waterMap.get(player)!!){
+                if (block == e.player.location.block){
+                    return arrayOf(block,player)
+                }
+            }
+        }
+        return null;
+    }
+    fun isInAlliesPool(plr: Player):Boolean{
+        for (player:Player in waterMap.keys){
+            if (!plugin.teamsManager.isOnSameTeam(plr,player)){
+                continue
+            }
+            for (block:Block in waterMap.get(player)!!){
+                if (block == plr.location.block){
+                    return true
+                }
+            }
+        }
+        return false
+    }
     }

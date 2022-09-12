@@ -41,6 +41,7 @@ public class MegaWalls extends JavaPlugin {
     private MWClassManager mwClassManager;
     private MWClassMenu mwClassMenu;
     private ShopMenu shopMenu;
+    public ArrayList<Player> bloodRageList=new ArrayList<>();
 
     @Getter
     public SpecialEventsManager getSpecialEventsManager() {
@@ -216,8 +217,8 @@ public class MegaWalls extends JavaPlugin {
                 new MWZombie(),
                 new MWCow(),
                 new MWDriver(),
-                new MWGuardian()
-                //new MWShark()
+                new MWGuardian(),
+                new MWShark()
                 // new MWWereWolf()
         );
 
