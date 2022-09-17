@@ -155,7 +155,7 @@ public class MWEnderman extends MWClass {
                     double num = wpr.time / 10.0;
 
                     String msg = "Teleport (" + ChatColor.RED + num + "s" + ChatColor.RESET + ")";
-                    ActionBar.send(player, msg);
+                    //ActionBar.send(player, msg);
 
                     wpr.time--;
                 }
@@ -292,5 +292,13 @@ public class MWEnderman extends MWClass {
         }
 
         MWKit.assignItems(player, items);
+    }
+
+    @Override
+    public String getActionBar(Player player) {
+        String sc=this.getColor()+"Soul Charge "+ (cooldownCacheRegen.contains(player)? ChatColor.RED + "✖":ChatColor.GREEN +"✔")+ChatColor.RESET;
+        String ab=this.getColor()+"Teleport "+ (((!cooldownCacheAbility.containsKey(player))||cooldownCacheAbility.get(player)==null ||cooldownCacheAbility.get(player).time<=0) ? ChatColor.GREEN +"✔":cooldownCacheAbility.get(player).time-10+" s")+ChatColor.RESET;
+
+        return ActionBar.joinActionBar(ab,sc);
     }
 }
