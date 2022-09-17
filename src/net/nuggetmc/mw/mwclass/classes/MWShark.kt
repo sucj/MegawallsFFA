@@ -9,6 +9,7 @@ import net.nuggetmc.mw.mwclass.info.Playstyle
 import net.nuggetmc.mw.mwclass.items.MWItem
 import net.nuggetmc.mw.mwclass.items.MWKit
 import net.nuggetmc.mw.mwclass.items.MWPotions
+import net.nuggetmc.mw.utils.PotionUtils
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.block.Block
@@ -18,6 +19,7 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.block.BlockPhysicsEvent
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityDamageEvent
+import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.event.player.PlayerMoveEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.potion.PotionEffect
@@ -49,10 +51,10 @@ class MWShark() : MWClass(){
                     " or +§a107.5%§7 damage§7§8 ? §7§7You and nearby allies deal +§a0.75§7 §7" +
                     "extra damage when standing or attacking enemies in" +
                     " §7the water that comes from your ability.§7§8 ? §7This has a maximum of +1.5 damage.",
-            "Refreshing Sip",
-            "Drinking any milk bucket grants nearby allies in a 7 block radius " + ChatColor.GREEN + "3 HP" + ChatColor.RESET + ", replenishing both hunger and saturation",
-            "Ultra Pasteurized",
-            "You will receive 2 milk buckets for every " + ChatColor.GREEN + "80" + ChatColor.RESET + " Stone you mine.Milk buckets grant Resistance I and Regeneration II for 5 seconds and can be given to teammates"
+            "Food Hunt",
+            "§7§8 ? §7§7Kills grant Regeneration III for §8 §8§a4§7 seconds and replenishes 4 hunger.\n If there is allies in a 4 block range,you will heal for 3.5 HP.",
+            "Sea Treasure",
+            "Nothing here."
         )
         classInfo.addEnergyGainType("Melee", 20)
         classInfo.addEnergyGainType("Bow", 20)
@@ -217,6 +219,46 @@ class MWShark() : MWClass(){
             increaceAmount=1.075
         }
         event.damage=event.damage+event.damage*increaceAmount
+    }
+
+    @EventHandler
+    fun onKill(event: PlayerDeathEvent) {
+        val victim = event.entity
+        val player = victim.killer
+        if (player == null || victim === player) return
+        if (manager[player] === this) {
+            player.addPotionEffect(PotionEffect(PotionEffectType.REGENERATION,4*20,2))
+            if (player.foodLevel+4>20){
+                player.foodLevel=20
+            }else{
+                player.foodLevel+=4
+            }
+           var b : Boolean=false
+           for (p in Bukkit.getOnlinePlayers()){
+               if (p.location.distance(player.location)>4){
+                   continue
+                   //too far
+               }
+               if (!plugin.teamsManager.isOnSameTeam(player,p)){
+                   continue
+                   //we need allies
+               }
+               if (!plugin.combatManager.isInCombat(p)){
+                   continue
+               }
+               if (player.world !== p.world) continue
+               if (p.isDead) continue
+               b=true
+               break
+           }
+            if (b){
+                if (player.health+3.5>player.maxHealth){
+                    player.health=player.maxHealth
+                }else{
+                    player.health+=3.5
+                }
+            }
+        }
     }
     fun forBlock(e:PlayerMoveEvent):  Array<Any>?{
         for (player:Player in waterMap.keys){
