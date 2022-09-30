@@ -1,6 +1,7 @@
 package net.nuggetmc.mw.special;
 
 import com.earth2me.essentials.Essentials;
+import com.joshargent.RegionPreserve.RegionPreservePlugin;
 import io.isles.nametagapi.NametagAPI;
 import net.md_5.bungee.api.ChatColor;
 import net.nuggetmc.mw.MegaWalls;
@@ -11,6 +12,7 @@ import org.bukkit.entity.Arrow;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockDispenseEvent;
@@ -31,8 +33,10 @@ import static net.nuggetmc.mw.MegaWalls.OPBYPASSGM;
 
 public class SpecialEventsManager implements Listener {
     MegaWalls plugin;
+    RegionPreservePlugin rp;
     public SpecialEventsManager(){
         this.plugin=MegaWalls.getInstance();
+        rp=Bukkit.getPluginManager().getPlugin("RegionPreserve")==null?null: (RegionPreservePlugin) Bukkit.getPluginManager().getPlugin("RegionPreserve");
     }
 
     ///////////////////////////COW BUCKET
@@ -195,10 +199,18 @@ public class SpecialEventsManager implements Listener {
         }}
     }
     ///////////////////////////BREAK BLOCK
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOW)
     public void onBreakGet(BlockBreakEvent e){
         if (!plugin.getCombatManager().isInCombat(e.getPlayer())) return;
         if (!e.getPlayer().getGameMode().equals(GameMode.SURVIVAL)) return;
+        if (e.isCancelled()) return;
+        if (rp!=null){
+            if (!rp.getAPI(plugin).getRegion("spawn").canPlayerEdit(e.getPlayer())){
+                if (rp.getAPI(plugin).getRegion("spawn").isLocationInRegion(e.getBlock().getLocation())){
+                    return;
+                }
+            }
+        }
         Collection<ItemStack> drops = e.getBlock().getDrops();
 
 

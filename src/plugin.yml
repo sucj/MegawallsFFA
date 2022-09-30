@@ -4,7 +4,7 @@ version: 1.0
 api-version: 1.16
 author: HorseNuggets
 depend: [NametagAPI]
-softdepend: [Essentials]
+softdepend: [Essentials,RegionPreserve]
 commands:
   megawalls:
     description: The MegaWalls base command.
