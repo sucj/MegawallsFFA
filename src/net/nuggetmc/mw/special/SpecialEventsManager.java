@@ -199,7 +199,7 @@ public class SpecialEventsManager implements Listener {
         }}
     }
     ///////////////////////////BREAK BLOCK
-    @EventHandler(priority = EventPriority.LOW)
+    /*@EventHandler(priority = EventPriority.LOW)
     public void onBreakGet(BlockBreakEvent e){
         if (!plugin.getCombatManager().isInCombat(e.getPlayer())) return;
         if (!e.getPlayer().getGameMode().equals(GameMode.SURVIVAL)) return;
@@ -221,7 +221,7 @@ public class SpecialEventsManager implements Listener {
 
 
 
-    }
+    }*/
     ///////////////////////////DEATH MESSAGE
     @EventHandler
     public void onDeath(PlayerDeathEvent e){
