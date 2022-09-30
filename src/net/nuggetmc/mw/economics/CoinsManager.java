@@ -1,7 +1,10 @@
 package net.nuggetmc.mw.economics;
 
+import me.kaaseigenaar.scoreboard.Main;
+import me.kaaseigenaar.scoreboard.ScoreboardBuilder;
 import net.md_5.bungee.api.ChatColor;
 import net.nuggetmc.mw.MegaWalls;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -17,6 +20,7 @@ import java.util.Map;
 public class CoinsManager implements Listener {
     private Map<Player,Integer> coinsData = new HashMap<>();
     private final MegaWalls plugin=MegaWalls.getInstance();
+    private final boolean sbExists= (Bukkit.getPluginManager().getPlugin("ScoreboardPlus")!=null);
 
 
     public CoinsManager(){
@@ -27,6 +31,9 @@ public class CoinsManager implements Listener {
         coinsData.put(player, amount);
 
         saveCoins(player, amount);
+        if (sbExists){
+            ScoreboardBuilder.buildScoreboard(player);
+        }
     }
 
     public void saveCoins(Player player, int amount) {
