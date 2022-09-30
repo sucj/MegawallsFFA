@@ -1,0 +1,36 @@
+use_chinese: false
+antistealDiamond: true
+opbypassgamemode: false
+shop:
+  price:
+    Golden Apple: 16
+    Cow Bucket: 10
+    Squid Potion of Absorption II: 30
+    Golem Potion of Regeneration: 50
+    Diamond: 100
+    Iron Helmet: 10
+    Iron CHESTPLATE: 10
+    Iron Boots: 10
+    Iron LEGGINGS: 10
+    Iron Chestplate: 10
+    Iron Leggings: 10
+spawnloc:
+  red:
+  - -36.09634198124103
+  - 112.0
+  - -15.017361274245067
+  green:
+  - -37.104716461128206
+  - 112.0
+  - -5.331872193203445
+  blue:
+  - -37.104716461128206
+  - 112.0
+  - -5.331872193203445
+  yellow:
+  - -48.64771146491404
+  - 112.0
+  - -15.558062115652408
+coins:
+  NIUDONGDONG: 60
+  keaidehuangpi: 10022
