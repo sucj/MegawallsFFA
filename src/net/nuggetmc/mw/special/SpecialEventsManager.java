@@ -6,6 +6,8 @@ import io.isles.nametagapi.NametagAPI;
 import net.md_5.bungee.api.ChatColor;
 import net.nuggetmc.mw.MegaWalls;
 import net.nuggetmc.mw.mwclass.classes.MWCow;
+import net.nuggetmc.mw.mwclass.items.MWKit;
+import net.nuggetmc.mw.utils.ItemUtils;
 import net.nuggetmc.mw.utils.WorldUtils;
 import org.bukkit.*;
 import org.bukkit.entity.Arrow;
@@ -127,6 +129,17 @@ public class SpecialEventsManager implements Listener {
 
 
         }
+    }
+    @EventHandler
+    public void onClick(PlayerInteractEvent e){
+        if (e.getAction().name().toLowerCase().contains("left")) {
+            Player player =e.getPlayer();
+            if (e.getItem().getType().equals(Material.COMPASS)&& ItemUtils.isKitItem(e.getItem())){
+                player.sendMessage(ChatColor.RED+"target distance: "+new BigDecimal(player.getLocation().distance(player.getCompassTarget())).setScale(1,BigDecimal.ROUND_HALF_UP).doubleValue())
+                        ;
+            }
+        }
+
     }
     ///////////////////////////EXPORB
     @EventHandler
