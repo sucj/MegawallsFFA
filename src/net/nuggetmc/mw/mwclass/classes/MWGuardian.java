@@ -30,6 +30,7 @@ public class MWGuardian extends MWClass {
     Set<Player> extrimityList=new HashSet<>();
     Set<Player> suckList=new HashSet<>();
     Set<Player> waterList=new HashSet<>();
+    Set<Player> multiplyList=new HashSet<>();
 
 
 
@@ -53,7 +54,7 @@ public class MWGuardian extends MWClass {
                 "Extremity",
                 "Once you are below 20 HP,every hit will heal you &a1.5&r HP in &a8&r seconds,you gain &a4&r seconds of resistance &aII&r.\nIf that damage cause you to be dead,it will be cancelled.\nCooldown: &a13 &rseconds.",
                 "Ruins guardian",
-                "If you are in water, you will deal &a+75%&r damage,gaining regeneration &aI&r for the next &a3&r seconds.\nCooldown:&a30&r seconds.",
+                "If you are in water, you will deal &a+75%&r damage for &a5&r seconds,gaining regeneration &aI&r for the next &a3&r seconds.\nCooldown:&a30&r seconds.",
                 "Stupid dev",
                 "There is no gathering talent because this kit is made for mwffa."
         );
@@ -124,10 +125,15 @@ public class MWGuardian extends MWClass {
             waterList.add(e.getPlayer());
             e.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,3*20,0));
             e.getPlayer().sendMessage("You have activated Ruins guardian!");
+            multiplyList.add(e.getPlayer());
             new Thread(() -> Bukkit.getScheduler().runTaskLater(plugin, () -> {
                 //Cool down finished
                 waterList.remove(e.getPlayer());
             }, 30 * 20)).start();
+            new Thread(() -> Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                //multiply effect finished
+                multiplyList.remove(e.getPlayer());
+            }, 5 * 20)).start();
         }
 
     }
@@ -141,6 +147,7 @@ public class MWGuardian extends MWClass {
             return;
         }
         if (!waterList.contains(player)) return;
+        if (!multiplyList.contains(player)) return;
         e.setDamage(e.getDamage()*1.75);
     }
 
@@ -235,6 +242,9 @@ public class MWGuardian extends MWClass {
         }
         if (waterList.contains(player)){
             waterList.remove(player);
+        }
+        if (multiplyList.contains(player)){
+            multiplyList.remove(player);
         }
     }
 }
