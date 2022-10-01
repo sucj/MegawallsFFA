@@ -19,9 +19,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockDispenseEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntitySpawnEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.entity.*;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -106,6 +104,14 @@ public class SpecialEventsManager implements Listener {
                 if (!plugin.getCombatManager().isInCombat(p)){
                     continue;
                 }
+                try {
+                    if (!plugin.getCompassManager().getCompassTargetMap().get(plr).equals(plugin.getTeamsManager().getTeamOfPlayer(p))){
+                        continue;
+                    }
+                }catch (Exception exc){
+                    exc.printStackTrace();
+                }
+
                 if(!p.getPlayerListName().equals(plrName)) {
                     // this is not yourself
                     if (p.getWorld().getEnvironment() == World.Environment.NORMAL) {
@@ -132,10 +138,11 @@ public class SpecialEventsManager implements Listener {
     }
     @EventHandler
     public void onClick(PlayerInteractEvent e){
+        if (e.getItem() == null) return;
         if (e.getAction().name().toLowerCase().contains("left")) {
             Player player =e.getPlayer();
             if (e.getItem().getType().equals(Material.COMPASS)&& ItemUtils.isKitItem(e.getItem())){
-                player.sendMessage(ChatColor.RED+"target distance: "+new BigDecimal(player.getLocation().distance(player.getCompassTarget())).setScale(1,BigDecimal.ROUND_HALF_UP).doubleValue())
+                plugin.getCompassManager().changeTrackingTarget(player);
                         ;
             }
         }
@@ -259,5 +266,17 @@ public class SpecialEventsManager implements Listener {
         int amount = e.getPlayer().getInventory().getContents()[slot].getAmount();
         e.getPlayer().getInventory().getContents()[slot].setAmount(amount +e.getItem().getItemStack().getAmount());
 
-}*/
+}*
+    */
+    /////////////////////////////////////AVOID TOO BIG FALL DAMAGE
+    @EventHandler
+    public void onFallDamage(EntityDamageEvent e) {
+        if (e.getEntity() instanceof Player) {
+            if (e.getCause().equals(EntityDamageEvent.DamageCause.FALL)) {
+                if (e.getDamage()>16) {
+                    e.setDamage(16);
+                }
+            }
+        }
+    }
 }

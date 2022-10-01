@@ -24,8 +24,8 @@
     <orderEntry type="library" name="spigot" level="project" />
     <orderEntry type="library" name="KotlinJavaRuntime" level="project" />
     <orderEntry type="library" name="nametagAPI" level="project" />
-    <orderEntry type="library" name="EssentialsX-2.19.4" level="project" />
-    <orderEntry type="library" name="regionpreserve" level="project" />
     <orderEntry type="library" name="scoreboardplus" level="project" />
+    <orderEntry type="library" name="regionpreserve" level="project" />
+    <orderEntry type="library" name="EssentialsX-2.19.4" level="project" />
   </component>
 </module>

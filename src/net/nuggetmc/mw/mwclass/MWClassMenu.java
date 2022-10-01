@@ -70,6 +70,9 @@ public class MWClassMenu implements Listener {
        TeamsManager.Team team= MegaWalls.getInstance().getTeamsManager().putTeam(player);
         energyManager.clear(player);
         player.getInventory().clear();
+        if (!MegaWalls.getInstance().getCompassManager().getCompassTargetMap().containsKey(player)){
+            MegaWalls.getInstance().getCompassManager().getCompassTargetMap().put(player,team);
+        }
         manager.assign(player, mwclass, team);
         List<Double> list=MegaWalls.getInstance().getTeamsManager().getSpawnLocOfPlayer(player);
         Location loc=new Location(player.getWorld(), list.get(0), list.get(1), list.get(2));

@@ -155,6 +155,6 @@ class TeamsManager :Listener {
         RED,
         GREEN,
         BLUE,
-        YELLOW
+        YELLOW;
     }
 }

@@ -11,6 +11,7 @@ import net.nuggetmc.mw.mwclass.MWClass;
 import net.nuggetmc.mw.mwclass.MWClassManager;
 import net.nuggetmc.mw.mwclass.MWClassMenu;
 import net.nuggetmc.mw.mwclass.classes.*;
+import net.nuggetmc.mw.special.CompassManager;
 import net.nuggetmc.mw.special.SpecialEventsManager;
 import net.nuggetmc.mw.special.TeamsManager;
 import net.nuggetmc.mw.utils.ItemUtils;
@@ -41,6 +42,13 @@ public class MegaWalls extends JavaPlugin {
     private MWClassManager mwClassManager;
     private MWClassMenu mwClassMenu;
     private ShopMenu shopMenu;
+
+    @Getter
+    public CompassManager getCompassManager() {
+        return compassManager;
+    }
+
+    private CompassManager compassManager;
     public ArrayList<Player> bloodRageList=new ArrayList<>();
 
     @Getter
@@ -187,6 +195,7 @@ public class MegaWalls extends JavaPlugin {
         this.mwhealth = new MWHealth();
         this.shopMenu=new ShopMenu();
         this.sellMenu=new SellMenu();
+        this.compassManager=new CompassManager();
 
         // Register commands
         setExecutor("energy", new EnergyCommand());

@@ -5,7 +5,9 @@ import net.nuggetmc.mw.mwclass.MWClass;
 import net.nuggetmc.mw.mwclass.MWClassManager;
 import net.nuggetmc.mw.mwclass.classes.MWDriver;
 import net.nuggetmc.mw.utils.ActionBar;
+import net.nuggetmc.mw.utils.ItemUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.ExperienceOrb;
@@ -58,7 +60,10 @@ public class EnergyManager implements Listener {
             MWClass mwclass = manager.get(player);
 
             if (mwclass == null) continue;
-
+            if (player.getItemInHand().getType().equals(Material.COMPASS)&& ItemUtils.isKitItem(player.getItemInHand())){
+                ActionBar.send(player, ChatColor.BOLD + plugin.getCompassManager().getCompassActionBarOfPlayer(player));
+                return;
+            }
             if (manager.get(player).getActionBar(player)!=null){
                 ActionBar.send(player,manager.get(player).getActionBar(player));
             }
