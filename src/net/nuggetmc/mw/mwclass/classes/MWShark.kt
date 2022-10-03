@@ -73,7 +73,7 @@ class MWShark() : MWClass(){
         var set=HashSet<Block>()
         for (i in -expand until expand+1){
             val block = world.getBlockAt(location.blockX + i, posY, location.blockZ)
-            if (block.isEmpty){
+            if (canBeReplaced(block)){
 
 
                         block.setType(Material.STATIONARY_WATER,false)
@@ -83,7 +83,7 @@ class MWShark() : MWClass(){
                         }
                 for (j in -expand until expand+1){
                     val block1 = world.getBlockAt(location.blockX + i, posY, location.blockZ + j)
-                    if (block1.isEmpty){
+                    if (canBeReplaced(block1)){
 
                         block1.setType(Material.STATIONARY_WATER,false)
                         waterMap.get(player)?.add(block1)
@@ -282,5 +282,11 @@ class MWShark() : MWClass(){
             }
         }
         return false
+    }
+    fun canBeReplaced(block: Block): Boolean {
+        return when(block.type){
+            Material.AIR,Material.GRASS,Material.LONG_GRASS,Material.YELLOW_FLOWER,Material.RAILS,Material.ACTIVATOR_RAIL,Material.DETECTOR_RAIL,Material.POWERED_RAIL,Material.REDSTONE,Material.REDSTONE_COMPARATOR,Material.REDSTONE_COMPARATOR_ON,Material.REDSTONE_WIRE,Material.REDSTONE_COMPARATOR_OFF,Material.REDSTONE_TORCH_OFF,Material.REDSTONE_TORCH_ON-> true
+            else->false
+        }
     }
     }

@@ -82,9 +82,8 @@ public class MWEnderman extends MWClass {
         Location loc=player.getLocation();
         ArrayList<Player> targets=new ArrayList<>();
         for (Player p : Bukkit.getOnlinePlayers()) {
-            if (world != target.getWorld()) continue;
-
-            if (target != player && !target.isDead() && loc.distance(target.getLocation()) <= 25&&(!plugin.getTeamsManager().isOnSameTeam(target,player))) {
+            if (world != p.getWorld()) continue;
+            if (p != player && !p.isDead() && loc.distance(p.getLocation()) <= 25&&(!plugin.getTeamsManager().isOnSameTeam(p,player))) {
                 targets.add(p);
             }
         }
