@@ -2,6 +2,7 @@ package net.nuggetmc.mw.special
 
 import net.nuggetmc.mw.MegaWalls
 import net.nuggetmc.mw.special.TeamsManager.Team.*
+import org.bukkit.ChatColor
 import org.bukkit.entity.Player
 import java.math.BigDecimal
 
@@ -20,7 +21,7 @@ class CompassManager {
         compassTargetMap.let { if (it.get(player)==null) {
             it.put(player,tm.getTeamOfPlayer(player))
         } }
-           return "Tracking ${compassTargetMap.get(player)?.name}        Distance: ${
+           return "Tracking ${compassTargetMap[player]?.let { tm.getColorOfTeam(it) } +ChatColor.BOLD + compassTargetMap.get(player)?.name+ChatColor.RESET+ChatColor.BOLD}        Distance: ${
                BigDecimal(
                    player.location.distance(
                        player.compassTarget

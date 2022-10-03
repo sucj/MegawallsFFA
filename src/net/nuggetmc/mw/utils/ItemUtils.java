@@ -8,6 +8,7 @@ import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.material.EnderChest;
@@ -120,5 +121,22 @@ public class ItemUtils {
     }
     public static boolean isSword(Material material){
         return material==Material.WOOD_SWORD||material==Material.STONE_SWORD||material==Material.IRON_SWORD||material==Material.GOLD_SWORD||material==Material.DIAMOND_SWORD;
+    }
+    public static boolean containsSimilar(Inventory inv,ItemStack itemStack){
+        if (itemStack == null) {
+            return false;
+        } else {
+            ItemStack[] var2;
+            int var3 = (var2 = inv.getContents()).length;
+
+            for(int var4 = 0; var4 < var3; ++var4) {
+                ItemStack i = var2[var4];
+                if (itemStack.isSimilar(i)) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
     }
 }

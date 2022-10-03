@@ -21,7 +21,9 @@ import org.bukkit.event.block.BlockDispenseEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.player.*;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -279,6 +281,35 @@ public class SpecialEventsManager implements Listener {
                     e.setDamage(16);
                 }
             }
+        }
+    }
+    ////////////////////////////////////AUTOFILL
+    @EventHandler
+    public void onAutoFill(PlayerItemConsumeEvent e){
+        PlayerInventory inventory=e.getPlayer().getInventory();
+        if (!(inventory.getItem(e.getPlayer().getInventory().getHeldItemSlot()).getAmount()==1)){
+            return;
+        }
+        SpecialItemUtils si= plugin.getSpecialItemUtils();
+        Player p=e.getPlayer();
+        ItemStack itemStack=e.getItem();
+        if (itemStack.isSimilar(si.getCowBucket())){
+                    Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                        if (ItemUtils.containsSimilar(inventory,si.getCowBucket())) {
+                            int slot=ItemUtils.findItemSlot(p,si.getCowBucket());
+                            inventory.setItem(inventory.getHeldItemSlot(), inventory.getItem(slot));
+                            inventory.setItem(slot,null);
+                        }
+                    }, 1);
+
+        } else if (itemStack.isSimilar(si.getSquidPot())) {
+            Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                if (ItemUtils.containsSimilar(inventory,si.getSquidPot())) {
+                    int slot=ItemUtils.findItemSlot(p,si.getSquidPot());
+                    inventory.setItem(inventory.getHeldItemSlot(), inventory.getItem(slot));
+                    inventory.setItem(slot,null);
+                }
+            }, 1);
         }
     }
 }

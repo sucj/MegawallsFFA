@@ -45,6 +45,13 @@ public class SpecialItemUtils {
     }
     public ItemStack getCowBucket(int amount){
         ItemStack milk=new ItemStack(Material.MILK_BUCKET,amount);
+        ArrayList<String> lore=new ArrayList<>();
+        lore.add(ChatColor.BLUE+"Resistance I (5s)");
+        lore.add(ChatColor.BLUE+"Regeneration II (5s) "+ChatColor.GRAY+"(2 "+ChatColor.RED+"❤"+ChatColor.RESET+")");
+        ItemMeta itemMeta=milk.getItemMeta();
+        itemMeta.setDisplayName(ChatColor.WHITE+"Ultra Pasteurized Milk Bucket");
+        itemMeta.setLore(lore);
+        milk.setItemMeta(itemMeta);
         net.minecraft.server.v1_8_R3.ItemStack nmsItem = CraftItemStack.asNMSCopy(milk);
         NBTTagCompound compound = nmsItem.hasTag() ? nmsItem.getTag() : new NBTTagCompound();
 
