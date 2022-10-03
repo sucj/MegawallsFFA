@@ -94,6 +94,9 @@ public class SpecialEventsManager implements Listener {
     @EventHandler
     public void onMove(PlayerMoveEvent e){
         Player plr = e.getPlayer();
+        if (!plugin.getCombatManager().isInCombat(plr)){
+            return;
+        }
         Location plrLocation = plr.getLocation();
         if (plr.getWorld().getEnvironment() == World.Environment.NORMAL){
             //System.out.println(plr.getPlayerListName());
@@ -104,13 +107,12 @@ public class SpecialEventsManager implements Listener {
                 if (!plugin.getCombatManager().isInCombat(p)){
                     continue;
                 }
-                try {
+
+
                     if (!plugin.getCompassManager().getCompassTargetMap().get(plr).equals(plugin.getTeamsManager().getTeamOfPlayer(p))){
                         continue;
                     }
-                }catch (Exception exc){
-                    exc.printStackTrace();
-                }
+
 
                 if(!p.getPlayerListName().equals(plrName)) {
                     // this is not yourself

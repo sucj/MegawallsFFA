@@ -77,56 +77,32 @@ public class MWEnderman extends MWClass {
 
         if (cooldownCacheAbility.containsKey(player)) return;
 
-        World world = player.getWorld();
-        Location loc = player.getLocation();
-        Vector dir = loc.getDirection();
-        Set<Location> points = new HashSet<>();
-
-        for (int i = 0; i <= 25; i++) {
-            points.add(loc.clone().add(dir.clone().multiply(i)));
-        }
-
-        Set<Player> valid = new HashSet<>();
-
-        for (Player target : Bukkit.getOnlinePlayers()) {
+        World world=player.getWorld();
+        Player target=null;
+        Location loc=player.getLocation();
+        ArrayList<Player> targets=new ArrayList<>();
+        for (Player p : Bukkit.getOnlinePlayers()) {
             if (world != target.getWorld()) continue;
 
             if (target != player && !target.isDead() && loc.distance(target.getLocation()) <= 25&&(!plugin.getTeamsManager().isOnSameTeam(target,player))) {
-                valid.add(target);
+                targets.add(p);
             }
         }
-
-        Map<Player, Double> stream = new HashMap<>();
-
-        for (Player target : valid) {
-            double low = 100;
-
-            for (Location pt : points) {
-                double dist = pt.distance(target.getLocation());
-
-                if (dist < low) {
-                    low = dist;
-                }
-            }
-
-            stream.put(target, low);
-        }
-
-        Player target = null;
-        double hdist = 100;
-
-        for (Map.Entry<Player, Double> entry : stream.entrySet()) {
-            Player check = entry.getKey();
-            double dist = entry.getValue();
-
-            if (target == null || dist < hdist) {
-                target = check;
-                hdist = dist;
-            }
-        }
-
-        if (target != null) {
+        if (targets.isEmpty()){
+            return;
+        }else {
             energyManager.clear(player);
+            targets.sort(new Comparator<Player>() {
+                @Override
+                public int compare(Player player1, Player t1) {
+                    if (player.getEyeLocation().distance(player1.getLocation())>(player.getEyeLocation().distance(t1.getLocation()))){
+                        return 1;
+                    }else {
+                        return -1;
+                    }
+                }
+            });
+            target=targets.get(0);
             player.teleport(target);
 
             PotionUtils.effect(player, PotionEffectType.SPEED, 5, 2);
@@ -152,7 +128,7 @@ public class MWEnderman extends MWClass {
                         return;
                     }
 
-                    double num = wpr.time / 10.0;
+                    double num = wpr.time / 100.0;
 
                     String msg = "Teleport (" + ChatColor.RED + num + "s" + ChatColor.RESET + ")";
                     //ActionBar.send(player, msg);
@@ -167,7 +143,7 @@ public class MWEnderman extends MWClass {
             return;
         }
 
-        ActionBar.send(player, "No players within " + ChatColor.RED + 25 + ChatColor.RESET + " meters!");
+
     }
 
     @EventHandler

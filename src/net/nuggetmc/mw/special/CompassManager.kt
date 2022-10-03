@@ -12,6 +12,9 @@ class CompassManager {
     fun changeTrackingTarget(player: Player) {
         compassTargetMap[player] = if (compassTargetMap[player] == null) tm.getTeamOfPlayer(player) else compassTargetMap.get(player)
             ?.let { nextTeam(it) }
+        if(compassTargetMap[player]?.let { plugin.teamsManager.getTeamMembers(it).isEmpty() } == true){
+            changeTrackingTarget(player)
+        }
     }
     fun getCompassActionBarOfPlayer(player: Player):String{
         compassTargetMap.let { if (it.get(player)==null) {
