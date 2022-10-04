@@ -132,7 +132,6 @@ public class SpecialEventsManager implements Listener {
             }
             if (LowestLocation==null){
                 return;
-                //Todo : When right click on Compass tell the player that target is not found
             }
             // we now have the lowest location and distance
             plr.setCompassTarget(LowestLocation);
