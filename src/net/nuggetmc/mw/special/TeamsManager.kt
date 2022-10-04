@@ -7,6 +7,7 @@ import org.bukkit.ChatColor
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
+import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.event.player.PlayerRespawnEvent
 
 class TeamsManager :Listener {
@@ -17,6 +18,10 @@ class TeamsManager :Listener {
      */
     @EventHandler
     fun onRespawn(e:PlayerRespawnEvent){
+        removePlayerTeam(e.player)
+    }
+    @EventHandler
+    fun onLeave(e:PlayerQuitEvent){
         removePlayerTeam(e.player)
     }
     fun getSpawnLocOfPlayer(player: Player):List<Double>{
@@ -121,7 +126,7 @@ class TeamsManager :Listener {
     /**
      * clear a player's team
      */
-    public fun removePlayerTeam(player: Player) {
+    fun removePlayerTeam(player: Player) {
         if (teamsMap.containsKey(player)){
             teamsMap.remove(player)
         }
@@ -130,7 +135,7 @@ class TeamsManager :Listener {
     /**
      * add a player in a team directly.
      */
-    public fun addTeam(player: Player,team:Team) {
+    fun addTeam(player: Player,team:Team) {
         teamsMap.put(player,team)
     }
 

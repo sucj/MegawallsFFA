@@ -36,7 +36,7 @@ public class MWArcanist extends MWClass {
 
     public MWArcanist() {
         this.name = new String[]{"奥术师","Arcanist","ARC"};
-        this.icon = Material.BOOK;
+        this.icon = Material.FIREWORK;
         this.color = ChatColor.AQUA;
 
         this.playstyles = new Playstyle[] {
