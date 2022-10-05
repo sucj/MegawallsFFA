@@ -50,7 +50,7 @@ public class EnergyManager implements Listener {
 
                 case "Spider":
                 case "蜘蛛":
-                    add(player, 4);
+                    add(player, 6);
                     break;
             }
         }

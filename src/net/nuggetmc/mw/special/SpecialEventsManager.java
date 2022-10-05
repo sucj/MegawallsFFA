@@ -311,4 +311,15 @@ public class SpecialEventsManager implements Listener {
             }, 1);
         }
     }
+    /////////////////////ARENA RESET
+    @EventHandler
+    public void onResetBreak(BlockBreakEvent e){
+        Material material=e.getBlock().getType();
+        if (material.name().toLowerCase().contains("diamond")) {
+            return;
+        }
+            Bukkit.getScheduler().runTaskLater(plugin,()->{
+            e.getBlock().setType(material);
+        }, plugin.breakResetTime* 20L);
+    }
 }

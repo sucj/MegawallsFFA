@@ -120,6 +120,7 @@ public class MegaWalls extends JavaPlugin {
     public List<Double> greenspawn;
     public List<Double> bluespawn;
     public List<Double> yellowspawn;
+    public int breakResetTime;
     public static boolean OPBYPASSGM=false;
     @Override
     public void onEnable() {
@@ -130,6 +131,13 @@ public class MegaWalls extends JavaPlugin {
         }catch (Exception e){
             getConfig().set("use_chinese",false);
             isChinese=false;
+            saveConfig();
+        }
+        try {
+            breakResetTime= (int) getConfig().get("break_reset_time");
+        }catch (Exception e){
+            getConfig().set("break_reset_time",60);
+            breakResetTime=60;
             saveConfig();
         }
         try {

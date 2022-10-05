@@ -34,3 +34,4 @@ spawnloc:
 coins:
   NIUDONGDONG: 60
   keaidehuangpi: 9722
+break_reset_time: 60

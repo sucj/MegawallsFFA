@@ -117,7 +117,7 @@ public class MWZombie extends MWClass {
         if (player == null) return;
 
         if (manager.get(player) == this) {
-            energyManager.add(player, 12);
+            energyManager.add(player, 20);
         }
 
         Player victim = (Player) event.getEntity();

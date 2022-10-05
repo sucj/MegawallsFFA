@@ -63,9 +63,9 @@ public class MWSpider extends MWClass {
             "When digging with a shovel, you will receive an iron ingot for every &a1 &rblock mined."
         );
 
-        this.classInfo.addEnergyGainType("Melee", 8);
-        this.classInfo.addEnergyGainType("Bow", 8);
-        this.classInfo.addEnergyGainType("Per Second", 4);
+        this.classInfo.addEnergyGainType("Melee", 16);
+        this.classInfo.addEnergyGainType("Bow", 16);
+        this.classInfo.addEnergyGainType("Per Second", 6);
 
         leapExceptions = Sets.newHashSet(Material.AIR, Material.LONG_GRASS, Material.DOUBLE_PLANT);
     }
@@ -258,7 +258,7 @@ public class MWSpider extends MWClass {
             }
         }
 
-        energyManager.add(player, 8);
+        energyManager.add(player, 16);
     }
 
     @EventHandler
@@ -296,16 +296,20 @@ public class MWSpider extends MWClass {
             Map<Enchantment, Integer> armorEnch = new HashMap<>();
             armorEnch.put(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
             armorEnch.put(Enchantment.DURABILITY, 10);
+            Map<Enchantment, Integer> armorEnch2 = new HashMap<>();
+            armorEnch.put(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+            armorEnch.put(Enchantment.DURABILITY, 10);
 
             ItemStack sword = MWItem.createSword(this, Material.DIAMOND_SWORD, swordEnch);
             ItemStack bow = MWItem.createBow(this, null);
             ItemStack tool = MWItem.createTool(this, Material.DIAMOND_PICKAXE);
             ItemStack toolShovel = MWItem.createTool(this, Material.IRON_SPADE);
             ItemStack boots = MWItem.createArmor(this, Material.DIAMOND_BOOTS, armorEnch);
+            ItemStack leggings=MWItem.createArmor(this,Material.IRON_LEGGINGS,armorEnch2);
 
             List<ItemStack> potions = MWPotions.createBasic(this, 2, 8, 2);
 
-            items = MWKit.generate(this, sword, bow, tool, null, toolShovel, potions, null, null, null, boots, null);
+            items = MWKit.generate(this, sword, bow, tool, null, toolShovel, potions, null, null, leggings, boots, null);
         }
 
         MWKit.assignItems(player, items);
