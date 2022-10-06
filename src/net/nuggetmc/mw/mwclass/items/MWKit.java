@@ -5,7 +5,6 @@ import net.nuggetmc.mw.MegaWalls;
 import net.nuggetmc.mw.mwclass.MWClass;
 import net.nuggetmc.mw.utils.ItemStackCreator;
 import net.nuggetmc.mw.utils.ItemUtils;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -28,7 +27,7 @@ public class MWKit {
     }
 
     public static Map<Integer, ItemStack> generate(MWClass mwclass, ItemStack sword, ItemStack bow, ItemStack tool, ItemStack toolAxe, ItemStack toolShovel, List<ItemStack> potions,
-                   ItemStack helmet, ItemStack chestplate, ItemStack leggings, ItemStack boots, List<ItemStack> extra) {
+                                                   ItemStack helmet, ItemStack chestplate, ItemStack leggings, ItemStack boots, List<ItemStack> extra) {
 
         Map<Integer, ItemStack> items = new HashMap<>();
 
@@ -39,8 +38,8 @@ public class MWKit {
         if (toolShovel == null) {
             toolShovel = new ItemStack(Material.IRON_SPADE);
         }
-        ItemStack enderchest= ItemStackCreator.createItem(Material.ENDER_CHEST, mwclass.getColor()+mwclass.getName()+ (MegaWalls.getInstance().isChinese()?" 末影箱":" Enderchest"),1);
-        ItemStack compass= ItemUtils.toMWItem(ItemStackCreator.createItem(Material.COMPASS, mwclass.getColor()+mwclass.getName()+ (MegaWalls.getInstance().isChinese()?" 指南针":" Compass"),1));
+        ItemStack enderchest = ItemStackCreator.createItem(Material.ENDER_CHEST, mwclass.getColor() + mwclass.getName() + (MegaWalls.getInstance().isChinese() ? " 末影箱" : " Enderchest"), 1);
+        ItemStack compass = ItemUtils.toMWItem(ItemStackCreator.createItem(Material.COMPASS, mwclass.getColor() + mwclass.getName() + (MegaWalls.getInstance().isChinese() ? " 指南针" : " Compass"), 1));
         List<ItemStack> contents = new ArrayList<>();
 
         contents.add(sword);
@@ -72,10 +71,10 @@ public class MWKit {
             items.put(n, item);
             n++;
         }
-        boolean nullhelmet=false;
-        boolean nullcp=false;
-        boolean nullleg=false;
-        boolean nullboots=false;
+        boolean nullhelmet = false;
+        boolean nullcp = false;
+        boolean nullleg = false;
+        boolean nullboots = false;
         if (helmet == null) helmet = new ItemStack(Material.IRON_HELMET);
         if (chestplate == null) chestplate = new ItemStack(Material.IRON_CHESTPLATE);
         if (leggings == null) leggings = new ItemStack(Material.IRON_LEGGINGS);

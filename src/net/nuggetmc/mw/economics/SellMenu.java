@@ -2,8 +2,8 @@ package net.nuggetmc.mw.economics;
 
 import net.md_5.bungee.api.ChatColor;
 import net.nuggetmc.mw.MegaWalls;
-import net.nuggetmc.mw.utils.ItemUtils;
 import net.nuggetmc.mw.special.SpecialItemUtils;
+import net.nuggetmc.mw.utils.ItemUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -18,34 +18,30 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SellMenu implements Listener {
-    MegaWalls plugin=MegaWalls.getInstance();
+    MegaWalls plugin = MegaWalls.getInstance();
 
-    SpecialItemUtils specialItemUtils= plugin.getSpecialItemUtils();
+    SpecialItemUtils specialItemUtils = plugin.getSpecialItemUtils();
     private static final String CLOSE_NAME = ChatColor.RED + "Close";
 
 
-    private final String menuTitle="Sell";
-    private static Map<ItemStack,Integer> things=new HashMap<>();
+    private final String menuTitle = "Sell";
+    private static Map<ItemStack, Integer> things = new HashMap<>();
 
 
     public SellMenu() {
-        things.put(new ItemStack(Material.DIAMOND),50);
-        things.put(new ItemStack(Material.IRON_ORE),1);
+        things.put(new ItemStack(Material.DIAMOND), 50);
+        things.put(new ItemStack(Material.IRON_ORE), 1);
         //things.put(new ItemStack(Material.COBBLESTONE),1);
     }
-
 
 
     public void openGUI(Player player) {
         Inventory inv = Bukkit.createInventory(null, 54, menuTitle);
 
 
-
-        for (int i=0;i<things.keySet().size();i++){
-            inv.setItem(i+10, (ItemStack) things.keySet().toArray()[i]);
+        for (int i = 0; i < things.keySet().size(); i++) {
+            inv.setItem(i + 10, (ItemStack) things.keySet().toArray()[i]);
         }
-
-
 
 
         inv.setItem(49, createClose());
@@ -53,18 +49,16 @@ public class SellMenu implements Listener {
     }
 
 
-
-
     public void select(Player player, ItemStack thing) {
-        int itemSlot= ItemUtils.findItemSlot(player,thing);
-        if (itemSlot==-1){
+        int itemSlot = ItemUtils.findItemSlot(player, thing);
+        if (itemSlot == -1) {
             player.sendMessage("There is no such item in your inventory!");
-        }else {
+        } else {
             int amount = player.getInventory().getContents()[itemSlot].getAmount();
             int totalcoin = amount * things.get(thing);
             plugin.getCoinsManager().add(player, totalcoin);
             player.getInventory().clear(itemSlot);
-            player.sendMessage("You have sold "+amount+" "+ChatColor.YELLOW+(thing.hasItemMeta()?thing.getItemMeta().getDisplayName():thing.getType().name())+ChatColor.RESET+" , getting "+ChatColor.GREEN+ totalcoin +ChatColor.RESET+" coins.");
+            player.sendMessage("You have sold " + amount + " " + ChatColor.YELLOW + (thing.hasItemMeta() ? thing.getItemMeta().getDisplayName() : thing.getType().name()) + ChatColor.RESET + " , getting " + ChatColor.GREEN + totalcoin + ChatColor.RESET + " coins.");
         }
 
 
@@ -82,18 +76,18 @@ public class SellMenu implements Listener {
         //event.getWhoClicked().sendMessage("1");
         ItemStack item = event.getCurrentItem();
         if (item == null) return;
-       // event.getWhoClicked().sendMessage("2");
+        // event.getWhoClicked().sendMessage("2");
         ItemMeta meta = item.getItemMeta();
         if (meta == null) return;
-       // event.getWhoClicked().sendMessage("3");
+        // event.getWhoClicked().sendMessage("3");
         //String name = meta.getDisplayName();
         //if (name == null) return;
-       // event.getWhoClicked().sendMessage("4");
+        // event.getWhoClicked().sendMessage("4");
 
 
         Player player = (Player) event.getWhoClicked();
 
-        if (item.getItemMeta().getDisplayName()!=null&&item.getItemMeta().getDisplayName().equals(CLOSE_NAME)) {
+        if (item.getItemMeta().getDisplayName() != null && item.getItemMeta().getDisplayName().equals(CLOSE_NAME)) {
             player.closeInventory();
             return;
         }

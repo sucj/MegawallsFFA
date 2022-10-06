@@ -9,8 +9,8 @@ import org.bukkit.entity.Player;
 public class ShopCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (sender instanceof Player){
-            Player player= (Player) sender;
+        if (sender instanceof Player) {
+            Player player = (Player) sender;
             MegaWalls.getInstance().getShopMenu().openGUI(player);
         }
         return true;

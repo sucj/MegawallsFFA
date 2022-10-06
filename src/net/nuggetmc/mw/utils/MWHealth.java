@@ -112,8 +112,8 @@ public class MWHealth implements Listener {
     }
 
     public void trueDamage(Player player, double amount, Player damager) {
-        if (plugin.bloodRageList.contains(damager)){
-            amount *=1.75;
+        if (plugin.bloodRageList.contains(damager)) {
+            amount *= 1.75;
         }
         double health = player.getHealth();
 

@@ -41,7 +41,7 @@ public abstract class MWClass implements Listener {
     }
 
     public String getName() {
-        return plugin.isChinese()?name[0]:name[1];
+        return plugin.isChinese() ? name[0] : name[1];
     }
 
     protected Set<Player> inRange(Player player, double radius) {
@@ -61,6 +61,7 @@ public abstract class MWClass implements Listener {
 
         return result;
     }
+
     /*@EventHandler
     public void onBow(EntityDamageByEntityEvent e){
         if (e.getDamager()instanceof Arrow){
@@ -70,7 +71,7 @@ public abstract class MWClass implements Listener {
         }
     }*/
     @EventHandler
-    public void onHit(EntityDamageByEntityEvent e){
+    public void onHit(EntityDamageByEntityEvent e) {
         this.hit(e);
     }
 
@@ -93,26 +94,30 @@ public abstract class MWClass implements Listener {
     public MWClassInfo getInfo() {
         return classInfo;
     }
-    public String getShortName(){
-        return plugin.isChinese()?name[0] :name[2];
+
+    public String getShortName() {
+        return plugin.isChinese() ? name[0] : name[2];
     }
 
     public abstract void ability(Player player);
 
     public abstract void assign(Player player);
+
     public void hit(EntityDamageByEntityEvent e) {
         if (e.isCancelled()) return;
         Player player = energyManager.validate(e);
         if (player == null) return;
-        Player victim= (Player) e.getEntity();
-        if (MegaWalls.getInstance().getTeamsManager().isOnSameTeam(player,victim)){
+        Player victim = (Player) e.getEntity();
+        if (MegaWalls.getInstance().getTeamsManager().isOnSameTeam(player, victim)) {
             e.setCancelled(true);
         }
     }
-    public int getPrice(){
+
+    public int getPrice() {
         return 0;
     }
-    public String getActionBar(Player player){
+
+    public String getActionBar(Player player) {
         return null;
     }
 }

@@ -29,6 +29,7 @@ public class MWPotions {
 
         return items;
     }
+
     public static List<ItemStack> createWolfBasic(MWClass mwclass, int hPotCount, int hPotAmount, int sPotCount) {
         List<ItemStack> items = new ArrayList<>();
 
@@ -36,7 +37,7 @@ public class MWPotions {
         ChatColor color = mwclass.getColor();
 
         items.add(createHealPotions(name, color, hPotCount, hPotAmount));
-        items.add(createWolfSpeedPotions(name,color,sPotCount));
+        items.add(createWolfSpeedPotions(name, color, sPotCount));
 
         return items;
     }
@@ -78,6 +79,7 @@ public class MWPotions {
 
         return ItemUtils.toMWItem(item);
     }
+
     public static ItemStack createWolfSpeedPotions(String name, ChatColor color, int count) {
         Potion potion = new Potion(PotionType.SPEED);
         ItemStack item = potion.toItemStack(count);

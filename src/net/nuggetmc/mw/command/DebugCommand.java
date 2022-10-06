@@ -3,7 +3,6 @@ package net.nuggetmc.mw.command;
 import net.nuggetmc.mw.MegaWalls;
 import net.nuggetmc.mw.mwclass.MWClassManager;
 import net.nuggetmc.mw.special.TeamsManager;
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -30,9 +29,9 @@ public class DebugCommand implements CommandExecutor {
             list.sort(new Comparator<TeamsManager.Team>() {
                 @Override
                 public int compare(TeamsManager.Team team, TeamsManager.Team t1) {
-                    if (MegaWalls.getInstance().getTeamsManager().getTeamMembers(team).size()<MegaWalls.getInstance().getTeamsManager().getTeamMembers(t1).size()){
+                    if (MegaWalls.getInstance().getTeamsManager().getTeamMembers(team).size() < MegaWalls.getInstance().getTeamsManager().getTeamMembers(t1).size()) {
                         return -1;
-                    }else if (MegaWalls.getInstance().getTeamsManager().getTeamMembers(team).size()>MegaWalls.getInstance().getTeamsManager().getTeamMembers(t1).size()){
+                    } else if (MegaWalls.getInstance().getTeamsManager().getTeamMembers(team).size() > MegaWalls.getInstance().getTeamsManager().getTeamMembers(t1).size()) {
                         return 1;
                     }
                     return 0;

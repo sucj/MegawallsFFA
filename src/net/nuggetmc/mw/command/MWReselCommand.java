@@ -20,11 +20,11 @@ public class MWReselCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (sender instanceof Player) {
             Player player = (Player) sender;
-            if (!MegaWalls.getInstance().getCombatManager().isInCombat(player)){
+            if (!MegaWalls.getInstance().getCombatManager().isInCombat(player)) {
                 player.sendMessage("LOL BRO YOU DIDNT SELECT A CLASS AT ALL!");
                 return true;
             }
-            if(args.length==0) {
+            if (args.length == 0) {
                 MegaWalls.getInstance().getMenu().select(player, manager.get(player));
             } else if (args.length == 1) {
                 try {
@@ -32,8 +32,7 @@ public class MWReselCommand implements CommandExecutor {
                 } catch (Exception e) {
                     sender.sendMessage("Player not found!");
                 }
-            }
-            else {
+            } else {
                 sender.sendMessage("invaild syntax! usage: /mwresel [player]");
             }
 

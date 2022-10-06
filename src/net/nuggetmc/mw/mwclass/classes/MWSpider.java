@@ -38,18 +38,18 @@ public class MWSpider extends MWClass {
     private final Map<Player, Integer> increment = new HashMap<>();
 
     public MWSpider() {
-        this.name = new String[]{"蜘蛛","Spider","SPI"};
+        this.name = new String[]{"蜘蛛", "Spider", "SPI"};
         this.icon = Material.WEB;
         this.color = ChatColor.DARK_GRAY;
 
-        this.playstyles = new Playstyle[] {
-            Playstyle.MOBILITY,
-            Playstyle.RUSHER
+        this.playstyles = new Playstyle[]{
+                Playstyle.MOBILITY,
+                Playstyle.RUSHER
         };
 
-        this.diamonds = new Diamond[] {
-            Diamond.SWORD,
-            Diamond.BOOTS
+        this.diamonds = new Diamond[]{
+                Diamond.SWORD,
+                Diamond.BOOTS
         };
 
         this.classInfo = new MWClassInfo(
@@ -140,7 +140,7 @@ public class MWSpider extends MWClass {
         if (dmg > 12) dmg = 12;
 
         for (Player victim : Bukkit.getOnlinePlayers()) {
-            if (plugin.getTeamsManager().isOnSameTeam(player,victim)) continue;
+            if (plugin.getTeamsManager().isOnSameTeam(player, victim)) continue;
             if (player.getWorld() != victim.getWorld()) continue;
 
             if (player != victim && !victim.isDead() && loc.distance(victim.getLocation()) <= 4) {
@@ -288,9 +288,7 @@ public class MWSpider extends MWClass {
 
         if (MWKit.contains(this)) {
             items = MWKit.fetch(this);
-        }
-
-        else {
+        } else {
             Map<Enchantment, Integer> swordEnch = new HashMap<>();
             swordEnch.put(Enchantment.DURABILITY, 10);
 

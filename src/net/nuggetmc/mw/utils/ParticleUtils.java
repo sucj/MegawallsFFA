@@ -11,17 +11,17 @@ public class ParticleUtils {
 
     public static void play(EnumParticle type, Location loc, double offsetX, double offsetY, double offsetZ, double speed, int count) {
         PacketPlayOutWorldParticles particles = new PacketPlayOutWorldParticles(
-            type,
-            true,
-            (float) loc.getX(),
-            (float) loc.getY(),
-            (float) loc.getZ(),
-            (float) offsetX,
-            (float) offsetY,
-            (float) offsetZ,
-            (float) speed,
-            count,
-            (int[]) null
+                type,
+                true,
+                (float) loc.getX(),
+                (float) loc.getY(),
+                (float) loc.getZ(),
+                (float) offsetX,
+                (float) offsetY,
+                (float) offsetZ,
+                (float) speed,
+                count,
+                (int[]) null
         );
 
         for (Player player : Bukkit.getOnlinePlayers()) {

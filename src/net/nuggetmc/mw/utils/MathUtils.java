@@ -14,7 +14,8 @@ public class MathUtils {
 
         return new Vector(Math.cos(angle), vector.getY(), Math.sin(angle));
     }
-    public static int randomIntInRange(int min,int max){
-        return new Random().nextInt((max-min)+1)+min;
+
+    public static int randomIntInRange(int min, int max) {
+        return new Random().nextInt((max - min) + 1) + min;
     }
 }

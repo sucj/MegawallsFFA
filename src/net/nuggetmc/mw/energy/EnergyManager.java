@@ -35,7 +35,7 @@ public class EnergyManager implements Listener {
         this.manager = plugin.getClassManager();
 
         Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, this::tick, 20, 20);
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, this::tickActionBar,0,0);
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, this::tickActionBar, 0, 0);
     }
 
     public void tick() {
@@ -55,17 +55,18 @@ public class EnergyManager implements Listener {
             }
         }
     }
+
     public void tickActionBar() {
         for (Player player : Bukkit.getOnlinePlayers()) {
             MWClass mwclass = manager.get(player);
 
             if (mwclass == null) continue;
-            if (player.getItemInHand().getType().equals(Material.COMPASS)&& ItemUtils.isKitItem(player.getItemInHand())){
+            if (player.getItemInHand().getType().equals(Material.COMPASS) && ItemUtils.isKitItem(player.getItemInHand())) {
                 ActionBar.send(player, ChatColor.BOLD + plugin.getCompassManager().getCompassActionBarOfPlayer(player));
                 return;
             }
-            if (manager.get(player).getActionBar(player)!=null){
-                ActionBar.send(player,manager.get(player).getActionBar(player));
+            if (manager.get(player).getActionBar(player) != null) {
+                ActionBar.send(player, manager.get(player).getActionBar(player));
             }
         }
     }
@@ -83,9 +84,7 @@ public class EnergyManager implements Listener {
                 player = (Player) arrow.getShooter();
 
                 if (player == event.getEntity()) return null;
-            }
-
-            else {
+            } else {
                 return null;
             }
 
@@ -102,9 +101,11 @@ public class EnergyManager implements Listener {
 
         return null;
     }
+
     public Player validate(PlayerDeathEvent event) {
         if (!(event.getEntity() instanceof Player)) return null;
-        if (!(event.getEntity().getKiller() instanceof Player) && !(event.getEntity().getKiller() instanceof Arrow)) return null;
+        if (!(event.getEntity().getKiller() instanceof Player) && !(event.getEntity().getKiller() instanceof Arrow))
+            return null;
 
         Player player;
 
@@ -115,17 +116,13 @@ public class EnergyManager implements Listener {
                 player = (Player) arrow.getShooter();
 
                 if (player == event.getEntity()) return null;
-            }
-
-            else {
+            } else {
                 return null;
             }
 
         } else {
             player = (Player) event.getEntity().getKiller();
         }
-
-
 
 
         if (manager.isMW(player)) {
@@ -165,7 +162,7 @@ public class EnergyManager implements Listener {
 
         Material type = player.getInventory().getItemInHand().getType();
 
-        if (type == Material.BOW && action.contains("LEFT_CLICK")&&(!(manager.get(player) instanceof MWDriver))) {
+        if (type == Material.BOW && action.contains("LEFT_CLICK") && (!(manager.get(player) instanceof MWDriver))) {
             callAbility(player);
         }
 

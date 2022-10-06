@@ -20,35 +20,35 @@ public class EchestCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (sender instanceof Player){
-            Player player = (Player)sender;
+        if (sender instanceof Player) {
+            Player player = (Player) sender;
 
-            if(args.length < 1) {
-                    if (MegaWalls.getInstance().getCombatManager().isInCombat(player)||player.isOp()||player.hasPermission("mw.admin")){
+            if (args.length < 1) {
+                if (MegaWalls.getInstance().getCombatManager().isInCombat(player) || player.isOp() || player.hasPermission("mw.admin")) {
                     player.openInventory(player.getEnderChest());
 
 
-            }else {
-                        sender.sendMessage("You must be in combat to do that!");
-                    }
+                } else {
+                    sender.sendMessage("You must be in combat to do that!");
+                }
                 return true;
             }
-            if(args.length == 1) {
-                if(player.isOp()||player.hasPermission("mw.admin")) {
+            if (args.length == 1) {
+                if (player.isOp() || player.hasPermission("mw.admin")) {
 
                     String targetplayername = null;
                     Player targetplayer = null;
                     try {
                         targetplayername = args[0];
-                    } catch(ArrayIndexOutOfBoundsException e) {
+                    } catch (ArrayIndexOutOfBoundsException e) {
                         getServer().getLogger().warning("Missing argument on enderchestcommand... " + e);
                     }
-                    if(targetplayername != null) {
+                    if (targetplayername != null) {
                         targetplayer = Bukkit.getPlayerExact(targetplayername);
 
                         // Exceptions vermeiden if possible...
 
-                        if(targetplayer == null) {
+                        if (targetplayer == null) {
                             sender.sendMessage("Player is null!");
                             return true;
                         }
@@ -62,11 +62,10 @@ public class EchestCommand implements CommandExecutor {
             }
 
 
-
             return true;
         }
-            sender.sendMessage("this can pnly be used by player!");
-            return true;
+        sender.sendMessage("this can pnly be used by player!");
+        return true;
 
     }
 }

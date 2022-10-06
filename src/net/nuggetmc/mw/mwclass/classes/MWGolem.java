@@ -27,36 +27,39 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class MWGolem extends MWClass {
 
     private final Map<Player, Integer> increment = new HashMap<>();
 
     public MWGolem() {
-        this.name = new String[]{"傀儡","Golem","GOL"};
+        this.name = new String[]{"傀儡", "Golem", "GOL"};
         this.icon = Material.IRON_CHESTPLATE;
         this.color = ChatColor.WHITE;
 
-        this.playstyles = new Playstyle[] {
-            Playstyle.TANK,
-            Playstyle.CONTROL
+        this.playstyles = new Playstyle[]{
+                Playstyle.TANK,
+                Playstyle.CONTROL
         };
 
-        this.diamonds = new Diamond[] {
-            Diamond.CHESTPLATE,
-            Diamond.BOOTS
+        this.diamonds = new Diamond[]{
+                Diamond.CHESTPLATE,
+                Diamond.BOOTS
         };
 
         this.classInfo = new MWClassInfo(
-            "Iron Punch",
-            "Punch the ground, forming a hexagon shockwave which deals &a6 &rdamage to opponents in a 4.5 block radius and pulls them inwards.",
-            "Iron Heart",
-            "Upon killing a player, you gain Absorption II for &a10 &rseconds.",
-            "Iron Constitution",
-            "You have a passive resistance against incoming true damage, allowing you to take &a20% &rless true damage.\nYou gain Resistance I as well for &a9 &rseconds when hit by an arrow.",
-            "Momentum",
-            "An Iron Block will be dropped after every &a4 &rwooden logs chopped."
+                "Iron Punch",
+                "Punch the ground, forming a hexagon shockwave which deals &a6 &rdamage to opponents in a 4.5 block radius and pulls them inwards.",
+                "Iron Heart",
+                "Upon killing a player, you gain Absorption II for &a10 &rseconds.",
+                "Iron Constitution",
+                "You have a passive resistance against incoming true damage, allowing you to take &a20% &rless true damage.\nYou gain Resistance I as well for &a9 &rseconds when hit by an arrow.",
+                "Momentum",
+                "An Iron Block will be dropped after every &a4 &rwooden logs chopped."
         );
 
         this.classInfo.addEnergyGainType("Melee", 10);
@@ -72,7 +75,7 @@ public class MWGolem extends MWClass {
         Location locUp = player.getEyeLocation();
 
         for (Player victim : inRange(player, 4.5)) {
-            if (plugin.getTeamsManager().isOnSameTeam(player,victim)) continue;
+            if (plugin.getTeamsManager().isOnSameTeam(player, victim)) continue;
             victim.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20, 1));
 
             Vector vel = locUp.toVector().subtract(victim.getEyeLocation().toVector());
@@ -206,9 +209,7 @@ public class MWGolem extends MWClass {
 
         if (MWKit.contains(this)) {
             items = MWKit.fetch(this);
-        }
-
-        else {
+        } else {
             Map<Enchantment, Integer> swordEnch = new HashMap<>();
             swordEnch.put(Enchantment.DURABILITY, 10);
 
@@ -229,8 +230,8 @@ public class MWGolem extends MWClass {
 
             List<ItemStack> potions = new ArrayList<>();
 
-            potions.add(MWPotions.createRegenerationPotions(plugin.isChinese()?this.name[0]:this.name[1], this.color, 3, 12, 10));
-            potions.add(MWPotions.createSlowSplash(plugin.isChinese()?this.name[0]:this.name[1], this.color));
+            potions.add(MWPotions.createRegenerationPotions(plugin.isChinese() ? this.name[0] : this.name[1], this.color, 3, 12, 10));
+            potions.add(MWPotions.createSlowSplash(plugin.isChinese() ? this.name[0] : this.name[1], this.color));
 
             items = MWKit.generate(this, sword, bow, tool, toolAxe, null, potions, null, chestplate, null, boots, null);
         }

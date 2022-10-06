@@ -1,42 +1,30 @@
 package net.nuggetmc.mw.mwclass;
 
 import com.earth2me.essentials.Essentials;
-import com.earth2me.essentials.EssentialsPlayerListener;
 import io.isles.nametagapi.NametagAPI;
-import io.isles.nametagapi.NametagPlugin;
 import net.md_5.bungee.api.ChatColor;
 import net.nuggetmc.mw.MegaWalls;
-import net.nuggetmc.mw.mwclass.classes.MWZombie;
 import net.nuggetmc.mw.special.TeamsManager;
 import net.nuggetmc.mw.utils.ItemUtils;
-import net.nuggetmc.mw.utils.WorldUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
-import org.bukkit.entity.Arrow;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
-import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
-import org.bukkit.plugin.PluginBase;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scoreboard.Team;
 import org.spigotmc.event.player.PlayerSpawnLocationEvent;
 
-import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -94,48 +82,48 @@ public class MWClassManager implements Listener {
         inventory.clear();
 
 
-            player.setMaxHealth(40);
-            player.setHealth(40);
-            player.setFoodLevel(20);
-            player.setSaturation(20);
+        player.setMaxHealth(40);
+        player.setHealth(40);
+        player.setFoodLevel(20);
+        player.setSaturation(20);
 
 
-            if (team!=null) {
-                List<ItemStack> contents = ItemUtils.getAllContents(inventory).stream().filter(i -> !ItemUtils.isKitItem(i)).collect(Collectors.toList());
+        if (team != null) {
+            List<ItemStack> contents = ItemUtils.getAllContents(inventory).stream().filter(i -> !ItemUtils.isKitItem(i)).collect(Collectors.toList());
 
-                inventory.clear();
+            inventory.clear();
 
-                Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                    contents.forEach(i -> ItemUtils.givePlayerItemStack(player, i));
-                }, 1);
+            Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                contents.forEach(i -> ItemUtils.givePlayerItemStack(player, i));
+            }, 1);
 
-                mwclass.assign(player);
-            }
+            mwclass.assign(player);
+        }
 
         active.put(player, mwclass);
       /*  plugin.getConfig().set("active_classes." + player.getName(), mwclass.getName());
         plugin.saveConfig();*/
-        if (player.isOp()&&OPBYPASSGM){
+        if (player.isOp() && OPBYPASSGM) {
             //
-        }else {
+        } else {
             player.getPlayer().setGameMode(GameMode.SURVIVAL);
         }
-        String str= ((plugin.getTeamsManager().getSymbolOfTeam(team)));
+        String str = ((plugin.getTeamsManager().getSymbolOfTeam(team)));
         plugin.getCombatManager().addInCombat(player);
-        if (plugin.getCombatManager().isInCombat(player)){
+        if (plugin.getCombatManager().isInCombat(player)) {
             player.setPlayerListName(player.getName());
             player.setDisplayName(player.getName());
             NametagAPI.resetNametag(player.getName());
         }
-        if (Bukkit.getPluginManager().getPlugin("Essentials")!=null&& !Objects.equals(ChatColor.stripColor(((Essentials) Bukkit.getPluginManager().getPlugin("Essentials")).getUser(player).getNick()), player.getName())){
+        if (Bukkit.getPluginManager().getPlugin("Essentials") != null && !Objects.equals(ChatColor.stripColor(((Essentials) Bukkit.getPluginManager().getPlugin("Essentials")).getUser(player).getNick()), player.getName())) {
             //player nicked
-            String nickname=ChatColor.stripColor(((Essentials) Bukkit.getPluginManager().getPlugin("Essentials")).getUser(player).getNick());
+            String nickname = ChatColor.stripColor(((Essentials) Bukkit.getPluginManager().getPlugin("Essentials")).getUser(player).getNick());
             String prefix = str + " ";
             String suffix = ChatColor.GRAY + " [" + plugin.getClassManager().get(player).getShortName() + "]";
             player.setPlayerListName(prefix + nickname + suffix);
             player.setDisplayName((plugin.getTeamsManager().getColorOfTeam(team) + "[" + plugin.getTeamsManager().getTeamOfPlayer(player).name()) + "] " + nickname + ChatColor.RESET);
-            NametagAPI.setNametagHard(player.getName(), prefix+ChatColor.MAGIC,ChatColor.RESET+ suffix);
-        }else {
+            NametagAPI.setNametagHard(player.getName(), prefix + ChatColor.MAGIC, ChatColor.RESET + suffix);
+        } else {
             String prefix = str + " ";
             String suffix = ChatColor.GRAY + " [" + plugin.getClassManager().get(player).getShortName() + "]";
             player.setPlayerListName(prefix + player.getDisplayName() + suffix);
@@ -143,8 +131,8 @@ public class MWClassManager implements Listener {
             NametagAPI.setNametagHard(player.getName(), prefix, suffix);
         }
         player.sendMessage(ChatColor.YELLOW + "You can use /mwshop and /mwsell to buy and sell items.Use /echest to open your enderchest.");
-        if (mwclass.getShortName().equals("ZOM")){
-            player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING,9999*20,2));
+        if (mwclass.getShortName().equals("ZOM")) {
+            player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, 9999 * 20, 2));
         }
 
     }
@@ -160,8 +148,8 @@ public class MWClassManager implements Listener {
     }
 
     @EventHandler(
-        priority = EventPriority.HIGHEST,
-        ignoreCancelled = true
+            priority = EventPriority.HIGHEST,
+            ignoreCancelled = true
     )
     public void onDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
@@ -213,9 +201,9 @@ public class MWClassManager implements Listener {
                 player.sendMessage(ChatColor.GREEN + "Do " + ChatColor.YELLOW + "/mw" + ChatColor.GREEN + " to select a class!");
             }
         }, 10);
-        if (player.isOp()&&OPBYPASSGM){
+        if (player.isOp() && OPBYPASSGM) {
             //
-        }else {
+        } else {
             event.getPlayer().setGameMode(GameMode.ADVENTURE);
         }
         player.setHealth(0);
@@ -223,6 +211,6 @@ public class MWClassManager implements Listener {
 
     @EventHandler
     public void onPreJoin(PlayerSpawnLocationEvent event) {
-       // event.setSpawnLocation(WorldUtils.nearby(event.getSpawnLocation()));
+        // event.setSpawnLocation(WorldUtils.nearby(event.getSpawnLocation()));
     }
 }

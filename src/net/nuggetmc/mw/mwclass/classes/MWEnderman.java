@@ -23,7 +23,6 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.util.Vector;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -36,28 +35,28 @@ public class MWEnderman extends MWClass {
     private final Map<Player, Integer> incrementEChest = new HashMap<>();
 
     public MWEnderman() {
-        this.name = new String[]{"末影人","Enderman","END"};
+        this.name = new String[]{"末影人", "Enderman", "END"};
         this.icon = Material.ENDER_PEARL;
         this.color = ChatColor.DARK_PURPLE;
 
-        this.playstyles = new Playstyle[] {
-            Playstyle.MOBILITY,
-            Playstyle.FIGHTER
+        this.playstyles = new Playstyle[]{
+                Playstyle.MOBILITY,
+                Playstyle.FIGHTER
         };
 
-        this.diamonds = new Diamond[] {
-            Diamond.BOOTS
+        this.diamonds = new Diamond[]{
+                Diamond.BOOTS
         };
 
         this.classInfo = new MWClassInfo(
-            "Teleport",
-            "Teleport up to &a25 &rblocks onto an opponent, gaining Speed III for &a5 &rseconds.\nCooldown: &a6s",
-            "Ender Heart",
-            "For every &a3 &rdeaths, you will keep your inventory outside of Diamond-related items.\nYou heal &a3 HP &ron kill, and &a1.5 HP &ron assist.",
-            "Soul Charge",
-            "You gain &a10 &rseconds of Regeneration I when you reach 100 energy.\nCooldown: &a5s",
-            "Enderblocks",
-            "You will instantly break all adjacent blocks of a similar type for every &a3 &rore, stone, or wooden logs broken."
+                "Teleport",
+                "Teleport up to &a25 &rblocks onto an opponent, gaining Speed III for &a5 &rseconds.\nCooldown: &a6s",
+                "Ender Heart",
+                "For every &a3 &rdeaths, you will keep your inventory outside of Diamond-related items.\nYou heal &a3 HP &ron kill, and &a1.5 HP &ron assist.",
+                "Soul Charge",
+                "You gain &a10 &rseconds of Regeneration I when you reach 100 energy.\nCooldown: &a5s",
+                "Enderblocks",
+                "You will instantly break all adjacent blocks of a similar type for every &a3 &rore, stone, or wooden logs broken."
         );
 
         this.classInfo.addEnergyGainType("Melee", 20);
@@ -77,31 +76,31 @@ public class MWEnderman extends MWClass {
 
         if (cooldownCacheAbility.containsKey(player)) return;
 
-        World world=player.getWorld();
-        Player target=null;
-        Location loc=player.getLocation();
-        ArrayList<Player> targets=new ArrayList<>();
+        World world = player.getWorld();
+        Player target = null;
+        Location loc = player.getLocation();
+        ArrayList<Player> targets = new ArrayList<>();
         for (Player p : Bukkit.getOnlinePlayers()) {
             if (world != p.getWorld()) continue;
-            if (p != player && !p.isDead() && loc.distance(p.getLocation()) <= 25&&(!plugin.getTeamsManager().isOnSameTeam(p,player))) {
+            if (p != player && !p.isDead() && loc.distance(p.getLocation()) <= 25 && (!plugin.getTeamsManager().isOnSameTeam(p, player))) {
                 targets.add(p);
             }
         }
-        if (targets.isEmpty()){
+        if (targets.isEmpty()) {
             return;
-        }else {
+        } else {
             energyManager.clear(player);
             targets.sort(new Comparator<Player>() {
                 @Override
                 public int compare(Player player1, Player t1) {
-                    if (player.getEyeLocation().distance(player1.getLocation())>(player.getEyeLocation().distance(t1.getLocation()))){
+                    if (player.getEyeLocation().distance(player1.getLocation()) > (player.getEyeLocation().distance(t1.getLocation()))) {
                         return 1;
-                    }else {
+                    } else {
                         return -1;
                     }
                 }
             });
-            target=targets.get(0);
+            target = targets.get(0);
             player.teleport(target);
 
             PotionUtils.effect(player, PotionEffectType.SPEED, 5, 2);
@@ -245,9 +244,7 @@ public class MWEnderman extends MWClass {
 
         if (MWKit.contains(this)) {
             items = MWKit.fetch(this);
-        }
-
-        else {
+        } else {
             Map<Enchantment, Integer> swordEnch = new HashMap<>();
             swordEnch.put(Enchantment.DURABILITY, 10);
 
@@ -271,9 +268,9 @@ public class MWEnderman extends MWClass {
 
     @Override
     public String getActionBar(Player player) {
-        String sc=this.getColor()+"Soul Charge "+ (cooldownCacheRegen.contains(player)? ChatColor.RED + "✖":ChatColor.GREEN +"✔")+ChatColor.RESET;
-        String ab=this.getColor()+"Teleport "+ (((!cooldownCacheAbility.containsKey(player))||cooldownCacheAbility.get(player)==null ||cooldownCacheAbility.get(player).time<=0) ? ChatColor.GREEN +"✔":cooldownCacheAbility.get(player).time-10+" s")+ChatColor.RESET;
+        String sc = this.getColor() + "Soul Charge " + (cooldownCacheRegen.contains(player) ? ChatColor.RED + "✖" : ChatColor.GREEN + "✔") + ChatColor.RESET;
+        String ab = this.getColor() + "Teleport " + (((!cooldownCacheAbility.containsKey(player)) || cooldownCacheAbility.get(player) == null || cooldownCacheAbility.get(player).time <= 0) ? ChatColor.GREEN + "✔" : cooldownCacheAbility.get(player).time - 10 + " s") + ChatColor.RESET;
 
-        return ActionBar.joinActionBar(ab,sc);
+        return ActionBar.joinActionBar(ab, sc);
     }
 }

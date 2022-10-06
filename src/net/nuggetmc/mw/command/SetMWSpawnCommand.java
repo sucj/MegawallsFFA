@@ -1,6 +1,5 @@
 package net.nuggetmc.mw.command;
 
-import net.md_5.bungee.api.ChatColor;
 import net.nuggetmc.mw.MegaWalls;
 import net.nuggetmc.mw.mwclass.MWClassManager;
 import org.bukkit.command.Command;
@@ -14,7 +13,7 @@ import java.util.List;
 
 public class SetMWSpawnCommand implements CommandExecutor, TabCompleter {
     private final MWClassManager manager;
-    private final MegaWalls  plugin=MegaWalls.getInstance();
+    private final MegaWalls plugin = MegaWalls.getInstance();
 
     public SetMWSpawnCommand() {
         this.manager = MegaWalls.getInstance().getClassManager();
@@ -23,26 +22,26 @@ public class SetMWSpawnCommand implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (sender instanceof Player) {
-            Player player=((Player) sender).getPlayer();
-            if (args.length!=1){
+            Player player = ((Player) sender).getPlayer();
+            if (args.length != 1) {
                 sender.sendMessage("Invalid Syntax! Usage: /mwspawn [RED,GREEN,BLUE,YELLOW]");
-            }else {
-                double[] doubles =new double[] {player.getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ()};
-                switch (args[0].toLowerCase()){
+            } else {
+                double[] doubles = new double[]{player.getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ()};
+                switch (args[0].toLowerCase()) {
                     case "red":
                         plugin.getConfig().set("spawnloc.red", doubles);
                         sender.sendMessage("success!");
                         break;
                     case "green":
-                        plugin.getConfig().set("spawnloc.green",doubles);
+                        plugin.getConfig().set("spawnloc.green", doubles);
                         sender.sendMessage("success!");
                         break;
                     case "blue":
-                        plugin.getConfig().set("spawnloc.blue",doubles);
+                        plugin.getConfig().set("spawnloc.blue", doubles);
                         sender.sendMessage("success!");
                         break;
                     case "yellow":
-                        plugin.getConfig().set("spawnloc.yellow",doubles);
+                        plugin.getConfig().set("spawnloc.yellow", doubles);
                         sender.sendMessage("success!");
                         break;
                     default:
@@ -66,23 +65,25 @@ public class SetMWSpawnCommand implements CommandExecutor, TabCompleter {
     public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
 
 
-            List<String> groupnames = new ArrayList<>();
-            groupnames.add("red");
-            groupnames.add("green");
-            groupnames.add("blue");
-            groupnames.add("yellow");
-            String arg = args[0];
+        List<String> groupnames = new ArrayList<>();
+        groupnames.add("red");
+        groupnames.add("green");
+        groupnames.add("blue");
+        groupnames.add("yellow");
+        String arg = args[0];
 
-            if (!isEmptyTab(arg)) {
-                return autofill(groupnames, arg);
-            }
+        if (!isEmptyTab(arg)) {
+            return autofill(groupnames, arg);
+        }
 
-            return groupnames;
+        return groupnames;
 
     }
+
     private boolean isEmptyTab(String s) {
         return s == null || s.equals(" ") || s.isEmpty();
     }
+
     private List<String> autofill(List<String> groupnames, String input) {
         List<String> list = new ArrayList<>();
 

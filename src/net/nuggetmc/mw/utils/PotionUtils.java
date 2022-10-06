@@ -1,6 +1,5 @@
 package net.nuggetmc.mw.utils;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -18,6 +17,6 @@ public class PotionUtils {
     }
 
     public static void effect(Player player, PotionEffectType potionEffectType, int time, int amplifier) {
-        player.addPotionEffect(new PotionEffect(potionEffectType,time*20,amplifier),true);
+        player.addPotionEffect(new PotionEffect(potionEffectType, time * 20, amplifier), true);
     }
 }

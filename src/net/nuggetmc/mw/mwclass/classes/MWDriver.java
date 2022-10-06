@@ -27,21 +27,21 @@ import java.util.*;
 
 public class MWDriver extends MWClass {
 
-    private Set<Player> runnerList=new HashSet<>();
-    private Set<Player> abilitycache=new HashSet<>();
+    private Set<Player> runnerList = new HashSet<>();
+    private Set<Player> abilitycache = new HashSet<>();
 
 
     public MWDriver() {
-        this.name = new String[]{"司机","Driver","DRI"};
+        this.name = new String[]{"司机", "Driver", "DRI"};
         this.icon = Material.IRON_FENCE;
         this.color = ChatColor.DARK_AQUA;
 
-        this.playstyles = new Playstyle[] {
+        this.playstyles = new Playstyle[]{
                 Playstyle.RUSHER,
                 Playstyle.FIGHTER
         };
 
-        this.diamonds = new Diamond[] {
+        this.diamonds = new Diamond[]{
                 Diamond.LEGGINGS
         };
 
@@ -59,53 +59,56 @@ public class MWDriver extends MWClass {
         this.classInfo.addEnergyGainType("Melee", 15);
         this.classInfo.addEnergyGainType("Bow", 15);
     }
+
     @EventHandler
-    public void onDamage(EntityDamageEvent e){
+    public void onDamage(EntityDamageEvent e) {
         if (e.isCancelled()) return;
-        if (!(e.getEntity() instanceof Player )) return;
-        Player victim= (Player) e.getEntity();
+        if (!(e.getEntity() instanceof Player)) return;
+        Player victim = (Player) e.getEntity();
         if (manager.get(victim) != this) {
             return;
         }
-        if (runnerList.contains(victim)){
+        if (runnerList.contains(victim)) {
             return;
         }
-        if (!(victim.getHealth()-e.getDamage()<=7)) return;
-        if ((victim.getHealth()-e.getDamage()<=0)) e.setCancelled(true);
+        if (!(victim.getHealth() - e.getDamage() <= 7)) return;
+        if ((victim.getHealth() - e.getDamage() <= 0)) e.setCancelled(true);
         runnerList.add(victim);
-        victim.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,12*20,2));
-        victim.addPotionEffect(new PotionEffect(PotionEffectType.JUMP,12*20,2));
-        victim.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,5*20,19),true);
-        victim.sendMessage(this.getColor()+"You have became super runner! L runner");
+        victim.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 12 * 20, 2));
+        victim.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 12 * 20, 2));
+        victim.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 5 * 20, 19), true);
+        victim.sendMessage(this.getColor() + "You have became super runner! L runner");
         new Thread(() -> Bukkit.getScheduler().runTaskLater(plugin, () -> {
             //Cool down finished
             runnerList.remove(victim);
         }, 50 * 20)).start();
     }
+
     @EventHandler
-    public void onArrowDMG(EntityDamageByEntityEvent e){
+    public void onArrowDMG(EntityDamageByEntityEvent e) {
         if (e.isCancelled()) return;
-        if (!(e.getEntity() instanceof Player )) return;
-        Player victim= (Player) e.getEntity();
+        if (!(e.getEntity() instanceof Player)) return;
+        Player victim = (Player) e.getEntity();
         if (manager.get(victim) != this) {
             return;
         }
-      //  if (victim== energyManager.validate(e)) return;
+        //  if (victim== energyManager.validate(e)) return;
         if (!(e.getDamager() instanceof Arrow)) return;
         if (!(((Arrow) e.getDamager()).getShooter() instanceof Player)) return;
-        int i=0;
-        while (i<10){
+        int i = 0;
+        while (i < 10) {
             victim.throwSnowball();
             i++;
         }
-        victim.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,2*20,0));
+        victim.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 2 * 20, 0));
 
     }
+
     @Override
-    public String getActionBar(Player player){
-        String ride=this.getColor() + "Ride "+(abilitycache.contains(player)?ChatColor.RED + "✖":ChatColor.GREEN+ "✔")+ChatColor.RESET;
-        String runner=this.getColor() + "Ultimate Runner "+(runnerList.contains(player)?ChatColor.RED + "✖":ChatColor.GREEN+ "✔")+ChatColor.RESET;
-        return ride+"       "+runner;
+    public String getActionBar(Player player) {
+        String ride = this.getColor() + "Ride " + (abilitycache.contains(player) ? ChatColor.RED + "✖" : ChatColor.GREEN + "✔") + ChatColor.RESET;
+        String runner = this.getColor() + "Ultimate Runner " + (runnerList.contains(player) ? ChatColor.RED + "✖" : ChatColor.GREEN + "✔") + ChatColor.RESET;
+        return ride + "       " + runner;
     }
 
 
@@ -114,40 +117,38 @@ public class MWDriver extends MWClass {
         if (abilitycache.contains(player)) {
             return;
         }
-            Player target=null;
-            for (Player player1 : player.getWorld().getPlayers()){
-                if (plugin.getTeamsManager().isOnSameTeam(player,player1)) continue;
-                if (!plugin.getCombatManager().isInCombat(player1)||player1.isDead()||player1.getGameMode()==GameMode.CREATIVE||(player1.getLocation().distance(player.getLocation())>20)||player1.equals(player)){
-                    continue;
-                }else {
-                    target=player1;
-                    break;
-                }
+        Player target = null;
+        for (Player player1 : player.getWorld().getPlayers()) {
+            if (plugin.getTeamsManager().isOnSameTeam(player, player1)) continue;
+            if (!plugin.getCombatManager().isInCombat(player1) || player1.isDead() || player1.getGameMode() == GameMode.CREATIVE || (player1.getLocation().distance(player.getLocation()) > 20) || player1.equals(player)) {
+                continue;
+            } else {
+                target = player1;
+                break;
             }
+        }
         if (target == null) {
             ActionBar.send(player, "No players within " + ChatColor.RED + 20 + ChatColor.RESET + " blocks!");
             return;
-        }else {
+        } else {
             abilitycache.add(player);
             energyManager.clear(player);
-                player.setPassenger(target);
-            target.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20,254));
-            player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE,5*20,0));
-            player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP,5*20,1));
+            player.setPassenger(target);
+            target.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20, 254));
+            player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 5 * 20, 0));
+            player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 5 * 20, 1));
             new Thread(() -> Bukkit.getScheduler().runTaskLater(plugin, () -> {
                 //Cool down finished
                 abilitycache.remove(player);
             }, 17 * 20)).start();
         }
     }
+
     @EventHandler
-    public void onDeath(PlayerDeathEvent e){
+    public void onDeath(PlayerDeathEvent e) {
         e.getEntity().eject();
         e.getEntity().leaveVehicle();
     }
-
-
-
 
 
     @Override
@@ -158,7 +159,6 @@ public class MWDriver extends MWClass {
         if (player == null) return;
 
         if (manager.get(player) != this) return;
-
 
 
         energyManager.add(player, 15);
@@ -172,12 +172,10 @@ public class MWDriver extends MWClass {
 
         if (MWKit.contains(this)) {
             items = MWKit.fetch(this);
-        }
-
-        else {
+        } else {
             Map<Enchantment, Integer> swordEnch = new HashMap<>();
             swordEnch.put(Enchantment.DURABILITY, 10);
-            swordEnch.put(Enchantment.DAMAGE_ALL,1);
+            swordEnch.put(Enchantment.DAMAGE_ALL, 1);
 
             Map<Enchantment, Integer> armorEnch = new HashMap<>();
             armorEnch.put(Enchantment.PROTECTION_ENVIRONMENTAL, 2);
@@ -194,10 +192,10 @@ public class MWDriver extends MWClass {
         }
 
         MWKit.assignItems(player, items);
-        if (runnerList.contains(player)){
+        if (runnerList.contains(player)) {
             runnerList.remove(player);
         }
-        if (abilitycache.contains(player)){
+        if (abilitycache.contains(player)) {
             abilitycache.remove(player);
         }
     }

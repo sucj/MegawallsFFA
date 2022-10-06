@@ -9,7 +9,6 @@ import net.nuggetmc.mw.mwclass.info.Playstyle
 import net.nuggetmc.mw.mwclass.items.MWItem
 import net.nuggetmc.mw.mwclass.items.MWKit
 import net.nuggetmc.mw.mwclass.items.MWPotions
-import net.nuggetmc.mw.utils.PotionUtils
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.block.Block
@@ -25,8 +24,8 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 
-class MWShark() : MWClass(){
-    var waterMap :HashMap<Player,HashSet<Block>> = HashMap()
+class MWShark() : MWClass() {
+    var waterMap: HashMap<Player, HashSet<Block>> = HashMap()
 
     init {
         name = arrayOf("鲨鱼", "Shark", "SRK")
@@ -62,32 +61,32 @@ class MWShark() : MWClass(){
 
     override fun ability(player: Player) {
         energyManager.clear(player)
-        if (!waterMap.containsKey(player)){
+        if (!waterMap.containsKey(player)) {
             waterMap.put(player, emptySet<Block>().toHashSet())
         }
-        player.addPotionEffect(PotionEffect(PotionEffectType.REGENERATION,5*20,0))
-        var expand=3;
-        var posY=player.location.blockY
-        var location=player.getLocation()
-        var world=player.world
-        var set=HashSet<Block>()
-        for (i in -expand until expand+1){
+        player.addPotionEffect(PotionEffect(PotionEffectType.REGENERATION, 5 * 20, 0))
+        var expand = 3;
+        var posY = player.location.blockY
+        var location = player.getLocation()
+        var world = player.world
+        var set = HashSet<Block>()
+        for (i in -expand until expand + 1) {
             val block = world.getBlockAt(location.blockX + i, posY, location.blockZ)
-            if (canBeReplaced(block)){
+            if (canBeReplaced(block)) {
 
 
-                        block.setType(Material.STATIONARY_WATER,false)
+                block.setType(Material.STATIONARY_WATER, false)
                 waterMap.get(player)?.add(block)
-                        if (!set.contains(block)) {
-                            set.add(block)
-                        }
-                for (j in -expand until expand+1){
+                if (!set.contains(block)) {
+                    set.add(block)
+                }
+                for (j in -expand until expand + 1) {
                     val block1 = world.getBlockAt(location.blockX + i, posY, location.blockZ + j)
-                    if (canBeReplaced(block1)){
+                    if (canBeReplaced(block1)) {
 
-                        block1.setType(Material.STATIONARY_WATER,false)
+                        block1.setType(Material.STATIONARY_WATER, false)
                         waterMap.get(player)?.add(block1)
-                        if (!set.contains(block1)){
+                        if (!set.contains(block1)) {
                             set.add(block1)
                         }
                     }
@@ -98,17 +97,15 @@ class MWShark() : MWClass(){
             Bukkit.getScheduler().runTaskLater(
                 MegaWalls.getInstance(),
                 {
-                for(i in  0 until set.size){
-                    val block=set.toArray().get(i) as Block
-                    block.setType(Material.AIR)
-                    waterMap.get(player)?.remove(block)
-                }
-                }
-                ,5*20
+                    for (i in 0 until set.size) {
+                        val block = set.toArray().get(i) as Block
+                        block.setType(Material.AIR)
+                        waterMap.get(player)?.remove(block)
+                    }
+                }, 5 * 20
             )
         }
     }
-
 
 
     override fun hit(event: EntityDamageByEntityEvent) {
@@ -131,20 +128,17 @@ class MWShark() : MWClass(){
     }
 
 
-
-
-
     override fun assign(player: Player) {
         val items: Map<Int, ItemStack>
         if (MWKit.contains(this)) {
             items = MWKit.fetch(this)
         } else {
             val swordEnch: MutableMap<Enchantment, Int> = HashMap()
-            swordEnch.put(Enchantment.DURABILITY,10)
+            swordEnch.put(Enchantment.DURABILITY, 10)
             val armorEnch: MutableMap<Enchantment, Int> = HashMap()
-            armorEnch.put(Enchantment.DEPTH_STRIDER,3)
-            armorEnch.put(Enchantment.PROTECTION_ENVIRONMENTAL,2)
-            armorEnch.put(Enchantment.DURABILITY,10)
+            armorEnch.put(Enchantment.DEPTH_STRIDER, 3)
+            armorEnch.put(Enchantment.PROTECTION_ENVIRONMENTAL, 2)
+            armorEnch.put(Enchantment.DURABILITY, 10)
             val sword = MWItem.createSword(this, Material.DIAMOND_SWORD, swordEnch)
             val bow = MWItem.createBow(this, null)
             val tool = MWItem.createTool(this, Material.DIAMOND_PICKAXE)
@@ -157,68 +151,72 @@ class MWShark() : MWClass(){
 
 
     }
+
     @EventHandler
     fun onPhysics(e: BlockPhysicsEvent) {
-        for (player:Player in waterMap.keys){
-            for (block:Block in waterMap.get(player)!!){
-                if (e.block==block){
-                    e.isCancelled=true;
+        for (player: Player in waterMap.keys) {
+            for (block: Block in waterMap.get(player)!!) {
+                if (e.block == block) {
+                    e.isCancelled = true;
                     return
                 }
             }
         }
     }
+
     @EventHandler
-    fun onMove(e:PlayerMoveEvent){
-        if (e.player.location.block.type == Material.WATER || e.player.location.block.type == Material.STATIONARY_WATER){
-            var b=forBlock(e)
-            if (b==null) return
-            if (plugin.teamsManager.isOnSameTeam(e.player,b.get(1) as Player)){
+    fun onMove(e: PlayerMoveEvent) {
+        if (e.player.location.block.type == Material.WATER || e.player.location.block.type == Material.STATIONARY_WATER) {
+            var b = forBlock(e)
+            if (b == null) return
+            if (plugin.teamsManager.isOnSameTeam(e.player, b.get(1) as Player)) {
                 return
             }
-            e.player.addPotionEffect(PotionEffect(PotionEffectType.SLOW,1*20,0))
+            e.player.addPotionEffect(PotionEffect(PotionEffectType.SLOW, 1 * 20, 0))
         }
     }
+
     @EventHandler
     fun onBloodRageAllies(event: PlayerMoveEvent) {
-        var player=event.player
-        if (isInAlliesPool(player)){
+        var player = event.player
+        if (isInAlliesPool(player)) {
             plugin.bloodRageList.add(player)
-        }else{
-            if (plugin.bloodRageList.contains(player)){
+        } else {
+            if (plugin.bloodRageList.contains(player)) {
                 plugin.bloodRageList.remove(player)
             }
         }
 
     }
+
     @EventHandler
     fun onBloodRageSelf(event: EntityDamageByEntityEvent) {
         super.hit(event)
         if (event.isCancelled) return
         val player = energyManager.validate(event) ?: return
         if (manager[player] !== this) return
-        var increaceAmount:Double=0.0
-        if (player.health<15) increaceAmount+=0.215
-        for (p in Bukkit.getOnlinePlayers()){
-            if (p.location.distance(player.location)>9){
+        var increaceAmount: Double = 0.0
+        if (player.health < 15) increaceAmount += 0.215
+        for (p in Bukkit.getOnlinePlayers()) {
+            if (p.location.distance(player.location) > 9) {
                 continue
                 //too far
             }
-            if (plugin.teamsManager.isOnSameTeam(player,p)){
+            if (plugin.teamsManager.isOnSameTeam(player, p)) {
                 continue
                 //we need enemies
             }
-            if (!plugin.combatManager.isInCombat(p)){
+            if (!plugin.combatManager.isInCombat(p)) {
                 continue
             }
             if (player.world !== p.world) continue
             if (p.isDead) continue
-            increaceAmount +=0.215
+            increaceAmount += 0.215
         }
-        if (increaceAmount>1.075){
-            increaceAmount=1.075
+        if (increaceAmount > 1.075) {
+            increaceAmount = 1.075
         }
-        event.damage=event.damage+event.damage*increaceAmount
+        event.damage = event.damage + event.damage * increaceAmount
     }
 
     @EventHandler
@@ -227,66 +225,69 @@ class MWShark() : MWClass(){
         val player = victim.killer
         if (player == null || victim === player) return
         if (manager[player] === this) {
-            player.addPotionEffect(PotionEffect(PotionEffectType.REGENERATION,4*20,2))
-            if (player.foodLevel+4>20){
-                player.foodLevel=20
-            }else{
-                player.foodLevel+=4
+            player.addPotionEffect(PotionEffect(PotionEffectType.REGENERATION, 4 * 20, 2))
+            if (player.foodLevel + 4 > 20) {
+                player.foodLevel = 20
+            } else {
+                player.foodLevel += 4
             }
-           var b : Boolean=false
-           for (p in Bukkit.getOnlinePlayers()){
-               if (p.location.distance(player.location)>4){
-                   continue
-                   //too far
-               }
-               if (!plugin.teamsManager.isOnSameTeam(player,p)){
-                   continue
-                   //we need allies
-               }
-               if (!plugin.combatManager.isInCombat(p)){
-                   continue
-               }
-               if (player.world !== p.world) continue
-               if (p.isDead) continue
-               b=true
-               break
-           }
-            if (b){
-                if (player.health+3.5>player.maxHealth){
-                    player.health=player.maxHealth
-                }else{
-                    player.health+=3.5
+            var b: Boolean = false
+            for (p in Bukkit.getOnlinePlayers()) {
+                if (p.location.distance(player.location) > 4) {
+                    continue
+                    //too far
+                }
+                if (!plugin.teamsManager.isOnSameTeam(player, p)) {
+                    continue
+                    //we need allies
+                }
+                if (!plugin.combatManager.isInCombat(p)) {
+                    continue
+                }
+                if (player.world !== p.world) continue
+                if (p.isDead) continue
+                b = true
+                break
+            }
+            if (b) {
+                if (player.health + 3.5 > player.maxHealth) {
+                    player.health = player.maxHealth
+                } else {
+                    player.health += 3.5
                 }
             }
         }
     }
-    fun forBlock(e:PlayerMoveEvent):  Array<Any>?{
-        for (player:Player in waterMap.keys){
-            for (block:Block in waterMap.get(player)!!){
-                if (block == e.player.location.block){
-                    return arrayOf(block,player)
+
+    fun forBlock(e: PlayerMoveEvent): Array<Any>? {
+        for (player: Player in waterMap.keys) {
+            for (block: Block in waterMap.get(player)!!) {
+                if (block == e.player.location.block) {
+                    return arrayOf(block, player)
                 }
             }
         }
         return null;
     }
-    fun isInAlliesPool(plr: Player):Boolean{
-        for (player:Player in waterMap.keys){
-            if (!plugin.teamsManager.isOnSameTeam(plr,player)){
+
+    fun isInAlliesPool(plr: Player): Boolean {
+        for (player: Player in waterMap.keys) {
+            if (!plugin.teamsManager.isOnSameTeam(plr, player)) {
                 continue
             }
-            for (block:Block in waterMap.get(player)!!){
-                if (block == plr.location.block){
+            for (block: Block in waterMap.get(player)!!) {
+                if (block == plr.location.block) {
                     return true
                 }
             }
         }
         return false
     }
+
     fun canBeReplaced(block: Block): Boolean {
-        return when(block.type){
-            Material.AIR,Material.GRASS,Material.LONG_GRASS,Material.YELLOW_FLOWER,Material.RAILS,Material.ACTIVATOR_RAIL,Material.DETECTOR_RAIL,Material.POWERED_RAIL,Material.REDSTONE,Material.REDSTONE_COMPARATOR,Material.REDSTONE_COMPARATOR_ON,Material.REDSTONE_WIRE,Material.REDSTONE_COMPARATOR_OFF,Material.REDSTONE_TORCH_OFF,Material.REDSTONE_TORCH_ON-> true
-            else->false
+        return when (block.type) {
+            Material.AIR, Material.GRASS, Material.LONG_GRASS, Material.YELLOW_FLOWER, Material.RAILS, Material.ACTIVATOR_RAIL, Material.DETECTOR_RAIL, Material.POWERED_RAIL, Material.REDSTONE, Material.REDSTONE_COMPARATOR, Material.REDSTONE_COMPARATOR_ON, Material.REDSTONE_WIRE, Material.REDSTONE_COMPARATOR_OFF, Material.REDSTONE_TORCH_OFF, Material.REDSTONE_TORCH_ON -> true
+            else -> false
         }
     }
-    }
+}

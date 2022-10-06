@@ -2,7 +2,6 @@ package net.nuggetmc.mw.mwclass.items;
 
 import net.md_5.bungee.api.ChatColor;
 import net.nuggetmc.mw.mwclass.MWClass;
-import net.nuggetmc.mw.mwclass.info.ClassInfoEntry;
 import net.nuggetmc.mw.mwclass.info.EnumInfoType;
 import net.nuggetmc.mw.mwclass.info.MWClassInfo;
 import net.nuggetmc.mw.utils.ItemUtils;

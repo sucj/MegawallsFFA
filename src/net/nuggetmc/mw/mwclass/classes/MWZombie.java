@@ -11,13 +11,10 @@ import net.nuggetmc.mw.mwclass.items.MWItem;
 import net.nuggetmc.mw.mwclass.items.MWKit;
 import net.nuggetmc.mw.mwclass.items.MWPotions;
 import net.nuggetmc.mw.utils.ParticleUtils;
-import net.nuggetmc.mw.utils.PotionUtils;
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -29,33 +26,33 @@ import java.util.List;
 import java.util.Map;
 
 public class MWZombie extends MWClass {
-    
+
     private final Map<Player, Wrapper> tasks = new HashMap<>();
     private final Map<Player, Integer> increment = new HashMap<>();
 
     public MWZombie() {
-        this.name = new String[]{"僵尸","Zombie","ZOM"};
+        this.name = new String[]{"僵尸", "Zombie", "ZOM"};
         this.icon = Material.ROTTEN_FLESH;
         this.color = ChatColor.DARK_GREEN;
 
-        this.playstyles = new Playstyle[] {
-            Playstyle.TANK,
-            Playstyle.SUPPORT
+        this.playstyles = new Playstyle[]{
+                Playstyle.TANK,
+                Playstyle.SUPPORT
         };
 
-        this.diamonds = new Diamond[] {
-            Diamond.CHESTPLATE
+        this.diamonds = new Diamond[]{
+                Diamond.CHESTPLATE
         };
 
         this.classInfo = new MWClassInfo(
-            "Circle of Healing",
-            "Heal yourself for &a8 HP &rand nearby allies in a 5 block radius for &a5 HP&r.",
-            "Toughness",
-            "You will gain Resistance I for 1 second after getting attacked every &a3 &rtimes.",
-            "Berserk",
-            "After being hit by an arrow, you will receive Strength I and Speed II for &a6 &rseconds.\nCooldown: &a15s",
-            "Well Trained",
-            "You will gain Haste III for &a5 &rseconds when breaking blocks."
+                "Circle of Healing",
+                "Heal yourself for &a8 HP &rand nearby allies in a 5 block radius for &a5 HP&r.",
+                "Toughness",
+                "You will gain Resistance I for 1 second after getting attacked every &a3 &rtimes.",
+                "Berserk",
+                "After being hit by an arrow, you will receive Strength I and Speed II for &a6 &rseconds.\nCooldown: &a15s",
+                "Well Trained",
+                "You will gain Haste III for &a5 &rseconds when breaking blocks."
         );
 
         this.classInfo.addEnergyGainType("Melee", 12);
@@ -80,25 +77,24 @@ public class MWZombie extends MWClass {
         ParticleUtils.play(EnumParticle.HEART, loc, 0.5, 0.5, 0.5, 0.15, 12);
 
         player.getWorld().playSound(loc, Sound.LEVEL_UP, 1, 2);
-        for (Player player1 : Bukkit.getOnlinePlayers()){
+        for (Player player1 : Bukkit.getOnlinePlayers()) {
             if (player.getWorld() != player1.getWorld()) continue;
             if (player1.isDead()) continue;
-            if (!plugin.getTeamsManager().isOnSameTeam(player,player1)) continue;
-            if (player==player1) continue;
-            if (player1.getLocation().distance(player.getLocation())>5) continue;
-            double healthh=player1.getHealth()+5;
-            if (healthh>player1.getMaxHealth()){
+            if (!plugin.getTeamsManager().isOnSameTeam(player, player1)) continue;
+            if (player == player1) continue;
+            if (player1.getLocation().distance(player.getLocation()) > 5) continue;
+            double healthh = player1.getHealth() + 5;
+            if (healthh > player1.getMaxHealth()) {
                 player1.setHealth(player1.getMaxHealth());
-            }else {
+            } else {
                 player1.setHealth(healthh);
             }
-            player1.sendMessage("You have been healed by the Healing Aura of "+player.getName()+"!");
+            player1.sendMessage("You have been healed by the Healing Aura of " + player.getName() + "!");
         }
     }
 
     /**
-     *
-     *  Moved to MWClassManager : assign().
+     * Moved to MWClassManager : assign().
      */
     /*@EventHandler
     public void gathering(BlockBreakEvent event) {
@@ -108,7 +104,6 @@ public class MWZombie extends MWClass {
             PotionUtils.effect(player, "haste", 5, 2);
         }
     }*/
-
     @Override
     public void hit(EntityDamageByEntityEvent event) {
         super.hit(event);
@@ -202,9 +197,7 @@ public class MWZombie extends MWClass {
 
         if (MWKit.contains(this)) {
             items = MWKit.fetch(this);
-        }
-
-        else {
+        } else {
             Map<Enchantment, Integer> swordEnch = new HashMap<>();
             swordEnch.put(Enchantment.DURABILITY, 10);
 

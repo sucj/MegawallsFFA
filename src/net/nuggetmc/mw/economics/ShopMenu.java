@@ -15,35 +15,37 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ShopMenu implements Listener {
-    MegaWalls plugin=MegaWalls.getInstance();
+    MegaWalls plugin = MegaWalls.getInstance();
 
-    SpecialItemUtils specialItemUtils= plugin.getSpecialItemUtils();
+    SpecialItemUtils specialItemUtils = plugin.getSpecialItemUtils();
     private static final String CLOSE_NAME = ChatColor.RED + "Close";
 
-    private final MWClassManager classmanager =plugin.getClassManager();
-    private final EnergyManager energyManager= plugin.getEnergyManager();
-    private final String menuTitle="Shop";
-    private static Map<String,Good> goods=new HashMap<>();
-   public Good gapple=new Good(new ItemStack(Material.GOLDEN_APPLE,1),"Golden Apple",8,new ItemStack(Material.GOLDEN_APPLE,1),null);
-   public Good milk=new Good(new ItemStack(Material.MILK_BUCKET,1),"Cow Bucket",5,specialItemUtils.getCowBucket(),null);
-    Good squpot=new Good(specialItemUtils.getSquidPot(),ChatColor.stripColor(specialItemUtils.getSquidPot().getItemMeta().getDisplayName()),15,specialItemUtils.getSquidPot(),null);
-    Good golempot=new Good(specialItemUtils.getGolemPot(),ChatColor.stripColor(specialItemUtils.getGolemPot().getItemMeta().getDisplayName()),25,specialItemUtils.getGolemPot(),null);
-   Good diamond=new Good(new ItemStack(Material.DIAMOND,1),"Diamond",50,new ItemStack(Material.DIAMOND,1),null);
-   Good ironHelmet=new Good(new ItemStack(Material.IRON_HELMET,1),"Iron Helmet",10,new ItemStack(Material.IRON_HELMET,1),null);
-   Good ironChestplate=new Good(new ItemStack(Material.IRON_CHESTPLATE,1),"Iron Chestplate",10,new ItemStack(Material.IRON_CHESTPLATE,1),null);
-   Good ironLeggings=new Good(new ItemStack(Material.IRON_LEGGINGS,1),"Iron Leggings",10,new ItemStack(Material.IRON_LEGGINGS,1),null);
-   Good ironBoots=new Good(new ItemStack(Material.IRON_BOOTS,1),"Iron Boots",10,new ItemStack(Material.IRON_BOOTS,1),null);
+    private final MWClassManager classmanager = plugin.getClassManager();
+    private final EnergyManager energyManager = plugin.getEnergyManager();
+    private final String menuTitle = "Shop";
+    private static Map<String, Good> goods = new HashMap<>();
+    public Good gapple = new Good(new ItemStack(Material.GOLDEN_APPLE, 1), "Golden Apple", 8, new ItemStack(Material.GOLDEN_APPLE, 1), null);
+    public Good milk = new Good(new ItemStack(Material.MILK_BUCKET, 1), "Cow Bucket", 5, specialItemUtils.getCowBucket(), null);
+    Good squpot = new Good(specialItemUtils.getSquidPot(), ChatColor.stripColor(specialItemUtils.getSquidPot().getItemMeta().getDisplayName()), 15, specialItemUtils.getSquidPot(), null);
+    Good golempot = new Good(specialItemUtils.getGolemPot(), ChatColor.stripColor(specialItemUtils.getGolemPot().getItemMeta().getDisplayName()), 25, specialItemUtils.getGolemPot(), null);
+    Good diamond = new Good(new ItemStack(Material.DIAMOND, 1), "Diamond", 50, new ItemStack(Material.DIAMOND, 1), null);
+    Good ironHelmet = new Good(new ItemStack(Material.IRON_HELMET, 1), "Iron Helmet", 10, new ItemStack(Material.IRON_HELMET, 1), null);
+    Good ironChestplate = new Good(new ItemStack(Material.IRON_CHESTPLATE, 1), "Iron Chestplate", 10, new ItemStack(Material.IRON_CHESTPLATE, 1), null);
+    Good ironLeggings = new Good(new ItemStack(Material.IRON_LEGGINGS, 1), "Iron Leggings", 10, new ItemStack(Material.IRON_LEGGINGS, 1), null);
+    Good ironBoots = new Good(new ItemStack(Material.IRON_BOOTS, 1), "Iron Boots", 10, new ItemStack(Material.IRON_BOOTS, 1), null);
 
     //an example
-    private void registergood(Good... GoodArray){
-        for (Good good:GoodArray){
-            goods.put(good.getDisplayName(),good);
+    private void registergood(Good... GoodArray) {
+        for (Good good : GoodArray) {
+            goods.put(good.getDisplayName(), good);
         }
     }
-    private Good getGoodByName(String goodname){
+
+    private Good getGoodByName(String goodname) {
         return goods.get(goodname);
     }
 
@@ -63,39 +65,36 @@ public class ShopMenu implements Listener {
     }
 
     private void reloadPrices() {
-       loadPriceOrDefault(this.gapple,16);
-       loadPriceOrDefault(this.milk,10);
-       loadPriceOrDefault(this.squpot,30);
-       loadPriceOrDefault(this.golempot,50);
-       loadPriceOrDefault(this.diamond,100);
-       loadPriceOrDefault(this.ironHelmet,10);
-       loadPriceOrDefault(this.ironChestplate,10);
-       loadPriceOrDefault(this.ironBoots,10);
-       loadPriceOrDefault(this.ironLeggings,10);
+        loadPriceOrDefault(this.gapple, 16);
+        loadPriceOrDefault(this.milk, 10);
+        loadPriceOrDefault(this.squpot, 30);
+        loadPriceOrDefault(this.golempot, 50);
+        loadPriceOrDefault(this.diamond, 100);
+        loadPriceOrDefault(this.ironHelmet, 10);
+        loadPriceOrDefault(this.ironChestplate, 10);
+        loadPriceOrDefault(this.ironBoots, 10);
+        loadPriceOrDefault(this.ironLeggings, 10);
     }
-    private void loadPriceOrDefault(Good good, int defaulta){
-        good.setPrice(plugin.getOrDefaultFromConfig("shop.price."+good.getDisplayName(),defaulta));
+
+    private void loadPriceOrDefault(Good good, int defaulta) {
+        good.setPrice(plugin.getOrDefaultFromConfig("shop.price." + good.getDisplayName(), defaulta));
     }
 
     public void openGUI(Player player) {
         Inventory inv = Bukkit.createInventory(null, 54, menuTitle);
 
 
+        inv.setItem(10, gapple.getMenuItem());
+        inv.setItem(11, milk.getMenuItem());
+        inv.setItem(12, squpot.getMenuItem());
+        inv.setItem(13, golempot.getMenuItem());
+        inv.setItem(14, diamond.getMenuItem());
+        inv.setItem(15, ironHelmet.getMenuItem());
+        inv.setItem(16, ironChestplate.getMenuItem());
 
-
-            inv.setItem(10, gapple.getMenuItem());
-            inv.setItem(11, milk.getMenuItem());
-            inv.setItem(12, squpot.getMenuItem());
-            inv.setItem(13, golempot.getMenuItem());
-            inv.setItem(14, diamond.getMenuItem());
-            inv.setItem(15, ironHelmet.getMenuItem());
-            inv.setItem(16, ironChestplate.getMenuItem());
-
-            inv.setItem(19, ironLeggings.getMenuItem());
-            inv.setItem(20, ironBoots.getMenuItem());
-          //  inv.setItem(11, example);
-
-
+        inv.setItem(19, ironLeggings.getMenuItem());
+        inv.setItem(20, ironBoots.getMenuItem());
+        //  inv.setItem(11, example);
 
 
         inv.setItem(49, createClose());
@@ -103,7 +102,7 @@ public class ShopMenu implements Listener {
     }
 
     private void select(Player player, String name) {
-        Good good=getGoodByName(name);
+        Good good = getGoodByName(name);
         if (good == null) return;
 
         select(player, good);
@@ -111,11 +110,11 @@ public class ShopMenu implements Listener {
 
 
     public void select(Player player, Good good) {
-        if (plugin.getCoinsManager().get(player)<good.getPrice()){
+        if (plugin.getCoinsManager().get(player) < good.getPrice()) {
             player.sendMessage("not enough coins!");
-        }else {
-            plugin.getCoinsManager().add(player,-good.getPrice());
-            player.sendMessage("You have purchased "+ChatColor.YELLOW+good.getDisplayName()+ChatColor.RESET+" with "+ChatColor.GREEN+good.getPrice()+ChatColor.RESET+" coins.");
+        } else {
+            plugin.getCoinsManager().add(player, -good.getPrice());
+            player.sendMessage("You have purchased " + ChatColor.YELLOW + good.getDisplayName() + ChatColor.RESET + " with " + ChatColor.GREEN + good.getPrice() + ChatColor.RESET + " coins.");
             player.getInventory().addItem(good.getTheItem());
         }
 
@@ -159,8 +158,6 @@ public class ShopMenu implements Listener {
 
         return item;
     }
-
-
 
 
 }

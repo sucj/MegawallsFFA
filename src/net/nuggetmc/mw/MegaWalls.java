@@ -1,9 +1,9 @@
 package net.nuggetmc.mw;
 
 import jdk.nashorn.internal.objects.annotations.Getter;
-import net.nuggetmc.mw.economics.CoinsManager;
 import net.nuggetmc.mw.combat.CombatManager;
 import net.nuggetmc.mw.command.*;
+import net.nuggetmc.mw.economics.CoinsManager;
 import net.nuggetmc.mw.economics.SellMenu;
 import net.nuggetmc.mw.economics.ShopMenu;
 import net.nuggetmc.mw.energy.EnergyManager;
@@ -13,13 +13,12 @@ import net.nuggetmc.mw.mwclass.MWClassMenu;
 import net.nuggetmc.mw.mwclass.classes.*;
 import net.nuggetmc.mw.special.CompassManager;
 import net.nuggetmc.mw.special.SpecialEventsManager;
+import net.nuggetmc.mw.special.SpecialItemUtils;
 import net.nuggetmc.mw.special.TeamsManager;
 import net.nuggetmc.mw.utils.ItemUtils;
 import net.nuggetmc.mw.utils.MWHealth;
-import net.nuggetmc.mw.special.SpecialItemUtils;
 import net.nuggetmc.mw.utils.WorldUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.command.TabCompleter;
@@ -32,7 +31,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Level;
 
 public class MegaWalls extends JavaPlugin {
 
@@ -49,7 +47,7 @@ public class MegaWalls extends JavaPlugin {
     }
 
     private CompassManager compassManager;
-    public ArrayList<Player> bloodRageList=new ArrayList<>();
+    public ArrayList<Player> bloodRageList = new ArrayList<>();
 
     @Getter
     public SpecialEventsManager getSpecialEventsManager() {
@@ -94,7 +92,8 @@ public class MegaWalls extends JavaPlugin {
     public MWClassMenu getMenu() {
         return mwClassMenu;
     }
-    public ShopMenu getShopMenu(){
+
+    public ShopMenu getShopMenu() {
         return shopMenu;
     }
 
@@ -105,14 +104,17 @@ public class MegaWalls extends JavaPlugin {
     public EnergyManager getEnergyManager() {
         return energyManager;
     }
+
     @Getter
-    public CoinsManager getCoinsManager(){
+    public CoinsManager getCoinsManager() {
         return this.coinsManager;
     }
+
     @Getter
-    public CombatManager getCombatManager(){
+    public CombatManager getCombatManager() {
         return combatManager;
     }
+
     private boolean isChinese;
     public boolean antistealDiamond;
     //it is used to stop players from mining diamonds when there is only themselves.
@@ -121,89 +123,90 @@ public class MegaWalls extends JavaPlugin {
     public List<Double> bluespawn;
     public List<Double> yellowspawn;
     public int breakResetTime;
-    public static boolean OPBYPASSGM=false;
+    public static boolean OPBYPASSGM = false;
+
     @Override
     public void onEnable() {
         INSTANCE = this;
         //cfg
         try {
-            isChinese=(getConfig().get("use_chinese").equals(true));
-        }catch (Exception e){
-            getConfig().set("use_chinese",false);
-            isChinese=false;
+            isChinese = (getConfig().get("use_chinese").equals(true));
+        } catch (Exception e) {
+            getConfig().set("use_chinese", false);
+            isChinese = false;
             saveConfig();
         }
         try {
-            breakResetTime= (int) getConfig().get("break_reset_time");
-        }catch (Exception e){
-            getConfig().set("break_reset_time",60);
-            breakResetTime=60;
+            breakResetTime = (int) getConfig().get("break_reset_time");
+        } catch (Exception e) {
+            getConfig().set("break_reset_time", 60);
+            breakResetTime = 60;
             saveConfig();
         }
         try {
-            antistealDiamond=(getConfig().get("antistealDiamond").equals(true));
-        }catch (Exception e){
-            getConfig().set("antistealDiamond",true);
-            antistealDiamond=true;
+            antistealDiamond = (getConfig().get("antistealDiamond").equals(true));
+        } catch (Exception e) {
+            getConfig().set("antistealDiamond", true);
+            antistealDiamond = true;
             saveConfig();
         }
         try {
-            redspawn= getConfig().getDoubleList("spawnloc.red");
-            greenspawn=  getConfig().getDoubleList("spawnloc.green");
-            bluespawn= getConfig().getDoubleList("spawnloc.blue");
-            yellowspawn=  getConfig().getDoubleList("spawnloc.yellow");
-        }catch (Exception e){
+            redspawn = getConfig().getDoubleList("spawnloc.red");
+            greenspawn = getConfig().getDoubleList("spawnloc.green");
+            bluespawn = getConfig().getDoubleList("spawnloc.blue");
+            yellowspawn = getConfig().getDoubleList("spawnloc.yellow");
+        } catch (Exception e) {
 
         }
-        if (redspawn==null){
-            getConfig().set("spawnloc.red",new double[]{0,100,0});
-            redspawn= new ArrayList<>(3);
+        if (redspawn == null) {
+            getConfig().set("spawnloc.red", new double[]{0, 100, 0});
+            redspawn = new ArrayList<>(3);
             redspawn.add(0d);
             redspawn.add(100d);
             redspawn.add(0d);
         }
-        if (greenspawn==null){
-            getConfig().set("spawnloc.green",new double[]{0,100,0});
-            greenspawn=new ArrayList<>(3);
+        if (greenspawn == null) {
+            getConfig().set("spawnloc.green", new double[]{0, 100, 0});
+            greenspawn = new ArrayList<>(3);
             greenspawn.add(0d);
             greenspawn.add(100d);
             greenspawn.add(0d);
         }
-        if (bluespawn==null){
-            getConfig().set("spawnloc.blue",new double[]{0,100,0});
-            bluespawn=new ArrayList<>(3);
+        if (bluespawn == null) {
+            getConfig().set("spawnloc.blue", new double[]{0, 100, 0});
+            bluespawn = new ArrayList<>(3);
             bluespawn.add(0d);
             bluespawn.add(100d);
             bluespawn.add(0d);
         }
-        if (yellowspawn==null){
-            getConfig().set("spawnloc.yellow",new double[]{0,0,0});
-            yellowspawn=new ArrayList<>(3);
+        if (yellowspawn == null) {
+            getConfig().set("spawnloc.yellow", new double[]{0, 0, 0});
+            yellowspawn = new ArrayList<>(3);
             yellowspawn.add(0d);
             yellowspawn.add(100d);
             yellowspawn.add(0d);
         }
 
         try {
-            OPBYPASSGM= (boolean) getConfig().get("opbypassgamemode");
-        }catch (Exception e){
-            getConfig().set("opbypassgamemode",false);
+            OPBYPASSGM = (boolean) getConfig().get("opbypassgamemode");
+        } catch (Exception e) {
+            getConfig().set("opbypassgamemode", false);
             saveConfig();
         }
         // Create instances
         this.pluginManager = this.getServer().getPluginManager();
         this.mwClassManager = new MWClassManager(this);
         this.energyManager = new EnergyManager();
-        this.coinsManager=new CoinsManager();
-        this.specialEventsManager=new SpecialEventsManager();
+        this.coinsManager = new CoinsManager();
+        this.specialEventsManager = new SpecialEventsManager();
         this.mwClassMenu = new MWClassMenu(this, "Class Selector");
-        this.combatManager=new CombatManager();
-        this.specialItemUtils=new SpecialItemUtils();
-        this.teamsManager=new TeamsManager();
+        this.combatManager = new CombatManager();
+        this.specialItemUtils = new SpecialItemUtils();
+        this.teamsManager = new TeamsManager();
         this.mwhealth = new MWHealth();
-        this.shopMenu=new ShopMenu();
-        this.sellMenu=new SellMenu();
-        this.compassManager=new CompassManager();
+        this.shopMenu = new ShopMenu();
+        this.sellMenu = new SellMenu();
+        this.compassManager = new CompassManager();
 
         // Register commands
         setExecutor("energy", new EnergyCommand());
@@ -216,10 +219,10 @@ public class MegaWalls extends JavaPlugin {
         setExecutor("mwshop", new ShopCommand());
         setExecutor("mwsell", new SellCommand());
         setExecutor("coinsmgr", new CoinsmgrCommand());
-        setExecutor("mwride",new MWRideCommand());
-        setExecutor("mwbaltop",new MWBalTopCommand());
-        setExecutor("mwmakeride",new MWMakeRideCommand());
-        setExecutor("mwresel",new MWReselCommand());
+        setExecutor("mwride", new MWRideCommand());
+        setExecutor("mwbaltop", new MWBalTopCommand());
+        setExecutor("mwmakeride", new MWMakeRideCommand());
+        setExecutor("mwresel", new MWReselCommand());
         setExecutorAndTabCompleter("megawalls", new MegaWallsCommand());
 
         this.registerClasses(
@@ -261,13 +264,14 @@ public class MegaWalls extends JavaPlugin {
 
 
     }
-    public int getOrDefaultFromConfig(String path,int defaulta){
+
+    public int getOrDefaultFromConfig(String path, int defaulta) {
         int result;
         try {
-            result= (int) getConfig().get(path);
-        }catch (Exception e){
-            getConfig().set(path,defaulta);
-            result=defaulta;
+            result = (int) getConfig().get(path);
+        } catch (Exception e) {
+            getConfig().set(path, defaulta);
+            result = defaulta;
         }
         saveConfig();
         return result;

@@ -36,29 +36,29 @@ public class MWDreadlord extends MWClass {
     private final Map<Player, Integer> increment = new HashMap<>();
 
     public MWDreadlord() {
-        this.name = new String[]{"恐惧魔王","Dreadlord","DRE"};
+        this.name = new String[]{"恐惧魔王", "Dreadlord", "DRE"};
         this.icon = Material.NETHER_BRICK_ITEM;
         this.color = ChatColor.DARK_RED;
 
-        this.playstyles = new Playstyle[] {
-            Playstyle.RUSHER,
-            Playstyle.DAMAGE
+        this.playstyles = new Playstyle[]{
+                Playstyle.RUSHER,
+                Playstyle.DAMAGE
         };
 
-        this.diamonds = new Diamond[] {
-            Diamond.SWORD,
-            Diamond.HELMET
+        this.diamonds = new Diamond[]{
+                Diamond.SWORD,
+                Diamond.HELMET
         };
 
         this.classInfo = new MWClassInfo(
-            "Shadow Burst",
-            "Fire three wither skulls at once dealing a total of &a8 &rtrue damage.",
-            "Soul Eater",
-            "Every &a5 &rattacks will restore 3 hunger and &a2 HP&r.",
-            "Soul Siphon",
-            "Gain Strength I and Regeneration I for &a5 &rseconds on kill.",
-            "Dark Matter",
-            "Every &a1 &riron ore will be auto-smelted when mined, dropping an iron ingot."
+                "Shadow Burst",
+                "Fire three wither skulls at once dealing a total of &a8 &rtrue damage.",
+                "Soul Eater",
+                "Every &a5 &rattacks will restore 3 hunger and &a2 HP&r.",
+                "Soul Siphon",
+                "Gain Strength I and Regeneration I for &a5 &rseconds on kill.",
+                "Dark Matter",
+                "Every &a1 &riron ore will be auto-smelted when mined, dropping an iron ingot."
         );
 
         this.classInfo.addEnergyGainType("Melee", 10);
@@ -108,7 +108,7 @@ public class MWDreadlord extends MWClass {
                     }, 2);
 
                     for (Player target : Bukkit.getOnlinePlayers()) {
-                        if (plugin.getTeamsManager().isOnSameTeam(player,target)) continue;
+                        if (plugin.getTeamsManager().isOnSameTeam(player, target)) continue;
                         if (player == target) continue;
                         if (target.getWorld() != pointLoc.getWorld()) continue;
                         if (pointLoc.distance(target.getLocation().add(0, 1, 0)) < 1) {
@@ -135,13 +135,13 @@ public class MWDreadlord extends MWClass {
 
     private void witherSkullHit(Player player, Location loc, Player hit) {
         Set<Player> playersToDamage = new HashSet<>();
-        if ((hit != null)&&plugin.getTeamsManager().isOnSameTeam(player,hit)) playersToDamage.add(hit);
+        if ((hit != null) && plugin.getTeamsManager().isOnSameTeam(player, hit)) playersToDamage.add(hit);
 
         WorldUtils.createNoDamageExplosion(loc, 2);
 
         for (Player target : Bukkit.getOnlinePlayers()) {
             if (player == target) continue;
-            if (plugin.getTeamsManager().isOnSameTeam(player,target)) continue;
+            if (plugin.getTeamsManager().isOnSameTeam(player, target)) continue;
             if (playersToDamage.contains(target)) continue;
             if (target.getWorld() != loc.getWorld()) continue;
 
@@ -228,9 +228,7 @@ public class MWDreadlord extends MWClass {
 
         if (MWKit.contains(this)) {
             items = MWKit.fetch(this);
-        }
-
-        else {
+        } else {
             Map<Enchantment, Integer> swordEnch = new HashMap<>();
             swordEnch.put(Enchantment.DAMAGE_UNDEAD, 1);
             swordEnch.put(Enchantment.DURABILITY, 10);

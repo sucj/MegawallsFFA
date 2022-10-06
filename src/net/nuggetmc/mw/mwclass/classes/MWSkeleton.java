@@ -37,28 +37,28 @@ public class MWSkeleton extends MWClass {
     private final Set<Player> cooldownCache = new HashSet<>();
 
     public MWSkeleton() {
-        this.name = new String[]{"骷髅","Skeleton","SKE"};
+        this.name = new String[]{"骷髅", "Skeleton", "SKE"};
         this.icon = Material.BONE;
         this.color = ChatColor.AQUA;
 
-        this.playstyles = new Playstyle[] {
-            Playstyle.RANGED,
-            Playstyle.CONTROL
+        this.playstyles = new Playstyle[]{
+                Playstyle.RANGED,
+                Playstyle.CONTROL
         };
 
-        this.diamonds = new Diamond[] {
-            Diamond.HELMET
+        this.diamonds = new Diamond[]{
+                Diamond.HELMET
         };
 
         this.classInfo = new MWClassInfo(
-            "Explosive Arrow",
-            "You will fire an explosive arrow that deals &a6 &rdamage in a 6 block radius and breaks blocks.",
-            "Salvaging",
-            "When landing a bow shot onto an opponent, you will receive &a2 &rarrows and &a2 &rhunger.",
-            "Agile",
-            "You gain Speed II and Regeneration I for &a7 &rseconds after hitting an enemy with a bow shot.\nThe cooldown only affects Speed II.\nCooldown: &a14s",
-            "Efficiency",
-            "Drops while breaking iron ore, coal ore, and wooden logs are tripled, and drops while mining diamond ore are doubled."
+                "Explosive Arrow",
+                "You will fire an explosive arrow that deals &a6 &rdamage in a 6 block radius and breaks blocks.",
+                "Salvaging",
+                "When landing a bow shot onto an opponent, you will receive &a2 &rarrows and &a2 &rhunger.",
+                "Agile",
+                "You gain Speed II and Regeneration I for &a7 &rseconds after hitting an enemy with a bow shot.\nThe cooldown only affects Speed II.\nCooldown: &a14s",
+                "Efficiency",
+                "Drops while breaking iron ore, coal ore, and wooden logs are tripled, and drops while mining diamond ore are doubled."
         );
 
         this.classInfo.addEnergyGainType("Bow", "25 × CHARGE%");
@@ -119,7 +119,7 @@ public class MWSkeleton extends MWClass {
 
     public void explosionDamage(Projectile proj, Player player) {
         for (Player victim : Bukkit.getOnlinePlayers()) {
-            if (plugin.getTeamsManager().isOnSameTeam(player,victim)) return;
+            if (plugin.getTeamsManager().isOnSameTeam(player, victim)) return;
             if (player.getWorld() != victim.getWorld()) continue;
 
             if (player != victim && !victim.isDead() && proj.getLocation().distance(victim.getLocation()) < 6) {
@@ -182,14 +182,14 @@ public class MWSkeleton extends MWClass {
         if (manager.get(player) == this) {
             Block block = event.getBlock();
             Material type = block.getType();
-            boolean a=false;
-            switch (type){
+            boolean a = false;
+            switch (type) {
                 case DIAMOND_ORE:
                 case IRON_ORE:
                 case COAL_ORE:
                 case LOG:
                 case LOG_2:
-                    a=true;
+                    a = true;
                 default:
                     //
             }
@@ -220,9 +220,7 @@ public class MWSkeleton extends MWClass {
 
         if (MWKit.contains(this)) {
             items = MWKit.fetch(this);
-        }
-
-        else {
+        } else {
             Map<Enchantment, Integer> swordEnch = new HashMap<>();
             swordEnch.put(Enchantment.DURABILITY, 10);
 

@@ -25,31 +25,31 @@ import java.util.*;
 public class MWHerobrine extends MWClass {
 
     private final Map<Player, Integer> increment = new HashMap<>();
-    private final Set<Player> wrathList=new HashSet<>();
+    private final Set<Player> wrathList = new HashSet<>();
 
     public MWHerobrine() {
-        this.name = new String[]{"Herobrine","Herobrine","HBR"};
+        this.name = new String[]{"Herobrine", "Herobrine", "HBR"};
         this.icon = Material.DIAMOND_SWORD;
         this.color = ChatColor.YELLOW;
 
-        this.playstyles = new Playstyle[] {
-            Playstyle.DAMAGE,
-            Playstyle.CONTROL
+        this.playstyles = new Playstyle[]{
+                Playstyle.DAMAGE,
+                Playstyle.CONTROL
         };
 
-        this.diamonds = new Diamond[] {
-            Diamond.SWORD
+        this.diamonds = new Diamond[]{
+                Diamond.SWORD
         };
 
         this.classInfo = new MWClassInfo(
-            "Wrath",
-            "Unleash the wrath of Herobrine, striking all nearby enemies in a 5 block radius for &a4.5 &rtrue damage.",
-            "Power",
-            "Killing an enemy grants you Strength I for &a6 &rseconds.",
-            "Flurry",
-            "Every &a3 &rattacks will grant you Speed II for 3 seconds and Regeneration I for 5 seconds.",
-            "Treasure Hunter",
-            "Increases the chance to find treasure chests by &a300% &rwhen mining."
+                "Wrath",
+                "Unleash the wrath of Herobrine, striking all nearby enemies in a 5 block radius for &a4.5 &rtrue damage.",
+                "Power",
+                "Killing an enemy grants you Strength I for &a6 &rseconds.",
+                "Flurry",
+                "Every &a3 &rattacks will grant you Speed II for 3 seconds and Regeneration I for 5 seconds.",
+                "Treasure Hunter",
+                "Increases the chance to find treasure chests by &a300% &rwhen mining."
         );
 
         this.classInfo.addEnergyGainType("Melee", 25);
@@ -70,7 +70,7 @@ public class MWHerobrine extends MWClass {
 
             Location loc = victim.getLocation();
 
-            if (player.getLocation().distance(loc) <= 5 && player != victim && !victim.isDead()&&(!plugin.getTeamsManager().isOnSameTeam(player,victim))) {
+            if (player.getLocation().distance(loc) <= 5 && player != victim && !victim.isDead() && (!plugin.getTeamsManager().isOnSameTeam(player, victim))) {
                 world.strikeLightningEffect(loc);
                 pass = true;
 
@@ -139,9 +139,7 @@ public class MWHerobrine extends MWClass {
 
         if (MWKit.contains(this)) {
             items = MWKit.fetch(this);
-        }
-
-        else {
+        } else {
             Map<Enchantment, Integer> swordEnch = new HashMap<>();
             swordEnch.put(Enchantment.DURABILITY, 10);
 
@@ -161,15 +159,15 @@ public class MWHerobrine extends MWClass {
         }
 
         MWKit.assignItems(player, items);
-        if (wrathList.contains(player)){
+        if (wrathList.contains(player)) {
             wrathList.remove(player);
         }
     }
 
     @Override
     public String getActionBar(Player player) {
-        String wrath=this.getColor() + "Wrath "+ (energyManager.get(player)!=100 ?ChatColor.RED + "✖":ChatColor.GREEN+ "✔")+ChatColor.RESET;
-        String flurry=this.getColor() + "Flurry "+ ((!increment.containsKey(player)||increment.get(player)==0) ?ChatColor.GREEN + "✔":(ChatColor.RED+ String.valueOf(increment.get(player))))+ChatColor.RESET;
-        return wrath+"      "+flurry;
+        String wrath = this.getColor() + "Wrath " + (energyManager.get(player) != 100 ? ChatColor.RED + "✖" : ChatColor.GREEN + "✔") + ChatColor.RESET;
+        String flurry = this.getColor() + "Flurry " + ((!increment.containsKey(player) || increment.get(player) == 0) ? ChatColor.GREEN + "✔" : (ChatColor.RED + String.valueOf(increment.get(player)))) + ChatColor.RESET;
+        return wrath + "      " + flurry;
     }
 }

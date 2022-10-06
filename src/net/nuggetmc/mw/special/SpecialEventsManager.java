@@ -6,29 +6,26 @@ import io.isles.nametagapi.NametagAPI;
 import net.md_5.bungee.api.ChatColor;
 import net.nuggetmc.mw.MegaWalls;
 import net.nuggetmc.mw.mwclass.classes.MWCow;
-import net.nuggetmc.mw.mwclass.items.MWKit;
 import net.nuggetmc.mw.utils.ItemUtils;
-import net.nuggetmc.mw.utils.WorldUtils;
 import org.bukkit.*;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockDispenseEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.entity.*;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntitySpawnEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.*;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.math.BigDecimal;
-import java.util.Collection;
 import java.util.Objects;
 
 import static net.nuggetmc.mw.MegaWalls.OPBYPASSGM;
@@ -36,15 +33,17 @@ import static net.nuggetmc.mw.MegaWalls.OPBYPASSGM;
 public class SpecialEventsManager implements Listener {
     MegaWalls plugin;
     RegionPreservePlugin rp;
-    public SpecialEventsManager(){
-        this.plugin=MegaWalls.getInstance();
-        rp=Bukkit.getPluginManager().getPlugin("RegionPreserve")==null?null: (RegionPreservePlugin) Bukkit.getPluginManager().getPlugin("RegionPreserve");
+
+    public SpecialEventsManager() {
+        this.plugin = MegaWalls.getInstance();
+        rp = Bukkit.getPluginManager().getPlugin("RegionPreserve") == null ? null : (RegionPreservePlugin) Bukkit.getPluginManager().getPlugin("RegionPreserve");
     }
 
     ///////////////////////////COW BUCKET
-    SpecialItemUtils specialItemUtils=new SpecialItemUtils();
+    SpecialItemUtils specialItemUtils = new SpecialItemUtils();
+
     @EventHandler
-    public void onCowBucket(PlayerItemConsumeEvent e){
+    public void onCowBucket(PlayerItemConsumeEvent e) {
         if (specialItemUtils.isCowBucket(e.getItem())) {
             Player player = e.getPlayer();
             player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 5 * 20, 0));
@@ -60,63 +59,67 @@ public class SpecialEventsManager implements Listener {
                     if (target.getLocation().distance(player.getLocation()) > 7) continue;
                     target.setFoodLevel(20);
                     target.setSaturation(20);
-                    double health=target.getHealth()+3;
-                    if (health>target.getMaxHealth()){
+                    double health = target.getHealth() + 3;
+                    if (health > target.getMaxHealth()) {
                         target.setHealth(target.getMaxHealth());
-                    }else {
-                       target.setHealth(health);
+                    } else {
+                        target.setHealth(health);
                     }
-                    target.sendMessage("You have been healed by the Refreshing Sip of "+player.getName()+"!");
+                    target.sendMessage("You have been healed by the Refreshing Sip of " + player.getName() + "!");
                 }
             }
         }
     }
+
     ///////////////////////////ENDER CHEST
     @EventHandler
-    public void onPlace(BlockPlaceEvent e){
-        if (plugin.getCombatManager().isInCombat(e.getPlayer())&&e.getBlock().getType()== Material.ENDER_CHEST){
+    public void onPlace(BlockPlaceEvent e) {
+        if (plugin.getCombatManager().isInCombat(e.getPlayer()) && e.getBlock().getType() == Material.ENDER_CHEST) {
             e.setCancelled(true);
         }
     }
+
     @EventHandler
-    public void onDrop(PlayerDropItemEvent e){
-        if (plugin.getCombatManager().isInCombat(e.getPlayer())&&e.getItemDrop().getItemStack().getType()==Material.ENDER_CHEST){
+    public void onDrop(PlayerDropItemEvent e) {
+        if (plugin.getCombatManager().isInCombat(e.getPlayer()) && e.getItemDrop().getItemStack().getType() == Material.ENDER_CHEST) {
             e.setCancelled(true);
         }
     }
+
     @EventHandler
-    public void onInteract(PlayerInteractEvent e){
+    public void onInteract(PlayerInteractEvent e) {
         Player p = e.getPlayer();
-        if(!e.getAction().name().contains("RIGHT")) return;
-        if(p.getItemInHand() == null || p.getItemInHand().getType() == Material.AIR) return;
-        if (p.getItemInHand().getType()!=Material.ENDER_CHEST) return;
+        if (!e.getAction().name().contains("RIGHT")) return;
+        if (p.getItemInHand() == null || p.getItemInHand().getType() == Material.AIR) return;
+        if (p.getItemInHand().getType() != Material.ENDER_CHEST) return;
         p.openInventory(p.getEnderChest());
     }
+
     ///////////////////////////PLAYER TRACK
     @EventHandler
-    public void onMove(PlayerMoveEvent e){
+    public void onMove(PlayerMoveEvent e) {
         Player plr = e.getPlayer();
-        if (!plugin.getCombatManager().isInCombat(plr)){
+        if (!plugin.getCombatManager().isInCombat(plr)) {
             return;
         }
         Location plrLocation = plr.getLocation();
-        if (plr.getWorld().getEnvironment() == World.Environment.NORMAL){
+        if (plr.getWorld().getEnvironment() == World.Environment.NORMAL) {
             //System.out.println(plr.getPlayerListName());
             String plrName = plr.getPlayerListName();
             double LowestDistance = Double.MAX_VALUE;
             Location LowestLocation = plr.getLocation();
-            for (Player p : Bukkit.getOnlinePlayers()){
-                if (!plugin.getCombatManager().isInCombat(p)){
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                if (!plugin.getCombatManager().isInCombat(p)) {
                     continue;
                 }
 
 
-                    if (!plugin.getCompassManager().getCompassTargetMap().get(plr).equals(plugin.getTeamsManager().getTeamOfPlayer(p))){
-                        continue;
-                    }
+                if (!plugin.getCompassManager().getCompassTargetMap().get(plr).equals(plugin.getTeamsManager().getTeamOfPlayer(p))) {
+                    continue;
+                }
 
 
-                if(!p.getPlayerListName().equals(plrName)) {
+                if (!p.getPlayerListName().equals(plrName)) {
                     // this is not yourself
                     if (p.getWorld().getEnvironment() == World.Environment.NORMAL) {
                         Location pLocation = p.getLocation();
@@ -130,7 +133,7 @@ public class SpecialEventsManager implements Listener {
                     }
                 }
             }
-            if (LowestLocation==null){
+            if (LowestLocation == null) {
                 return;
             }
             // we now have the lowest location and distance
@@ -139,18 +142,20 @@ public class SpecialEventsManager implements Listener {
 
         }
     }
+
     @EventHandler
-    public void onClick(PlayerInteractEvent e){
+    public void onClick(PlayerInteractEvent e) {
         if (e.getItem() == null) return;
         if (e.getAction().name().toLowerCase().contains("left")) {
-            Player player =e.getPlayer();
-            if (e.getItem().getType().equals(Material.COMPASS)&& ItemUtils.isKitItem(e.getItem())){
+            Player player = e.getPlayer();
+            if (e.getItem().getType().equals(Material.COMPASS) && ItemUtils.isKitItem(e.getItem())) {
                 plugin.getCompassManager().changeTrackingTarget(player);
-                        ;
+                ;
             }
         }
 
     }
+
     ///////////////////////////EXPORB
     @EventHandler
     public void onEntitySpawn(EntitySpawnEvent event) {
@@ -158,47 +163,50 @@ public class SpecialEventsManager implements Listener {
             event.setCancelled(true);
         }
     }
+
     ///////////////////////////TELL ARROW DAMAGE
     @EventHandler
-    public void onArrowDamageTell(EntityDamageByEntityEvent e){
+    public void onArrowDamageTell(EntityDamageByEntityEvent e) {
         if (!(e.getEntity() instanceof Player)) return;
         if (!(e.getDamager() instanceof Arrow)) return;
-        Arrow arrow=(Arrow) e.getDamager();
-        Player victim=((Player) e.getEntity()).getPlayer();
+        Arrow arrow = (Arrow) e.getDamager();
+        Player victim = ((Player) e.getEntity()).getPlayer();
         if (arrow.getShooter() instanceof Player) {
             Player player = (Player) arrow.getShooter();
 
 
-            player.sendMessage(ChatColor.YELLOW+victim.getDisplayName()+ChatColor.RESET+" is on "+(new BigDecimal(victim.getHealth()).setScale(1,BigDecimal.ROUND_HALF_UP)).doubleValue()+" health!");
+            player.sendMessage(ChatColor.YELLOW + victim.getDisplayName() + ChatColor.RESET + " is on " + (new BigDecimal(victim.getHealth()).setScale(1, BigDecimal.ROUND_HALF_UP)).doubleValue() + " health!");
         }
     }
+
     ///////////////////////////NO DAMAGE BEFORE JOINING
     @EventHandler
     public void onDamage(EntityDamageByEntityEvent e) {
         if (e.getEntity() instanceof Player) {
-            Player player= (Player) e.getEntity();
-            if (!MegaWalls.getInstance().getCombatManager().isInCombat(player)){
+            Player player = (Player) e.getEntity();
+            if (!MegaWalls.getInstance().getCombatManager().isInCombat(player)) {
                 e.setCancelled(true);
             }
         }
     }
+
     ///////////////////////////RESPAWN
     @EventHandler
     public void onRespawn(PlayerRespawnEvent event) {
-        Player player=event.getPlayer();
+        Player player = event.getPlayer();
         if (event.getPlayer().isOp() && OPBYPASSGM) {
             //
         } else {
             event.getPlayer().setGameMode(GameMode.ADVENTURE);
         }
         MegaWalls.getInstance().getCombatManager().removeInCombat(event.getPlayer());
-        if (Bukkit.getPluginManager().getPlugin("Essentials")!=null&& !Objects.equals(ChatColor.stripColor(((Essentials) Bukkit.getPluginManager().getPlugin("Essentials")).getUser(player).getNick()), player.getName())){
+        if (Bukkit.getPluginManager().getPlugin("Essentials") != null && !Objects.equals(ChatColor.stripColor(((Essentials) Bukkit.getPluginManager().getPlugin("Essentials")).getUser(player).getNick()), player.getName())) {
             //player nicked
             String nickname = ChatColor.stripColor(((Essentials) Bukkit.getPluginManager().getPlugin("Essentials")).getUser(player).getNick());
             player.setPlayerListName(nickname);
             player.setDisplayName(nickname);
             NametagAPI.resetNametag(player.getName());
-        }else {
+        } else {
             player.setPlayerListName(player.getName());
             player.setDisplayName(player.getName());
             NametagAPI.resetNametag(player.getName());
@@ -206,21 +214,21 @@ public class SpecialEventsManager implements Listener {
     }
 
     @EventHandler
-    public void onAntiStealDiamonds(BlockBreakEvent e){
-        if(e.getPlayer().isOp()||e.getPlayer().hasPermission("mw.admin")) return;
-        if (Bukkit.getOnlinePlayers().toArray().length>2) return;
-        if (e.getBlock().getType()==Material.DIAMOND_ORE||e.getBlock().getType()==Material.DIAMOND_BLOCK){
-            if (Bukkit.getOnlinePlayers().toArray().length==1||(Bukkit.getOnlinePlayers().toArray().length==2&&((((Player)Bukkit.getOnlinePlayers().toArray()[0]).getAddress())==((Player)Bukkit.getOnlinePlayers().toArray()[1]).getAddress()))){
-
-
+    public void onAntiStealDiamonds(BlockBreakEvent e) {
+        if (e.getPlayer().isOp() || e.getPlayer().hasPermission("mw.admin")) return;
+        if (Bukkit.getOnlinePlayers().toArray().length > 2) return;
+        if (e.getBlock().getType() == Material.DIAMOND_ORE || e.getBlock().getType() == Material.DIAMOND_BLOCK) {
+            if (Bukkit.getOnlinePlayers().toArray().length == 1 || (Bukkit.getOnlinePlayers().toArray().length == 2 && ((((Player) Bukkit.getOnlinePlayers().toArray()[0]).getAddress()) == ((Player) Bukkit.getOnlinePlayers().toArray()[1]).getAddress()))) {
 
 
                 e.setCancelled(true);
                 e.getPlayer().sendMessage("禁止打工!等有人的时候你再挖吧!");
                 return;
 
-        }}
+            }
+        }
     }
+
     ///////////////////////////BREAK BLOCK
     /*@EventHandler(priority = EventPriority.LOW)
     public void onBreakGet(BlockBreakEvent e){
@@ -247,12 +255,12 @@ public class SpecialEventsManager implements Listener {
     }*/
     ///////////////////////////DEATH MESSAGE
     @EventHandler
-    public void onDeath(PlayerDeathEvent e){
-       Player killer = plugin.getEnergyManager().validate(e);
-       if (killer==null) {
-           return;
-       }
-        e.setDeathMessage(ChatColor.GREEN + e.getEntity().getName()+ChatColor.WHITE+" was Killed,Killer: "+ChatColor.RED+killer.getName());
+    public void onDeath(PlayerDeathEvent e) {
+        Player killer = plugin.getEnergyManager().validate(e);
+        if (killer == null) {
+            return;
+        }
+        e.setDeathMessage(ChatColor.GREEN + e.getEntity().getName() + ChatColor.WHITE + " was Killed,Killer: " + ChatColor.RED + killer.getName());
     }
 
     ///////////////////////////MILK BUCKET
@@ -276,50 +284,52 @@ public class SpecialEventsManager implements Listener {
     public void onFallDamage(EntityDamageEvent e) {
         if (e.getEntity() instanceof Player) {
             if (e.getCause().equals(EntityDamageEvent.DamageCause.FALL)) {
-                if (e.getDamage()>16) {
+                if (e.getDamage() > 16) {
                     e.setDamage(16);
                 }
             }
         }
     }
+
     ////////////////////////////////////AUTOFILL
     @EventHandler
-    public void onAutoFill(PlayerItemConsumeEvent e){
-        PlayerInventory inventory=e.getPlayer().getInventory();
-        if (!(inventory.getItem(e.getPlayer().getInventory().getHeldItemSlot()).getAmount()==1)){
+    public void onAutoFill(PlayerItemConsumeEvent e) {
+        PlayerInventory inventory = e.getPlayer().getInventory();
+        if (!(inventory.getItem(e.getPlayer().getInventory().getHeldItemSlot()).getAmount() == 1)) {
             return;
         }
-        SpecialItemUtils si= plugin.getSpecialItemUtils();
-        Player p=e.getPlayer();
-        ItemStack itemStack=e.getItem();
-        if (itemStack.isSimilar(si.getCowBucket())){
-                    Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                        if (ItemUtils.containsSimilar(inventory,si.getCowBucket())) {
-                            int slot=ItemUtils.findItemSlot(p,si.getCowBucket());
-                            inventory.setItem(inventory.getHeldItemSlot(), inventory.getItem(slot));
-                            inventory.setItem(slot,null);
-                        }
-                    }, 1);
+        SpecialItemUtils si = plugin.getSpecialItemUtils();
+        Player p = e.getPlayer();
+        ItemStack itemStack = e.getItem();
+        if (itemStack.isSimilar(si.getCowBucket())) {
+            Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                if (ItemUtils.containsSimilar(inventory, si.getCowBucket())) {
+                    int slot = ItemUtils.findItemSlot(p, si.getCowBucket());
+                    inventory.setItem(inventory.getHeldItemSlot(), inventory.getItem(slot));
+                    inventory.setItem(slot, null);
+                }
+            }, 1);
 
         } else if (itemStack.isSimilar(si.getSquidPot())) {
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                if (ItemUtils.containsSimilar(inventory,si.getSquidPot())) {
-                    int slot=ItemUtils.findItemSlot(p,si.getSquidPot());
+                if (ItemUtils.containsSimilar(inventory, si.getSquidPot())) {
+                    int slot = ItemUtils.findItemSlot(p, si.getSquidPot());
                     inventory.setItem(inventory.getHeldItemSlot(), inventory.getItem(slot));
-                    inventory.setItem(slot,null);
+                    inventory.setItem(slot, null);
                 }
             }, 1);
         }
     }
+
     /////////////////////ARENA RESET
     @EventHandler
-    public void onResetBreak(BlockBreakEvent e){
-        Material material=e.getBlock().getType();
+    public void onResetBreak(BlockBreakEvent e) {
+        Material material = e.getBlock().getType();
         if (material.name().toLowerCase().contains("diamond")) {
             return;
         }
-            Bukkit.getScheduler().runTaskLater(plugin,()->{
+        Bukkit.getScheduler().runTaskLater(plugin, () -> {
             e.getBlock().setType(material);
-        }, plugin.breakResetTime* 20L);
+        }, plugin.breakResetTime * 20L);
     }
 }

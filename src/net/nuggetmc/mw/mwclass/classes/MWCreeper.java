@@ -40,28 +40,28 @@ public class MWCreeper extends MWClass {
     private final Set<Player> willpowerList = new HashSet<>();
 
     public MWCreeper() {
-        this.name = new String[]{"苦力怕","Creeper","CRE"};
+        this.name = new String[]{"苦力怕", "Creeper", "CRE"};
         this.icon = Material.TNT;
         this.color = ChatColor.GREEN;
 
-        this.playstyles = new Playstyle[] {
-            Playstyle.CONTROL,
-            Playstyle.DAMAGE
+        this.playstyles = new Playstyle[]{
+                Playstyle.CONTROL,
+                Playstyle.DAMAGE
         };
 
-        this.diamonds = new Diamond[] {
-            Diamond.LEGGINGS
+        this.diamonds = new Diamond[]{
+                Diamond.LEGGINGS
         };
 
         this.classInfo = new MWClassInfo(
-            "Detonate",
-            "You will set off an explosion that deals up to &a10 &rtrue damage in a 6 block radius with a &a3 &rsecond delay.\nHowever, you will lose &a0.75 &rdamage for every block that separates you and an opponent, with a minimum of &a5 &rdamage.",
-            "Fission Heart",
-            "You will spawn a Creeper with Resistance V on death.\nPlacing a TNT block will instantly prime it, but it will only deal &a87.5% &rof its vanilla damage and will not destroy blocks.\nWhile sneaking, you can place unprimed vanilla TNT.",
-            "Willpower",
-            "When your health drops below 20 HP, you gain Speed II and Regeneration I for &a12 &rseconds.\nIf you are hit by one of your own explosions above 25 HP, you will instead receive the Speed II effect for &a4 &rseconds with half of the cooldown.\nCooldown: &a20s",
-            "TNT Mining",
-            "A TNT block will be dropped for every &a1 &rcoal ore mined."
+                "Detonate",
+                "You will set off an explosion that deals up to &a10 &rtrue damage in a 6 block radius with a &a3 &rsecond delay.\nHowever, you will lose &a0.75 &rdamage for every block that separates you and an opponent, with a minimum of &a5 &rdamage.",
+                "Fission Heart",
+                "You will spawn a Creeper with Resistance V on death.\nPlacing a TNT block will instantly prime it, but it will only deal &a87.5% &rof its vanilla damage and will not destroy blocks.\nWhile sneaking, you can place unprimed vanilla TNT.",
+                "Willpower",
+                "When your health drops below 20 HP, you gain Speed II and Regeneration I for &a12 &rseconds.\nIf you are hit by one of your own explosions above 25 HP, you will instead receive the Speed II effect for &a4 &rseconds with half of the cooldown.\nCooldown: &a20s",
+                "TNT Mining",
+                "A TNT block will be dropped for every &a1 &rcoal ore mined."
         );
 
         this.classInfo.addEnergyGainType("Melee", 20);
@@ -92,14 +92,10 @@ public class MWCreeper extends MWClass {
                     explode(player);
                     this.cancel();
                     return;
-                }
-
-                else if (n % 4 == 0 && n != 12) {
+                } else if (n % 4 == 0 && n != 12) {
                     ParticleUtils.play(EnumParticle.EXPLOSION_NORMAL, loc, 0.5, 0.5, 0.5, 0.15, 10);
                     world.playSound(loc, Sound.WOOD_CLICK, 1, 1);
-                }
-
-                else if (n == 12) {
+                } else if (n == 12) {
                     ParticleUtils.play(EnumParticle.EXPLOSION_NORMAL, loc, 0.5, 0.5, 0.5, 0.15, 20);
                     world.playSound(loc, Sound.CREEPER_HISS, 1, 1);
                 }
@@ -116,7 +112,7 @@ public class MWCreeper extends MWClass {
         WorldUtils.createNoDamageExplosion(player.getLocation(), 2);
 
         for (Player victim : Bukkit.getOnlinePlayers()) {
-            if (plugin.getTeamsManager().isOnSameTeam(player,victim)) continue;
+            if (plugin.getTeamsManager().isOnSameTeam(player, victim)) continue;
             if (player.getWorld() != victim.getWorld()) continue;
 
             Location pLoc = player.getLocation();
@@ -218,9 +214,7 @@ public class MWCreeper extends MWClass {
             if (own) {
                 n = 10;
                 PotionUtils.effect(player, PotionEffectType.SPEED, 4, 1);
-            }
-
-            else {
+            } else {
                 n = 20;
                 PotionUtils.effect(player, PotionEffectType.REGENERATION, 12);
                 PotionUtils.effect(player, PotionEffectType.SPEED, 12, 1);
@@ -264,9 +258,7 @@ public class MWCreeper extends MWClass {
 
         if (MWKit.contains(this)) {
             items = MWKit.fetch(this);
-        }
-
-        else {
+        } else {
             Map<Enchantment, Integer> swordEnch = new HashMap<>();
             swordEnch.put(Enchantment.DURABILITY, 10);
 

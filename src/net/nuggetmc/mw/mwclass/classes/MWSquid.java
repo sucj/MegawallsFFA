@@ -31,32 +31,32 @@ public class MWSquid extends MWClass {
     private final Set<Player> rejuvenateList = new HashSet<>();
 
     public MWSquid() {
-        this.name = new String[]{"鱿鱼","Squid","SQU"};
+        this.name = new String[]{"鱿鱼", "Squid", "SQU"};
         this.icon = Material.INK_SACK;
         this.color = ChatColor.BLUE;
 
-        this.playstyles = new Playstyle[] {
-            Playstyle.CONTROL,
-            Playstyle.TANK
+        this.playstyles = new Playstyle[]{
+                Playstyle.CONTROL,
+                Playstyle.TANK
         };
 
-        this.diamonds = new Diamond[] {
-            Diamond.BOOTS
+        this.diamonds = new Diamond[]{
+                Diamond.BOOTS
         };
 
         this.classInfo = new MWClassInfo(
-            "Squid Splash",
-            "You pull opponents inwards, dealing 3.5 damage to all enemies within a 5 block radius.\n"
-                + "You are healed by &a70% &rof the total damage dealt.\n"
-                + "You can heal for a maximum of &a7 HP&r.",
-            "Inner Ink",
-            "Every time you finish drinking a potion, you give blindness to enemies in a &a5 &rblock radius for &a3 &rseconds.",
-            "Rejuvenate",
-            "When you fall below &a21 HP&r, you will receive Regeneration V and Resistance I for &a1.5 &rseconds.\n"
-                + "Every 0.3 seconds of Regeneration V heals for &a2 HP&r.\n"
-                + "Cooldown: &a40s",
-            "Luck Of The Sea",
-            "On every kill, you will reveive &a2 &rAbsorption II &rpotions that each last &a1 &rminute."
+                "Squid Splash",
+                "You pull opponents inwards, dealing 3.5 damage to all enemies within a 5 block radius.\n"
+                        + "You are healed by &a70% &rof the total damage dealt.\n"
+                        + "You can heal for a maximum of &a7 HP&r.",
+                "Inner Ink",
+                "Every time you finish drinking a potion, you give blindness to enemies in a &a5 &rblock radius for &a3 &rseconds.",
+                "Rejuvenate",
+                "When you fall below &a21 HP&r, you will receive Regeneration V and Resistance I for &a1.5 &rseconds.\n"
+                        + "Every 0.3 seconds of Regeneration V heals for &a2 HP&r.\n"
+                        + "Cooldown: &a40s",
+                "Luck Of The Sea",
+                "On every kill, you will reveive &a2 &rAbsorption II &rpotions that each last &a1 &rminute."
         );
 
         this.classInfo.addEnergyGainType("Melee", 10);
@@ -76,7 +76,7 @@ public class MWSquid extends MWClass {
         double healedAmount = 0;
 
         for (Player victim : inRange(player, 5)) {
-            if (plugin.getTeamsManager().isOnSameTeam(player,victim)){
+            if (plugin.getTeamsManager().isOnSameTeam(player, victim)) {
                 continue;
             }
             Vector vel = loc.toVector().subtract(victim.getLocation().toVector());
@@ -97,7 +97,7 @@ public class MWSquid extends MWClass {
 
             double damage = 3.5;
             healedAmount += damage * 0.7;
-            
+
             mwhealth.trueDamage(victim, damage, player);
         }
 
@@ -119,7 +119,7 @@ public class MWSquid extends MWClass {
     }
 
     private void givePotions(Player player) {
-        ItemStack potions = MWPotions.createAbsorptionPotions(plugin.isChinese()?this.name[0]:this.name[1], this.color, 2, 60);
+        ItemStack potions = MWPotions.createAbsorptionPotions(plugin.isChinese() ? this.name[0] : this.name[1], this.color, 2, 60);
         ItemUtils.givePlayerItemStack(player, potions);
     }
 
@@ -134,7 +134,7 @@ public class MWSquid extends MWClass {
             ParticleUtils.play(EnumParticle.SMOKE_LARGE, loc, 0.5, 0.5, 0.5, 0.1, 50);
 
             for (Player victim : inRange(player, 5)) {
-                if (plugin.getTeamsManager().isOnSameTeam(player,victim)){
+                if (plugin.getTeamsManager().isOnSameTeam(player, victim)) {
                     continue;
                 }
                 victim.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 3 * 20, 0));
@@ -190,9 +190,7 @@ public class MWSquid extends MWClass {
 
         if (MWKit.contains(this)) {
             items = MWKit.fetch(this);
-        }
-
-        else {
+        } else {
             Map<Enchantment, Integer> swordEnch = new HashMap<>();
             swordEnch.put(Enchantment.DURABILITY, 10);
 

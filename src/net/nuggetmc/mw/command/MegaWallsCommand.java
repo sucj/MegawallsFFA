@@ -32,11 +32,11 @@ public class MegaWallsCommand implements CommandExecutor, TabCompleter {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (sender instanceof Player) {
             Player player = (Player) sender;
-            if (MegaWalls.getInstance().getCombatManager().isInCombat(player)&&(!player.isOp())){
-                sender.sendMessage(ChatColor.RED+"You cannot do that because you are in combat!");
+            if (MegaWalls.getInstance().getCombatManager().isInCombat(player) && (!player.isOp())) {
+                sender.sendMessage(ChatColor.RED + "You cannot do that because you are in combat!");
                 return true;
             }
-                
+
             if (args.length > 0) {
                 String name = StringUtils.capitalize(args[0].toLowerCase());
                 MWClass mwclass = manager.fetch(name);
