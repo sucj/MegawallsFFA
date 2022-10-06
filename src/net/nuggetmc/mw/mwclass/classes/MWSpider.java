@@ -53,18 +53,18 @@ public class MWSpider extends MWClass {
         };
 
         this.classInfo = new MWClassInfo(
-            "Leap",
-            "Leap forward into the air, applying Slowness I to all enemies in a 4 block radius for &a4 &rseconds.\nYou deal &a1.5x &rthe amount of fall damage you take, up to a maximum of &a12 HP &rdealt.\nYou gain Absorption I for &a5 &rseconds upon casting.",
-            "Venom Strike",
-            "For every &a4 &rmelee attacks, you will poison your opponent, dealing 3 damage over &a5 &rseconds.",
-            "Skitter",
-            "If you melee enemies &a4 &rtimes after landing with Leap within 3 seconds, you gain Speed I for &a5 &rseconds and earn &a20 &renergy.",
-            "Iron Rush",
-            "When digging with a shovel, you will receive an iron ingot for every &a1 &rblock mined."
+                "Leap",
+                "Leap forward into the air, applying Slowness I to all enemies in a 4 block radius for &a4 &rseconds.\nYou deal &a1.5x &rthe amount of fall damage you take, up to a maximum of &a12 HP &rdealt.\nYou gain Absorption I for &a5 &rseconds upon casting.",
+                "Venom Strike",
+                "For every &a4 &rmelee attacks, you will poison your opponent, dealing 3 damage over &a5 &rseconds.",
+                "Skitter",
+                "If you melee enemies &a4 &rtimes after landing with Leap within 3 seconds, you gain Speed I for &a5 &rseconds and earn &a20 &renergy.",
+                "Iron Rush",
+                "When digging with a shovel, you will receive an iron ingot for every &a1 &rblock mined."
         );
 
-        this.classInfo.addEnergyGainType("Melee", 16);
-        this.classInfo.addEnergyGainType("Bow", 16);
+        this.classInfo.addEnergyGainType("Melee", 10);
+        this.classInfo.addEnergyGainType("Bow", 10);
         this.classInfo.addEnergyGainType("Per Second", 6);
 
         leapExceptions = Sets.newHashSet(Material.AIR, Material.LONG_GRASS, Material.DOUBLE_PLANT);
@@ -127,6 +127,7 @@ public class MWSpider extends MWClass {
 
                 skitter(player);
                 spiderDamage(player, event);
+                event.setDamage(0);
             }
         }
     }
@@ -258,7 +259,7 @@ public class MWSpider extends MWClass {
             }
         }
 
-        energyManager.add(player, 16);
+        energyManager.add(player, 10);
     }
 
     @EventHandler
@@ -297,15 +298,15 @@ public class MWSpider extends MWClass {
             armorEnch.put(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
             armorEnch.put(Enchantment.DURABILITY, 10);
             Map<Enchantment, Integer> armorEnch2 = new HashMap<>();
-            armorEnch.put(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
-            armorEnch.put(Enchantment.DURABILITY, 10);
+            armorEnch2.put(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+            armorEnch2.put(Enchantment.DURABILITY, 10);
 
             ItemStack sword = MWItem.createSword(this, Material.DIAMOND_SWORD, swordEnch);
             ItemStack bow = MWItem.createBow(this, null);
             ItemStack tool = MWItem.createTool(this, Material.DIAMOND_PICKAXE);
             ItemStack toolShovel = MWItem.createTool(this, Material.IRON_SPADE);
             ItemStack boots = MWItem.createArmor(this, Material.DIAMOND_BOOTS, armorEnch);
-            ItemStack leggings=MWItem.createArmor(this,Material.IRON_LEGGINGS,armorEnch2);
+            ItemStack leggings = MWItem.createArmor(this, Material.IRON_LEGGINGS, armorEnch2);
 
             List<ItemStack> potions = MWPotions.createBasic(this, 2, 8, 2);
 
