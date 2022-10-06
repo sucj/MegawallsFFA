@@ -3,13 +3,13 @@ main: net.nuggetmc.mw.MegaWalls
 version: 1.0
 api-version: 1.16
 author: HorseNuggets
-depend: [NametagAPI]
-softdepend: [Essentials,RegionPreserve,ScoreboardPlus]
+depend: [ NametagAPI ]
+softdepend: [ Essentials,RegionPreserve,ScoreboardPlus ]
 commands:
   megawalls:
     description: The MegaWalls base command.
     usage: /mw
-    aliases: [mw, class, kit]
+    aliases: [ mw, class, kit ]
   energy:
     description: Instant max energy (for debug).
     usage: /energy
@@ -60,6 +60,10 @@ commands:
   mwresel:
     description: make a player reselect kit.
     usage: /mwresel
+    permission: mw.admin
+  mwitem:
+    description: give player a megawalls item.
+    usage: /mwitem
     permission: mw.admin
 permissions:
   mw.*:

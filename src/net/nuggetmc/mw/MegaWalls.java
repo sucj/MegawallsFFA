@@ -223,6 +223,7 @@ public class MegaWalls extends JavaPlugin {
         setExecutor("mwbaltop", new MWBalTopCommand());
         setExecutor("mwmakeride", new MWMakeRideCommand());
         setExecutor("mwresel", new MWReselCommand());
+        setExecutorAndTabCompleter("mwitem", new getItemCommand());
         setExecutorAndTabCompleter("megawalls", new MegaWallsCommand());
 
         this.registerClasses(

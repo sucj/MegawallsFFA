@@ -64,9 +64,12 @@ public class Good {
         List<String> lore = new ArrayList<>();
         lore.add(ChatColor.GREEN + "Price: " + this.price);
 
+
         if (extralore != null) {
             lore.add(extralore);
         }
+        lore.add(ChatColor.RED.toString() + ChatColor.BOLD + "Click to buy one!");
+        lore.add(ChatColor.RED.toString() + ChatColor.BOLD + "Shift Click to buy multiple!");
 
 
         meta.setLore(lore);

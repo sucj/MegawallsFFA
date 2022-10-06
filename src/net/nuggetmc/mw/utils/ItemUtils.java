@@ -139,4 +139,14 @@ public class ItemUtils {
             return false;
         }
     }
+
+    public static boolean isFullInventory(Inventory inventory) {
+        boolean result = true;
+        for (ItemStack is : inventory) {
+            if (is == null) {
+                return false;
+            }
+        }
+        return result;
+    }
 }

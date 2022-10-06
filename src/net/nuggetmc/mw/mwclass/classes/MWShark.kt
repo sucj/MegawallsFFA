@@ -286,7 +286,7 @@ class MWShark() : MWClass() {
 
     fun canBeReplaced(block: Block): Boolean {
         return when (block.type) {
-            Material.AIR, Material.GRASS, Material.LONG_GRASS, Material.YELLOW_FLOWER, Material.RAILS, Material.ACTIVATOR_RAIL, Material.DETECTOR_RAIL, Material.POWERED_RAIL, Material.REDSTONE, Material.REDSTONE_COMPARATOR, Material.REDSTONE_COMPARATOR_ON, Material.REDSTONE_WIRE, Material.REDSTONE_COMPARATOR_OFF, Material.REDSTONE_TORCH_OFF, Material.REDSTONE_TORCH_ON -> true
+            Material.AIR, Material.LONG_GRASS, Material.YELLOW_FLOWER, Material.DOUBLE_PLANT -> true
             else -> false
         }
     }

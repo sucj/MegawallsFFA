@@ -5,12 +5,14 @@ import net.nuggetmc.mw.MegaWalls;
 import net.nuggetmc.mw.energy.EnergyManager;
 import net.nuggetmc.mw.mwclass.MWClassManager;
 import net.nuggetmc.mw.special.SpecialItemUtils;
+import net.nuggetmc.mw.utils.ItemUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -23,6 +25,7 @@ public class ShopMenu implements Listener {
 
     SpecialItemUtils specialItemUtils = plugin.getSpecialItemUtils();
     private static final String CLOSE_NAME = ChatColor.RED + "Close";
+    private final Map<Player, String> waitingForInputList = new HashMap<>();
 
     private final MWClassManager classmanager = plugin.getClassManager();
     private final EnergyManager energyManager = plugin.getEnergyManager();
@@ -108,14 +111,38 @@ public class ShopMenu implements Listener {
         select(player, good);
     }
 
+    private void select(Player player, String name, int amount) {
+        Good good = getGoodByName(name);
+        if (good == null) return;
+
+        select(player, good, amount);
+    }
+
 
     public void select(Player player, Good good) {
         if (plugin.getCoinsManager().get(player) < good.getPrice()) {
             player.sendMessage("not enough coins!");
+        } else if (ItemUtils.isFullInventory(player.getInventory())) {
+            player.sendMessage("your inventory is full!");
         } else {
             plugin.getCoinsManager().add(player, -good.getPrice());
             player.sendMessage("You have purchased " + ChatColor.YELLOW + good.getDisplayName() + ChatColor.RESET + " with " + ChatColor.GREEN + good.getPrice() + ChatColor.RESET + " coins.");
             player.getInventory().addItem(good.getTheItem());
+        }
+
+    }
+
+    public void select(Player player, Good good, int amount) {
+        if (plugin.getCoinsManager().get(player) < (good.getPrice() * amount)) {
+            player.sendMessage("not enough coins!");
+        } else if (ItemUtils.isFullInventory(player.getInventory())) {
+            player.sendMessage("your inventory is full!");
+        } else {
+            plugin.getCoinsManager().add(player, -(good.getPrice() * amount));
+            player.sendMessage("You have purchased " + amount + " " + ChatColor.YELLOW + good.getDisplayName() + ChatColor.RESET + " with " + ChatColor.GREEN + (good.getPrice() * amount) + ChatColor.RESET + " coins.");
+            ItemStack itemStack = good.getTheItem().clone();
+            itemStack.setAmount(itemStack.getAmount() * amount);
+            player.getInventory().addItem(itemStack);
         }
 
     }
@@ -145,8 +172,34 @@ public class ShopMenu implements Listener {
             player.closeInventory();
             return;
         }
+        if (event.isShiftClick()) {
+            player.closeInventory();
+            waitingForInputList.put(player, ChatColor.stripColor(name));
+            player.sendMessage("please enter...");
+        } else {
+            select(player, ChatColor.stripColor(name));
+        }
+    }
 
-        select(player, ChatColor.stripColor(name));
+    @EventHandler
+    public void onChat(PlayerChatEvent e) {
+        if (waitingForInputList.containsKey(e.getPlayer())) {
+            e.setCancelled(true);
+            int amount = 0;
+            try {
+                amount = Integer.parseInt(e.getMessage());
+            } catch (Exception ignored) {
+
+            }
+            if (amount == 0) {
+                e.getPlayer().sendMessage("please enter a valid integer!");
+                return;
+            } else {
+                String str = waitingForInputList.get(e.getPlayer());
+                select(e.getPlayer(), str, amount);
+                waitingForInputList.remove(e.getPlayer());
+            }
+        }
     }
 
     private ItemStack createClose() {

@@ -21,8 +21,16 @@ public class SpecialItemUtils {
         return MWPotions.createAbsorptionPotions(plugin.isChinese() ? this.squidname[0] : this.squidname[1], ChatColor.BLUE, 1, 60);
     }
 
+    public ItemStack getSquidPot(int count) {
+        return MWPotions.createAbsorptionPotions(plugin.isChinese() ? this.squidname[0] : this.squidname[1], ChatColor.BLUE, count, 60);
+    }
+
     public ItemStack getGolemPot() {
         return MWPotions.createRegenerationPotions(plugin.isChinese() ? golemname[0] : golemname[1], ChatColor.WHITE, 1, 12, 10);
+    }
+
+    public ItemStack getGolemPot(int count) {
+        return MWPotions.createRegenerationPotions(plugin.isChinese() ? golemname[0] : golemname[1], ChatColor.WHITE, count, 12, 10);
     }
 
     public ItemStack getCowBucket() {

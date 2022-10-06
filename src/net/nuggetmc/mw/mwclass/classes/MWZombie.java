@@ -55,8 +55,8 @@ public class MWZombie extends MWClass {
                 "You will gain Haste III for &a5 &rseconds when breaking blocks."
         );
 
-        this.classInfo.addEnergyGainType("Melee", 12);
-        this.classInfo.addEnergyGainType("Bow", 12);
+        this.classInfo.addEnergyGainType("Melee", 14);
+        this.classInfo.addEnergyGainType("Bow", 14);
         this.classInfo.addEnergyGainType("When Hit", 1);
         this.classInfo.addEnergyGainType("When Bowed", 2);
     }
@@ -112,7 +112,7 @@ public class MWZombie extends MWClass {
         if (player == null) return;
 
         if (manager.get(player) == this) {
-            energyManager.add(player, 20);
+            energyManager.add(player, 14);
         }
 
         Player victim = (Player) event.getEntity();
