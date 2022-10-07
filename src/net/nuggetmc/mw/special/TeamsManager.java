@@ -251,18 +251,19 @@ public class TeamsManager implements Listener {
         return result;
     }
 
-    private static final int putTeam$lambda_1/* $FF was: putTeam$lambda-1*/(TeamsManager.Team team, TeamsManager.Team t1) {
-        TeamsManager var10000 = MegaWalls.getInstance().getTeamsManager();
-        //Intrinsics.checkNotNull(team);
-        int var2 = var10000.getTeamMembers(team).size();
-        TeamsManager var10001 = MegaWalls.getInstance().getTeamsManager();
-        //Intrinsics.checkNotNull(t1);
-        if (var2 < var10001.getTeamMembers(t1).size()) {
-            return -1;
-        } else {
-            return MegaWalls.getInstance().getTeamsManager().getTeamMembers(team).size() > MegaWalls.getInstance().getTeamsManager().getTeamMembers(t1).size() ? 1 : 0;
-        }
-    }
+// 这是什么lambda
+//    private static final int putTeam$lambda_1/* $FF was: putTeam$lambda-1*/(TeamsManager.Team team, TeamsManager.Team t1) {
+//        TeamsManager var10000 = MegaWalls.getInstance().getTeamsManager();
+//        //Intrinsics.checkNotNull(team);
+//        int var2 = var10000.getTeamMembers(team).size();
+//        TeamsManager var10001 = MegaWalls.getInstance().getTeamsManager();
+//        //Intrinsics.checkNotNull(t1);
+//        if (var2 < var10001.getTeamMembers(t1).size()) {
+//            return -1;
+//        } else {
+//            return MegaWalls.getInstance().getTeamsManager().getTeamMembers(team).size() > MegaWalls.getInstance().getTeamsManager().getTeamMembers(t1).size() ? 1 : 0;
+//        }
+//    }
 
 
 

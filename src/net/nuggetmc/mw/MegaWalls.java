@@ -21,7 +21,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.command.TabCompleter;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
@@ -281,40 +280,41 @@ public class MegaWalls extends JavaPlugin {
         });
     }
 
-    @Deprecated
-    private void restore() {
-        ConfigurationSection section = getConfig().getConfigurationSection("active_classes");
-        if (section == null) return;
-
-        ConfigurationSection sectionEnergy = getConfig().getConfigurationSection("energy");
-        boolean checkEnergy = sectionEnergy != null;
-
-        for (String key : section.getKeys(false)) {
-            String name = section.getString(key);
-
-            section.set(key, null);
-
-            Player player = Bukkit.getPlayer(key);
-            if (player == null || !player.isOnline()) continue;
-
-            MWClass mwclass = mwClassManager.fetch(name);
-            if (mwclass == null) continue;
-
-            mwClassManager.assign(player, mwclass, null);
-
-            if (checkEnergy) {
-                if (sectionEnergy.contains(key)) {
-                    int energy = sectionEnergy.getInt(key);
-
-                    energyManager.set(player, energy);
-
-                    sectionEnergy.set(key, null);
-                }
-            }
-        }
-
-        saveConfig();
-    }
+// 已弃用的方法删了得了
+//    @Deprecated
+//    private void restore() {
+//        ConfigurationSection section = getConfig().getConfigurationSection("active_classes");
+//        if (section == null) return;
+//
+//        ConfigurationSection sectionEnergy = getConfig().getConfigurationSection("energy");
+//        boolean checkEnergy = sectionEnergy != null;
+//
+//        for (String key : section.getKeys(false)) {
+//            String name = section.getString(key);
+//
+//            section.set(key, null);
+//
+//            Player player = Bukkit.getPlayer(key);
+//            if (player == null || !player.isOnline()) continue;
+//
+//            MWClass mwclass = mwClassManager.fetch(name);
+//            if (mwclass == null) continue;
+//
+//            mwClassManager.assign(player, mwclass, null);
+//
+//            if (checkEnergy) {
+//                if (sectionEnergy.contains(key)) {
+//                    int energy = sectionEnergy.getInt(key);
+//
+//                    energyManager.set(player, energy);
+//
+//                    sectionEnergy.set(key, null);
+//                }
+//            }
+//        }
+//
+//        saveConfig();
+//    }
 
 
     private void setExecutor(String name, CommandExecutor executor) {
