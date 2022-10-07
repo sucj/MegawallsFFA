@@ -1,5 +1,6 @@
 package net.nuggetmc.mw;
 
+import jdk.nashorn.internal.objects.annotations.Getter;
 import net.nuggetmc.mw.combat.CombatManager;
 import net.nuggetmc.mw.command.*;
 import net.nuggetmc.mw.economics.CoinsManager;
@@ -39,6 +40,7 @@ public class MegaWalls extends JavaPlugin {
     private MWClassMenu mwClassMenu;
     private ShopMenu shopMenu;
 
+    @Getter
     public CompassManager getCompassManager() {
         return compassManager;
     }
@@ -46,12 +48,14 @@ public class MegaWalls extends JavaPlugin {
     private CompassManager compassManager;
     public ArrayList<Player> bloodRageList = new ArrayList<>();
 
+    @Getter
     public SpecialEventsManager getSpecialEventsManager() {
         return specialEventsManager;
     }
 
     private SpecialEventsManager specialEventsManager;
 
+    @Getter
     public SellMenu getSellMenu() {
         return sellMenu;
     }
@@ -61,6 +65,7 @@ public class MegaWalls extends JavaPlugin {
     private EnergyManager energyManager;
     private CoinsManager coinsManager;
 
+    @Getter
     public TeamsManager getTeamsManager() {
         return teamsManager;
     }
@@ -68,6 +73,7 @@ public class MegaWalls extends JavaPlugin {
     private TeamsManager teamsManager;
     private SpecialItemUtils specialItemUtils;
 
+    @Getter
     public SpecialItemUtils getSpecialItemUtils() {
         return specialItemUtils;
     }
@@ -98,10 +104,12 @@ public class MegaWalls extends JavaPlugin {
         return energyManager;
     }
 
+    @Getter
     public CoinsManager getCoinsManager() {
         return this.coinsManager;
     }
 
+    @Getter
     public CombatManager getCombatManager() {
         return combatManager;
     }

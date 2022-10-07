@@ -1,5 +1,7 @@
 package net.nuggetmc.mw.economics;
 
+import jdk.nashorn.internal.objects.annotations.Getter;
+import jdk.nashorn.internal.objects.annotations.Setter;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.craftbukkit.libs.jline.internal.Nullable;
 import org.bukkit.inventory.ItemFlag;
@@ -12,6 +14,7 @@ import java.util.List;
 public class Good {
     private ItemStack displayItem;
 
+    @Setter
     public void setPrice(int price) {
         this.price = price;
     }
@@ -29,18 +32,22 @@ public class Good {
         this.extralore = extralore;
     }
 
+    @Getter
     public ItemStack getDisplayItem() {
         return this.displayItem;
     }
 
+    @Getter
     public ItemStack getTheItem() {
         return this.theItem;
     }
 
+    @Getter
     public String getDisplayName() {
         return this.displayname;
     }
 
+    @Getter
     public int getPrice() {
         return this.price;
     }
