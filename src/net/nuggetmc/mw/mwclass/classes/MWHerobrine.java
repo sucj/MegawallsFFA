@@ -26,7 +26,7 @@ public class MWHerobrine extends MWClass {
     private final Set<Player> wrathList = new HashSet<>();
 
     public MWHerobrine() {
-        this.name = new String[]{"Herobrine", "Herobrine", "HBR", "RockstarGamesOL", "张泽旭"};
+        this.name = new String[]{"Herobrine", "Herobrine", "HBR"/*, "RockstarGamesOL", "张泽旭"*/};
         this.icon = Material.DIAMOND_SWORD;
         this.color = ChatColor.YELLOW;
 
