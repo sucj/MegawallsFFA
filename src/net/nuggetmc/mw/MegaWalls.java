@@ -1,6 +1,5 @@
 package net.nuggetmc.mw;
 
-import jdk.nashorn.internal.objects.annotations.Getter;
 import net.nuggetmc.mw.combat.CombatManager;
 import net.nuggetmc.mw.command.*;
 import net.nuggetmc.mw.economics.CoinsManager;
@@ -22,7 +21,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.command.TabCompleter;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
@@ -41,7 +39,6 @@ public class MegaWalls extends JavaPlugin {
     private MWClassMenu mwClassMenu;
     private ShopMenu shopMenu;
 
-    @Getter
     public CompassManager getCompassManager() {
         return compassManager;
     }
@@ -49,14 +46,12 @@ public class MegaWalls extends JavaPlugin {
     private CompassManager compassManager;
     public ArrayList<Player> bloodRageList = new ArrayList<>();
 
-    @Getter
     public SpecialEventsManager getSpecialEventsManager() {
         return specialEventsManager;
     }
 
     private SpecialEventsManager specialEventsManager;
 
-    @Getter
     public SellMenu getSellMenu() {
         return sellMenu;
     }
@@ -66,7 +61,6 @@ public class MegaWalls extends JavaPlugin {
     private EnergyManager energyManager;
     private CoinsManager coinsManager;
 
-    @Getter
     public TeamsManager getTeamsManager() {
         return teamsManager;
     }
@@ -74,7 +68,6 @@ public class MegaWalls extends JavaPlugin {
     private TeamsManager teamsManager;
     private SpecialItemUtils specialItemUtils;
 
-    @Getter
     public SpecialItemUtils getSpecialItemUtils() {
         return specialItemUtils;
     }
@@ -105,12 +98,10 @@ public class MegaWalls extends JavaPlugin {
         return energyManager;
     }
 
-    @Getter
     public CoinsManager getCoinsManager() {
         return this.coinsManager;
     }
 
-    @Getter
     public CombatManager getCombatManager() {
         return combatManager;
     }
@@ -118,6 +109,7 @@ public class MegaWalls extends JavaPlugin {
     private boolean isChinese;
     public boolean antistealDiamond;
     //it is used to stop players from mining diamonds when there is only themselves.
+    // 主播你不会用Vec3d或者BlockPos或者数组吗
     public List<Double> redspawn;
     public List<Double> greenspawn;
     public List<Double> bluespawn;
@@ -288,40 +280,41 @@ public class MegaWalls extends JavaPlugin {
         });
     }
 
-    @Deprecated
-    private void restore() {
-        ConfigurationSection section = getConfig().getConfigurationSection("active_classes");
-        if (section == null) return;
-
-        ConfigurationSection sectionEnergy = getConfig().getConfigurationSection("energy");
-        boolean checkEnergy = sectionEnergy != null;
-
-        for (String key : section.getKeys(false)) {
-            String name = section.getString(key);
-
-            section.set(key, null);
-
-            Player player = Bukkit.getPlayer(key);
-            if (player == null || !player.isOnline()) continue;
-
-            MWClass mwclass = mwClassManager.fetch(name);
-            if (mwclass == null) continue;
-
-            mwClassManager.assign(player, mwclass, null);
-
-            if (checkEnergy) {
-                if (sectionEnergy.contains(key)) {
-                    int energy = sectionEnergy.getInt(key);
-
-                    energyManager.set(player, energy);
-
-                    sectionEnergy.set(key, null);
-                }
-            }
-        }
-
-        saveConfig();
-    }
+// 已弃用的方法删了得了
+//    @Deprecated
+//    private void restore() {
+//        ConfigurationSection section = getConfig().getConfigurationSection("active_classes");
+//        if (section == null) return;
+//
+//        ConfigurationSection sectionEnergy = getConfig().getConfigurationSection("energy");
+//        boolean checkEnergy = sectionEnergy != null;
+//
+//        for (String key : section.getKeys(false)) {
+//            String name = section.getString(key);
+//
+//            section.set(key, null);
+//
+//            Player player = Bukkit.getPlayer(key);
+//            if (player == null || !player.isOnline()) continue;
+//
+//            MWClass mwclass = mwClassManager.fetch(name);
+//            if (mwclass == null) continue;
+//
+//            mwClassManager.assign(player, mwclass, null);
+//
+//            if (checkEnergy) {
+//                if (sectionEnergy.contains(key)) {
+//                    int energy = sectionEnergy.getInt(key);
+//
+//                    energyManager.set(player, energy);
+//
+//                    sectionEnergy.set(key, null);
+//                }
+//            }
+//        }
+//
+//        saveConfig();
+//    }
 
 
     private void setExecutor(String name, CommandExecutor executor) {
