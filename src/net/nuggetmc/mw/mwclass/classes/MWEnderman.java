@@ -206,6 +206,7 @@ public class MWEnderman extends MWClass {
 
     @EventHandler
     public void gathering(BlockBreakEvent event) {
+        if(event.isCancelled() ) return;
         Player player = event.getPlayer();
 
         if (manager.get(player) == this) {
