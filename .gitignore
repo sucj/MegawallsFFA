@@ -3,3 +3,7 @@ out
 *.patch
 /libs/
 
+/bin/
+/.settings/
+.project
+.classpath
