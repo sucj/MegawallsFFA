@@ -13,7 +13,7 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import java.util.*;
 
 public class TeamsManager implements Listener {
-    private HashMap<Player, Team> teamsMap = new HashMap();
+    private HashMap<Player, Team> teamsMap = new HashMap<>();
     private MegaWalls plugin = MegaWalls.getInstance();
 
     @EventHandler
@@ -30,7 +30,7 @@ public class TeamsManager implements Listener {
 
     public final List<Double> getSpawnLocOfPlayer(Player player) {
         TeamsManager.Team var10000 = this.getTeamOfPlayer(player);
-        List var2;
+        List<Double> var2;
         switch(var10000 == null ? -1 : EnumTeamIndex.EnumTeamIndex[var10000.ordinal()]) {
             case -1:
                 throw new RuntimeException("WOCENIMA!!!!");
@@ -206,8 +206,8 @@ public class TeamsManager implements Listener {
     
     public final TeamsManager.Team putTeam(Player player) {
         //Intrinsics.checkNotNullParameter(player, "player");
-        ArrayList list = new ArrayList();
-        Collections.addAll((Collection)list, TeamsManager.Team.values());
+        ArrayList<Team> list = new ArrayList<>();
+        Collections.addAll(list, TeamsManager.Team.values());
         Object var10002 = list.get(0);
         //Intrinsics.checkNotNullExpressionValue(var10002, "list[0]");
         this.addTeam(player, (TeamsManager.Team)var10002);
@@ -237,13 +237,12 @@ public class TeamsManager implements Listener {
     
     public final HashSet<Player> getTeamMembers(TeamsManager.Team team) {
         //Intrinsics.checkNotNullParameter(team, "team");
-        HashSet result = new HashSet();
-        Iterator var3 = this.teamsMap.keySet().iterator();
+        HashSet<Player> result = new HashSet<>();
+        Iterator<Player> var3 = this.teamsMap.keySet().iterator();
 
         while(var3.hasNext()) {
-            Object var10000 = var3.next();
             //Intrinsics.checkNotNullExpressionValue(var10000, "teamsMap.keys");
-            Player player = (Player)var10000;
+            Player player = var3.next();
             if (this.teamsMap.get(player) == team) {
                 result.add(player);
             }

@@ -33,7 +33,7 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.*;
 
 public class MWShark extends MWClass {
-    private HashMap<Player, HashSet<Block>> waterMap = new HashMap();
+    private HashMap<Player, HashSet<Block>> waterMap = new HashMap<>();
 
 //    public HashMap<Player, HashSet<Block>> getWaterMap(){
 //        return waterMap;
@@ -71,20 +71,20 @@ public class MWShark extends MWClass {
         int posY = player.getLocation().getBlockY();
         Location location = player.getLocation();
         World world = player.getWorld();
-        HashSet set = new HashSet();
+        HashSet<Block> set = new HashSet<>();
         int i = -expand;
 
         for(int var8 = expand + 1; i < var8; ++i) {
             Block block = world.getBlockAt(location.getBlockX() + i, posY, location.getBlockZ());
             if (this.canBeReplaced(block)) {
                 block.setType(Material.STATIONARY_WATER, false);
-                HashSet var10000 = (HashSet)this.waterMap.get(player);
+                HashSet<Block> var10000 = this.waterMap.get(player);
                 if (var10000 != null) {
                     var10000.add(block);
                 }
 
-                if (!((HashSet)set).contains(block)) {
-                    ((HashSet)set).add(block);
+                if (!set.contains(block)) {
+                    set.add(block);
                 }
 
                 int j = -expand;
@@ -93,31 +93,31 @@ public class MWShark extends MWClass {
                     Block block1 = world.getBlockAt(location.getBlockX() + i, posY, location.getBlockZ() + j);
                     if (this.canBeReplaced(block1)) {
                         block1.setType(Material.STATIONARY_WATER, false);
-                        var10000 = (HashSet)this.waterMap.get(player);
+                        var10000 = this.waterMap.get(player);
                         if (var10000 != null) {
                             var10000.add(block1);
                         }
 
-                        if (!((HashSet)set).contains(block1)) {
-                            ((HashSet)set).add(block1);
+                        if (!set.contains(block1)) {
+                            set.add(block1);
                         }
                     }
                 }
             }
         }
 
-        if (!((Collection)set).isEmpty()) {
+        if (!(set).isEmpty()) {
             Bukkit.getScheduler().runTaskLater((Plugin) MegaWalls.getInstance(), new Runnable() {
 
                 @Override
                 public void run() {
                     int i = 0;
-
-                    for(int var4 = ((HashSet<?>)set).size(); i < var4; ++i) {
-                        Object var10000 = ((HashSet<?>)set).toArray()[i];
-                        Block block = (Block)var10000;
+                    Block[] lst = set.toArray(new Block[0]);
+                    for(int var4 = set.size(); i < var4; ++i) {
+                    	Block var10000 = lst[i];
+                        Block block = var10000;
                         block.setType(Material.AIR);
-                        HashSet var6 = getWaterMap().get(player);
+                        HashSet<Block> var6 = getWaterMap().get(player);
                         if (var6 != null) {
                             var6.remove(block);
                         }
@@ -158,16 +158,16 @@ public class MWShark extends MWClass {
     }
 
     public void assign(Player player) {
-        Map items = null;
-        Map var10000;
+        Map<Integer, ItemStack> items = null;
+        Map<Integer, ItemStack> var10000;
         if (MWKit.contains((MWClass)this)) {
             var10000 = MWKit.fetch((MWClass)this);
             items = var10000;
         } else {
-            Map swordEnch = (Map)(new HashMap());
+            Map<Enchantment, Integer> swordEnch = new HashMap<>();
             Enchantment var10001 = Enchantment.DURABILITY;
             swordEnch.put(var10001, 10);
-            Map armorEnch = (Map)(new HashMap());
+            Map<Enchantment, Integer> armorEnch = new HashMap<>();
             var10001 = Enchantment.DEPTH_STRIDER;
             armorEnch.put(var10001, 3);
             var10001 = Enchantment.PROTECTION_ENVIRONMENTAL;
@@ -175,11 +175,11 @@ public class MWShark extends MWClass {
             var10001 = Enchantment.DURABILITY;
             armorEnch.put(var10001, 10);
             ItemStack sword = MWItem.createSword((MWClass)this, Material.DIAMOND_SWORD, swordEnch);
-            ItemStack bow = MWItem.createBow((MWClass)this, (Map)null);
+            ItemStack bow = MWItem.createBow((MWClass)this, null);
             ItemStack tool = MWItem.createTool((MWClass)this, Material.DIAMOND_PICKAXE);
             ItemStack boots = MWItem.createArmor((MWClass)this, Material.DIAMOND_BOOTS, armorEnch);
-            List potions = MWPotions.createBasic((MWClass)this, 2, 8, 2);
-            var10000 = MWKit.generate((MWClass)this, sword, bow, tool, (ItemStack)null, (ItemStack)null, potions, (ItemStack)null, (ItemStack)null, (ItemStack)null, boots, (List)null);
+            List<ItemStack> potions = MWPotions.createBasic((MWClass)this, 2, 8, 2);
+            var10000 = MWKit.generate((MWClass)this, sword, bow, tool, null, null, potions, null, null, null, boots, null);
             items = var10000;
         }
 
@@ -188,17 +188,14 @@ public class MWShark extends MWClass {
 
     @EventHandler
     public final void onPhysics(BlockPhysicsEvent e) {
-        Iterator var2 = this.waterMap.keySet().iterator();
+        Iterator<Player> var2 = this.waterMap.keySet().iterator();
 
         while(var2.hasNext()) {
-            Object var10000 = var2.next();
-            Player player = (Player)var10000;
-            var10000 = this.waterMap.get(player);
-            Iterator var4 = ((HashSet)var10000).iterator();
+            Player player = var2.next();
+            Iterator<Block> var4 = this.waterMap.get(player).iterator();
 
             while(var4.hasNext()) {
-                var10000 = var4.next();
-                Block block = (Block)var10000;
+                Block block = var4.next();
                 if (Objects.equals(e.getBlock(), block)) {
                     e.setCancelled(true);
                     return;
@@ -252,7 +249,7 @@ public class MWShark extends MWClass {
                         increaceAmount += 0.215D;
                     }
 
-                    Iterator var5 = Bukkit.getOnlinePlayers().iterator();
+                    Iterator<? extends Player> var5 = Bukkit.getOnlinePlayers().iterator();
 
                     while(var5.hasNext()) {
                         Player p = (Player)var5.next();
@@ -288,7 +285,7 @@ public class MWShark extends MWClass {
                 }
 
                 boolean b = false;
-                Iterator var5 = Bukkit.getOnlinePlayers().iterator();
+                Iterator<? extends Player> var5 = Bukkit.getOnlinePlayers().iterator();
 
                 while(var5.hasNext()) {
                     Player p = (Player)var5.next();
@@ -314,17 +311,14 @@ public class MWShark extends MWClass {
     }
 
     public final Object[] forBlock(PlayerMoveEvent e) {
-        Iterator var2 = this.waterMap.keySet().iterator();
+        Iterator<Player> var2 = this.waterMap.keySet().iterator();
 
         while(var2.hasNext()) {
-            Object var10000 = var2.next();
-            Player player = (Player)var10000;
-            var10000 = this.waterMap.get(player);
-            Iterator var4 = ((HashSet)var10000).iterator();
+            Player player = var2.next();
+            Iterator<Block> var4 = this.waterMap.get(player).iterator();
 
             while(var4.hasNext()) {
-                var10000 = var4.next();
-                Block block = (Block)var10000;
+                Block block = (Block) var4.next();
                 if (Objects.equals(block, e.getPlayer().getLocation().getBlock())) {
                     Object[] var6 = new Object[]{block, player};
                     return var6;
@@ -336,26 +330,22 @@ public class MWShark extends MWClass {
     }
 
     public final boolean isInAlliesPool(Player plr) {
-        Iterator var2 = this.waterMap.keySet().iterator();
+        Iterator<Player> var2 = this.waterMap.keySet().iterator();
 
         while(true) {
-            Object var10000;
             Player player;
             do {
                 if (!var2.hasNext()) {
                     return false;
                 }
 
-                var10000 = var2.next();
-                player = (Player)var10000;
+                player = (Player) var2.next();
             } while(!this.plugin.getTeamsManager().isOnSameTeam(plr, player));
 
-            var10000 = this.waterMap.get(player);
-            Iterator var4 = ((HashSet)var10000).iterator();
+            Iterator<Block> var4 = this.waterMap.get(player).iterator();
 
             while(var4.hasNext()) {
-                var10000 = var4.next();
-                Block block = (Block)var10000;
+                Block block = var4.next();
                 if (Objects.equals(block, plr.getLocation().getBlock())) {
                     return true;
                 }

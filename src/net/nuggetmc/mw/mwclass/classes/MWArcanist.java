@@ -201,7 +201,6 @@ public class MWArcanist extends MWClass {
             if (!(ent instanceof LivingEntity)) continue;
             if (!(ent instanceof Player)) continue;
             if (ent.isDead()) continue;
-            if (ent == null) continue;
             if (!ent.getWorld().equals(l.getWorld())) continue;
             if (l.distance(ent.getLocation()) <= size) {
                 entities.add(ent);
@@ -211,7 +210,7 @@ public class MWArcanist extends MWClass {
     }
 
     void shoot(Player p, double damage) {
-        for (Block b : p.getLineOfSight((HashSet<Byte>) null, 50)) {
+        for (Block b : p.getLineOfSight((Set<Material>) null, 50)) {
             try {
                 FireworkEffectPlayer.playFirework(
                         p.getWorld(), b.getLocation(),

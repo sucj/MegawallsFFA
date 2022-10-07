@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public final class CompassManager {
-    private Map<Player, TeamsManager.Team> compassTargetMap = (Map)(new HashMap());
+    private Map<Player, TeamsManager.Team> compassTargetMap = new HashMap<>();
     private MegaWalls plugin = MegaWalls.getInstance();
     private TeamsManager tm;
 
@@ -43,7 +43,7 @@ public final class CompassManager {
     }
 
     public final void changeTrackingTarget(Player player) {
-        Map var2 = this.compassTargetMap;
+        Map<Player, TeamsManager.Team> var2 = this.compassTargetMap;
         TeamsManager.Team var10000;
         TeamsManager.Team var3;
         if (this.compassTargetMap.get(player) == null) {
@@ -75,7 +75,7 @@ public final class CompassManager {
     }
 
     public final String getCompassActionBarOfPlayer(Player player) {
-        Map it = this.compassTargetMap;
+        Map<Player, TeamsManager.Team> it = this.compassTargetMap;
         if (it.get(player) == null) {
             it.put(player, this.tm.getTeamOfPlayer(player));
         }

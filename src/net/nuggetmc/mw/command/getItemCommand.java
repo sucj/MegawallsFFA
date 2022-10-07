@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class getItemCommand implements CommandExecutor, TabCompleter {
-    private final List<String> groupnames = (List)(new ArrayList());
+    private final List<String> groupnames = new ArrayList<>();
     private final MWClassManager classManager = MegaWalls.getInstance().getClassManager();
     private final SpecialItemUtils si;
 
@@ -160,11 +160,11 @@ public class getItemCommand implements CommandExecutor, TabCompleter {
     }
 
     private final List<String> autofill(List<String> groupnames, String input) {
-        List list = (List)(new ArrayList());
-        Iterator var4 = groupnames.iterator();
+        List<String> list = new ArrayList<String>();
+        Iterator<String> var4 = groupnames.iterator();
 
         while(var4.hasNext()) {
-            String entry = (String)var4.next();
+            String entry = var4.next();
             if (entry.length() >= input.length()) {
                 String var10001 = entry.substring(0, input.length());
                 if (Objects.equals(input, var10001)) {

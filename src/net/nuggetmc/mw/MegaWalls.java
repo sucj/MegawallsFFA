@@ -110,6 +110,7 @@ public class MegaWalls extends JavaPlugin {
     private boolean isChinese;
     public boolean antistealDiamond;
     //it is used to stop players from mining diamonds when there is only themselves.
+    // 主播你不会用Vec3d或者BlockPos或者数组吗
     public List<Double> redspawn;
     public List<Double> greenspawn;
     public List<Double> bluespawn;
