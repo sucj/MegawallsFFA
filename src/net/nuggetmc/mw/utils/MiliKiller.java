@@ -1,6 +1,5 @@
 package net.nuggetmc.mw.utils;
 
-import net.ess3.api.events.PrivateMessageSentEvent;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
