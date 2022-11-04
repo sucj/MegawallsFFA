@@ -11,6 +11,7 @@ import net.nuggetmc.mw.mwclass.items.MWKit;
 import net.nuggetmc.mw.mwclass.items.MWPotions;
 import net.nuggetmc.mw.utils.ActionBar;
 import net.nuggetmc.mw.utils.ParticleUtils;
+import net.nuggetmc.mw.utils.PlayerUtils;
 import net.nuggetmc.mw.utils.PotionUtils;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -26,6 +27,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static net.nuggetmc.mw.utils.PlayerUtils.getNearbyPlayers;
 
 public class MWEnderman extends MWClass {
 
@@ -70,6 +73,10 @@ public class MWEnderman extends MWClass {
 
         public int time;
     }
+    private static final Set<Material> set = new HashSet<>();
+    static {
+        set.addAll(Arrays.asList(Material.values()));
+    }
 
     @Override
     public void ability(Player player) {
@@ -78,33 +85,25 @@ public class MWEnderman extends MWClass {
 
         World world = player.getWorld();
         Player target = null;
-        Location loc = player.getLocation();
-        ArrayList<Player> targets = new ArrayList<>();
-        for (Player p : Bukkit.getOnlinePlayers()) {
-            if (world != p.getWorld()) continue;
-            if (p != player && !p.isDead() && loc.distance(p.getLocation()) <= 25 && (!plugin.getTeamsManager().isOnSameTeam(p, player))) {
-                targets.add(p);
+        for (Block block : player
+                .getLineOfSight(set, 25)) {
+            for (Player player2 : PlayerUtils.getNearbyPlayers(block.getLocation(), player, 2)) {
+                if (target == null || player2
+                        .getLocation().distance(player.getLocation()) < target
+                        .getLocation().distance(player.getLocation()))
+                    target = player2;
             }
         }
-        if (targets.isEmpty()) {
-            return;
+        if (target == null) {
+            player.sendMessage("§c没有玩家在目标范围内！");
+            return ;
         } else {
             energyManager.clear(player);
-            targets.sort(new Comparator<Player>() {
-                @Override
-                public int compare(Player player1, Player t1) {
-                    if (player.getEyeLocation().distance(player1.getLocation()) > (player.getEyeLocation().distance(t1.getLocation()))) {
-                        return 1;
-                    } else {
-                        return -1;
-                    }
-                }
-            });
-            target = targets.get(0);
+
             player.teleport(target);
 
             PotionUtils.effect(player, PotionEffectType.SPEED, 5, 2);
-            Location[] locs = new Location[]{loc, target.getLocation()};
+            Location[] locs = new Location[]{player.getLocation(), target.getLocation()};
 
             for (Location point : locs) {
                 ParticleUtils.play(EnumParticle.SPELL_WITCH, point, 0.5, 0.5, 0.5, 0.15, 40);
@@ -143,6 +142,7 @@ public class MWEnderman extends MWClass {
 
 
     }
+
 
     @EventHandler
     public void onKill(PlayerDeathEvent event) {

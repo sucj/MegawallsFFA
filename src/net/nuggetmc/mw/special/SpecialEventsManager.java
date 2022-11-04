@@ -22,6 +22,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.Objects;
 
 import static net.nuggetmc.mw.MegaWalls.OPBYPASSGM;
@@ -226,25 +227,21 @@ public class SpecialEventsManager implements Listener {
     }
 
     ///////////////////////////BREAK BLOCK
-    /*@EventHandler(priority = EventPriority.LOW)
+    /*@EventHandler
     public void onBreakGet(BlockBreakEvent e){
+
         if (!plugin.getCombatManager().isInCombat(e.getPlayer())) return;
         if (!e.getPlayer().getGameMode().equals(GameMode.SURVIVAL)) return;
         if (e.isCancelled()) return;
-        if (rp!=null){
-            if (!rp.getAPI(plugin).getRegion("spawn").canPlayerEdit(e.getPlayer())){
-                if (rp.getAPI(plugin).getRegion("spawn").isLocationInRegion(e.getBlock().getLocation())){
-                    return;
+        Collection<ItemStack> drops = e.getBlock().getDrops();
+        Bukkit.getScheduler().runTaskLater(plugin,()->{
+            if (!e.isCancelled()) {
+                e.getBlock().getDrops().clear();
+                for (ItemStack itemStack : drops) {
+                    e.getPlayer().getInventory().addItem(itemStack);
                 }
             }
-        }
-        Collection<ItemStack> drops = e.getBlock().getDrops();
-
-
-            for (ItemStack itemStack: drops){
-                e.getPlayer().getInventory().addItem(itemStack);
-            }
-            e.getBlock().setType(Material.AIR);
+        },1);
 
 
 

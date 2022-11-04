@@ -13,7 +13,9 @@ import net.minecraft.server.v1_8_R3.PacketPlayInClientCommand;
 import net.minecraft.server.v1_8_R3.PacketPlayOutEntityDestroy;
 import net.minecraft.server.v1_8_R3.PacketPlayOutNamedEntitySpawn;
 import net.minecraft.server.v1_8_R3.PacketPlayOutPlayerInfo;
+import net.nuggetmc.mw.MegaWalls;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
@@ -40,6 +42,16 @@ public class PlayerUtils {
 
       if (e instanceof Player)
         players.add((Player)e);
+    }
+    return players;
+  }
+  public static List<Player> getNearbyPlayers(Location location, Player player, int radius) {
+    List<Player> players = new ArrayList<>();
+    for (Player other : PlayerUtils.getNearbyPlayers(location, radius)) {
+      if (other.getGameMode().equals(GameMode.SPECTATOR) || MegaWalls.getInstance().getTeamsManager().isOnSameTeam(player,other) || other
+              .getLocation().distance(location) > radius)
+        continue;
+      players.add(other);
     }
     return players;
   }

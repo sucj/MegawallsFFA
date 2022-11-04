@@ -46,8 +46,11 @@ public class MegaWallsCommand implements CommandExecutor, TabCompleter {
                     return true;
                 }
             }
-
-            menu.openGUI(player);
+            try {
+                menu.openGUI(player);
+            }catch (Exception ignored){
+                //
+            }
         }
 
         return true;

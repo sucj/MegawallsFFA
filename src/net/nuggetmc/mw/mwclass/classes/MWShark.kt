@@ -65,14 +65,14 @@ class MWShark() : MWClass() {
             waterMap.put(player, emptySet<Block>().toHashSet())
         }
         player.addPotionEffect(PotionEffect(PotionEffectType.REGENERATION, 5 * 20, 0))
-        var expand = 3;
-        var posY = player.location.blockY
-        var location = player.getLocation()
-        var world = player.world
-        var set = HashSet<Block>()
+        val expand = 3
+        val posY = player.location.blockY
+        val location = player.getLocation()
+        val world = player.world
+        val set = HashSet<Block>()
         for (i in -expand until expand + 1) {
             val block = world.getBlockAt(location.blockX + i, posY, location.blockZ)
-            if (canBeReplaced(block)) {
+            if (block.canBeReplaced()) {
 
 
                 block.setType(Material.STATIONARY_WATER, false)
@@ -82,7 +82,7 @@ class MWShark() : MWClass() {
                 }
                 for (j in -expand until expand + 1) {
                     val block1 = world.getBlockAt(location.blockX + i, posY, location.blockZ + j)
-                    if (canBeReplaced(block1)) {
+                    if (block1.canBeReplaced()) {
 
                         block1.setType(Material.STATIONARY_WATER, false)
                         waterMap.get(player)?.add(block1)
@@ -157,7 +157,7 @@ class MWShark() : MWClass() {
         for (player: Player in waterMap.keys) {
             for (block: Block in waterMap.get(player)!!) {
                 if (e.block == block) {
-                    e.isCancelled = true;
+                    e.isCancelled = true
                     return
                 }
             }
@@ -167,7 +167,7 @@ class MWShark() : MWClass() {
     @EventHandler
     fun onMove(e: PlayerMoveEvent) {
         if (e.player.location.block.type == Material.WATER || e.player.location.block.type == Material.STATIONARY_WATER) {
-            var b = forBlock(e)
+            val b = forBlock(e)
             if (b == null) return
             if (plugin.teamsManager.isOnSameTeam(e.player, b.get(1) as Player)) {
                 return
@@ -178,7 +178,7 @@ class MWShark() : MWClass() {
 
     @EventHandler
     fun onBloodRageAllies(event: PlayerMoveEvent) {
-        var player = event.player
+        val player = event.player
         if (isInAlliesPool(player)) {
             plugin.bloodRageList.add(player)
         } else {
@@ -195,7 +195,7 @@ class MWShark() : MWClass() {
         if (event.isCancelled) return
         val player = energyManager.validate(event) ?: return
         if (manager[player] !== this) return
-        var increaceAmount: Double = 0.0
+        var increaceAmount = 0.0
         if (player.health < 15) increaceAmount += 0.215
         for (p in Bukkit.getOnlinePlayers()) {
             if (p.location.distance(player.location) > 9) {
@@ -231,7 +231,7 @@ class MWShark() : MWClass() {
             } else {
                 player.foodLevel += 4
             }
-            var b: Boolean = false
+            var b = false
             for (p in Bukkit.getOnlinePlayers()) {
                 if (p.location.distance(player.location) > 4) {
                     continue
@@ -267,7 +267,7 @@ class MWShark() : MWClass() {
                 }
             }
         }
-        return null;
+        return null
     }
 
     fun isInAlliesPool(plr: Player): Boolean {
@@ -284,8 +284,8 @@ class MWShark() : MWClass() {
         return false
     }
 
-    fun canBeReplaced(block: Block): Boolean {
-        return when (block.type) {
+    fun Block.canBeReplaced(): Boolean {
+        return when (this.type) {
             Material.AIR, Material.LONG_GRASS, Material.YELLOW_FLOWER, Material.DOUBLE_PLANT -> true
             else -> false
         }

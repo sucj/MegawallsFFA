@@ -10,6 +10,7 @@ import net.nuggetmc.mw.mwclass.MWClass;
 import net.nuggetmc.mw.mwclass.MWClassManager;
 import net.nuggetmc.mw.mwclass.MWClassMenu;
 import net.nuggetmc.mw.mwclass.classes.*;
+import net.nuggetmc.mw.prestige.PrestigeManager;
 import net.nuggetmc.mw.special.CompassManager;
 import net.nuggetmc.mw.special.SpecialEventsManager;
 import net.nuggetmc.mw.special.SpecialItemUtils;
@@ -68,6 +69,13 @@ public class MegaWalls extends JavaPlugin {
     public TeamsManager getTeamsManager() {
         return teamsManager;
     }
+
+
+    public PrestigeManager getPrestigeManager() {
+        return prestigeManager;
+    }
+
+    private PrestigeManager prestigeManager=new PrestigeManager();
 
     private TeamsManager teamsManager;
     private SpecialItemUtils specialItemUtils;
