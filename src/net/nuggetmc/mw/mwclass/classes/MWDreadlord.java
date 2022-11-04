@@ -86,7 +86,7 @@ public class MWDreadlord extends MWClass {
 
                             if (player1.getGameMode().equals(GameMode.SPECTATOR) || plugin.getTeamsManager().isOnSameTeam(player,player1))
                                 continue;
-                            mwhealth.trueDamage(player,8,player1);
+                            mwhealth.trueDamage(player1,8,player);
                         }
                         if (!witherSkull.isDead())
                             witherSkull.remove();

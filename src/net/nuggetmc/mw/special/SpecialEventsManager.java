@@ -361,6 +361,11 @@ public class SpecialEventsManager implements Listener {
                     if (plugin.getTeamsManager().isOnSameTeam(((Player) projectile.getShooter()).getPlayer(),((Player) e.getEntity()).getPlayer())){
                         e.setCancelled(true);
                     }
+                    if (projectile instanceof WitherSkull){
+                        if (projectile.hasMetadata(MegaWalls.getMetadataValue())){
+                            e.setCancelled(true);
+                        }
+                    }
                 }
             }
         }
