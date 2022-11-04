@@ -32,122 +32,71 @@ public class getItemCommand implements CommandExecutor, TabCompleter {
         this.si = MegaWalls.getInstance().getSpecialItemUtils();
     }
 
-    public final List<String> getGroupnames() {
-        return this.groupnames;
-    }
+
 
     public final MWClassManager getClassManager() {
         return this.classManager;
     }
 
-    public final SpecialItemUtils getSi() {
-        return this.si;
-    }
+
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!(sender instanceof Player)) {
+        if (!(sender instanceof Player)) return true;
+        Player player= ((Player) sender);
+        if (!MegaWalls.getInstance().getCombatManager().isInCombat(player)) {
             return true;
-        } else {
-            Player player = (Player)sender;
-            if (!MegaWalls.getInstance().getCombatManager().isInCombat(player)) {
-                return true;
-            } else if (!(args != null ? args.length == 2 : false) && !(args != null ? args.length == 1 : false)) {
-                ((Player)sender).sendMessage("invalid syntax!Correct usage: /mwitem item count");
-                return true;
-            } else {
-                int amount;
-                if (args.length == 2) {
-                    try {
-                        amount = Integer.parseInt(args[1]);
-                    } catch (Exception e) {
-                        sender.sendMessage("invalid syntax!Correct usage: /mwitem item count");
-                        return true;
-                    }
-                } else {
-                    amount = 1;
-                }
-
-                ItemStack stack;
-                cfrIsTheBestDecompiler: {
-                    String itemName = args[0];
-                    if (itemName != null) {
-                        MWClassManager classManager1;
-                        MWClass bzd;
-                        String var14;
-                        switch(itemName.hashCode()) {
-                            case -2131167058:
-                                if (itemName.equals("speedpot")) {
-                                    label72: {
-                                        classManager1 = this.classManager;
-                                        if (classManager1 != null) {
-                                            bzd = classManager1.get(player);
-                                            if (bzd != null) {
-                                                var14 = bzd.getName();
-                                                break label72;
-                                            }
-                                        }
-
-                                        var14 = null;
-                                    }
-
-                                    stack = MWPotions.createSpeedPotions(var14, this.classManager.get(player).getColor(), amount);
-                                    break cfrIsTheBestDecompiler;
-                                }
-                                break;
-                            case -894660322:
-                                if (itemName.equals("squpot")) {
-                                    stack = this.si.getSquidPot(amount);
-                                    break cfrIsTheBestDecompiler;
-                                }
-                                break;
-                            case 3351579:
-                                if (itemName.equals("milk")) {
-                                    stack = this.si.getCowBucket(amount);
-                                    break cfrIsTheBestDecompiler;
-                                }
-                                break;
-                            case 795556717:
-                                if (itemName.equals("healpot")) {
-                                    label77: {
-                                        classManager1 = this.classManager;
-                                        if (classManager1 != null) {
-                                            bzd = classManager1.get(player);
-                                            if (bzd != null) {
-                                                var14 = bzd.getName();
-                                                break label77;
-                                            }
-                                        }
-
-                                        var14 = null;
-                                    }
-
-                                    stack = MWPotions.createHealPotions(var14, this.classManager.get(player).getColor(), amount, 10);
-                                    break cfrIsTheBestDecompiler;
-                                }
-                                break;
-                            case 2038081193:
-                                if (itemName.equals("golempot")) {
-                                    stack = this.si.getGolemPot(amount);
-                                    break cfrIsTheBestDecompiler;
-                                }
-                        }
-                    }
-
-                    stack = (ItemStack)null;
-                }
-
-                ItemStack itemStack = stack;
-                if (itemStack == null) {
-                    ((Player)sender).sendMessage("invalid item!Allowed items:" + this.groupnames);
-                } else {
-                    PlayerInventory var15 = player.getInventory();
-                    ItemStack[] var11 = new ItemStack[]{itemStack};
-                    var15.addItem(var11);
-                }
-
-                return true;
-            }
         }
+        if (args.length == 2 || args.length == 1) {
+            int amount;
+            if (args.length == 2) {
+                try {
+                    amount = Integer.parseInt(args[1]);
+                } catch (Exception e) {
+                    sender.sendMessage("invalid syntax!Correct usage: /mwitem item count");
+                    return true;
+                }
+            } else {
+                amount = 1;
+            }
+            ItemStack itemStack;
+            switch (args[0]){
+                case "healpot":
+                    itemStack=MWPotions.createHealPotions(
+                            classManager.get(player).getName(),
+                        classManager.get(player).getColor(),
+                        amount,
+                        10
+                );
+                     break;
+                case "speedpot":
+                    itemStack=MWPotions.createSpeedPotions(
+                            classManager.get(player).getName(),
+                        classManager.get(player).getColor(),
+                        amount
+                );
+                    break;
+                case "squpot":
+                    itemStack=si.getSquidPot(amount);
+                    break;
+                case "golempot":
+                    itemStack=si.getGolemPot(amount);
+                    break;
+                case "milk":
+                    itemStack=si.getCowBucket(amount);
+                    break;
+                default:
+                    itemStack=null;
+            }
+            if (itemStack == null) {
+                sender.sendMessage("invalid item!Allowed items: "+groupnames);
+            } else {
+                player.getInventory().addItem(itemStack);
+            }
+        } else {
+            sender.sendMessage("invalid syntax!Correct usage: /mwitem item count");
+            return true;
+        }
+        return true;
     }
 
     public List<String> onTabComplete(CommandSender sender, Command cmd, String label,String[] args) {
@@ -159,8 +108,8 @@ public class getItemCommand implements CommandExecutor, TabCompleter {
         }
     }
 
-    private final List<String> autofill(List<String> groupnames, String input) {
-        List<String> list = new ArrayList<String>();
+    private List<String> autofill(List<String> groupnames, String input) {
+        List<String> list = new ArrayList<>();
 
         for (String entry : groupnames) {
             if (entry.length() >= input.length()) {
@@ -174,7 +123,7 @@ public class getItemCommand implements CommandExecutor, TabCompleter {
         return list.isEmpty() ? groupnames : list;
     }
 
-    private final boolean isEmptyTab(String s) {
+    private boolean isEmptyTab(String s) {
         return s == null || Objects.equals(s, " ") || ((CharSequence)s).length() == 0;
     }
 
