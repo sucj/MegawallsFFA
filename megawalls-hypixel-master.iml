@@ -22,7 +22,6 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="libs" level="project" />
     <orderEntry type="library" name="spigot" level="project" />
-    <orderEntry type="library" name="KotlinJavaRuntime" level="project" />
     <orderEntry type="library" name="nametagAPI" level="project" />
     <orderEntry type="library" name="scoreboardplus" level="project" />
     <orderEntry type="library" name="regionpreserve" level="project" />

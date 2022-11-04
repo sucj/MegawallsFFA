@@ -18,8 +18,6 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scheduler.BukkitRunnable;
-
 import java.util.*;
 
 public class MWHerobrine extends MWClass {
@@ -28,7 +26,7 @@ public class MWHerobrine extends MWClass {
     private final Set<Player> wrathList = new HashSet<>();
 
     public MWHerobrine() {
-        this.name = new String[]{"Herobrine", "Herobrine", "HBR"};
+        this.name = new String[]{"Herobrine", "Herobrine", "HBR"/*, "RockstarGamesOL", "张泽旭"*/};
         this.icon = Material.DIAMOND_SWORD;
         this.color = ChatColor.YELLOW;
 
@@ -86,7 +84,7 @@ public class MWHerobrine extends MWClass {
             }
 
             world.playSound(player.getLocation(), Sound.ENDERMAN_DEATH, 1, (float) 0.5);
-            Bukkit.getScheduler().runTaskLater(plugin, new BukkitRunnable() {
+            Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
                 @Override
                 public void run() {
                     wrathList.remove(player);
