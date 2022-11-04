@@ -2,6 +2,7 @@ package net.nuggetmc.mw.mwclass.classes;
 
 import net.md_5.bungee.api.ChatColor;
 import net.minecraft.server.v1_8_R3.EnumParticle;
+import net.nuggetmc.mw.MegaWalls;
 import net.nuggetmc.mw.mwclass.MWClass;
 import net.nuggetmc.mw.mwclass.info.Diamond;
 import net.nuggetmc.mw.mwclass.info.MWClassInfo;
@@ -9,21 +10,19 @@ import net.nuggetmc.mw.mwclass.info.Playstyle;
 import net.nuggetmc.mw.mwclass.items.MWItem;
 import net.nuggetmc.mw.mwclass.items.MWKit;
 import net.nuggetmc.mw.mwclass.items.MWPotions;
-import net.nuggetmc.mw.utils.MathUtils;
-import net.nuggetmc.mw.utils.ParticleUtils;
-import net.nuggetmc.mw.utils.PotionUtils;
-import net.nuggetmc.mw.utils.WorldUtils;
+import net.nuggetmc.mw.utils.*;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.metadata.MetadataValue;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
@@ -69,67 +68,36 @@ public class MWDreadlord extends MWClass {
     public void ability(Player player) {
         energyManager.clear(player);
 
-        World world = player.getWorld();
-        Location loc = player.getEyeLocation();
-
-        world.playSound(loc, Sound.WITHER_SHOOT, 1, 1);
-
-        Set<Vector> directions = new HashSet<>();
-        Vector facing = loc.getDirection();
-
-        directions.add(facing);
-        directions.add(MathUtils.rotateAroundY(facing, 15));
-        directions.add(MathUtils.rotateAroundY(facing, -15));
-
-        for (Vector dir : directions) {
-            Location ahead = loc.clone().add(dir.getX(), -1, dir.getZ());
-            ArmorStand pt = (ArmorStand) world.spawnEntity(ahead, EntityType.ARMOR_STAND);
-
-            armorStands.add(pt);
-
-            pt.setVisible(false);
-            pt.setGravity(false);
-            pt.setSmall(true);
-            pt.setHelmet(new ItemStack(Material.SKULL_ITEM, 1, (byte) 1));
-
-            BukkitRunnable task = new BukkitRunnable() {
-
-                @Override
+        for (int i = 1; i <= 3; i++) {
+            final WitherSkull witherSkull = (WitherSkull)player.launchProjectile(WitherSkull.class);
+            witherSkull.setMetadata("MegaWalls", (MetadataValue)new FixedMetadataValue(
+                    (Plugin)MegaWalls.getInstance(), plugin.getTeamsManager().getTeamOfPlayer(player)));
+            witherSkull
+                    .setVelocity(player.getLocation().add(0.0D, 0.0D, i * 2.0D).getDirection());
+            (new BukkitRunnable() {
                 public void run() {
-                    if (pt.isDead() || !armorStands.contains(pt)) {
-                        this.cancel();
+                    if (witherSkull.isDead() || witherSkull.isOnGround()) {
+
+                            ParticleUtils.play(EnumParticle.EXPLOSION_HUGE, witherSkull.getLocation(), 0.0F, 0.0F, 0.0F, 1.0F, 1);
+
+                        witherSkull.getWorld()
+                                .playSound(witherSkull.getLocation(), Sound.EXPLODE, 1.0F, 0.0F);
+                        for (Player player1 : PlayerUtils.getNearbyPlayers((Entity)witherSkull, 10.0D)) {
+
+                            if (player1.getGameMode().equals(GameMode.SPECTATOR) || plugin.getTeamsManager().isOnSameTeam(player,player1))
+                                continue;
+                            mwhealth.trueDamage(player,8,player1);
+                        }
+                        if (!witherSkull.isDead())
+                            witherSkull.remove();
+                        cancel();
                         return;
                     }
 
-                    Location pointLoc = pt.getEyeLocation();
+                        ParticleUtils.play(EnumParticle.LAVA, witherSkull.getLocation(), 0.0F, 0.0F, 0.0F, 1.0F, 5);
 
-                    Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                        ParticleUtils.play(EnumParticle.REDSTONE, pointLoc, 0.01, 0, 0, 1, 0);
-                    }, 2);
-
-                    for (Player target : Bukkit.getOnlinePlayers()) {
-                        if (plugin.getTeamsManager().isOnSameTeam(player, target)) continue;
-                        if (player == target) continue;
-                        if (target.getWorld() != pointLoc.getWorld()) continue;
-                        if (pointLoc.distance(target.getLocation().add(0, 1, 0)) < 1) {
-                            witherSkullHit(player, pointLoc, target);
-                            pt.remove();
-                            this.cancel();
-                            return;
-                        }
-                    }
-
-                    if (pointLoc.getBlock().getType().isSolid()) {
-                        witherSkullHit(player, pointLoc, null);
-                        pt.remove();
-                        this.cancel();
-                    }
-
-                    pt.teleport(pt.getLocation().clone().add(dir));
                 }
-            };
-
-            task.runTaskTimer(plugin, 0, 1);
+            }).runTaskTimer((Plugin)MegaWalls.getInstance(), 0L, 1L);
         }
     }
 
@@ -245,7 +213,7 @@ public class MWDreadlord extends MWClass {
 
             List<ItemStack> potions = MWPotions.createBasic(this, 2, 8, 2);
 
-            items = MWKit.generate(this, sword, bow, tool, null, null, potions, helmet, null, null, null, null);
+            items = MWKit.generate(this, sword, null, tool, null, null, potions, helmet, null, null, null, null);
         }
 
         MWKit.assignItems(player, items);

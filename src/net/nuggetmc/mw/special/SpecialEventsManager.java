@@ -8,17 +8,13 @@ import net.nuggetmc.mw.MegaWalls;
 import net.nuggetmc.mw.mwclass.classes.MWCow;
 import net.nuggetmc.mw.utils.ItemUtils;
 import org.bukkit.*;
-import org.bukkit.entity.Arrow;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntitySpawnEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.entity.*;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -332,4 +328,42 @@ public class SpecialEventsManager implements Listener {
             e.getBlock().setType(material);
         }, plugin.breakResetTime * 20L);
     }
+    @EventHandler
+    public void onEntityChangeBlock(EntityChangeBlockEvent e) {
+        if (e.getEntity().hasMetadata(MegaWalls.getMetadataValue()))
+            e.setCancelled(true);
+    }
+
+
+
+
+    @EventHandler
+    public void onPotionSplash(PotionSplashEvent e) {
+        for (LivingEntity entity : e.getAffectedEntities()) {
+            if (entity instanceof Player && ((Player) entity).getGameMode().equals(GameMode.SPECTATOR)) {
+                e.setCancelled(true);
+                return;
+            }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGH)
+    public void onEntityDamageByEntity(EntityDamageByEntityEvent e) {
+        if (e.isCancelled())
+            return;
+
+
+        if (e.getDamager() instanceof Projectile) {
+            Projectile projectile = (Projectile) e.getDamager();
+            if (projectile.getShooter() instanceof Player) {
+
+                if (e.getEntity() instanceof Player) {
+                    if (plugin.getTeamsManager().isOnSameTeam(((Player) projectile.getShooter()).getPlayer(),((Player) e.getEntity()).getPlayer())){
+                        e.setCancelled(true);
+                    }
+                }
+            }
+        }
+    }
+
 }

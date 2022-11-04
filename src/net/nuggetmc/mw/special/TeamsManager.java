@@ -120,6 +120,9 @@ public class TeamsManager implements Listener {
     }
 
     public final boolean isOnSameTeam(Player player, Player player1) {
+        if (player.getUniqueId()==player1.getUniqueId()){
+            return true;
+        }
         if (this.plugin.getCombatManager().isInCombat(player) && this.plugin.getCombatManager().isInCombat(player1)) {
             return this.getTeamOfPlayer(player) == this.getTeamOfPlayer(player1);
         } else {

@@ -206,7 +206,7 @@ public class MWSquid extends MWClass {
 
             List<ItemStack> potions = MWPotions.createBasic(this, 3, 6, 1);
 
-            items = MWKit.generate(this, sword, bow, tool, null, null, potions, null, null, null, boots, null);
+            items = MWKit.generate(this, sword, null, tool, null, null, potions, null, null, null, boots, null);
         }
 
         MWKit.assignItems(player, items);

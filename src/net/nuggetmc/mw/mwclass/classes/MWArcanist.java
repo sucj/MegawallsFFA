@@ -161,7 +161,7 @@ public class MWArcanist extends MWClass {
 
             List<ItemStack> potions = MWPotions.createBasic(this, 2, 8, 2);
 
-            items = MWKit.generate(this, sword, bow, tool, null, null, potions, null, null, leggings, null, null);
+            items = MWKit.generate(this, sword, null, tool, null, null, potions, null, null, leggings, null, null);
         }
         MWKit.assignItems(player, items);
         if (dmgcount.containsKey(player)) {

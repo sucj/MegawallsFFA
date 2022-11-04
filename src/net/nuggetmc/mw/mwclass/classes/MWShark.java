@@ -155,7 +155,7 @@ public class MWShark extends MWClass {
             ItemStack tool = MWItem.createTool(this, Material.DIAMOND_PICKAXE);
             ItemStack boots = MWItem.createArmor(this, Material.DIAMOND_BOOTS, armorEnch);
             List<ItemStack> potions = MWPotions.createBasic(this, 2, 8, 2);
-            kit = MWKit.generate(this, sword, bow, tool, null, null, potions, null, null, null, boots, null);
+            kit = MWKit.generate(this, sword, null, tool, null, null, potions, null, null, null, boots, null);
         }
         items = kit;
 

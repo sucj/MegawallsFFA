@@ -39,6 +39,10 @@ public class MegaWalls extends JavaPlugin {
     private MWClassMenu mwClassMenu;
     private ShopMenu shopMenu;
 
+    public static String getMetadataValue() {
+        return "MegaWalls";
+    }
+
     public CompassManager getCompassManager() {
         return compassManager;
     }

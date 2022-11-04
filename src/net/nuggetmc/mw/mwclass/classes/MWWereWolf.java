@@ -276,7 +276,7 @@ public class MWWereWolf extends MWClass {
 
             List<ItemStack> potions = MWPotions.createWolfBasic(this, 1, 8, 3);
 
-            items = MWKit.generate(this, sword, bow, tool, null, null, potions, null, chestplate, null, null, null);
+            items = MWKit.generate(this, sword, null, tool, null, null, potions, null, chestplate, null, null, null);
         }
 
         MWKit.assignItems(player, items);

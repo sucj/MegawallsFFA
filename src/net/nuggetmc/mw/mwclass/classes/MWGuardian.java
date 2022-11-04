@@ -34,7 +34,7 @@ public class MWGuardian extends MWClass {
     public MWGuardian() {
         this.name = new String[]{"守卫者", "Guardian", "GUA"};
         this.icon = Material.MOB_SPAWNER;
-        this.color = ChatColor.BLUE;
+        this.color = ChatColor.DARK_GREEN;
 
         this.playstyles = new Playstyle[]{
                 Playstyle.CONTROL,
@@ -42,7 +42,8 @@ public class MWGuardian extends MWClass {
         };
 
         this.diamonds = new Diamond[]{
-                Diamond.BOOTS
+                Diamond.BOOTS,
+                Diamond.SWORD
         };
 
         this.classInfo = new MWClassInfo(
@@ -218,14 +219,14 @@ public class MWGuardian extends MWClass {
             armorEnch.put(Enchantment.DEPTH_STRIDER, 5);
             armorEnch.put(Enchantment.DURABILITY, 10);
 
-            ItemStack sword = MWItem.createSword(this, Material.IRON_SWORD, swordEnch);
+            ItemStack sword = MWItem.createSword(this, Material.DIAMOND_SWORD, swordEnch);
             ItemStack bow = MWItem.createBow(this, null);
             ItemStack tool = MWItem.createTool(this, Material.DIAMOND_PICKAXE);
             ItemStack boots = MWItem.createArmor(this, Material.DIAMOND_BOOTS, armorEnch);
 
             List<ItemStack> potions = MWPotions.createBasic(this, 1, 8, 2);
 
-            items = MWKit.generate(this, sword, bow, tool, null, null, potions, null, null, null, boots, null);
+            items = MWKit.generate(this, sword, null, tool, null, null, potions, null, null, null, boots, null);
         }
 
         MWKit.assignItems(player, items);
