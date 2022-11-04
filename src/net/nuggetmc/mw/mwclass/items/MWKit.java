@@ -6,6 +6,7 @@ import net.nuggetmc.mw.mwclass.MWClass;
 import net.nuggetmc.mw.utils.ItemStackCreator;
 import net.nuggetmc.mw.utils.ItemUtils;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -33,6 +34,11 @@ public class MWKit {
 
         if (toolAxe == null) {
             toolAxe = new ItemStack(Material.IRON_AXE);
+        }
+        if (bow==null){
+            Map<Enchantment, Integer> bowEnch = new HashMap<>();
+            bowEnch.put(Enchantment.DURABILITY,10);
+            bow = MWItem.createBow(mwclass, bowEnch);
         }
 
         if (toolShovel == null) {
@@ -71,10 +77,6 @@ public class MWKit {
             items.put(n, item);
             n++;
         }
-        boolean nullhelmet = false;
-        boolean nullcp = false;
-        boolean nullleg = false;
-        boolean nullboots = false;
         if (helmet == null) helmet = new ItemStack(Material.IRON_HELMET);
         if (chestplate == null) chestplate = new ItemStack(Material.IRON_CHESTPLATE);
         if (leggings == null) leggings = new ItemStack(Material.IRON_LEGGINGS);

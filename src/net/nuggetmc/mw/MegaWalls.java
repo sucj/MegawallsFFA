@@ -351,6 +351,9 @@ public class MegaWalls extends JavaPlugin {
     public void setChinese(boolean chinese) {
         isChinese = chinese;
     }
+    public static String getMetadataValue() {
+        return "MegaWalls";
+    }
     //  @EventHandler
     //public void onClearPot(PlayerDropItemEvent e){
 

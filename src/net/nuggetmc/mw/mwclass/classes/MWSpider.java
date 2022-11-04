@@ -73,7 +73,7 @@ public class MWSpider extends MWClass {
     @Override
     public void ability(Player player) {
         energyManager.clear(player);
-        PotionUtils.effect(player, PotionEffectType.ABSORPTION, 5);
+        //PotionUtils.effect(player, PotionEffectType.ABSORPTION, 5);
 
         World world = player.getWorld();
         Location loc = player.getLocation();
@@ -127,6 +127,7 @@ public class MWSpider extends MWClass {
 
                 skitter(player);
                 spiderDamage(player, event);
+                player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,3*20,2));
                 event.setDamage(0);
             }
         }
@@ -218,7 +219,6 @@ public class MWSpider extends MWClass {
                     energyManager.add(player, 20);
 
                     PotionUtils.effect(player, PotionEffectType.SPEED, 5);
-
                     this.cancel();
                     return;
                 }
@@ -295,20 +295,21 @@ public class MWSpider extends MWClass {
             Map<Enchantment, Integer> armorEnch = new HashMap<>();
             armorEnch.put(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
             armorEnch.put(Enchantment.DURABILITY, 10);
-            Map<Enchantment, Integer> armorEnch2 = new HashMap<>();
-            armorEnch2.put(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
-            armorEnch2.put(Enchantment.DURABILITY, 10);
+            //Map<Enchantment, Integer> armorEnch2 = new HashMap<>();
+            //armorEnch2.put(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+            //armorEnch2.put(Enchantment.DURABILITY, 10);
 
             ItemStack sword = MWItem.createSword(this, Material.DIAMOND_SWORD, swordEnch);
             ItemStack bow = MWItem.createBow(this, null);
             ItemStack tool = MWItem.createTool(this, Material.DIAMOND_PICKAXE);
             ItemStack toolShovel = MWItem.createTool(this, Material.IRON_SPADE);
             ItemStack boots = MWItem.createArmor(this, Material.DIAMOND_BOOTS, armorEnch);
-            ItemStack leggings = MWItem.createArmor(this, Material.IRON_LEGGINGS, armorEnch2);
+            //ItemStack leggings = MWItem.createArmor(this, Material.IRON_LEGGINGS, armorEnch2);
 
             List<ItemStack> potions = MWPotions.createBasic(this, 2, 8, 2);
 
-            items = MWKit.generate(this, sword, bow, tool, null, toolShovel, potions, null, null, leggings, boots, null);
+            //items = MWKit.generate(this, sword, null, tool, null, toolShovel, potions, null, null, leggings, boots, null);
+            items = MWKit.generate(this, sword, null, tool, null, toolShovel, potions, null, null, null, boots, null);
         }
 
         MWKit.assignItems(player, items);

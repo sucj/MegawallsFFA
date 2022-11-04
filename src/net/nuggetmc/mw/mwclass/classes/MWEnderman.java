@@ -206,6 +206,7 @@ public class MWEnderman extends MWClass {
 
     @EventHandler
     public void gathering(BlockBreakEvent event) {
+        if(event.isCancelled() ) return;
         Player player = event.getPlayer();
 
         if (manager.get(player) == this) {
@@ -260,7 +261,7 @@ public class MWEnderman extends MWClass {
 
             List<ItemStack> potions = MWPotions.createBasic(this, 2, 8, 2);
 
-            items = MWKit.generate(this, sword, bow, tool, null, null, potions, null, null, null, boots, null);
+            items = MWKit.generate(this, sword, null, tool, null, null, potions, null, null, null, boots, null);
         }
 
         MWKit.assignItems(player, items);

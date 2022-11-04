@@ -277,7 +277,7 @@ public class MWCreeper extends MWClass {
             List<ItemStack> extra = new ArrayList<>();
             extra.add(new ItemStack(Material.TNT, 16));
 
-            items = MWKit.generate(this, sword, bow, tool, null, null, potions, null, null, leggings, null, extra);
+            items = MWKit.generate(this, sword, null, tool, null, null, potions, null, null, leggings, null, extra);
         }
 
         MWKit.assignItems(player, items);
