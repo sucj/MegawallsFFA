@@ -22,6 +22,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
+import org.bukkit.metadata.MetadataValueAdapter;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -72,6 +73,8 @@ public class MWDreadlord extends MWClass {
             final WitherSkull witherSkull = (WitherSkull)player.launchProjectile(WitherSkull.class);
             witherSkull.setMetadata("MegaWalls", (MetadataValue)new FixedMetadataValue(
                     (Plugin)MegaWalls.getInstance(), plugin.getTeamsManager().getTeamOfPlayer(player)));
+            witherSkull.setMetadata("TimeMillis", (MetadataValue)new FixedMetadataValue(
+                    (Plugin)MegaWalls.getInstance(), System.currentTimeMillis()));
             witherSkull
                     .setVelocity(player.getLocation().add(0.0D, 0.0D, i * 2.0D).getDirection());
             (new BukkitRunnable() {
@@ -86,7 +89,7 @@ public class MWDreadlord extends MWClass {
 
                             if (player1.getGameMode().equals(GameMode.SPECTATOR) || plugin.getTeamsManager().isOnSameTeam(player,player1))
                                 continue;
-                            player1.damage(7.0D,player);
+                            mwhealth.dreadTrueDamage(player1,player,witherSkull);
                         }
                         if (!witherSkull.isDead())
                             witherSkull.remove();

@@ -74,7 +74,7 @@ public class MWSpider extends MWClass {
     public void ability(Player player) {
         energyManager.clear(player);
         //PotionUtils.effect(player, PotionEffectType.ABSORPTION, 5);
-
+        player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,3*20,2));
         World world = player.getWorld();
         Location loc = player.getLocation();
 
@@ -127,7 +127,6 @@ public class MWSpider extends MWClass {
 
                 skitter(player);
                 spiderDamage(player, event);
-                player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,3*20,2));
                 event.setDamage(0);
             }
         }

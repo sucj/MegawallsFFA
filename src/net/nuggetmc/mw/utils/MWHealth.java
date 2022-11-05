@@ -9,6 +9,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.WitherSkull;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
@@ -19,6 +20,10 @@ import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 public class MWHealth implements Listener {
 
@@ -133,4 +138,33 @@ public class MWHealth implements Listener {
             player.damage(250, damager);
         }
     }
+    public void dreadTrueDamage(Player player ,Player damager, WitherSkull witherSkull) {
+        double amount=8;
+        if (timeMillis.contains(witherSkull.getMetadata("TimeMillis").get(0).asInt())){
+            return;
+        }
+        timeMillis.add(witherSkull.getMetadata("TimeMillis").get(0).asInt());
+        if (plugin.bloodRageList.contains(damager)) {
+            amount *= 1.75;
+        }
+        double health = player.getHealth();
+
+        if (manager.isMW(player) && manager.get(player).getName().equals("Golem")) {
+            amount *= 0.8;
+            player.getWorld().playSound(player.getLocation(), Sound.ZOMBIE_METAL, 1, 1);
+        }
+        if (manager.isMW(player) && manager.get(player).getName().equals("傀儡")) {
+            amount *= 0.8;
+            player.getWorld().playSound(player.getLocation(), Sound.ZOMBIE_METAL, 1, 1);
+        }
+
+        if (health >= amount + 0.01) {
+            player.damage(0.01, damager);
+            player.setHealth(health - amount);
+        } else {
+            player.damage(250, damager);
+        }
+
+    }
+    ArrayList<Integer> timeMillis=new ArrayList<>();
 }
