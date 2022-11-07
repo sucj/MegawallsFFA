@@ -95,7 +95,7 @@ public class MWEnderman extends MWClass {
             }
         }
         if (target == null) {
-            player.sendMessage("§c没有玩家在目标范围内！");
+            player.sendMessage("§cNo players within range to target");
             return ;
         } else {
             energyManager.clear(player);

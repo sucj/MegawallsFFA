@@ -35,14 +35,14 @@ public class ShopMenu implements Listener {
     public Good gapple = new Good(new ItemStack(Material.GOLDEN_APPLE, 1), "Golden Apple", 8, new ItemStack(Material.GOLDEN_APPLE, 1), null);
     public Good milk = new Good(new ItemStack(Material.MILK_BUCKET, 1), "Cow Bucket", 5, specialItemUtils.getCowBucket(), null);
     Good squpot = new Good(specialItemUtils.getSquidPot(), ChatColor.stripColor(specialItemUtils.getSquidPot().getItemMeta().getDisplayName()), 15, specialItemUtils.getSquidPot(), null);
+    Good phxpot = new Good(specialItemUtils.getPhxPot(), ChatColor.stripColor(specialItemUtils.getPhxPot().getItemMeta().getDisplayName()), 20, specialItemUtils.getPhxPot(), null);
     Good golempot = new Good(specialItemUtils.getGolemPot(), ChatColor.stripColor(specialItemUtils.getGolemPot().getItemMeta().getDisplayName()), 25, specialItemUtils.getGolemPot(), null);
     Good diamond = new Good(new ItemStack(Material.DIAMOND, 1), "Diamond", 50, new ItemStack(Material.DIAMOND, 1), null);
-    Good ironHelmet = new Good(new ItemStack(Material.IRON_HELMET, 1), "Iron Helmet", 10, new ItemStack(Material.IRON_HELMET, 1), null);
-    Good ironChestplate = new Good(new ItemStack(Material.IRON_CHESTPLATE, 1), "Iron Chestplate", 10, new ItemStack(Material.IRON_CHESTPLATE, 1), null);
-    Good ironLeggings = new Good(new ItemStack(Material.IRON_LEGGINGS, 1), "Iron Leggings", 10, new ItemStack(Material.IRON_LEGGINGS, 1), null);
-    Good ironBoots = new Good(new ItemStack(Material.IRON_BOOTS, 1), "Iron Boots", 10, new ItemStack(Material.IRON_BOOTS, 1), null);
+    Good ironHelmet = new Good(new ItemStack(Material.IRON_HELMET, 1), "Iron Helmet", 1, new ItemStack(Material.IRON_HELMET, 1), null);
+    Good ironChestplate = new Good(new ItemStack(Material.IRON_CHESTPLATE, 1), "Iron Chestplate", 1, new ItemStack(Material.IRON_CHESTPLATE, 1), null);
+    Good ironLeggings = new Good(new ItemStack(Material.IRON_LEGGINGS, 1), "Iron Leggings", 1, new ItemStack(Material.IRON_LEGGINGS, 1), null);
+    Good ironBoots = new Good(new ItemStack(Material.IRON_BOOTS, 1), "Iron Boots", 1, new ItemStack(Material.IRON_BOOTS, 1), null);
 
-    //an example
     private void registergood(Good... GoodArray) {
         for (Good good : GoodArray) {
             goods.put(good.getDisplayName(), good);
@@ -64,7 +64,8 @@ public class ShopMenu implements Listener {
                 ironHelmet,
                 ironChestplate,
                 ironBoots,
-                ironLeggings
+                ironLeggings,
+                phxpot
         );
     }
 
@@ -74,10 +75,11 @@ public class ShopMenu implements Listener {
         loadPriceOrDefault(this.squpot, 30);
         loadPriceOrDefault(this.golempot, 50);
         loadPriceOrDefault(this.diamond, 100);
-        loadPriceOrDefault(this.ironHelmet, 10);
-        loadPriceOrDefault(this.ironChestplate, 10);
-        loadPriceOrDefault(this.ironBoots, 10);
-        loadPriceOrDefault(this.ironLeggings, 10);
+        loadPriceOrDefault(this.ironHelmet, 1);
+        loadPriceOrDefault(this.ironChestplate, 1);
+        loadPriceOrDefault(this.ironBoots, 1);
+        loadPriceOrDefault(this.ironLeggings, 1);
+        loadPriceOrDefault(this.phxpot, 20);
     }
 
     private void loadPriceOrDefault(Good good, int defaulta) {
@@ -98,6 +100,7 @@ public class ShopMenu implements Listener {
 
         inv.setItem(19, ironLeggings.getMenuItem());
         inv.setItem(20, ironBoots.getMenuItem());
+        inv.setItem(21, phxpot.getMenuItem());
         //  inv.setItem(11, example);
 
 

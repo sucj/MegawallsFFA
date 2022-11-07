@@ -4,10 +4,16 @@ import net.md_5.bungee.api.ChatColor;
 import net.minecraft.server.v1_8_R3.NBTTagCompound;
 import net.nuggetmc.mw.MegaWalls;
 import net.nuggetmc.mw.mwclass.items.MWPotions;
+import net.nuggetmc.mw.utils.ItemUtils;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.potion.Potion;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.potion.PotionType;
 
 import java.util.ArrayList;
 
@@ -18,7 +24,7 @@ public class SpecialItemUtils {
     String cowBucketTag = "cowbucket";
 
     public ItemStack getSquidPot() {
-        return MWPotions.createAbsorptionPotions(plugin.isChinese() ? this.squidname[0] : this.squidname[1], ChatColor.BLUE, 1, 60);
+        return getSquidPot(1);
     }
 
     public ItemStack getSquidPot(int count) {
@@ -26,7 +32,7 @@ public class SpecialItemUtils {
     }
 
     public ItemStack getGolemPot() {
-        return MWPotions.createRegenerationPotions(plugin.isChinese() ? golemname[0] : golemname[1], ChatColor.WHITE, 1, 12, 10);
+        return getGolemPot(1);
     }
 
     public ItemStack getGolemPot(int count) {
@@ -34,21 +40,7 @@ public class SpecialItemUtils {
     }
 
     public ItemStack getCowBucket() {
-        ItemStack milk = new ItemStack(Material.MILK_BUCKET, 1);
-        ArrayList<String> lore = new ArrayList<>();
-        lore.add(ChatColor.BLUE + "Resistance I (5s)");
-        lore.add(ChatColor.BLUE + "Regeneration II (5s) " + ChatColor.GRAY + "(2 " + ChatColor.RED + "❤" + ChatColor.RESET + ")");
-        ItemMeta itemMeta = milk.getItemMeta();
-        itemMeta.setDisplayName(ChatColor.WHITE + "Ultra Pasteurized Milk Bucket");
-        itemMeta.setLore(lore);
-        milk.setItemMeta(itemMeta);
-        net.minecraft.server.v1_8_R3.ItemStack nmsItem = CraftItemStack.asNMSCopy(milk);
-        NBTTagCompound compound = nmsItem.hasTag() ? nmsItem.getTag() : new NBTTagCompound();
-
-        compound.setBoolean(cowBucketTag, true);
-        nmsItem.setTag(compound);
-
-        return CraftItemStack.asBukkitCopy(nmsItem);
+        return getCowBucket(1);
     }
 
     public ItemStack getCowBucket(int amount) {
@@ -72,7 +64,7 @@ public class SpecialItemUtils {
     public ItemStack getCowOwnBucket(int amount) {
         ItemStack milk = new ItemStack(Material.MILK_BUCKET, amount);
         ItemMeta itemMeta = milk.getItemMeta();
-        itemMeta.setDisplayName(ChatColor.LIGHT_PURPLE + "Cow Buckets Regeneration II (2 Hearts / 0:005s) & Resistance I (0:05s)");
+        itemMeta.setDisplayName(ChatColor.LIGHT_PURPLE + "Cow Buckets Regeneration II (2 Hearts / 5s) & Resistance I (5s)");
         milk.setItemMeta(itemMeta);
         net.minecraft.server.v1_8_R3.ItemStack nmsItem = CraftItemStack.asNMSCopy(milk);
         NBTTagCompound compound = nmsItem.hasTag() ? nmsItem.getTag() : new NBTTagCompound();
@@ -95,12 +87,28 @@ public class SpecialItemUtils {
 
     public boolean isCowBucket(net.minecraft.server.v1_8_R3.ItemStack itemStack1) {
         ItemStack itemStack = CraftItemStack.asBukkitCopy(itemStack1);
-        if (itemStack == null) return false;
         net.minecraft.server.v1_8_R3.ItemStack nmsItem = CraftItemStack.asNMSCopy(itemStack);
         if (nmsItem == null) return false;
 
         NBTTagCompound compound = nmsItem.hasTag() ? nmsItem.getTag() : new NBTTagCompound();
 
         return compound.getBoolean(cowBucketTag);
+    }
+    public ItemStack getPhxPot(int amount) {
+        Potion potion = new Potion(PotionType.REGEN);
+        potion.setSplash(true);
+
+        ItemStack item = potion.toItemStack(amount);
+        PotionMeta meta = (PotionMeta) item.getItemMeta();
+
+        meta.addCustomEffect(new PotionEffect(PotionEffectType.REGENERATION, 4 * 20, 2), true);
+        meta.setDisplayName(ChatColor.GOLD + "Phoenix's Tears of Regeneration III (3 Hearts / 4s)");
+
+        item.setItemMeta(meta);
+
+        return ItemUtils.toMWItem(item);
+    }
+    public ItemStack getPhxPot() {
+        return getPhxPot(1);
     }
 }
