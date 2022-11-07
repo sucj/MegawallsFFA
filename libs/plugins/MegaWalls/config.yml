@@ -14,6 +14,7 @@ shop:
     Iron LEGGINGS: 10
     Iron Chestplate: 10
     Iron Leggings: 10
+    Phoenix's Tears of Regeneration III (3 Hearts / 4s): 20
 spawnloc:
   red:
   - -32.34131540016453
@@ -33,5 +34,5 @@ spawnloc:
   - 7.877186682652628
 coins:
   NIUDONGDONG: 60
-  keaidehuangpi: 9722
+  keaidehuangpi: 6622
 break_reset_time: 60

@@ -13,7 +13,7 @@ commands:
   energy:
     description: Instant max energy (for debug).
     usage: /energy
-    permission: mw.admin
+    permission: mw.energy
   coinsmgr:
     description: coinsmgr command.
     usage: /coinsmgr
@@ -64,6 +64,10 @@ commands:
   mwitem:
     description: give player a megawalls item.
     usage: /mwitem
+    permission: mw.admin
+  milikiller:
+    description: for fun.
+    usage: /milikiller
     permission: mw.admin
 permissions:
   mw.*:

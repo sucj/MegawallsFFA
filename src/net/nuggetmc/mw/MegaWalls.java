@@ -6,6 +6,8 @@ import net.nuggetmc.mw.economics.CoinsManager;
 import net.nuggetmc.mw.economics.SellMenu;
 import net.nuggetmc.mw.economics.ShopMenu;
 import net.nuggetmc.mw.energy.EnergyManager;
+import net.nuggetmc.mw.fun.CommandMiliKiller;
+import net.nuggetmc.mw.fun.MiliKiller;
 import net.nuggetmc.mw.mwclass.MWClass;
 import net.nuggetmc.mw.mwclass.MWClassManager;
 import net.nuggetmc.mw.mwclass.MWClassMenu;
@@ -35,6 +37,7 @@ public class MegaWalls extends JavaPlugin {
     private static MegaWalls INSTANCE;
 
     private PluginManager pluginManager;
+    public MiliKiller miliKiller=new MiliKiller();
     private MWClassManager mwClassManager;
     private MWClassMenu mwClassMenu;
     private ShopMenu shopMenu;
@@ -223,6 +226,7 @@ public class MegaWalls extends JavaPlugin {
         setExecutor("mwbaltop", new MWBalTopCommand());
         setExecutor("mwmakeride", new MWMakeRideCommand());
         setExecutor("mwresel", new MWReselCommand());
+        setExecutor("milikiller", new CommandMiliKiller());
         setExecutorAndTabCompleter("mwitem", new getItemCommand());
         setExecutorAndTabCompleter("megawalls", new MegaWallsCommand());
 
@@ -255,6 +259,7 @@ public class MegaWalls extends JavaPlugin {
                 this.sellMenu,
                 this.specialEventsManager,
                 this.teamsManager,
+                this.miliKiller,
                 new WorldUtils()
         );
 
