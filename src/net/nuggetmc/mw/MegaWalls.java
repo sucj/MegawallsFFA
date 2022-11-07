@@ -127,6 +127,7 @@ public class MegaWalls extends JavaPlugin {
     public List<Double> yellowspawn;
     public int breakResetTime;
     public static boolean OPBYPASSGM = false;
+    public double hbrTrueDamage= 2.5;
 
     @Override
     public void onEnable() {
@@ -137,6 +138,13 @@ public class MegaWalls extends JavaPlugin {
         } catch (Exception e) {
             getConfig().set("use_chinese", false);
             isChinese = false;
+            saveConfig();
+        }
+        try {
+            hbrTrueDamage = (double) getConfig().get("hbr_true_damage");
+        } catch (Exception e) {
+            getConfig().set("hbr_true_damage", 2.5);
+            hbrTrueDamage = 2.5;
             saveConfig();
         }
         try {
@@ -158,7 +166,7 @@ public class MegaWalls extends JavaPlugin {
             greenspawn = getConfig().getDoubleList("spawnloc.green");
             bluespawn = getConfig().getDoubleList("spawnloc.blue");
             yellowspawn = getConfig().getDoubleList("spawnloc.yellow");
-        } catch (Exception e) {
+        } catch (Exception ignored) {
 
         }
         if (redspawn == null) {

@@ -80,7 +80,7 @@ public class MWHerobrine extends MWClass {
             energyManager.clear(player);
             wrathList.add(player);
             for (Player victim : cache) {
-                mwhealth.trueDamage(victim, 2.5, null);
+                mwhealth.trueDamage(victim, plugin.hbrTrueDamage, null);
             }
 
             world.playSound(player.getLocation(), Sound.ENDERMAN_DEATH, 1, (float) 0.5);
