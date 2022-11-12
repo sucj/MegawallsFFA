@@ -252,7 +252,8 @@ public class MegaWalls extends JavaPlugin {
                 new MWDriver(),
                 new MWGuardian(),
                 new MWShark(),
-                new MWArcanist()
+                new MWArcanist(),
+                new MWAsn()
                 // new MWWereWolf()
         );
 

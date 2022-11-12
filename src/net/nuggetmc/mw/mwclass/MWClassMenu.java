@@ -124,7 +124,7 @@ public class MWClassMenu implements Listener {
             return cache.get(name);
         }
 
-        ItemStack item = new ItemStack(mwclass.getIcon());
+        ItemStack item = mwclass.getIconAsItemStack()==null?new ItemStack(mwclass.getIcon()):mwclass.getIconAsItemStack();
         ItemMeta meta = item.getItemMeta();
 
         meta.setDisplayName(ChatColor.YELLOW + name);

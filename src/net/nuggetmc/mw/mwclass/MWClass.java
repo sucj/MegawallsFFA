@@ -2,6 +2,7 @@ package net.nuggetmc.mw.mwclass;
 
 import net.md_5.bungee.api.ChatColor;
 import net.nuggetmc.mw.MegaWalls;
+import net.nuggetmc.mw.combat.CombatManager;
 import net.nuggetmc.mw.energy.EnergyManager;
 import net.nuggetmc.mw.mwclass.info.Diamond;
 import net.nuggetmc.mw.mwclass.info.MWClassInfo;
@@ -15,6 +16,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -28,16 +30,19 @@ public abstract class MWClass implements Listener {
 
     protected String[] name;
     protected Material icon;
+    protected ItemStack iconAsItemStack=null;
     protected ChatColor color;
     protected Playstyle[] playstyles;
     protected Diamond[] diamonds;
     protected MWClassInfo classInfo;
+    private CombatManager combatManager;
 
     public MWClass() {
         this.plugin = MegaWalls.getInstance();
         this.manager = plugin.getClassManager();
         this.mwhealth = plugin.getMWHealth();
         this.energyManager = plugin.getEnergyManager();
+        this.combatManager= plugin.getCombatManager();
     }
 
     public String getName() {
@@ -78,6 +83,9 @@ public abstract class MWClass implements Listener {
     public Material getIcon() {
         return icon;
     }
+    public ItemStack getIconAsItemStack() {
+        return iconAsItemStack;
+    }
 
     public ChatColor getColor() {
         return color;
@@ -108,6 +116,9 @@ public abstract class MWClass implements Listener {
         Player player = energyManager.validate(e);
         if (player == null) return;
         Player victim = (Player) e.getEntity();
+        if(!combatManager.isInCombat(player)||!combatManager.isInCombat(victim)){
+            return;
+        }
         if (MegaWalls.getInstance().getTeamsManager().isOnSameTeam(player, victim)) {
             e.setCancelled(true);
         }

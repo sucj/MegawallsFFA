@@ -6,6 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CombatManager {
+    public List<Player> getInCombatPlayers() {
+        return inCombatPlayers;
+    }
+
     public static List<Player> inCombatPlayers = new ArrayList<>();
 
     public void addInCombat(Player player) {

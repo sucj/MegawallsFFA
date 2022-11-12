@@ -27,8 +27,8 @@ import java.util.*;
 
 public class MWDriver extends MWClass {
 
-    private Set<Player> runnerList = new HashSet<>();
-    private Set<Player> abilitycache = new HashSet<>();
+    private final Set<Player> runnerList = new HashSet<>();
+    private final Set<Player> abilitycache = new HashSet<>();
 
 
     public MWDriver() {
@@ -192,11 +192,7 @@ public class MWDriver extends MWClass {
         }
 
         MWKit.assignItems(player, items);
-        if (runnerList.contains(player)) {
-            runnerList.remove(player);
-        }
-        if (abilitycache.contains(player)) {
-            abilitycache.remove(player);
-        }
+        runnerList.remove(player);
+        abilitycache.remove(player);
     }
 }

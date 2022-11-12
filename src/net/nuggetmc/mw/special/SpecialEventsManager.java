@@ -15,6 +15,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.*;
+import org.bukkit.event.inventory.FurnaceBurnEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -191,7 +192,7 @@ public class SpecialEventsManager implements Listener {
     @EventHandler
     public void onRespawn(PlayerRespawnEvent event) {
         Player player = event.getPlayer();
-        if (event.getPlayer().isOp() && OPBYPASSGM) {
+        if ((player.isOp()|| event.getPlayer().hasPermission("mw.admin")) && OPBYPASSGM) {
             //
         } else {
             event.getPlayer().setGameMode(GameMode.ADVENTURE);

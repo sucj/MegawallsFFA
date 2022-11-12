@@ -35,7 +35,7 @@ public class EnergyManager implements Listener {
         this.manager = plugin.getClassManager();
 
         Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, this::tick, 20, 20);
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, this::tickActionBar, 0, 0);
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, this::tickActionBar, 0, 5);
     }
 
     public void tick() {
@@ -44,13 +44,15 @@ public class EnergyManager implements Listener {
 
             if (mwclass == null) continue;
 
-            switch (mwclass.getName()) {
+            switch (mwclass.getShortName().toLowerCase()) {
                 default:
                     break;
 
-                case "Spider":
-                case "蜘蛛":
+                case "spi":
                     add(player, 6);
+                    break;
+                case "asn":
+                    add(player, 2);
                     break;
             }
         }

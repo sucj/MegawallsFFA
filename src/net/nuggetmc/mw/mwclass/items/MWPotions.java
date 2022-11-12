@@ -114,6 +114,25 @@ public class MWPotions {
 
         return ItemUtils.toMWItem(item);
     }
+    public static ItemStack createAsnPotions(ChatColor color, int count) {
+        Potion potion = new Potion(PotionType.INSTANT_DAMAGE);
+        ItemStack item = potion.toItemStack(count);
+        PotionMeta meta = (PotionMeta) item.getItemMeta();
+
+
+        meta.addCustomEffect(new PotionEffect(PotionEffectType.REGENERATION, 6 * 20, 2), true);
+        meta.addCustomEffect(new PotionEffect(PotionEffectType.SPEED, 6 * 20, 1), true);
+        meta.setDisplayName(color + "Assassin Potion of Regeneration III and Speed II");
+        meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
+
+        List<String> lore = new ArrayList<>();
+        lore.add(ChatColor.GRAY + "Regeneration III and Speed II (6s)");
+
+        meta.setLore(lore);
+        item.setItemMeta(meta);
+
+        return ItemUtils.toMWItem(item);
+    }
 
     public static ItemStack createAbsorptionPotions(String name, ChatColor color, int count, int duration) {
         Potion potion = new Potion(PotionType.WEAKNESS);

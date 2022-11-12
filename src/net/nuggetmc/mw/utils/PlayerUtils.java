@@ -20,6 +20,7 @@ import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -30,10 +31,10 @@ public class PlayerUtils {
   public static List<Player> getNearbyPlayers(Location location, double radius) {
     List<Player> players = new ArrayList<>();
     for (Entity e : location.getWorld()
-      .getNearbyEntities(location, radius, radius, radius)) {
+            .getNearbyEntities(location, radius, radius, radius)) {
       if (e instanceof Player && e.getLocation().distance(location) <= radius)
-        players.add((Player)e); 
-    } 
+        players.add((Player) e);
+    }
     return players;
   }
   public static List<Player> getNearbyPlayers(Entity entity, double radius) {
