@@ -4,4 +4,4 @@ veryyyyyyy advanced Megawalls FFA plugin
 
 # NOTICE:
 
-please copy nametagAPI.jar to your plugins folder and add it to your dependencies!
+libs是运行目录 请把你的游戏在这下面运行并且使用那里的spigot.jar作为核心
