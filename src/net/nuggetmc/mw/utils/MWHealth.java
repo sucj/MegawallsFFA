@@ -35,6 +35,11 @@ public class MWHealth implements Listener {
         this.plugin = MegaWalls.getInstance();
         this.manager = plugin.getClassManager();
         this.energyManager = plugin.getEnergyManager();
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin,()->{
+            if (Bukkit.getOnlinePlayers().isEmpty()){
+                timeMillis.clear();
+            }
+        },600*20,600*20);
     }
 
     private void healthSetup(Player player) {

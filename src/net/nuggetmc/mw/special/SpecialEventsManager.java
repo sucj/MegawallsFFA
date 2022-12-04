@@ -8,17 +8,21 @@ import net.nuggetmc.mw.MegaWalls;
 import net.nuggetmc.mw.mwclass.classes.MWCow;
 import net.nuggetmc.mw.utils.ItemUtils;
 import org.bukkit.*;
+import org.bukkit.block.Block;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockExplodeEvent;
+import org.bukkit.event.block.BlockMultiPlaceEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.FurnaceBurnEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -323,8 +327,25 @@ public class SpecialEventsManager implements Listener {
             return;
         }
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
-            e.getBlock().setType(material);
+            if (!e.isCancelled()) {
+                e.getBlock().setType(material);
+            }
         }, plugin.breakResetTime * 20L);
+    }
+    @EventHandler
+    public void onResetExplosion(EntityExplodeEvent e) {
+        for (Block b:e.blockList()){
+            Material material = b.getType();
+            if (material.name().toLowerCase().contains("diamond")) {
+                return;
+            }
+            Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                if(!e.isCancelled()) {
+                    b.setType(material);
+                }
+            }, plugin.breakResetTime * 20L);
+        }
+
     }
     @EventHandler
     public void onEntityChangeBlock(EntityChangeBlockEvent e) {
@@ -368,5 +389,25 @@ public class SpecialEventsManager implements Listener {
             }
         }
     }
+    @EventHandler
+    public void onPickUpExpOrb(PlayerPickupItemEvent e){
+        if (e.getItem() instanceof ExperienceOrb){
+            e.setCancelled(true);
+            e.getItem().remove();
+        }
+    }
+    @EventHandler
+    public void onExpChange(PlayerExpChangeEvent e){
+        e.setAmount(0);
+    }
+    @EventHandler
+    public void onPlayerItemConsume(PlayerItemConsumeEvent e) {
+        if (e.getItem().getType() == Material.POTION) {
+            Bukkit.getScheduler().runTaskLater(MegaWalls.getInstance(), () -> e.getPlayer().getInventory().remove(Material.GLASS_BOTTLE), 1L);
+        } else if (e.getItem().getType() == Material.MILK_BUCKET) {
+            Bukkit.getScheduler().runTaskLater(MegaWalls.getInstance(), () -> e.getPlayer().getInventory().remove(Material.BUCKET), 1L);
+        }
+    }
+
 
 }
