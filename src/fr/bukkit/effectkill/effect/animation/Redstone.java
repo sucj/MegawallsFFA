@@ -1,6 +1,6 @@
 package fr.bukkit.effectkill.effect.animation;
 
-import fr.bukkit.effectkill.effect.MainEffectKill;
+import fr.bukkit.effectkill.effect.KillEffect;
 import fr.bukkit.effectkill.utils.inventory.Heads;
 import fr.bukkit.effectkill.utils.maths.MathUtils;
 import org.bukkit.Effect;
@@ -8,7 +8,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
-public class Redstone extends MainEffectKill {
+public class Redstone extends KillEffect {
 
     public Redstone() {
         super("redstone", Heads.REDSTONE.getTexture());

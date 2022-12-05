@@ -1,7 +1,7 @@
 package fr.bukkit.effectkill.effect.animation;
 
 
-import fr.bukkit.effectkill.effect.MainEffectKill;
+import fr.bukkit.effectkill.effect.KillEffect;
 import fr.bukkit.effectkill.utils.Particle;
 import fr.bukkit.effectkill.utils.inventory.Heads;
 import org.bukkit.Effect;
@@ -9,7 +9,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-public class Wave extends MainEffectKill {
+public class Wave extends KillEffect {
 
     public Wave() {
         super("wave", Heads.WAVE.getTexture());

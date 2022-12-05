@@ -9,18 +9,18 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 
 
-public abstract class MainEffectKill{
+public abstract class KillEffect {
 
 
 	public static MegaWalls plugin=MegaWalls.getInstance();
-	public static MainEffectKill effectKill;
+	public static KillEffect effectKill;
 	public ArrayList<ArmorStand> as = new ArrayList<>();
 	public ItemStack itemStack;
 	protected String name;
 	protected String displayName;
 
 
-	public MainEffectKill(String name, String texture) {
+	public KillEffect(String name, String texture) {
 		effectKill = this;
 		ItemStack head = ItemsUtils.getSkull(texture);
 		itemStack = ItemsUtils.create(head, displayName,null);
@@ -35,10 +35,5 @@ public abstract class MainEffectKill{
 		return name;
 	}
 
-	public String getDisplayName() {
-		return displayName; 
-	}
-	public ItemStack getItemStack() {
-		return itemStack;
-	}
+
 }

@@ -1,6 +1,6 @@
 package fr.bukkit.effectkill.effect.animation;
 
-import fr.bukkit.effectkill.effect.MainEffectKill;
+import fr.bukkit.effectkill.effect.KillEffect;
 import fr.bukkit.effectkill.utils.Particle;
 import fr.bukkit.effectkill.utils.inventory.Heads;
 import org.bukkit.Effect;
@@ -13,7 +13,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
-public class HeadExplode extends MainEffectKill {
+public class HeadExplode extends KillEffect {
 
     public HeadExplode() {
         super("headexplode", Heads.ANGRY.getTexture());

@@ -1,6 +1,6 @@
 package fr.bukkit.effectkill.effect.animation;
 
-import fr.bukkit.effectkill.effect.MainEffectKill;
+import fr.bukkit.effectkill.effect.KillEffect;
 import fr.bukkit.effectkill.utils.Particle;
 import fr.bukkit.effectkill.utils.inventory.Heads;
 import fr.bukkit.effectkill.utils.maths.MathUtils;
@@ -14,7 +14,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
-public class Satan extends MainEffectKill {
+public class Satan extends KillEffect {
 
     public Satan() {
         super("satan", Heads.DEVIL.getTexture());

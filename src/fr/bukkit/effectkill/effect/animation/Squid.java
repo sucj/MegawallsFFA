@@ -1,6 +1,6 @@
 package fr.bukkit.effectkill.effect.animation;
 
-import fr.bukkit.effectkill.effect.MainEffectKill;
+import fr.bukkit.effectkill.effect.KillEffect;
 import fr.bukkit.effectkill.utils.Particle;
 import fr.bukkit.effectkill.utils.inventory.Heads;
 import org.bukkit.Effect;
@@ -12,7 +12,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-public class Squid extends MainEffectKill {
+public class Squid extends KillEffect {
 
     public Squid() {
         super("squid", Heads.SQUID.getTexture());

@@ -1,6 +1,6 @@
 package fr.bukkit.effectkill.effect.animation;
 
-import fr.bukkit.effectkill.effect.MainEffectKill;
+import fr.bukkit.effectkill.effect.KillEffect;
 import fr.bukkit.effectkill.utils.ItemFactory;
 import fr.bukkit.effectkill.utils.Particle;
 import fr.bukkit.effectkill.utils.inventory.Heads;
@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.UUID;
 
-public class DropSoup extends MainEffectKill {
+public class DropSoup extends KillEffect {
 
     Random r = new Random();
     ArrayList<Item> items = new ArrayList<Item>();

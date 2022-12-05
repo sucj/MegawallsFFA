@@ -8,6 +8,7 @@ import net.nuggetmc.mw.economics.ShopMenu;
 import net.nuggetmc.mw.energy.EnergyManager;
 import net.nuggetmc.mw.fun.CommandMiliKiller;
 import net.nuggetmc.mw.fun.MiliKiller;
+import net.nuggetmc.mw.killeffects.KEMenu;
 import net.nuggetmc.mw.mwclass.MWClass;
 import net.nuggetmc.mw.mwclass.MWClassManager;
 import net.nuggetmc.mw.mwclass.MWClassMenu;
@@ -76,6 +77,12 @@ public class MegaWalls extends JavaPlugin {
 
 
     private TeamsManager teamsManager;
+
+    public KEMenu getKeMenu() {
+        return keMenu;
+    }
+
+    private KEMenu keMenu=new KEMenu();
     private SpecialItemUtils specialItemUtils;
 
     public SpecialItemUtils getSpecialItemUtils() {

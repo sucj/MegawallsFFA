@@ -1,6 +1,6 @@
 package fr.bukkit.effectkill.effect.animation;
 
-import fr.bukkit.effectkill.effect.MainEffectKill;
+import fr.bukkit.effectkill.effect.KillEffect;
 import fr.bukkit.effectkill.utils.Particle;
 import fr.bukkit.effectkill.utils.inventory.Heads;
 import fr.bukkit.effectkill.utils.maths.MathUtils;
@@ -8,7 +8,7 @@ import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-public class Heart extends MainEffectKill {
+public class Heart extends KillEffect {
 
     public Heart() {
         super("love", Heads.HEART.getTexture());
