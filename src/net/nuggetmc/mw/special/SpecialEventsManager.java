@@ -44,34 +44,6 @@ public class SpecialEventsManager implements Listener {
     ///////////////////////////COW BUCKET
     SpecialItemUtils specialItemUtils = new SpecialItemUtils();
 
-    @EventHandler
-    public void onCowBucket(PlayerItemConsumeEvent e) {
-        if (specialItemUtils.isCowBucket(e.getItem())) {
-            Player player = e.getPlayer();
-            player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 5 * 20, 0));
-            player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 5 * 20, 1));
-            player.setFoodLevel(20);
-            player.setSaturation(20);
-            if (plugin.getClassManager().get(player) instanceof MWCow) {
-                for (Player target : Bukkit.getOnlinePlayers()) {
-                    if (player.getWorld() != target.getWorld()) continue;
-                    if (target.isDead()) continue;
-                    if (!plugin.getTeamsManager().isOnSameTeam(player, target)) continue;
-                    if (player == target) continue;
-                    if (target.getLocation().distance(player.getLocation()) > 7) continue;
-                    target.setFoodLevel(20);
-                    target.setSaturation(20);
-                    double health = target.getHealth() + 3;
-                    if (health > target.getMaxHealth()) {
-                        target.setHealth(target.getMaxHealth());
-                    } else {
-                        target.setHealth(health);
-                    }
-                    target.sendMessage("You have been healed by the Refreshing Sip of " + player.getName() + "!");
-                }
-            }
-        }
-    }
 
     ///////////////////////////ENDER CHEST
     @EventHandler
@@ -400,13 +372,39 @@ public class SpecialEventsManager implements Listener {
     public void onExpChange(PlayerExpChangeEvent e){
         e.setAmount(0);
     }
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerItemConsume(PlayerItemConsumeEvent e) {
         if (e.getItem().getType() == Material.POTION) {
             Bukkit.getScheduler().runTaskLater(MegaWalls.getInstance(), () -> e.getPlayer().getInventory().remove(Material.GLASS_BOTTLE), 1L);
-        } else if (e.getItem().getType() == Material.MILK_BUCKET) {
+        }
+        if (specialItemUtils.isCowBucket(e.getItem())) {
+            Player player = e.getPlayer();
+            player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 5 * 20, 0));
+            player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 5 * 20, 1));
+            player.setFoodLevel(20);
+            player.setSaturation(20);
+            if (plugin.getClassManager().get(player) instanceof MWCow) {
+                for (Player target : Bukkit.getOnlinePlayers()) {
+                    if (player.getWorld() != target.getWorld()) continue;
+                    if (target.isDead()) continue;
+                    if (!plugin.getTeamsManager().isOnSameTeam(player, target)) continue;
+                    if (player == target) continue;
+                    if (target.getLocation().distance(player.getLocation()) > 7) continue;
+                    target.setFoodLevel(20);
+                    target.setSaturation(20);
+                    double health = target.getHealth() + 3;
+                    if (health > target.getMaxHealth()) {
+                        target.setHealth(target.getMaxHealth());
+                    } else {
+                        target.setHealth(health);
+                    }
+                    target.sendMessage("You have been healed by the Refreshing Sip of " + player.getName() + "!");
+                }
+            }
             Bukkit.getScheduler().runTaskLater(MegaWalls.getInstance(), () -> e.getPlayer().getInventory().remove(Material.BUCKET), 1L);
         }
+
+
     }
 
 
