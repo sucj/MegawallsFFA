@@ -26,8 +26,7 @@ public class KEMenu implements Listener {
     private static final String CLOSE_NAME = ChatColor.RED + "Close";
 
 
-    private final MWClassManager classmanager = plugin.getClassManager();
-    private final EnergyManager energyManager = plugin.getEnergyManager();
+
     private final String menuTitle = "Kill effects";
     public static List<KillEffect> effects = new ArrayList<>();
 
@@ -89,15 +88,8 @@ public class KEMenu implements Listener {
 
 
     public void select(Player player, KillEffect killEffect) {
-        if (plugin.getCoinsManager().get(player) < good.getPrice()) {
-            player.sendMessage("not enough coins!");
-        } else if (ItemUtils.isFullInventory(player.getInventory())) {
-            player.sendMessage("your inventory is full!");
-        } else {
-            plugin.getCoinsManager().add(player, -good.getPrice());
-            player.sendMessage("You have purchased " + ChatColor.YELLOW + good.getDisplayName() + ChatColor.RESET + " with " + ChatColor.GREEN + good.getPrice() + ChatColor.RESET + " coins.");
-            player.getInventory().addItem(good.getTheItem());
-        }
+        plugin.getKillEffectManager().select(player,killEffect);
+            player.sendMessage("You have selected " + ChatColor.YELLOW + killEffect.getName() + ChatColor.RESET + ".");
 
     }
 
@@ -127,7 +119,8 @@ public class KEMenu implements Listener {
             player.closeInventory();
             return;
         }
-            select(player, ChatColor.stripColor(name));
+
+        select(player, ChatColor.stripColor(name));
     }
 
 

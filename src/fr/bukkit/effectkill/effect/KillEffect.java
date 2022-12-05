@@ -17,16 +17,16 @@ public abstract class KillEffect {
 	public ArrayList<ArmorStand> as = new ArrayList<>();
 	public ItemStack itemStack;
 	protected String name;
-	protected String displayName;
+
 
 
 	public KillEffect(String name, String texture) {
 		effectKill = this;
 		ItemStack head = ItemsUtils.getSkull(texture);
-		itemStack = ItemsUtils.create(head, displayName,null);
+		itemStack = ItemsUtils.create(head, name,null);
 		this.name = name;
 
-		this.displayName = name;
+
 
 
 	}
@@ -35,5 +35,8 @@ public abstract class KillEffect {
 		return name;
 	}
 
-
+    @Override
+    public String toString() {
+        return this.name;
+    }
 }

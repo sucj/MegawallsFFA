@@ -15,7 +15,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import java.util.*;
 
 public class KillEffectManager implements Listener {
-    private Map<Player, List<KillEffect>> data = new HashMap<>();
+    private Map<Player, KillEffect> data = new HashMap<>();
     private final MegaWalls plugin = MegaWalls.getInstance();
 
 
@@ -28,55 +28,38 @@ public class KillEffectManager implements Listener {
         if (data.get(player)==null){
             return;
         }
-        List<String> list=new ArrayList<>();
-        for (KillEffect ke:data.get(player)){
-            list.add(ke.getName());
-        }
-        plugin.getConfig().set("owneffects." + player.getName(), list);
+        plugin.getConfig().set("useeffect." + player.getName(), data.get(player).getName());
         plugin.saveConfig();
     }
 
-    public List<KillEffect> get(Player player) {
+    public KillEffect get(Player player) {
         return data.get(player);
     }
 
-    public void give(Player player, KillEffect ke) {
-        if (data.get(player)==null){
-            data.put(player, Collections.singletonList(ke));
-        }else {
-            data.get(player).add(ke);
-        }
+    public void select(Player player, KillEffect ke) {
+        data.put(player,ke);
         save(player);
-    }
-    public boolean playerHasEffect(Player player,KillEffect ke){
-        if (data.get(player)==null||data.get(player).isEmpty()){
-            return false;
-        }else {
-            return data.get(player).contains(ke);
-        }
     }
 
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
-        ConfigurationSection section = plugin.getConfig().getConfigurationSection("owneffects");
+        ConfigurationSection section = plugin.getConfig().getConfigurationSection("useeffect");
 
         if (section == null) return;
-        List<String> effects;
+        String effect;
+        KillEffect ke;
         try {
-            effects = plugin.getConfig().getStringList("owneffects." + e.getPlayer().getName());
+            effect = plugin.getConfig().getString("useeffect." + e.getPlayer().getName());
         } catch (Exception exception) {
             return;
         }
-        for (String str:effects){
-            KillEffect ke=plugin.getKeMenu().getKEByName(str);
-            if (ke!=null){
-                if (data.get(e.getPlayer())==null){
-                    data.put(e.getPlayer(), Collections.singletonList(ke));
-                }else {
-                    data.get(e.getPlayer()).add(ke);
-                }
-            }
+
+            ke=plugin.getKeMenu().getKEByName(effect);
+        if (ke==null){
+            return;
         }
+        data.put(e.getPlayer(),ke);
+
         save(e.getPlayer());
         plugin.saveConfig();
     }

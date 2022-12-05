@@ -49,6 +49,9 @@ commands:
   mwbaltop:
     description: see the balance top.
     usage: /mwbaltop
+  killeffects:
+      description: opens the kill effects menu.
+      usage: /killeffects
   mwride:
     description: ride a player.
     usage: /mwride

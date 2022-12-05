@@ -9,6 +9,7 @@ import net.nuggetmc.mw.energy.EnergyManager;
 import net.nuggetmc.mw.fun.CommandMiliKiller;
 import net.nuggetmc.mw.fun.MiliKiller;
 import net.nuggetmc.mw.killeffects.KEMenu;
+import net.nuggetmc.mw.killeffects.KillEffectManager;
 import net.nuggetmc.mw.mwclass.MWClass;
 import net.nuggetmc.mw.mwclass.MWClassManager;
 import net.nuggetmc.mw.mwclass.MWClassMenu;
@@ -73,16 +74,18 @@ public class MegaWalls extends JavaPlugin {
         return teamsManager;
     }
 
+    public KillEffectManager getKillEffectManager() {
+        return killEffectManager;
+    }
+
+    public KillEffectManager killEffectManager;
+
 
 
 
     private TeamsManager teamsManager;
 
-    public KEMenu getKeMenu() {
-        return keMenu;
-    }
 
-    private KEMenu keMenu=new KEMenu();
     private SpecialItemUtils specialItemUtils;
 
     public SpecialItemUtils getSpecialItemUtils() {
@@ -122,6 +125,11 @@ public class MegaWalls extends JavaPlugin {
     public CombatManager getCombatManager() {
         return combatManager;
     }
+    public KEMenu getKeMenu() {
+        return keMenu;
+    }
+
+    private KEMenu keMenu;
 
     private boolean isChinese;
     public boolean antistealDiamond;
@@ -225,6 +233,8 @@ public class MegaWalls extends JavaPlugin {
         this.shopMenu = new ShopMenu();
         this.sellMenu = new SellMenu();
         this.compassManager = new CompassManager();
+        this.keMenu=new KEMenu();
+        this.killEffectManager=new KillEffectManager();
 
         // Register commands
         setExecutor("energy", new EnergyCommand());
@@ -242,6 +252,7 @@ public class MegaWalls extends JavaPlugin {
         setExecutor("mwmakeride", new MWMakeRideCommand());
         setExecutor("mwresel", new MWReselCommand());
         setExecutor("milikiller", new CommandMiliKiller());
+        setExecutor("killeffects", new killEffectCommand());
         setExecutorAndTabCompleter("mwitem", new getItemCommand());
         setExecutorAndTabCompleter("megawalls", new MegaWallsCommand());
 
@@ -276,6 +287,7 @@ public class MegaWalls extends JavaPlugin {
                 this.specialEventsManager,
                 this.teamsManager,
                 this.miliKiller,
+                this.keMenu,
                 new WorldUtils()
         );
 
