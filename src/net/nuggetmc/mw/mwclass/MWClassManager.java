@@ -122,7 +122,7 @@ public class MWClassManager implements Listener {
             String suffix = ChatColor.GRAY + " [" + plugin.getClassManager().get(player).getShortName() + "]";
             player.setPlayerListName(prefix + nickname + suffix);
             player.setDisplayName((plugin.getTeamsManager().getColorOfTeam(team) + "[" + plugin.getTeamsManager().getTeamOfPlayer(player).name()) + "] " + nickname + ChatColor.RESET);
-            NametagAPI.setNametagHard(player.getName(), prefix + ChatColor.MAGIC, ChatColor.RESET + suffix);
+            NametagAPI.setNametagHard(nickname, prefix + ChatColor.MAGIC, ChatColor.RESET + suffix);
         } else {
             String prefix = str + " ";
             String suffix = ChatColor.GRAY + " [" + plugin.getClassManager().get(player).getShortName() + "]";

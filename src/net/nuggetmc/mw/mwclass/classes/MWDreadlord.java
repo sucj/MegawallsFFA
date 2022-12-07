@@ -68,7 +68,6 @@ public class MWDreadlord extends MWClass {
     @Override
     public void ability(Player player) {
         energyManager.clear(player);
-
         for (int i = 1; i <= 3; i++) {
             final WitherSkull witherSkull = (WitherSkull)player.launchProjectile(WitherSkull.class);
             witherSkull.setMetadata("MegaWalls", (MetadataValue)new FixedMetadataValue(

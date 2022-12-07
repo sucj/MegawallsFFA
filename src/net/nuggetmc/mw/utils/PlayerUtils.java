@@ -1,31 +1,25 @@
 package net.nuggetmc.mw.utils;
 
-import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.properties.Property;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
-import net.minecraft.server.v1_8_R3.EntityHuman;
-import net.minecraft.server.v1_8_R3.EntityPlayer;
-import net.minecraft.server.v1_8_R3.Packet;
-import net.minecraft.server.v1_8_R3.PacketPlayInClientCommand;
-import net.minecraft.server.v1_8_R3.PacketPlayOutEntityDestroy;
-import net.minecraft.server.v1_8_R3.PacketPlayOutNamedEntitySpawn;
-import net.minecraft.server.v1_8_R3.PacketPlayOutPlayerInfo;
+import net.minecraft.server.v1_8_R3.*;
 import net.nuggetmc.mw.MegaWalls;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.block.BlockExplodeEvent;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.inventory.ItemStack;
 
 
 public class PlayerUtils {
+
 
   
   public static List<Player> getNearbyPlayers(Location location, double radius) {
@@ -56,12 +50,30 @@ public class PlayerUtils {
     }
     return players;
   }
+  public static void sendPacket(Player player, Packet packet) {
+      ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
+  }
+
+  public static Class<?> getNMSClass(String name) {
+    String version = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
+    try {
+      return Class.forName("net.minecraft.server." + version + "." + name);
+    } catch (Exception e) {
+      e.printStackTrace();
+      return null;
+    }
+  }
+
+  public static Class<?> getClass(String name) {
+    String version = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
+    try {
+      return Class.forName("org.bukkit.craftbukkit." + version + "." + name);
+    } catch (Exception e) {
+      e.printStackTrace();
+      return null;
+    }
+  }
+
   
 
 }
-
-
-/* Location:              C:\Users\ADMINI~1\AppData\Local\Temp\MegaWalls-1.1-SNAPSHOT.jar!\xyz\yuzegod\megawall\\util\PlayerUtils.class
- * Java compiler version: 8 (52.0)
- * JD-Core Version:       1.1.3
- */

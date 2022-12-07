@@ -2,8 +2,8 @@ name: MegaWalls
 main: net.nuggetmc.mw.MegaWalls
 version: 1.0
 api-version: 1.16
-author: HorseNuggets
-depend: [ NametagAPI ]
+author: [ HorseNuggets,keaidehuangpi ]
+depend: [ NametagAPI,ProtocolLib ]
 softdepend: [ Essentials,RegionPreserve,ScoreboardPlus ]
 commands:
   megawalls:

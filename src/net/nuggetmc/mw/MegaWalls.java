@@ -1,5 +1,7 @@
 package net.nuggetmc.mw;
 
+import com.comphenix.protocol.ProtocolLibrary;
+import io.isles.nametagapi.NametagPlugin;
 import net.nuggetmc.mw.combat.CombatManager;
 import net.nuggetmc.mw.command.*;
 import net.nuggetmc.mw.economics.CoinsManager;
@@ -14,10 +16,7 @@ import net.nuggetmc.mw.mwclass.MWClass;
 import net.nuggetmc.mw.mwclass.MWClassManager;
 import net.nuggetmc.mw.mwclass.MWClassMenu;
 import net.nuggetmc.mw.mwclass.classes.*;
-import net.nuggetmc.mw.special.CompassManager;
-import net.nuggetmc.mw.special.SpecialEventsManager;
-import net.nuggetmc.mw.special.SpecialItemUtils;
-import net.nuggetmc.mw.special.TeamsManager;
+import net.nuggetmc.mw.special.*;
 import net.nuggetmc.mw.utils.ItemUtils;
 import net.nuggetmc.mw.utils.MWHealth;
 import net.nuggetmc.mw.utils.WorldUtils;
@@ -42,6 +41,7 @@ public class MegaWalls extends JavaPlugin {
     public MiliKiller miliKiller=new MiliKiller();
     private MWClassManager mwClassManager;
     private MWClassMenu mwClassMenu;
+    private EquipMentListener equipMentListener;
     private ShopMenu shopMenu;
 
     public static String getMetadataValue() {
@@ -144,6 +144,12 @@ public class MegaWalls extends JavaPlugin {
     public static boolean OPBYPASSGM = false;
     public double hbrTrueDamage= 2.5;
 
+    public HideManager getHideManager() {
+        return hideManager;
+    }
+
+    private HideManager hideManager;
+
     @Override
     public void onEnable() {
         INSTANCE = this;
@@ -235,6 +241,8 @@ public class MegaWalls extends JavaPlugin {
         this.compassManager = new CompassManager();
         this.keMenu=new KEMenu();
         this.killEffectManager=new KillEffectManager();
+        this.equipMentListener =new EquipMentListener(this);
+        this.hideManager=new HideManager();
 
         // Register commands
         setExecutor("energy", new EnergyCommand());
@@ -290,13 +298,12 @@ public class MegaWalls extends JavaPlugin {
                 this.keMenu,
                 new WorldUtils()
         );
+        ProtocolLibrary.getProtocolManager().addPacketListener(this.equipMentListener);
 
         // this.restore();
         this.initEnergy();
 
         ItemUtils.tickMWItems();
-
-
     }
 
     public int getOrDefaultFromConfig(String path, int defaulta) {

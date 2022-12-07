@@ -1,6 +1,12 @@
 package net.nuggetmc.mw.mwclass.classes
 
+import com.earth2me.essentials.Essentials
+import io.isles.nametagapi.NametagAPI
 import net.md_5.bungee.api.ChatColor
+import net.minecraft.server.v1_8_R3.Blocks
+import net.minecraft.server.v1_8_R3.Packet
+import net.minecraft.server.v1_8_R3.PacketListenerPlayOut
+import net.minecraft.server.v1_8_R3.PacketPlayOutEntityEquipment
 import net.nuggetmc.mw.MegaWalls
 import net.nuggetmc.mw.mwclass.MWClass
 import net.nuggetmc.mw.mwclass.info.Diamond
@@ -10,9 +16,11 @@ import net.nuggetmc.mw.mwclass.items.MWItem
 import net.nuggetmc.mw.mwclass.items.MWKit
 import net.nuggetmc.mw.mwclass.items.MWPotions
 import net.nuggetmc.mw.utils.ItemUtils
+import net.nuggetmc.mw.utils.PlayerUtils
 import org.bukkit.Bukkit
 import org.bukkit.DyeColor
 import org.bukkit.Material
+import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Arrow
 import org.bukkit.entity.Entity
@@ -34,6 +42,11 @@ class MWAsn :MWClass(){
     val dmgHandle= HashMap<Player,Double>()
     private val shadowStepCache: HashSet<Player> = HashSet()
     private val maCache: HashSet<Player> = HashSet()
+   public companion object{
+       @JvmField
+       val hiddenPlayers=HashSet<Player>()
+    }
+
     init {
         Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, { this.tickArrowCatch() }, 0, 1)
         name = arrayOf("刺客", "Assassin", "ASN")
@@ -173,18 +186,14 @@ class MWAsn :MWClass(){
                 if ((!sc.containsKey(player))|| sc[player]!! <=0){
                     cancel()
                     sc.remove(player)
-                    for (p:Player in plugin.combatManager.inCombatPlayers){
-                        p.showPlayer(player)
-                    }
+                   showArmor(player)
                 }
             }
         }.runTaskTimer(plugin,0,20)
         player.addPotionEffect(PotionEffect(PotionEffectType.SPEED,6*20,0))
         player.addPotionEffect(PotionEffect(PotionEffectType.DAMAGE_RESISTANCE,6*20,0))
         player.addPotionEffect(PotionEffect(PotionEffectType.INVISIBILITY,6*20,0))
-        for (p:Player in plugin.combatManager.inCombatPlayers){
-            p.hidePlayer(player)
-        }
+        hideArmor(player)
     }
 
 
@@ -201,9 +210,7 @@ class MWAsn :MWClass(){
             plugin.energyManager.add(player,sc[player] as Int *4)
             sc.remove(player)
             mwhealth.trueDamage(victim,event.damage/10,player)
-            for (p:Player in plugin.combatManager.inCombatPlayers){
-                p.showPlayer(player)
-            }
+            showArmor(player)
         }
     }
 
@@ -236,8 +243,84 @@ class MWAsn :MWClass(){
         shadowStepCache.remove(player)
         maCache.remove(player)
         dmgHandle.remove(player)
+        hiddenPlayers.remove(player)
 
+    }
+    fun hideArmor(player: Player) {
 
+        val packet1: Packet<PacketListenerPlayOut> =
+            PacketPlayOutEntityEquipment(player.entityId, 1, net.minecraft.server.v1_8_R3.ItemStack(Blocks.AIR))
+        val packet2: Packet<PacketListenerPlayOut> =
+            PacketPlayOutEntityEquipment(player.entityId, 2, net.minecraft.server.v1_8_R3.ItemStack(Blocks.AIR))
+        val packet3: Packet<PacketListenerPlayOut> =
+            PacketPlayOutEntityEquipment(player.entityId, 3, net.minecraft.server.v1_8_R3.ItemStack(Blocks.AIR))
+        val packet4: Packet<PacketListenerPlayOut> =
+            PacketPlayOutEntityEquipment(player.entityId, 4, net.minecraft.server.v1_8_R3.ItemStack(Blocks.AIR))
+        for (p in MegaWalls.getInstance().combatManager.inCombatPlayers) {
+            if (p !== player) {
+                PlayerUtils.sendPacket(p, packet1)
+                PlayerUtils.sendPacket(p, packet2)
+                PlayerUtils.sendPacket(p, packet3)
+                PlayerUtils.sendPacket(p, packet4)
+            }
+        }
+        hiddenPlayers.add(player)
+        plugin.hideManager.hidePlayer(player)
+    }
+
+    fun showArmor(player: Player) {
+        val packet1: Packet<PacketListenerPlayOut> = PacketPlayOutEntityEquipment(
+            player.entityId,
+            1,
+            net.minecraft.server.v1_8_R3.ItemStack(CraftItemStack.asNMSCopy(player.inventory.boots).item)
+        )
+        val packet2: Packet<PacketListenerPlayOut> = PacketPlayOutEntityEquipment(
+            player.entityId,
+            2,
+            net.minecraft.server.v1_8_R3.ItemStack(CraftItemStack.asNMSCopy(player.inventory.leggings).item)
+        )
+        val packet3: Packet<PacketListenerPlayOut> = PacketPlayOutEntityEquipment(
+            player.entityId,
+            3,
+            net.minecraft.server.v1_8_R3.ItemStack(CraftItemStack.asNMSCopy(player.inventory.chestplate).item)
+        )
+        val packet4: Packet<PacketListenerPlayOut> = PacketPlayOutEntityEquipment(
+            player.entityId,
+            4,
+            net.minecraft.server.v1_8_R3.ItemStack(CraftItemStack.asNMSCopy(player.inventory.helmet).item)
+        )
+        for (p in MegaWalls.getInstance().combatManager.inCombatPlayers) {
+            if (p !== player) {
+                PlayerUtils.sendPacket(p, packet1)
+                PlayerUtils.sendPacket(p, packet2)
+                PlayerUtils.sendPacket(p, packet3)
+                PlayerUtils.sendPacket(p, packet4)
+            }
+        }
+        hiddenPlayers.remove(player)
+        plugin.hideManager.unHidePlayer(player)
+
+        /**
+         *  RESET NAMETAG.
+         */
+
+        val str = plugin.teamsManager.getSymbolOfTeam(plugin.teamsManager.getTeamOfPlayer(player)!!)
+        if (Bukkit.getPluginManager().getPlugin("Essentials") != null && ChatColor.stripColor(
+                (Bukkit.getPluginManager().getPlugin("Essentials") as Essentials).getUser(player).nick
+            ) != player.name
+        ) {
+            //player nicked
+            val nickname = ChatColor.stripColor(
+                (Bukkit.getPluginManager().getPlugin("Essentials") as Essentials).getUser(player).nick
+            )
+            val prefix = "$str "
+            val suffix = ChatColor.GRAY.toString() + " [" + plugin.classManager[player].shortName + "]"
+            NametagAPI.setNametagHard(nickname, prefix + ChatColor.MAGIC, ChatColor.RESET.toString() + suffix)
+        } else {
+            val prefix = "$str "
+            val suffix = ChatColor.GRAY.toString() + " [" + plugin.classManager[player].shortName + "]"
+            NametagAPI.setNametagHard(player.name, prefix, suffix)
+        }
     }
 
 
