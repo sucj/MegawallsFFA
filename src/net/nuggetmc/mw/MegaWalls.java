@@ -147,7 +147,6 @@ public class MegaWalls extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        System.out.println(Boosters.Coins.getDescription());
         INSTANCE = this;
         //cfg
         try {
