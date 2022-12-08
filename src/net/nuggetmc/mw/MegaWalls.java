@@ -53,10 +53,6 @@ public class MegaWalls extends JavaPlugin {
     private CompassManager compassManager;
     public ArrayList<Player> bloodRageList = new ArrayList<>();
 
-    public SpecialEventsManager getSpecialEventsManager() {
-        return specialEventsManager;
-    }
-
     private SpecialEventsManager specialEventsManager;
 
     public SellMenu getSellMenu() {
@@ -383,10 +379,6 @@ public class MegaWalls extends JavaPlugin {
 
     public boolean isChinese() {
         return isChinese;
-    }
-
-    public void setChinese(boolean chinese) {
-        isChinese = chinese;
     }
 
     //  @EventHandler

@@ -28,8 +28,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static net.nuggetmc.mw.utils.PlayerUtils.getNearbyPlayers;
-
 public class MWEnderman extends MWClass {
 
     private final Map<Player, Wrapper> cooldownCacheAbility = new HashMap<>();
@@ -96,7 +94,6 @@ public class MWEnderman extends MWClass {
         }
         if (target == null) {
             player.sendMessage("§cNo players within range to target");
-            return ;
         } else {
             energyManager.clear(player);
 
@@ -125,9 +122,6 @@ public class MWEnderman extends MWClass {
                         return;
                     }
 
-                    double num = wpr.time / 100.0;
-
-                    String msg = "Teleport (" + ChatColor.RED + num + "s" + ChatColor.RESET + ")";
                     //ActionBar.send(player, msg);
 
                     wpr.time--;
@@ -137,7 +131,6 @@ public class MWEnderman extends MWClass {
             cooldownCacheAbility.put(player, new Wrapper(60));
             task.runTaskTimer(plugin, 0, 2);
 
-            return;
         }
 
 
@@ -255,7 +248,6 @@ public class MWEnderman extends MWClass {
             armorEnch.put(Enchantment.DURABILITY, 10);
 
             ItemStack sword = MWItem.createSword(this, Material.IRON_SWORD, swordEnch);
-            ItemStack bow = MWItem.createBow(this, null);
             ItemStack tool = MWItem.createTool(this, Material.DIAMOND_PICKAXE);
             ItemStack boots = MWItem.createArmor(this, Material.DIAMOND_BOOTS, armorEnch);
 
@@ -270,7 +262,7 @@ public class MWEnderman extends MWClass {
     @Override
     public String getActionBar(Player player) {
         String sc = this.getColor() + "Soul Charge " + (cooldownCacheRegen.contains(player) ? ChatColor.RED + "✖" : ChatColor.GREEN + "✔") + ChatColor.RESET;
-        String ab = this.getColor() + "Teleport " + (((!cooldownCacheAbility.containsKey(player)) || cooldownCacheAbility.get(player) == null || cooldownCacheAbility.get(player).time <= 0) ? ChatColor.GREEN + "✔" : cooldownCacheAbility.get(player).time - 10 + " s") + ChatColor.RESET;
+        String ab = this.getColor() + "Teleport " + (((!cooldownCacheAbility.containsKey(player)) || cooldownCacheAbility.get(player) == null || cooldownCacheAbility.get(player).time <= 0) ? ChatColor.GREEN + "✔" : cooldownCacheAbility.get(player).time/100 + " s") + ChatColor.RESET;
 
         return ActionBar.joinActionBar(ab, sc);
     }

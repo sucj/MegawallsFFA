@@ -14,25 +14,23 @@ import net.nuggetmc.mw.utils.*;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.WitherSkull;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.metadata.MetadataValue;
-import org.bukkit.metadata.MetadataValueAdapter;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.util.Vector;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class MWDreadlord extends MWClass {
 
-    private final Set<ArmorStand> armorStands = new HashSet<>();
     private final Map<Player, Integer> increment = new HashMap<>();
 
     public MWDreadlord() {
@@ -69,11 +67,11 @@ public class MWDreadlord extends MWClass {
     public void ability(Player player) {
         energyManager.clear(player);
         for (int i = 1; i <= 3; i++) {
-            final WitherSkull witherSkull = (WitherSkull)player.launchProjectile(WitherSkull.class);
-            witherSkull.setMetadata("MegaWalls", (MetadataValue)new FixedMetadataValue(
-                    (Plugin)MegaWalls.getInstance(), plugin.getTeamsManager().getTeamOfPlayer(player)));
-            witherSkull.setMetadata("TimeMillis", (MetadataValue)new FixedMetadataValue(
-                    (Plugin)MegaWalls.getInstance(), System.currentTimeMillis()));
+            final WitherSkull witherSkull = player.launchProjectile(WitherSkull.class);
+            witherSkull.setMetadata("MegaWalls", new FixedMetadataValue(
+                    MegaWalls.getInstance(), plugin.getTeamsManager().getTeamOfPlayer(player)));
+            witherSkull.setMetadata("TimeMillis", new FixedMetadataValue(
+                    MegaWalls.getInstance(), System.currentTimeMillis()));
             witherSkull
                     .setVelocity(player.getLocation().add(0.0D, 0.0D, i * 2.0D).getDirection());
             (new BukkitRunnable() {
@@ -84,7 +82,7 @@ public class MWDreadlord extends MWClass {
 
                         witherSkull.getWorld()
                                 .playSound(witherSkull.getLocation(), Sound.EXPLODE, 1.0F, 0.0F);
-                        for (Player player1 : PlayerUtils.getNearbyPlayers((Entity)witherSkull, 10.0D)) {
+                        for (Player player1 : PlayerUtils.getNearbyPlayers(witherSkull, 10.0D)) {
 
                             if (player1.getGameMode().equals(GameMode.SPECTATOR) || plugin.getTeamsManager().isOnSameTeam(player,player1))
                                 continue;
@@ -99,40 +97,10 @@ public class MWDreadlord extends MWClass {
                         ParticleUtils.play(EnumParticle.LAVA, witherSkull.getLocation(), 0.0F, 0.0F, 0.0F, 1.0F, 5);
 
                 }
-            }).runTaskTimer((Plugin)MegaWalls.getInstance(), 0L, 1L);
+            }).runTaskTimer(MegaWalls.getInstance(), 0L, 1L);
         }
     }
 
-    private void witherSkullHit(Player player, Location loc, Player hit) {
-        Set<Player> playersToDamage = new HashSet<>();
-        if ((hit != null) && plugin.getTeamsManager().isOnSameTeam(player, hit)) playersToDamage.add(hit);
-
-        WorldUtils.createNoDamageExplosion(loc, 2);
-
-        for (Player target : Bukkit.getOnlinePlayers()) {
-            if (player == target) continue;
-            if (plugin.getTeamsManager().isOnSameTeam(player, target)) continue;
-            if (playersToDamage.contains(target)) continue;
-            if (target.getWorld() != loc.getWorld()) continue;
-
-            if (loc.distance(target.getLocation()) < 1) {
-                playersToDamage.add(target);
-            }
-        }
-
-        playersToDamage.forEach(p -> mwhealth.trueDamage(p, 2.666667, player));
-    }
-
-    @EventHandler
-    public void cancelArmorStand(EntityDamageByEntityEvent event) {
-        if (!(event.getEntity() instanceof ArmorStand)) return;
-
-        ArmorStand stand = (ArmorStand) event.getEntity();
-
-        if (armorStands.contains(stand)) {
-            event.setCancelled(true);
-        }
-    }
 
     @Override
     public void hit(EntityDamageByEntityEvent event) {
@@ -185,9 +153,7 @@ public class MWDreadlord extends MWClass {
                 Location loc = block.getLocation().add(0.5, 0.5, 0.5);
                 World world = block.getWorld();
 
-                Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                    world.dropItem(loc, new ItemStack(Material.IRON_INGOT));
-                }, 2);
+                Bukkit.getScheduler().runTaskLater(plugin, () -> world.dropItem(loc, new ItemStack(Material.IRON_INGOT)), 2);
             }
         }
     }
@@ -209,7 +175,6 @@ public class MWDreadlord extends MWClass {
             armorEnch.put(Enchantment.PROTECTION_EXPLOSIONS, 2);
 
             ItemStack sword = MWItem.createSword(this, Material.DIAMOND_SWORD, swordEnch);
-            ItemStack bow = MWItem.createBow(this, null);
             ItemStack tool = MWItem.createTool(this, Material.DIAMOND_PICKAXE);
             ItemStack helmet = MWItem.createArmor(this, Material.DIAMOND_HELMET, armorEnch);
 

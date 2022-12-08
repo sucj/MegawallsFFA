@@ -84,11 +84,7 @@ public class MWZombie extends MWClass {
             if (player == player1) continue;
             if (player1.getLocation().distance(player.getLocation()) > 5) continue;
             double healthh = player1.getHealth() + 5;
-            if (healthh > player1.getMaxHealth()) {
-                player1.setHealth(player1.getMaxHealth());
-            } else {
-                player1.setHealth(healthh);
-            }
+            player1.setHealth(Math.min(healthh, player1.getMaxHealth()));
             player1.sendMessage("You have been healed by the Healing Aura of " + player.getName() + "!");
         }
     }
@@ -143,12 +139,9 @@ public class MWZombie extends MWClass {
     }
 
     static class Wrapper {
-        public Wrapper(BukkitRunnable task, int time) {
-            this.task = task;
+        public Wrapper(int time) {
             this.time = time;
         }
-
-        private BukkitRunnable task;
 
         public int time;
     }
@@ -171,9 +164,7 @@ public class MWZombie extends MWClass {
                 Wrapper wpr = tasks.get(player);
 
                 if (wpr == null || wpr.time <= 0) {
-                    if (tasks.containsKey(player)) {
-                        tasks.remove(player);
-                    }
+                    tasks.remove(player);
 
                     this.cancel();
                     return;
@@ -187,7 +178,7 @@ public class MWZombie extends MWClass {
             }
         };
 
-        tasks.put(player, new Wrapper(task, 42));
+        tasks.put(player, new Wrapper(42));
         task.runTaskTimer(MegaWalls.getInstance(), 0, 10);
     }
 
@@ -210,7 +201,6 @@ public class MWZombie extends MWClass {
             chestplateEnch.put(Enchantment.DURABILITY, 10);
 
             ItemStack sword = MWItem.createSword(this, Material.IRON_SWORD, swordEnch);
-            ItemStack bow = MWItem.createBow(this, null);
             ItemStack tool = MWItem.createTool(this, Material.DIAMOND_PICKAXE);
             ItemStack helmet = MWItem.createArmor(this, Material.IRON_HELMET, helmetEnch);
             ItemStack chestplate = MWItem.createArmor(this, Material.DIAMOND_CHESTPLATE, chestplateEnch);

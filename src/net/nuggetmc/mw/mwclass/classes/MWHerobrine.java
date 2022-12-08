@@ -84,12 +84,7 @@ public class MWHerobrine extends MWClass {
             }
 
             world.playSound(player.getLocation(), Sound.ENDERMAN_DEATH, 1, (float) 0.5);
-            Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
-                @Override
-                public void run() {
-                    wrathList.remove(player);
-                }
-            }, 20);
+            Bukkit.getScheduler().runTaskLater(plugin, () -> wrathList.remove(player), 20);
             return;
         }
 
@@ -147,7 +142,6 @@ public class MWHerobrine extends MWClass {
             armorEnch.put(Enchantment.WATER_WORKER, 1);
 
             ItemStack sword = MWItem.createSword(this, Material.DIAMOND_SWORD, swordEnch);
-            ItemStack bow = MWItem.createBow(this, null);
             ItemStack tool = MWItem.createTool(this, Material.DIAMOND_PICKAXE);
             ItemStack helmet = MWItem.createArmor(this, Material.IRON_HELMET, armorEnch);
 
@@ -157,9 +151,7 @@ public class MWHerobrine extends MWClass {
         }
 
         MWKit.assignItems(player, items);
-        if (wrathList.contains(player)) {
-            wrathList.remove(player);
-        }
+        wrathList.remove(player);
     }
 
     @Override

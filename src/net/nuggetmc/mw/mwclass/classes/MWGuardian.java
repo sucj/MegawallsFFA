@@ -110,11 +110,7 @@ public class MWGuardian extends MWClass {
             return;
         }
         double finalhealth = player.getHealth() + 1.5;
-        if (finalhealth >= player.getMaxHealth()) {
-            player.setHealth(player.getMaxHealth());
-        } else {
-            player.setHealth(finalhealth);
-        }
+        player.setHealth(Math.min(finalhealth, player.getMaxHealth()));
 
 
     }
@@ -159,15 +155,12 @@ public class MWGuardian extends MWClass {
     public void ability(Player player) {
         Set<Player> targets = new HashSet<>();
         for (Player player1 : Bukkit.getOnlinePlayers()) {
-            if (!plugin.getCombatManager().isInCombat(player1) || player1.isDead() || player1.getGameMode() == GameMode.CREATIVE || (player1.getLocation().distance(player.getLocation()) > 15) || player1.equals(player)) {
-                continue;
-            } else {
+            if (!(!plugin.getCombatManager().isInCombat(player1) || player1.isDead() || player1.getGameMode() == GameMode.CREATIVE || (player1.getLocation().distance(player.getLocation()) > 15) || player1.equals(player))) {
                 targets.add(player1);
             }
         }
         if (targets.isEmpty()) {
             ActionBar.send(player, "No players within " + ChatColor.RED + 15 + ChatColor.RESET + " blocks!");
-            return;
         } else {
             energyManager.clear(player);
             player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 5 * 20, 1));
@@ -175,16 +168,7 @@ public class MWGuardian extends MWClass {
             for (int i = 0; i < targets.size(); i++) {
                 arrayList.add((Player) targets.toArray()[i]);
             }
-            arrayList.sort(new Comparator<Player>() {
-                @Override
-                public int compare(Player player1, Player t1) {
-                    if (player.getEyeLocation().distance(player1.getLocation()) > (player.getEyeLocation().distance(t1.getLocation()))) {
-                        return 1;
-                    } else {
-                        return -1;
-                    }
-                }
-            });
+            arrayList.sort(Comparator.comparingDouble(player2 -> player.getEyeLocation().distance(player2.getLocation())));
             mwhealth.trueDamage(arrayList.get(0), 5d, player);
         }
     }
@@ -220,7 +204,6 @@ public class MWGuardian extends MWClass {
             armorEnch.put(Enchantment.DURABILITY, 10);
 
             ItemStack sword = MWItem.createSword(this, Material.DIAMOND_SWORD, swordEnch);
-            ItemStack bow = MWItem.createBow(this, null);
             ItemStack tool = MWItem.createTool(this, Material.DIAMOND_PICKAXE);
             ItemStack boots = MWItem.createArmor(this, Material.DIAMOND_BOOTS, armorEnch);
 
@@ -230,17 +213,9 @@ public class MWGuardian extends MWClass {
         }
 
         MWKit.assignItems(player, items);
-        if (extrimityList.contains(player)) {
-            extrimityList.remove(player);
-        }
-        if (suckList.contains(player)) {
-            suckList.remove(player);
-        }
-        if (waterList.contains(player)) {
-            waterList.remove(player);
-        }
-        if (multiplyList.contains(player)) {
-            multiplyList.remove(player);
-        }
+        extrimityList.remove(player);
+        suckList.remove(player);
+        waterList.remove(player);
+        multiplyList.remove(player);
     }
 }

@@ -38,11 +38,11 @@ import kotlin.math.sin
 
 class MWAsn :MWClass(){
     var sc=HashMap<Player,Int>()
-    var plugin=MegaWalls.getInstance()
+    var plugin: MegaWalls =MegaWalls.getInstance()
     val dmgHandle= HashMap<Player,Double>()
     private val shadowStepCache: HashSet<Player> = HashSet()
     private val maCache: HashSet<Player> = HashSet()
-   public companion object{
+   companion object{
        @JvmField
        val hiddenPlayers=HashSet<Player>()
     }
@@ -74,7 +74,7 @@ class MWAsn :MWClass(){
         classInfo.addEnergyGainType("Melee", 10)
         classInfo.addEnergyGainType("Bow", 10)
     }
-    fun tickArrowCatch(){
+    private fun tickArrowCatch(){
         for (p in plugin.combatManager.inCombatPlayers){
             if (manager[p]==this){
                 if (ItemUtils.isFullInventory(p.inventory)){

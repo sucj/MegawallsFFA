@@ -120,16 +120,13 @@ public class MWDriver extends MWClass {
         Player target = null;
         for (Player player1 : player.getWorld().getPlayers()) {
             if (plugin.getTeamsManager().isOnSameTeam(player, player1)) continue;
-            if (!plugin.getCombatManager().isInCombat(player1) || player1.isDead() || player1.getGameMode() == GameMode.CREATIVE || (player1.getLocation().distance(player.getLocation()) > 20) || player1.equals(player)) {
-                continue;
-            } else {
+            if (!(!plugin.getCombatManager().isInCombat(player1) || player1.isDead() || player1.getGameMode() == GameMode.CREATIVE || (player1.getLocation().distance(player.getLocation()) > 20) || player1.equals(player))) {
                 target = player1;
                 break;
             }
         }
         if (target == null) {
             ActionBar.send(player, "No players within " + ChatColor.RED + 20 + ChatColor.RESET + " blocks!");
-            return;
         } else {
             abilitycache.add(player);
             energyManager.clear(player);
@@ -182,7 +179,6 @@ public class MWDriver extends MWClass {
             armorEnch.put(Enchantment.DURABILITY, 10);
 
             ItemStack sword = MWItem.createSword(this, Material.IRON_SWORD, swordEnch);
-            ItemStack bow = MWItem.createBow(this, null);
             ItemStack tool = MWItem.createTool(this, Material.DIAMOND_PICKAXE);
             ItemStack leggings = MWItem.createArmor(this, Material.DIAMOND_LEGGINGS, armorEnch);
 

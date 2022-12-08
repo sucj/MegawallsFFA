@@ -163,9 +163,7 @@ public class MWGolem extends MWClass {
                 location.add(0.5, 0.5, 0.5);
 
                 if (block.getType() == Material.LOG || block.getType() == Material.LOG_2) {
-                    Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
-                        block.getWorld().dropItem(location, new ItemStack(Material.IRON_BLOCK));
-                    }, 2);
+                    Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> block.getWorld().dropItem(location, new ItemStack(Material.IRON_BLOCK)), 2);
                 }
             }
         }
@@ -222,7 +220,6 @@ public class MWGolem extends MWClass {
             bootsEnch.put(Enchantment.DURABILITY, 10);
 
             ItemStack sword = MWItem.createSword(this, Material.IRON_SWORD, swordEnch);
-            ItemStack bow = MWItem.createBow(this, null);
             ItemStack tool = MWItem.createTool(this, Material.DIAMOND_PICKAXE);
             ItemStack toolAxe = MWItem.createTool(this, Material.IRON_AXE);
             ItemStack chestplate = MWItem.createArmor(this, Material.DIAMOND_CHESTPLATE, chestplateEnch);

@@ -14,20 +14,15 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockExplodeEvent;
-import org.bukkit.event.block.BlockMultiPlaceEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.*;
-import org.bukkit.event.inventory.FurnaceBurnEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.math.BigDecimal;
-import java.util.Collection;
 import java.util.Objects;
 
 import static net.nuggetmc.mw.MegaWalls.OPBYPASSGM;
@@ -62,11 +57,7 @@ public class SpecialEventsManager implements Listener {
                     target.setFoodLevel(20);
                     target.setSaturation(20);
                     double health = target.getHealth() + 3;
-                    if (health > target.getMaxHealth()) {
-                        target.setHealth(target.getMaxHealth());
-                    } else {
-                        target.setHealth(health);
-                    }
+                    target.setHealth(Math.min(health, target.getMaxHealth()));
                     target.sendMessage("You have been healed by the Refreshing Sip of " + player.getName() + "!");
                 }
             }
@@ -152,7 +143,6 @@ public class SpecialEventsManager implements Listener {
             Player player = e.getPlayer();
             if (e.getItem().getType().equals(Material.COMPASS) && ItemUtils.isKitItem(e.getItem())) {
                 plugin.getCompassManager().changeTrackingTarget(player);
-                ;
             }
         }
 

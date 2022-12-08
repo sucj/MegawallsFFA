@@ -94,9 +94,7 @@ public class MWArcanist extends MWClass {
             if (dmgcount.get(victim) == 0) {
                 if (cooldownCache.contains(victim)) return;
                 cooldownCache.add(victim);
-                Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                    cooldownCache.remove(victim);
-                }, 20);
+                Bukkit.getScheduler().runTaskLater(plugin, () -> cooldownCache.remove(victim), 20);
                 energyManager.add(victim, 34);
                 for (Player online : Bukkit.getOnlinePlayers()) {
                     online.playSound(victim.getLocation(), Sound.EXPLODE, 1, 1);
@@ -155,7 +153,6 @@ public class MWArcanist extends MWClass {
             armorEnch.put(Enchantment.DURABILITY, 10);
 
             ItemStack sword = MWItem.createSword(this, Material.DIAMOND_SWORD, swordEnch);
-            ItemStack bow = MWItem.createBow(this, null);
             ItemStack tool = MWItem.createTool(this, Material.DIAMOND_PICKAXE);
             ItemStack leggings = MWItem.createArmor(this, Material.DIAMOND_LEGGINGS, armorEnch);
 
@@ -169,17 +166,15 @@ public class MWArcanist extends MWClass {
         } else {
             dmgcount.put(player, 0);
         }
-        if (cooldownCache.contains(player)) {
-            cooldownCache.remove(player);
-        }
+        cooldownCache.remove(player);
 
     }
 
     @EventHandler
     public void onTempest(PlayerDeathEvent e) {
         if (!combatManager.isInCombat(e.getEntity())) return;
-        if (!(e.getEntity().getKiller() instanceof Player)) return;
-        Player killer = (Player) e.getEntity().getKiller();
+        if (e.getEntity().getKiller() == null) return;
+        Player killer = e.getEntity().getKiller();
         if (manager.get(killer) != this) return;
         double damage = 0.5;
         for (int i = 0; i < 9; i++) {
@@ -196,7 +191,7 @@ public class MWArcanist extends MWClass {
     CombatManager combatManager = plugin.getCombatManager();
 
     List<Entity> getNearbyEntites(Location l, int size) {
-        List<Entity> entities = new ArrayList<Entity>();
+        List<Entity> entities = new ArrayList<>();
         for (Entity ent : l.getWorld().getEntities()) {
             if (!(ent instanceof LivingEntity)) continue;
             if (!(ent instanceof Player)) continue;

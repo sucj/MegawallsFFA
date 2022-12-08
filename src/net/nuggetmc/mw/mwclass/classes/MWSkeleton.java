@@ -233,7 +233,6 @@ public class MWSkeleton extends MWClass {
             armorEnch.put(Enchantment.DURABILITY, 10);
 
             ItemStack sword = MWItem.createSword(this, Material.IRON_SWORD, swordEnch);
-            ItemStack bow = MWItem.createBow(this, bowEnch);
             ItemStack tool = MWItem.createTool(this, Material.DIAMOND_PICKAXE);
             ItemStack helmet = MWItem.createArmor(this, Material.DIAMOND_HELMET, armorEnch);
 

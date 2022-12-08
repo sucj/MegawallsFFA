@@ -246,9 +246,7 @@ public class MWCreeper extends MWClass {
             Block block = event.getBlock();
             if (block.getType() != Material.COAL_ORE) return;
 
-            Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                block.getWorld().dropItem(block.getLocation().add(0.5, 0.5, 0.5), new ItemStack(Material.TNT));
-            }, 2);
+            Bukkit.getScheduler().runTaskLater(plugin, () -> block.getWorld().dropItem(block.getLocation().add(0.5, 0.5, 0.5), new ItemStack(Material.TNT)), 2);
         }
     }
 
@@ -268,7 +266,6 @@ public class MWCreeper extends MWClass {
             armorEnch.put(Enchantment.PROTECTION_EXPLOSIONS, 5);
 
             ItemStack sword = MWItem.createSword(this, Material.IRON_SWORD, swordEnch);
-            ItemStack bow = MWItem.createBow(this, null);
             ItemStack tool = MWItem.createTool(this, Material.DIAMOND_PICKAXE);
             ItemStack leggings = MWItem.createArmor(this, Material.DIAMOND_LEGGINGS, armorEnch);
 

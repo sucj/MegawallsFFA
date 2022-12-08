@@ -164,13 +164,10 @@ public class MWSpider extends MWClass {
     }
 
     static class SkitterData {
-        public SkitterData(BukkitRunnable task, int time, int count) {
-            this.task = task;
+        public SkitterData(int time, int count) {
             this.time = time;
             this.count = count;
         }
-
-        private BukkitRunnable task;
 
         public int time;
 
@@ -195,9 +192,7 @@ public class MWSpider extends MWClass {
                 SkitterData data = skitterData.get(player);
 
                 if (data == null || data.time <= 0) {
-                    if (skitterData.containsKey(player)) {
-                        skitterData.remove(player);
-                    }
+                    skitterData.remove(player);
 
                     ActionBar.clear(player);
 
@@ -210,9 +205,7 @@ public class MWSpider extends MWClass {
                 String msg = "Skitter (" + ChatColor.RED + count + ChatColor.RESET + "/4 Hits) (" + ChatColor.RED + (data.time / 10.0) + "s" + ChatColor.RESET + ")";
 
                 if (count >= 4) {
-                    if (skitterData.containsKey(player)) {
-                        skitterData.remove(player);
-                    }
+                    skitterData.remove(player);
 
                     ActionBar.send(player, ChatColor.GREEN + ChatColor.stripColor(msg));
                     energyManager.add(player, 20);
@@ -228,7 +221,7 @@ public class MWSpider extends MWClass {
             }
         };
 
-        skitterData.put(player, new SkitterData(task, 30, 0));
+        skitterData.put(player, new SkitterData(30, 0));
         task.runTaskTimer(plugin, 0, 2);
     }
 
@@ -299,7 +292,6 @@ public class MWSpider extends MWClass {
             //armorEnch2.put(Enchantment.DURABILITY, 10);
 
             ItemStack sword = MWItem.createSword(this, Material.DIAMOND_SWORD, swordEnch);
-            ItemStack bow = MWItem.createBow(this, null);
             ItemStack tool = MWItem.createTool(this, Material.DIAMOND_PICKAXE);
             ItemStack toolShovel = MWItem.createTool(this, Material.IRON_SPADE);
             ItemStack boots = MWItem.createArmor(this, Material.DIAMOND_BOOTS, armorEnch);
