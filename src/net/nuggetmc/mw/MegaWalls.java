@@ -1,7 +1,6 @@
 package net.nuggetmc.mw;
 
-import com.comphenix.protocol.ProtocolLibrary;
-import io.isles.nametagapi.NametagPlugin;
+
 import net.nuggetmc.mw.combat.CombatManager;
 import net.nuggetmc.mw.command.*;
 import net.nuggetmc.mw.economics.CoinsManager;
@@ -41,7 +40,6 @@ public class MegaWalls extends JavaPlugin {
     public MiliKiller miliKiller=new MiliKiller();
     private MWClassManager mwClassManager;
     private MWClassMenu mwClassMenu;
-    private EquipMentListener equipMentListener;
     private ShopMenu shopMenu;
 
     public static String getMetadataValue() {
@@ -241,7 +239,6 @@ public class MegaWalls extends JavaPlugin {
         this.compassManager = new CompassManager();
         this.keMenu=new KEMenu();
         this.killEffectManager=new KillEffectManager();
-        this.equipMentListener =new EquipMentListener(this);
         this.hideManager=new HideManager();
 
         // Register commands
@@ -298,7 +295,6 @@ public class MegaWalls extends JavaPlugin {
                 this.keMenu,
                 new WorldUtils()
         );
-        ProtocolLibrary.getProtocolManager().addPacketListener(this.equipMentListener);
 
         // this.restore();
         this.initEnergy();
