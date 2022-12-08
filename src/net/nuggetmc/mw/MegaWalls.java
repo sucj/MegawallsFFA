@@ -1,6 +1,7 @@
 package net.nuggetmc.mw;
 
 
+import net.nuggetmc.mw.boosters.Boosters;
 import net.nuggetmc.mw.combat.CombatManager;
 import net.nuggetmc.mw.command.*;
 import net.nuggetmc.mw.economics.CoinsManager;
@@ -146,6 +147,7 @@ public class MegaWalls extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        System.out.println(Boosters.Coins.getDescription());
         INSTANCE = this;
         //cfg
         try {
