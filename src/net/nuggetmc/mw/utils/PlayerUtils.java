@@ -5,6 +5,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.md_5.bungee.api.ChatColor;
 import net.minecraft.server.v1_8_R3.*;
 import net.nuggetmc.mw.MegaWalls;
 import org.bukkit.Bukkit;
@@ -16,11 +17,13 @@ import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 
 public class PlayerUtils {
 
-
+  static MegaWalls plugin=MegaWalls.getInstance();
   
   public static List<Player> getNearbyPlayers(Location location, double radius) {
     List<Player> players = new ArrayList<>();
@@ -72,6 +75,28 @@ public class PlayerUtils {
       e.printStackTrace();
       return null;
     }
+  }
+  public static Player getClosestEnemyInRange(Player player,double range){
+    Player target = null;
+    for (Player player1 : player.getWorld().getPlayers()) {
+      if (plugin.getTeamsManager().isOnSameTeam(player, player1)) continue;
+      if (plugin.getCombatManager().isInCombat(player1) && !player1.isDead() && player1.getGameMode() != GameMode.CREATIVE && (player1.getLocation().distance(player.getLocation()) < range) && !player1.equals(player)) {
+        target = player1;
+        break;
+      }
+    }
+    return target;
+  }
+  public static Player getClosestEnemy(Player player){
+    Player target = null;
+    for (Player player1 : player.getWorld().getPlayers()) {
+      if (plugin.getTeamsManager().isOnSameTeam(player, player1)) continue;
+      if (plugin.getCombatManager().isInCombat(player1) && !player1.isDead() && player1.getGameMode() != GameMode.CREATIVE  && !player1.equals(player)) {
+        target = player1;
+        break;
+      }
+    }
+    return target;
   }
 
   

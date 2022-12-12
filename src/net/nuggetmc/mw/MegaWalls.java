@@ -1,7 +1,6 @@
 package net.nuggetmc.mw;
 
 
-import net.nuggetmc.mw.boosters.Boosters;
 import net.nuggetmc.mw.combat.CombatManager;
 import net.nuggetmc.mw.command.*;
 import net.nuggetmc.mw.economics.CoinsManager;
@@ -273,7 +272,8 @@ public class MegaWalls extends JavaPlugin {
                 new MWGuardian(),
                 new MWShark(),
                 new MWArcanist(),
-                new MWAsn()
+                new MWAsn(),
+                new MWGoldenDragon()
                 // new MWWereWolf()
         );
 

@@ -9,6 +9,7 @@ import net.nuggetmc.mw.mwclass.items.MWItem;
 import net.nuggetmc.mw.mwclass.items.MWKit;
 import net.nuggetmc.mw.mwclass.items.MWPotions;
 import net.nuggetmc.mw.utils.ActionBar;
+import net.nuggetmc.mw.utils.PlayerUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -117,14 +118,7 @@ public class MWDriver extends MWClass {
         if (abilitycache.contains(player)) {
             return;
         }
-        Player target = null;
-        for (Player player1 : player.getWorld().getPlayers()) {
-            if (plugin.getTeamsManager().isOnSameTeam(player, player1)) continue;
-            if (!(!plugin.getCombatManager().isInCombat(player1) || player1.isDead() || player1.getGameMode() == GameMode.CREATIVE || (player1.getLocation().distance(player.getLocation()) > 20) || player1.equals(player))) {
-                target = player1;
-                break;
-            }
-        }
+        Player target= PlayerUtils.getClosestEnemyInRange(player,20);
         if (target == null) {
             ActionBar.send(player, "No players within " + ChatColor.RED + 20 + ChatColor.RESET + " blocks!");
         } else {

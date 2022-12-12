@@ -4,6 +4,7 @@ import net.nuggetmc.mw.MegaWalls;
 import net.nuggetmc.mw.mwclass.MWClass;
 import net.nuggetmc.mw.mwclass.MWClassManager;
 import net.nuggetmc.mw.mwclass.classes.MWDriver;
+import net.nuggetmc.mw.mwclass.classes.MWGoldenDragon;
 import net.nuggetmc.mw.utils.ActionBar;
 import net.nuggetmc.mw.utils.ItemUtils;
 import org.bukkit.Bukkit;
@@ -53,6 +54,9 @@ public class EnergyManager implements Listener {
                     break;
                 case "asn":
                     add(player, 2);
+                    break;
+                case "god":
+                    add(player,1);
                     break;
             }
         }
@@ -163,6 +167,14 @@ public class EnergyManager implements Listener {
         if (item == null) return;
 
         Material type = player.getInventory().getItemInHand().getType();
+        if (manager.get(player) instanceof MWGoldenDragon){
+            if (type == Material.BOW && action.contains("LEFT_CLICK") ) {
+                ((MWGoldenDragon) manager.get(player)).callEcho(player);
+            }else if(type.name().contains("SWORD") && action.contains("RIGHT_CLICK")){
+                ((MWGoldenDragon) manager.get(player)).callHeal(player);
+            }
+            return;
+        }
 
         if (type == Material.BOW && action.contains("LEFT_CLICK") && (!(manager.get(player) instanceof MWDriver))) {
             callAbility(player);
