@@ -17,11 +17,13 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
+import org.bukkit.scheduler.BukkitRunnable
 
 class MWGoldenDragon : MWClass() {
     val plugin: MegaWalls =MegaWalls.getInstance()!!
     val energyManager=plugin.energyManager!!
-
+    @get:Synchronized
+    val cdCache= HashSet<Player>()
 
     init {
         name = arrayOf("金龙", "GoldenDragon", "GOD")
@@ -34,16 +36,18 @@ class MWGoldenDragon : MWClass() {
         diamonds = emptyArray()
         classInfo = MWClassInfo(
             "Echo",
-            "You will deal 4 damage to the closest enemy and gain 3 HP."+
+            "You will deal 4 damage to the closest enemy in 30 blocks and gain 2 HP."+
             "\n how to activate:Left click with your bow"+
-            "\n Energy cost:21",
+            "\n Energy cost:21"+
+            "\n Cooldown:1s",
             "Echo+",
-            "You will deal 9 damage to the closest enemy and gain 8 Hp."+
+            "You will deal 9 damage to the closest enemy in 35 blocks and gain 5 Hp."+
                     "\n how to activate:Left click with your bow"+
-                    "\n Energy cost:40",
+                    "\n Energy cost:40"+
+            "\n the cooldown of this counts as the cooldown of Echo.",
             "Heal",
-            "Right click with your bow and all players in your team will get Regeneration III for 4 seconds.\n" +
-                    " Energy cost:70",
+            "Right click with your sword and all players in your team will get Regeneration III for 4 seconds.\n" +
+                    " Energy cost:65",
             "Nothing",
             "Nothing here."
         )
@@ -64,38 +68,52 @@ class MWGoldenDragon : MWClass() {
             }
         }
         fun callEcho(player: Player){
+            if (cdCache.contains(player)){
+                return
+            }
             val energy= energyManager[player]
             if (energy<21){
                 return
             }
-            val enemy=PlayerUtils.getClosestEnemy(player)
-            if (enemy==null){
-                return
-            }
+            cdCache.add(player)
             when(energy){
                 in 21..39->{
+                    val enemy=PlayerUtils.getClosestEnemyInRange(player, 30.0)
+                    if (enemy==null) return
                     energyManager[player] -=21
                     mwhealth.trueDamage(enemy,4.toDouble(),player)
-                    player.heal(3)
-
+                    player.sendMessage(this.color.toString()+ "You deal 4 damage to ${enemy.displayName}.")
+                    enemy.sendMessage(this.color.toString() + "You received 4 damage from ${player.displayName}.")
+                    player.heal(2)
                 }
                 in 40..100->{
+                    val enemy=PlayerUtils.getClosestEnemyInRange(player, 35.0)
+                    if (enemy==null) return
                     energyManager[player] -=40
                     mwhealth.trueDamage(enemy,9.toDouble(),player)
-                    player.heal(8)
+                    player.sendMessage(this.color.toString()+ "You deal 9 damage to ${enemy.displayName}.")
+                    enemy.sendMessage(this.color.toString() + "You received 9 damage from ${player.displayName}.")
+                    player.heal(5)
 
                 }
             }
+
+            object :BukkitRunnable(){
+                override fun run() {
+                    cdCache.remove(player)
+                }
+            }.runTaskLater(plugin,20)
+
         }
         fun callHeal(p: Player){
             val energy= energyManager[p]
-            if (energy<70){
+            if (energy<65){
                 return
             }
             plugin.teamsManager.getTeamMembers(plugin.teamsManager.getTeamOfPlayer(p)!!).forEach {
                 player -> player.addPotionEffect(PotionEffect(PotionEffectType.REGENERATION,4*20,2))
             }
-            energyManager[p] -=70
+            energyManager[p] -=65
         }
 
 
@@ -145,13 +163,13 @@ class MWGoldenDragon : MWClass() {
             items = MWKit.generate(this, sword, bow, tool, null, null, potions, null, null, leg, boots, null)
         }
         MWKit.assignItems(player, items)
-
+        cdCache.remove(player)
 
     }
 
     override fun getActionBar(player: Player?): String {
-        val echo=this.color.toString()+ChatColor.BOLD.toString() + "Echo ${if (energyManager[player]>=21) ChatColor.GREEN.toString()+ChatColor.BOLD.toString() + "✔" else ChatColor.RED.toString() +ChatColor.BOLD.toString() + "✖" }"
-        val echoPlus=this.color.toString()+ChatColor.BOLD.toString() + "Echo+ ${if (energyManager[player]>=40) ChatColor.GREEN.toString()+ChatColor.BOLD.toString() + "✔" else ChatColor.RED.toString() +ChatColor.BOLD.toString() + "✖" }"
+        val echo=this.color.toString()+ChatColor.BOLD.toString() + "Echo ${if (energyManager[player]>=21&&!cdCache.contains(player)) ChatColor.GREEN.toString()+ChatColor.BOLD.toString() + "✔" else ChatColor.RED.toString() +ChatColor.BOLD.toString() + "✖" }"
+        val echoPlus=this.color.toString()+ChatColor.BOLD.toString() + "Echo+ ${if (energyManager[player]>=40&&!cdCache.contains(player)) ChatColor.GREEN.toString()+ChatColor.BOLD.toString() + "✔" else ChatColor.RED.toString() +ChatColor.BOLD.toString() + "✖" }"
         val heal=this.color.toString()+ChatColor.BOLD.toString() + "Heal ${if (energyManager[player]>=70) ChatColor.GREEN.toString()+ChatColor.BOLD.toString() + "✔" else ChatColor.RED.toString() +ChatColor.BOLD.toString() + "✖" }"
         return echo+"       "+echoPlus+"     " +heal
     }
