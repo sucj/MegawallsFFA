@@ -2,6 +2,11 @@ package net.nuggetmc.mw.economics;
 
 import me.kaaseigenaar.scoreboard.ScoreboardBuilder;
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
+import net.minecraft.server.v1_8_R3.ChatClickable;
 import net.nuggetmc.mw.MegaWalls;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
@@ -11,10 +16,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class CoinsManager implements Listener {
     private Map<Player, Integer> coinsData = new HashMap<>();
@@ -76,70 +78,74 @@ public class CoinsManager implements Listener {
         set(player, 0);
     }
 
-    public String getBalTop() {
+    public TextComponent[] getBalTopPage(int page) {
+        TextComponent textComponent=new TextComponent();
+        TextComponent[] list=new TextComponent[4];
         StringBuilder result = new StringBuilder();
         result.append(ChatColor.AQUA + "------------BalTop------------\n");
         Map<String, Integer> data = new HashMap<>();
         ArrayList<String> mapArrayList = new ArrayList<>();
         for (String playername : plugin.getConfig().getConfigurationSection("coins").getKeys(false)) {
-            if (playername == "keaidehuangpi" || playername == "Diana0307_") {
-                continue;
-            }
             data.put(playername, (plugin.getOrDefaultFromConfig("coins." + playername, 0)));
         }
         for (int i = 0; i < data.keySet().toArray().length; i++) {
             mapArrayList.add((String) data.keySet().toArray()[i]);
         }
-        mapArrayList.sort(new Comparator<String>() {
-            @Override
-            public int compare(String s, String t1) {
-                if (data.get(s) < data.get(t1)) {
-                    return 1;
-                } else {
-                    return -1;
-                }
+        mapArrayList.sort((s, t1) -> {
+            if (data.get(s) < data.get(t1)) {
+                return 1;
+            } else {
+                return -1;
             }
         });
-        for (int i = 0; i < mapArrayList.size(); i++) {
+        int startsAt=((page-1)*10);
+        int endsAt=page*10-1;
+        for (int i = startsAt; i < mapArrayList.size()&&i<=endsAt; i++) {
+            result.append(getColorOfGrade(i + 1) + "[" + (i + 1) + "] " + mapArrayList.get(i) + " : " + data.get(mapArrayList.get(i)) + "\n");
+        }
+        result.append(ChatColor.AQUA + "------------------------------\n");
+        result.append(ChatColor.YELLOW+ChatColor.BOLD.toString()+ "this is page "+page+" .\n");
+        TextComponent lastPage=new TextComponent(ChatColor.RED+ChatColor.BOLD.toString()+"[<<<PREVIOUS PAGE]");
+        lastPage.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,"/mwbaltop "+(page-1)));
+        lastPage.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent[]{new TextComponent("CLICK TO GO TO THE PREVIOUS PAGE!")}));
+        TextComponent t1=new TextComponent("        ");
+        TextComponent nextPage=new TextComponent(ChatColor.GREEN+ChatColor.BOLD.toString()+ "[>>>NEXT PAGE]");
+        nextPage.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,"/mwbaltop "+(page+1)));
+        nextPage.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent[]{new TextComponent("CLICK TO GO TO THE NEXT PAGE!")}));
+        textComponent.setText(result.toString());
+        list[0]=textComponent;
+        list[1]=lastPage;
+        list[2]=t1;
+        list[3]=nextPage;
+        return list;
+    }
+    public String getBalTopPageCONSOLE(int page) {
+        StringBuilder result = new StringBuilder();
+        result.append(ChatColor.AQUA + "------------BalTop------------\n");
+        Map<String, Integer> data = new HashMap<>();
+        ArrayList<String> mapArrayList = new ArrayList<>();
+        for (String playername : plugin.getConfig().getConfigurationSection("coins").getKeys(false)) {
+            data.put(playername, (plugin.getOrDefaultFromConfig("coins." + playername, 0)));
+        }
+        for (int i = 0; i < data.keySet().toArray().length; i++) {
+            mapArrayList.add((String) data.keySet().toArray()[i]);
+        }
+        mapArrayList.sort((s, t1) -> {
+            if (data.get(s) < data.get(t1)) {
+                return 1;
+            } else {
+                return -1;
+            }
+        });
+        int startsAt=((page-1)*10);
+        int endsAt=page*10-1;
+        for (int i = startsAt; i < mapArrayList.size()&&i<=endsAt; i++) {
             result.append(getColorOfGrade(i + 1) + "[" + (i + 1) + "] " + mapArrayList.get(i) + " : " + data.get(mapArrayList.get(i)) + "\n");
         }
         result.append(ChatColor.AQUA + "------------------------------\n");
         return result.toString();
     }
 
-    public Map<String, Integer> getMapBalTop() {
-        Map<String, Integer> result = new HashMap<>();
-        Map<String, Integer> data = new HashMap<>();
-        ArrayList<String> mapArrayList = new ArrayList<>();
-        for (String playername : plugin.getConfig().getConfigurationSection("coins").getKeys(false)) {
-            data.put(playername, (plugin.getOrDefaultFromConfig("coins." + playername, 0)));
-        }
-        for (int i = 0; i < data.keySet().toArray().length; i++) {
-            mapArrayList.add((String) data.keySet().toArray()[i]);
-        }
-        mapArrayList.sort(new Comparator<String>() {
-            @Override
-            public int compare(String s, String t1) {
-                if (data.get(s) < data.get(t1)) {
-                    return 1;
-                } else {
-                    return -1;
-                }
-            }
-        });
-        for (int i = 0; i < mapArrayList.size(); i++) {
-            result.put(mapArrayList.get(i), i + 1);
-        }
-        return result;
-    }
-
-    public int getRankOnBalTop(Player player) {
-        if (!getMapBalTop().containsKey(player.getName())) {
-            return 0;
-        }
-        return getMapBalTop().get(player.getName());
-
-    }
 
     private ChatColor getColorOfGrade(int input) {
         switch (input) {
