@@ -33,8 +33,8 @@ public class MWItem {
 
         lore.addAll(info.getLoreFormatted(EnumInfoType.ABILITY, false));
 
-        lore.add(ChatColor.DARK_GRAY + " ▪ " + ChatColor.GRAY + "How to Activate: Right-Click with your Sword");
-        lore.add(ChatColor.GRAY + "   or Left-Click with your Bow");
+        //lore.add(ChatColor.DARK_GRAY + " ▪ " + ChatColor.GRAY + "How to Activate: Right-Click with your Sword");
+        //lore.add(ChatColor.GRAY + "   or Left-Click with your Bow");
 
         lore.add("");
 

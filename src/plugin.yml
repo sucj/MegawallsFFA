@@ -72,6 +72,10 @@ commands:
     description: for fun.
     usage: /milikiller
     permission: mw.admin
+  walkspeed:
+    description: set a player's walk speed.
+    usage: /walkspeed
+    permission: mw.admin
 permissions:
   mw.*:
     description: MegaWalls parent permission.

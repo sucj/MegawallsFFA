@@ -254,6 +254,7 @@ public class MegaWalls extends JavaPlugin {
         setExecutor("mwresel", new MWReselCommand());
         setExecutor("milikiller", new CommandMiliKiller());
         setExecutor("killeffects", new killEffectCommand());
+        setExecutor("walkspeed",new WalkSpeedCommand());
         setExecutorAndTabCompleter("mwitem", new getItemCommand());
         setExecutorAndTabCompleter("megawalls", new MegaWallsCommand());
 
