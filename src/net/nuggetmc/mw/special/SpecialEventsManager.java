@@ -383,14 +383,6 @@ public class SpecialEventsManager implements Listener {
             }
         }
     }
-    @EventHandler(priority = EventPriority.HIGHEST)
-    public void onBlock(PlayerMoveEvent e){
-        if (!e.getPlayer().isBlocking()){
-            e.getPlayer().setWalkSpeed(0.2f);
-        }else {
-            e.getPlayer().setWalkSpeed(1);
-        }
-    }
 
 
 
