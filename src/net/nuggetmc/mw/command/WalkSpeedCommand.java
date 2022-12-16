@@ -29,12 +29,15 @@ public class WalkSpeedCommand implements CommandExecutor {
         } else if (args.length != 1&&args.length!=2) {
             sender.sendMessage("WRONG USAGE!CORRECT USAGE : /walkspeed <speed> [player]");
         }else {
-            Player player= ((Player) sender);
             float speed;
             try {
                 speed=Float.parseFloat(args[0]);
             }catch (Exception e){
                 sender.sendMessage("INVALID NUMBER ! NEED A FLOAT!");
+                return true;
+            }
+            if (speed>1.0){
+                sender.sendMessage("NUMBER MUST BE SMALLER THAN 1.0 !");
                 return true;
             }
 

@@ -9,6 +9,7 @@ import net.nuggetmc.mw.mwclass.classes.MWCow;
 import net.nuggetmc.mw.utils.ItemUtils;
 import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -380,6 +381,14 @@ public class SpecialEventsManager implements Listener {
                     }
                 }
             }
+        }
+    }
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onBlock(PlayerMoveEvent e){
+        if (!e.getPlayer().isBlocking()){
+            e.getPlayer().setWalkSpeed(0.2f);
+        }else {
+            e.getPlayer().setWalkSpeed(1);
         }
     }
 
