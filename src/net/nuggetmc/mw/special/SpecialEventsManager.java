@@ -249,7 +249,7 @@ public class SpecialEventsManager implements Listener {
         if (killer == null) {
             return;
         }
-        e.setDeathMessage(ChatColor.GREEN + e.getEntity().getName() + ChatColor.WHITE + " was Killed,Killer: " + ChatColor.RED + killer.getName());
+        e.setDeathMessage(String.format("%s%s%s was killed by %s%s with %s", ChatColor.GREEN, e.getEntity().getName(), ChatColor.WHITE, ChatColor.RED, killer.getName(),killer.getItemInHand().getItemMeta().getDisplayName()));
         if (plugin.getKillEffectManager().get(killer)!=null){
             plugin.getKillEffectManager().get(killer).update(e.getEntity());
         }

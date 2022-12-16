@@ -11,6 +11,8 @@ import net.nuggetmc.mw.fun.CommandMiliKiller;
 import net.nuggetmc.mw.fun.MiliKiller;
 import net.nuggetmc.mw.killeffects.KEMenu;
 import net.nuggetmc.mw.killeffects.KillEffectManager;
+import net.nuggetmc.mw.luckdraw.SwordLuckDraw;
+import net.nuggetmc.mw.luckdraw.SwordNameRarity;
 import net.nuggetmc.mw.mwclass.MWClass;
 import net.nuggetmc.mw.mwclass.MWClassManager;
 import net.nuggetmc.mw.mwclass.MWClassMenu;
@@ -23,14 +25,16 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
 
 public class MegaWalls extends JavaPlugin {
 
@@ -143,6 +147,9 @@ public class MegaWalls extends JavaPlugin {
     }
 
     private HideManager hideManager;
+    FileConfiguration swordNames;
+   public HashMap<SwordNameRarity, List<String>> swordNameMap=new HashMap<>();
+    File file;
 
     @Override
     public void onEnable() {
@@ -255,6 +262,7 @@ public class MegaWalls extends JavaPlugin {
         setExecutor("milikiller", new CommandMiliKiller());
         setExecutor("killeffects", new killEffectCommand());
         setExecutor("walkspeed",new WalkSpeedCommand());
+        setExecutor("luckdraw",new LuckDrawCommand());
         setExecutorAndTabCompleter("mwitem", new getItemCommand());
         setExecutorAndTabCompleter("megawalls", new MegaWallsCommand());
 
@@ -298,7 +306,34 @@ public class MegaWalls extends JavaPlugin {
         this.initEnergy();
 
         ItemUtils.tickMWItems();
+        file=new File(getDataFolder(),"swordNames.yml");
+        swordNames= YamlConfiguration.loadConfiguration(file);
+        try {
+            swordNames.save(new File(getDataFolder(),"swordNames.yml"));
+        } catch (IOException e) {
+            System.out.println("-------------------------------------------------------------");
+            System.out.println("UNABLE TO LOAD swordNames from the config.");
+            System.out.println("-------------------------------------------------------------");
+            e.printStackTrace();
+        }
+        for (SwordNameRarity swordNameRarity:SwordNameRarity.values()){
+            if (swordNames.getStringList(swordNameRarity.name().toLowerCase()).isEmpty()){
+                swordNames.set(swordNameRarity.name().toLowerCase(),Collections.singletonList(swordNameRarity.name() + "SWORD EXAMPLE"));
+                saveSwordNames();
+            }
+        }
+        for (SwordNameRarity swordNameRarity:SwordNameRarity.values()) {
+            swordNameMap.put(swordNameRarity, swordNames.getStringList(swordNameRarity.name().toLowerCase()));
+        }
     }
+    public void saveSwordNames(){
+        try {
+            swordNames.save(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public int getOrDefaultFromConfig(String path, int defaulta) {
         int result;

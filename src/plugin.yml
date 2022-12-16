@@ -2,7 +2,7 @@ name: MegaWalls
 main: net.nuggetmc.mw.MegaWalls
 version: 1.0
 api-version: 1.16
-author: [ HorseNuggets,keaidehuangpi ]
+authors: [ HorseNuggets,keaidehuangpi ]
 depend: [ NametagAPI ]
 softdepend: [ Essentials,RegionPreserve,ScoreboardPlus ]
 commands:
@@ -14,6 +14,9 @@ commands:
     description: Instant max energy (for debug).
     usage: /energy
     permission: mw.energy
+  luckdraw:
+    description: luck draw.
+    usage: /luckdraw
   coinsmgr:
     description: coinsmgr command.
     usage: /coinsmgr
