@@ -132,9 +132,7 @@ class MWGoldenDragon : MWClass() {
 
     override fun assign(player: Player) {
         val items: Map<Int, ItemStack>
-        if (MWKit.contains(this)) {
-            items = MWKit.fetch(this)
-        } else {
+        
             val swordEnch: MutableMap<Enchantment, Int> = HashMap()
             swordEnch[Enchantment.DURABILITY] = 10
 
@@ -153,7 +151,7 @@ class MWGoldenDragon : MWClass() {
             leggingsEnch[Enchantment.PROTECTION_ENVIRONMENTAL] = 2
             leggingsEnch[Enchantment.DURABILITY] = 10
 
-            val sword = MWItem.createSword(this, Material.IRON_SWORD, swordEnch)
+            val sword = MWItem.createSword(this, Material.IRON_SWORD, swordEnch,player)
             val bow = MWItem.createBow(this, bowEnch)
             val tool = MWItem.createTool(this, Material.DIAMOND_PICKAXE)
             val boots = MWItem.createArmor(this, Material.IRON_BOOTS, bootEnch)
@@ -161,7 +159,7 @@ class MWGoldenDragon : MWClass() {
             val potions = MWPotions.createBasic(this, 2, 8, 2)
 
             items = MWKit.generate(this, sword, bow, tool, null, null, potions, null, null, leg, boots, null)
-        }
+        
         MWKit.assignItems(player, items)
         cdCache.remove(player)
 

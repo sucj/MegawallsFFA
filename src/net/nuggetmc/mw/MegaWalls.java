@@ -12,6 +12,7 @@ import net.nuggetmc.mw.fun.MiliKiller;
 import net.nuggetmc.mw.killeffects.KEMenu;
 import net.nuggetmc.mw.killeffects.KillEffectManager;
 import net.nuggetmc.mw.luckdraw.SwordLuckDraw;
+import net.nuggetmc.mw.luckdraw.SwordNameManager;
 import net.nuggetmc.mw.luckdraw.SwordNameRarity;
 import net.nuggetmc.mw.mwclass.MWClass;
 import net.nuggetmc.mw.mwclass.MWClassManager;
@@ -91,6 +92,12 @@ public class MegaWalls extends JavaPlugin {
     }
 
     private CombatManager combatManager;
+
+    public SwordNameManager getSwordNameManager() {
+        return swordNameManager;
+    }
+
+    private SwordNameManager swordNameManager;
 
     public static MegaWalls getInstance() {
         return INSTANCE;
@@ -243,6 +250,7 @@ public class MegaWalls extends JavaPlugin {
         this.keMenu=new KEMenu();
         this.killEffectManager=new KillEffectManager();
         this.hideManager=new HideManager();
+        this.swordNameManager=new SwordNameManager();
 
         // Register commands
         setExecutor("energy", new EnergyCommand());

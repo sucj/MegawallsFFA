@@ -17,15 +17,12 @@ import java.util.Map;
 
 public class MWKit {
 
-    private static final Map<MWClass, Map<Integer, ItemStack>> KIT_CACHE = new HashMap<>();
+    private static final List<MWClass> KIT_CACHE = new ArrayList<>();
 
     public static boolean contains(MWClass mwclass) {
-        return KIT_CACHE.containsKey(mwclass);
+        return KIT_CACHE.contains(mwclass);
     }
 
-    public static Map<Integer, ItemStack> fetch(MWClass mwclass) {
-        return KIT_CACHE.get(mwclass);
-    }
 
     public static Map<Integer, ItemStack> generate(MWClass mwclass, ItemStack sword, ItemStack bow, ItemStack tool, ItemStack toolAxe, ItemStack toolShovel, List<ItemStack> potions,
                                                    ItemStack helmet, ItemStack chestplate, ItemStack leggings, ItemStack boots, List<ItemStack> extra) {
@@ -87,7 +84,7 @@ public class MWKit {
         items.put(38, chestplate);
         items.put(39, helmet);
 
-        KIT_CACHE.put(mwclass, items);
+        KIT_CACHE.add(mwclass);
 
         return items;
     }

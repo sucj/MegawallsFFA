@@ -278,9 +278,7 @@ public class MWSpider extends MWClass {
     public void assign(Player player) {
         Map<Integer, ItemStack> items;
 
-        if (MWKit.contains(this)) {
-            items = MWKit.fetch(this);
-        } else {
+        
             Map<Enchantment, Integer> swordEnch = new HashMap<>();
             swordEnch.put(Enchantment.DURABILITY, 10);
 
@@ -291,7 +289,7 @@ public class MWSpider extends MWClass {
             //armorEnch2.put(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
             //armorEnch2.put(Enchantment.DURABILITY, 10);
 
-            ItemStack sword = MWItem.createSword(this, Material.DIAMOND_SWORD, swordEnch);
+            ItemStack sword = MWItem.createSword(this, Material.DIAMOND_SWORD, swordEnch,player);
             ItemStack tool = MWItem.createTool(this, Material.DIAMOND_PICKAXE);
             ItemStack toolShovel = MWItem.createTool(this, Material.IRON_SPADE);
             ItemStack boots = MWItem.createArmor(this, Material.DIAMOND_BOOTS, armorEnch);
@@ -301,7 +299,7 @@ public class MWSpider extends MWClass {
 
             //items = MWKit.generate(this, sword, null, tool, null, toolShovel, potions, null, null, leggings, boots, null);
             items = MWKit.generate(this, sword, null, tool, null, toolShovel, potions, null, null, null, boots, null);
-        }
+        
 
         MWKit.assignItems(player, items);
     }

@@ -188,9 +188,7 @@ public class MWSquid extends MWClass {
     public void assign(Player player) {
         Map<Integer, ItemStack> items;
 
-        if (MWKit.contains(this)) {
-            items = MWKit.fetch(this);
-        } else {
+        
             Map<Enchantment, Integer> swordEnch = new HashMap<>();
             swordEnch.put(Enchantment.DURABILITY, 10);
 
@@ -199,7 +197,7 @@ public class MWSquid extends MWClass {
             armorEnch.put(Enchantment.DEPTH_STRIDER, 2);
             armorEnch.put(Enchantment.DURABILITY, 10);
 
-            ItemStack sword = MWItem.createSword(this, Material.IRON_SWORD, swordEnch);
+            ItemStack sword = MWItem.createSword(this, Material.IRON_SWORD, swordEnch,player);
             ItemStack bow = MWItem.createBow(this, null);
             ItemStack tool = MWItem.createTool(this, Material.DIAMOND_PICKAXE);
             ItemStack boots = MWItem.createArmor(this, Material.DIAMOND_BOOTS, armorEnch);
@@ -207,7 +205,7 @@ public class MWSquid extends MWClass {
             List<ItemStack> potions = MWPotions.createBasic(this, 3, 6, 1);
 
             items = MWKit.generate(this, sword, null, tool, null, null, potions, null, null, null, boots, null);
-        }
+        
 
         MWKit.assignItems(player, items);
     }

@@ -205,9 +205,7 @@ public class MWGolem extends MWClass {
     public void assign(Player player) {
         Map<Integer, ItemStack> items;
 
-        if (MWKit.contains(this)) {
-            items = MWKit.fetch(this);
-        } else {
+        
             Map<Enchantment, Integer> swordEnch = new HashMap<>();
             swordEnch.put(Enchantment.DURABILITY, 10);
 
@@ -219,7 +217,7 @@ public class MWGolem extends MWClass {
             bootsEnch.put(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
             bootsEnch.put(Enchantment.DURABILITY, 10);
 
-            ItemStack sword = MWItem.createSword(this, Material.IRON_SWORD, swordEnch);
+            ItemStack sword = MWItem.createSword(this, Material.IRON_SWORD, swordEnch,player);
             ItemStack tool = MWItem.createTool(this, Material.DIAMOND_PICKAXE);
             ItemStack toolAxe = MWItem.createTool(this, Material.IRON_AXE);
             ItemStack chestplate = MWItem.createArmor(this, Material.DIAMOND_CHESTPLATE, chestplateEnch);
@@ -231,7 +229,7 @@ public class MWGolem extends MWClass {
             potions.add(MWPotions.createSlowSplash(plugin.isChinese() ? this.name[0] : this.name[1], this.color));
 
             items = MWKit.generate(this, sword, null, tool, toolAxe, null, potions, null, chestplate, null, boots, null);
-        }
+        
 
         MWKit.assignItems(player, items);
     }

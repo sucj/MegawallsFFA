@@ -162,9 +162,7 @@ public class MWDreadlord extends MWClass {
     public void assign(Player player) {
         Map<Integer, ItemStack> items;
 
-        if (MWKit.contains(this)) {
-            items = MWKit.fetch(this);
-        } else {
+        
             Map<Enchantment, Integer> swordEnch = new HashMap<>();
             swordEnch.put(Enchantment.DAMAGE_UNDEAD, 1);
             swordEnch.put(Enchantment.DURABILITY, 10);
@@ -174,14 +172,14 @@ public class MWDreadlord extends MWClass {
             armorEnch.put(Enchantment.PROTECTION_FIRE, 1);
             armorEnch.put(Enchantment.PROTECTION_EXPLOSIONS, 2);
 
-            ItemStack sword = MWItem.createSword(this, Material.DIAMOND_SWORD, swordEnch);
+            ItemStack sword = MWItem.createSword(this, Material.DIAMOND_SWORD, swordEnch,player);
             ItemStack tool = MWItem.createTool(this, Material.DIAMOND_PICKAXE);
             ItemStack helmet = MWItem.createArmor(this, Material.DIAMOND_HELMET, armorEnch);
 
             List<ItemStack> potions = MWPotions.createBasic(this, 2, 8, 2);
 
             items = MWKit.generate(this, sword, null, tool, null, null, potions, helmet, null, null, null, null);
-        }
+        
 
         MWKit.assignItems(player, items);
     }

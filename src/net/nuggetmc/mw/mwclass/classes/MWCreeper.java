@@ -254,9 +254,7 @@ public class MWCreeper extends MWClass {
     public void assign(Player player) {
         Map<Integer, ItemStack> items;
 
-        if (MWKit.contains(this)) {
-            items = MWKit.fetch(this);
-        } else {
+        
             Map<Enchantment, Integer> swordEnch = new HashMap<>();
             swordEnch.put(Enchantment.DURABILITY, 10);
 
@@ -265,7 +263,7 @@ public class MWCreeper extends MWClass {
             armorEnch.put(Enchantment.DURABILITY, 10);
             armorEnch.put(Enchantment.PROTECTION_EXPLOSIONS, 5);
 
-            ItemStack sword = MWItem.createSword(this, Material.IRON_SWORD, swordEnch);
+            ItemStack sword = MWItem.createSword(this, Material.IRON_SWORD, swordEnch,player);
             ItemStack tool = MWItem.createTool(this, Material.DIAMOND_PICKAXE);
             ItemStack leggings = MWItem.createArmor(this, Material.DIAMOND_LEGGINGS, armorEnch);
 
@@ -275,7 +273,7 @@ public class MWCreeper extends MWClass {
             extra.add(new ItemStack(Material.TNT, 16));
 
             items = MWKit.generate(this, sword, null, tool, null, null, potions, null, null, leggings, null, extra);
-        }
+        
 
         MWKit.assignItems(player, items);
     }

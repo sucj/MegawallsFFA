@@ -2,15 +2,20 @@ package net.nuggetmc.mw.luckdraw
 
 import net.nuggetmc.mw.MegaWalls
 import org.bukkit.configuration.file.FileConfiguration
+import org.bukkit.entity.Player
 import java.lang.Double.sum
 import kotlin.random.Random
 
-class SwordLuckDraw {
-    companion object {
+object SwordLuckDraw {
+
         val names = MegaWalls.getInstance().swordNameMap
         val total = SwordNameRarity.values().sumOf { it.probabilityPercent }
+        var swordNameManager: SwordNameManager? =null
 
-        fun luckDraw(): String {
+       private fun luckDraw(): String {
+           if (swordNameManager==null){
+               swordNameManager=MegaWalls.getInstance().swordNameManager
+           }
 
             val rarity = when ((Math.random() * total)) {
                 in 0.0..SwordNameRarity.LEGENDARY.probabilityPercent -> SwordNameRarity.LEGENDARY
@@ -28,5 +33,12 @@ class SwordLuckDraw {
             }
             return names[rarity]!![Random.nextInt(names[rarity]!!.size)]
         }
+    fun doLuckDraw(player:Player,times:Int=1){
+        repeat(times) {
+            val a = luckDraw()
+            swordNameManager!!.select(player, a)
+            player.sendMessage("GG!You found a $a")
+        }
     }
+
 }

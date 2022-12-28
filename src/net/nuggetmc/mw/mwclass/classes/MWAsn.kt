@@ -217,9 +217,7 @@ class MWAsn :MWClass(){
 
     override fun assign(player: Player) {
         val items: Map<Int, ItemStack>
-        if (MWKit.contains(this)) {
-            items = MWKit.fetch(this)
-        } else {
+        
             val swordEnch: MutableMap<Enchantment, Int> = HashMap()
             swordEnch.put(Enchantment.DURABILITY, 10)
             swordEnch.put(Enchantment.DAMAGE_ALL, 1)
@@ -227,7 +225,7 @@ class MWAsn :MWClass(){
             armorEnch.put(Enchantment.PROTECTION_FALL, 2)
             armorEnch.put(Enchantment.PROTECTION_PROJECTILE, 2)
             armorEnch.put(Enchantment.DURABILITY, 10)
-            val sword = MWItem.createSword(this, Material.DIAMOND_SWORD, swordEnch)
+            val sword = MWItem.createSword(this, Material.DIAMOND_SWORD, swordEnch,player)
             val bow = MWItem.createBow(this, null)
             val tool = MWItem.createTool(this, Material.DIAMOND_PICKAXE)
             val boots = MWItem.createArmor(this, Material.DIAMOND_BOOTS, armorEnch)
@@ -235,7 +233,7 @@ class MWAsn :MWClass(){
             potions.add(MWPotions.createAsnPotions(this.color,5))
 
             items = MWKit.generate(this, sword, bow, tool, null, null, potions, null, null, null, boots, null)
-        }
+        
         MWKit.assignItems(player, items)
 
         shadowStepCache.remove(player)

@@ -1,6 +1,8 @@
 package net.nuggetmc.mw.mwclass.items;
 
 import net.md_5.bungee.api.ChatColor;
+import net.nuggetmc.mw.MegaWalls;
+import net.nuggetmc.mw.luckdraw.SwordNameManager;
 import net.nuggetmc.mw.mwclass.MWClass;
 import net.nuggetmc.mw.mwclass.info.EnumInfoType;
 import net.nuggetmc.mw.mwclass.info.MWClassInfo;
@@ -8,6 +10,7 @@ import net.nuggetmc.mw.utils.ItemUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -16,8 +19,13 @@ import java.util.List;
 import java.util.Map;
 
 public class MWItem {
+   static SwordNameManager swordNameManager;
 
-    public static ItemStack createSword(MWClass mwclass, Material type, Map<Enchantment, Integer> enchantments) {
+
+    public static ItemStack createSword(MWClass mwclass, Material type, Map<Enchantment, Integer> enchantments, Player player) {
+        if (swordNameManager==null){
+            swordNameManager=MegaWalls.getInstance().getSwordNameManager();
+        }
         ItemStack item = new ItemStack(type);
         List<String> lore = new ArrayList<>();
 
@@ -27,7 +35,11 @@ public class MWItem {
         }
 
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(mwclass.getColor() + mwclass.getName() + " Sword");
+        meta.setDisplayName(
+                swordNameManager.get(player)==null?
+                mwclass.getColor() + mwclass.getName() + " Sword":
+                swordNameManager.get(player)
+        );
 
         MWClassInfo info = mwclass.getInfo();
 

@@ -236,9 +236,7 @@ public class MWEnderman extends MWClass {
     public void assign(Player player) {
         Map<Integer, ItemStack> items;
 
-        if (MWKit.contains(this)) {
-            items = MWKit.fetch(this);
-        } else {
+        
             Map<Enchantment, Integer> swordEnch = new HashMap<>();
             swordEnch.put(Enchantment.DURABILITY, 10);
 
@@ -247,14 +245,14 @@ public class MWEnderman extends MWClass {
             armorEnch.put(Enchantment.PROTECTION_FALL, 4);
             armorEnch.put(Enchantment.DURABILITY, 10);
 
-            ItemStack sword = MWItem.createSword(this, Material.IRON_SWORD, swordEnch);
+            ItemStack sword = MWItem.createSword(this, Material.IRON_SWORD, swordEnch,player);
             ItemStack tool = MWItem.createTool(this, Material.DIAMOND_PICKAXE);
             ItemStack boots = MWItem.createArmor(this, Material.DIAMOND_BOOTS, armorEnch);
 
             List<ItemStack> potions = MWPotions.createBasic(this, 2, 8, 2);
 
             items = MWKit.generate(this, sword, null, tool, null, null, potions, null, null, null, boots, null);
-        }
+        
 
         MWKit.assignItems(player, items);
     }

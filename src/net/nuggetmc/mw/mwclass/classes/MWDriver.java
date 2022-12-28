@@ -161,9 +161,7 @@ public class MWDriver extends MWClass {
     public void assign(Player player) {
         Map<Integer, ItemStack> items;
 
-        if (MWKit.contains(this)) {
-            items = MWKit.fetch(this);
-        } else {
+        
             Map<Enchantment, Integer> swordEnch = new HashMap<>();
             swordEnch.put(Enchantment.DURABILITY, 10);
             swordEnch.put(Enchantment.DAMAGE_ALL, 1);
@@ -172,14 +170,14 @@ public class MWDriver extends MWClass {
             armorEnch.put(Enchantment.PROTECTION_ENVIRONMENTAL, 2);
             armorEnch.put(Enchantment.DURABILITY, 10);
 
-            ItemStack sword = MWItem.createSword(this, Material.IRON_SWORD, swordEnch);
+            ItemStack sword = MWItem.createSword(this, Material.IRON_SWORD, swordEnch,player);
             ItemStack tool = MWItem.createTool(this, Material.DIAMOND_PICKAXE);
             ItemStack leggings = MWItem.createArmor(this, Material.DIAMOND_LEGGINGS, armorEnch);
 
             List<ItemStack> potions = MWPotions.createBasic(this, 2, 7, 2);
 
             items = MWKit.generate(this, sword, null, tool, null, null, potions, null, null, leggings, null, null);
-        }
+        
 
         MWKit.assignItems(player, items);
         runnerList.remove(player);
