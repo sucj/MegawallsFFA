@@ -75,7 +75,7 @@ class MWGoldenDragon : MWClass() {
             if (energy<21){
                 return
             }
-            cdCache.add(player)
+
             when(energy){
                 in 21..39->{
                     val enemy=PlayerUtils.getClosestEnemyInRange(player, 30.0)
@@ -97,6 +97,7 @@ class MWGoldenDragon : MWClass() {
 
                 }
             }
+            cdCache.add(player)
 
             object :BukkitRunnable(){
                 override fun run() {
