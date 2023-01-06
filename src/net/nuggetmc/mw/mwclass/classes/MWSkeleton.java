@@ -233,10 +233,11 @@ public class MWSkeleton extends MWClass {
             ItemStack sword = MWItem.createSword(this, Material.IRON_SWORD, swordEnch,player);
             ItemStack tool = MWItem.createTool(this, Material.DIAMOND_PICKAXE);
             ItemStack helmet = MWItem.createArmor(this, Material.DIAMOND_HELMET, armorEnch);
+            ItemStack bow=MWItem.createBow(this,bowEnch);
 
             List<ItemStack> potions = MWPotions.createBasic(this, 2, 8, 2);
 
-            items = MWKit.generate(this, sword, null, tool, null, null, potions, helmet, null, null, null, null);
+            items = MWKit.generate(this, sword, bow, tool, null, null, potions, helmet, null, null, null, null);
         
 
         MWKit.assignItems(player, items);
