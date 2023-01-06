@@ -11,7 +11,7 @@ import net.nuggetmc.mw.mwclass.items.MWItem;
 import net.nuggetmc.mw.mwclass.items.MWKit;
 import net.nuggetmc.mw.mwclass.items.MWPotions;
 import net.nuggetmc.mw.special.TeamsManager;
-import net.nuggetmc.mw.utils.FireworkEffectPlayer;
+import net.nuggetmc.mw.utils.*;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
@@ -32,6 +32,7 @@ public class MWArcanist extends MWClass {
 
     Map<Player, Integer> dmgcount = new HashMap<>();
     Set<Player> cooldownCache = new HashSet<>();
+
 
     public MWArcanist() {
         this.name = new String[]{"奥术师", "Arcanist", "ARC"};
@@ -65,10 +66,60 @@ public class MWArcanist extends MWClass {
         this.classInfo.addEnergyGainType("Bow", 35);
     }
 
+      static HashSet<Material> set = new HashSet<Material>();
+    static {
+        for (final Material material : Material.values()) {
+            set.add(material);
+        }
+    }
+
+
     @Override
     public void ability(Player player) {
         energyManager.clear(player);
-        shoot(player, 12);
+        final List<Player> damaged = new ArrayList<Player>();
+        for (final Block block : player.getLineOfSight(set, 12)) {
+            ParticleEffect.REDSTONE.display(0.0f, 0.0f, 0.0f, 0.0f, 3, block.getLocation(), 10.0);
+            block.getWorld().playSound(block.getLocation(), Sound.DIG_STONE, 1.0f, 1.0f);
+            for (final Block block2 : LocationUtils.getCube(block.getLocation(), 3)) {
+                if ( ((block2.getType() != Material.FURNACE && block2.getType() != Material.BURNING_FURNACE && block2.getType() != Material.TRAPPED_CHEST) )) {
+                    if (block2.getType() == Material.BEDROCK) {
+                        continue;
+                    }
+                    Material material = block2.getType();
+                    if (!material.name().toLowerCase().contains("diamond")) {
+                        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+
+                                block2.setType(material);
+
+                        }, plugin.breakResetTime * 20L);
+                    }
+
+                    block2.breakNaturally();
+
+                }
+            }
+            for (final Player player2 : this.getNearbyPlayers(block.getLocation(), player, 2)) {
+                if (damaged.contains(player2)) {
+                    continue;
+                }
+                mwhealth.trueDamage(player2,2d,player);
+                damaged.add(player2);
+            }
+        }
+    }
+    private List<Player> getNearbyPlayers(final Location location, final Player player, final int radius) {
+        final List<Player> players = new ArrayList<>();
+
+        for (final Player other : PlayerUtils.getNearbyPlayers(location, radius)) {
+            if (combatManager.isInCombat(other) && !teamsManager.isOnSameTeam(player,other)) {
+                if (other.getLocation().distance(location) > radius) {
+                    continue;
+                }
+                players.add(other);
+            }
+        }
+        return players;
     }
 
 

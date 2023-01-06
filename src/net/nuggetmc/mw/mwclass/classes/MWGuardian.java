@@ -50,7 +50,7 @@ public class MWGuardian extends MWClass {
                 "Curse laser",
                 "Shoot a laser to the closest player in a &a10 &rblocks radius,\n dealing &a5&r true damage , gaining Speed &aII&r for &a5 &rseconds.",
                 "Extremity",
-                "Once you are below 20 HP,every hit will heal you &a1.5&r HP in &a8&r seconds,you gain &a4&r seconds of resistance &aII&r.\nIf that damage cause you to be dead,it will be cancelled.\nCooldown: &a13 &rseconds.",
+                "Once you are below 20 HP,every hit will heal you &a3&r HP in &a8&r seconds,you gain &a4&r seconds of resistance &aII&r.\nIf that damage cause you to be dead,it will be cancelled.\nCooldown: &a13 &rseconds.",
                 "Ruins guardian",
                 "If you are in water, you will deal &a+75%&r damage for &a5&r seconds,gaining regeneration &aI&r for the next &a3&r seconds.\nCooldown:&a30&r seconds.",
                 "Stupid dev",
@@ -109,7 +109,7 @@ public class MWGuardian extends MWClass {
         if (!suckList.contains(player)) {
             return;
         }
-        double finalhealth = player.getHealth() + 1.5;
+        double finalhealth = player.getHealth() + 3;
         player.setHealth(Math.min(finalhealth, player.getMaxHealth()));
 
 

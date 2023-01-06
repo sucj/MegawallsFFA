@@ -50,7 +50,7 @@ class MWAsn :MWClass(){
         )
         classInfo = MWClassInfo(
             "Shadow Cloak",
-            "§7Become invisible and gain Speed I and §7Resistance I for §a10§7 seconds\n§7Attacking an enemy or a wither cancels  §7Shadow Cloak & your Resistance effect, dealing §7extra true damage equaling to §a10%§7 of that§7enemy's missing health, and refunds 4 Energy for §7each second of invisibility that remained",
+            "§7Become invisible and gain Speed I and §7Resistance I for §a10§4 seconds\n§7Attacking an enemy or a wither cancels  §7Shadow Cloak & your Resistance effect, dealing §7extra true damage equaling to §a10%§7 of that§7enemy's missing health, and refunds 4 Energy for §7each second of invisibility that remained",
             "Shadow Step",
             "§7When sneaking and taking melee or ranged, §7damage within §a25§7 blocks, you will teleport §7behind your attacker and not take damage.\n §7This does not trigger while Shadow Cloak is §7active.\n§7Cooldown: §a10s",
             "Master Alchemist",
@@ -158,7 +158,7 @@ class MWAsn :MWClass(){
 
     override fun ability(player: Player) {
         energyManager.clear(player)
-        sc.put(player,6)
+        sc.put(player,4)
         object :BukkitRunnable(){
             override fun run() {
                 if ((!sc.containsKey(player))|| sc[player]!! <=0){
@@ -179,9 +179,9 @@ class MWAsn :MWClass(){
                 }
             }
         }.runTaskTimer(plugin,0,20)
-        player.addPotionEffect(PotionEffect(PotionEffectType.SPEED,6*20,0))
-        player.addPotionEffect(PotionEffect(PotionEffectType.DAMAGE_RESISTANCE,6*20,0))
-        player.addPotionEffect(PotionEffect(PotionEffectType.INVISIBILITY,6*20,0))
+        player.addPotionEffect(PotionEffect(PotionEffectType.SPEED,4*20,0))
+        player.addPotionEffect(PotionEffect(PotionEffectType.DAMAGE_RESISTANCE,4*20,0))
+        player.addPotionEffect(PotionEffect(PotionEffectType.INVISIBILITY,4*20,0))
         for (p:Player in plugin.combatManager.inCombatPlayers){
             p.hidePlayer(player)
         }

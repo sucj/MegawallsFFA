@@ -54,7 +54,7 @@ public class MWSpider extends MWClass {
 
         this.classInfo = new MWClassInfo(
                 "Leap",
-                "Leap forward into the air, applying Slowness I to all enemies in a 4 block radius for &a4 &rseconds.\nYou deal &a1.5x &rthe amount of fall damage you take, up to a maximum of &a12 HP &rdealt.\nYou gain Regeneration III for &a3 &rseconds upon casting.",
+                "Leap forward into the air, applying Slowness I to all enemies in a 4 block radius for &a4 &rseconds.\nYou deal &a0.9x &rthe amount of fall damage you take, up to a maximum of &a12 HP &rdealt,and a minium of 7.\nYou gain Regeneration III for &a3 &rseconds upon casting.",
                 "Venom Strike",
                 "For every &a4 &rmelee attacks, you will poison your opponent, dealing 3 damage over &a5 &rseconds.",
                 "Skitter",
@@ -136,8 +136,9 @@ public class MWSpider extends MWClass {
         World world = player.getWorld();
         Location loc = player.getLocation();
 
-        double dmg = event.getDamage() * 1.5;
+        double dmg = event.getDamage() * 0.9;
         if (dmg > 12) dmg = 12;
+        if(dmg<7) dmg=7;
 
         for (Player victim : Bukkit.getOnlinePlayers()) {
             if (plugin.getTeamsManager().isOnSameTeam(player, victim)) continue;

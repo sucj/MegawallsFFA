@@ -17,6 +17,7 @@ commands:
   luckdraw:
     description: luck draw.
     usage: /luckdraw
+    permission: mw.luckdraw
   coinsmgr:
     description: coinsmgr command.
     usage: /coinsmgr
@@ -98,4 +99,6 @@ permissions:
   mw.ride:
     default: op
   mw.makeride:
+    default: op
+  mw.luckdraw:
     default: op
