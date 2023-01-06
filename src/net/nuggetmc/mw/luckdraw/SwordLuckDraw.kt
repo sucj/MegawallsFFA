@@ -1,5 +1,6 @@
 package net.nuggetmc.mw.luckdraw
 
+import net.md_5.bungee.api.ChatColor
 import net.nuggetmc.mw.MegaWalls
 import org.bukkit.configuration.file.FileConfiguration
 import org.bukkit.entity.Player
@@ -12,10 +13,12 @@ object SwordLuckDraw {
         val total = SwordNameRarity.values().sumOf { it.probabilityPercent }
         var swordNameManager: SwordNameManager? =null
 
-       private fun luckDraw(): String {
+
+       private fun luckDraw(): LuckDrawData {
            if (swordNameManager==null){
                swordNameManager=MegaWalls.getInstance().swordNameManager
            }
+
 
             val rarity = when ((Math.random() * total)) {
                 in 0.0..SwordNameRarity.LEGENDARY.probabilityPercent -> SwordNameRarity.LEGENDARY
@@ -31,14 +34,21 @@ object SwordLuckDraw {
 
                 else -> SwordNameRarity.UNCOMMON
             }
-            return names[rarity]!![Random.nextInt(names[rarity]!!.size)]
+            return LuckDrawData(names[rarity]!![Random.nextInt(names[rarity]!!.size)],rarity)
         }
     fun doLuckDraw(player:Player,times:Int=1){
         repeat(times) {
             val a = luckDraw()
-            swordNameManager!!.select(player, a)
-            player.sendMessage("GG!You found a $a")
+            val color=when(a.rarity){
+                SwordNameRarity.UNCOMMON-> ChatColor.GREEN
+                SwordNameRarity.RARE -> ChatColor.BLUE
+                SwordNameRarity.EPIC-> ChatColor.DARK_PURPLE
+                SwordNameRarity.LEGENDARY-> ChatColor.GOLD
+            }
+            swordNameManager!!.select(player, a.result)
+            player.sendMessage("GG!You found a ${color.toString()+a.result}")
         }
     }
+    class LuckDrawData(val result:String,val rarity: SwordNameRarity)
 
 }

@@ -75,9 +75,9 @@ commands:
     description: for fun.
     usage: /milikiller
     permission: mw.admin
-  walkspeed:
+  setwalkspeed:
     description: set a player's walk speed.
-    usage: /walkspeed
+    usage: /setwalkspeed
     permission: mw.admin
 permissions:
   mw.*:

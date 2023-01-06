@@ -148,6 +148,7 @@ public class MegaWalls extends JavaPlugin {
     public int breakResetTime;
     public static boolean OPBYPASSGM = false;
     public double hbrTrueDamage= 2.5;
+    public int swordLuckDrawPrice;
 
     public HideManager getHideManager() {
         return hideManager;
@@ -233,6 +234,13 @@ public class MegaWalls extends JavaPlugin {
             getConfig().set("opbypassgamemode", false);
             saveConfig();
         }
+        try {
+            swordLuckDrawPrice = getConfig().getInt("swordLuckDrawPrice");
+        } catch (Exception e) {
+            getConfig().set("swordLuckDrawPrice", 500);
+            hbrTrueDamage = 500;
+            saveConfig();
+        }
         // Create instances
         this.pluginManager = this.getServer().getPluginManager();
         this.mwClassManager = new MWClassManager(this);
@@ -269,7 +277,7 @@ public class MegaWalls extends JavaPlugin {
         setExecutor("mwresel", new MWReselCommand());
         setExecutor("milikiller", new CommandMiliKiller());
         setExecutor("killeffects", new killEffectCommand());
-        setExecutor("walkspeed",new WalkSpeedCommand());
+        setExecutor("setwalkspeed",new WalkSpeedCommand());
         setExecutor("luckdraw",new LuckDrawCommand());
         setExecutorAndTabCompleter("mwitem", new getItemCommand());
         setExecutorAndTabCompleter("megawalls", new MegaWallsCommand());

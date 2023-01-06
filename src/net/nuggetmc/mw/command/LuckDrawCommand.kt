@@ -10,9 +10,13 @@ import org.bukkit.entity.Player
 class LuckDrawCommand : CommandExecutor{
 
     val plugin = MegaWalls.getInstance()
-    val swordNameManager=plugin.swordNameManager
+    val coinsMgr=plugin.coinsManager
+    var luckDrawPrice:Int?=null
 
     override fun onCommand(sender: CommandSender?, cmd: Command?, label: String?, args: Array<String?>?): Boolean {
+        if (luckDrawPrice==null){
+            luckDrawPrice=MegaWalls.getInstance().swordLuckDrawPrice
+        }
         if (sender !is Player) return true
         if (args!!.isNotEmpty()){
             var times=0
@@ -25,7 +29,12 @@ class LuckDrawCommand : CommandExecutor{
                 sender.sendMessage("YOUR NUMBER MUST BE A VALID INTEGER AND BIGGER THAN 0!")
                 return true
             }
-            SwordLuckDraw.doLuckDraw(sender, Integer.parseInt(args[0]))
+            if (coinsMgr.get(sender)< luckDrawPrice!!){
+                sender.sendMessage("Not enough coins ! You need $luckDrawPrice to do this!")
+                return true
+            }else {
+                SwordLuckDraw.doLuckDraw(sender, Integer.parseInt(args[0]))
+            }
         }else {
             SwordLuckDraw.doLuckDraw(sender)
         }
