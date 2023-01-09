@@ -95,7 +95,7 @@ class MWWereWolf : MWClass() {
     fun onRightClick(e: PlayerInteractEvent) {
         val p = e.player
         if (!e.action.name.contains("RIGHT")) return
-        if (p.itemInHand == null || p.itemInHand.type == Material.AIR) return
+        if (p.itemInHand == null || p.itemInHand.type != Material.COOKED_BEEF) return
         if (manager[p] !== this) return
         if (p.foodLevel == 20) {
             p.foodLevel = 19
@@ -103,6 +103,9 @@ class MWWereWolf : MWClass() {
     }
     @EventHandler
     fun onSteak(e:PlayerItemConsumeEvent){
+        if(e.item.type!=Material.COOKED_BEEF){
+            return
+        }
         val player=e.player
         if (manager[player]==this){
             if (!devourCooldown.contains(player)){
