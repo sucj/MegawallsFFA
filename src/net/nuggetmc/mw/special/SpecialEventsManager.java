@@ -206,21 +206,6 @@ public class SpecialEventsManager implements Listener {
         }
     }
 
-    @EventHandler
-    public void onAntiStealDiamonds(BlockBreakEvent e) {
-        if (e.getPlayer().isOp() || e.getPlayer().hasPermission("mw.admin")) return;
-        if (Bukkit.getOnlinePlayers().toArray().length > 2) return;
-        if (e.getBlock().getType() == Material.DIAMOND_ORE || e.getBlock().getType() == Material.DIAMOND_BLOCK) {
-            if (Bukkit.getOnlinePlayers().toArray().length == 1 || (Bukkit.getOnlinePlayers().toArray().length == 2 && ((((Player) Bukkit.getOnlinePlayers().toArray()[0]).getAddress()) == ((Player) Bukkit.getOnlinePlayers().toArray()[1]).getAddress()))) {
-
-
-                e.setCancelled(true);
-                e.getPlayer().sendMessage("禁止打工!等有人的时候你再挖吧!");
-                return;
-
-            }
-        }
-    }
 
     ///////////////////////////BREAK BLOCK
     /*@EventHandler

@@ -74,7 +74,11 @@ class MWWereWolf : MWClass() {
             energyManager.add(player, 20)
             if (inAbility.contains(player)) {
                 mwhealth.heal(player, 0.3 * event.damage)
-                mwhealth.trueDamage(event.entity as Player, 2.toDouble(), player)
+                object:BukkitRunnable(){
+                    override fun run() {
+                        mwhealth.trueDamage(victim, 2.0, player)
+                    }
+                }.runTaskLater(plugin,5)
             }
             if (!combo.containsKey(player)){
                 combo[player] =1
