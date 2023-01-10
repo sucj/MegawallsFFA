@@ -76,7 +76,7 @@ class MWWereWolf : MWClass() {
                 mwhealth.heal(player, 0.3 * event.damage)
                 mwhealth.trueDamage(event.entity as Player, 2.toDouble(), player)
             }
-            if (combo.containsKey(player)){
+            if (!combo.containsKey(player)){
                 combo[player] =1
             }else{
                 combo[player] = combo[player]!! + 1
