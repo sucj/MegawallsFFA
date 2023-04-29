@@ -75,24 +75,41 @@ class MWGoldenDragon : MWClass() {
             if (energy<21){
                 return
             }
-
+            var target: Player? = null
+            for (block in player
+                .getLineOfSight(MWEnderman.set, 25)) {
+                for (player2 in PlayerUtils.getNearbyPlayers(block.location, player, 2)) {
+                    if (target == null || player2
+                            .location.distance(player.location) < target
+                            .location.distance(player.location)
+                    ) target = player2
+                }
+            }
             when(energy){
                 in 21..39->{
-                    val enemy=PlayerUtils.getClosestEnemyInRange(player, 30.0)
-                    if (enemy==null) return
+                    if (target==null){
+                        target=PlayerUtils.getClosestEnemyInRange(player, 30.0)
+                    }
+                    if (target==null){
+                        return
+                    }
                     energyManager[player] -=21
-                    mwhealth.trueDamage(enemy,4.toDouble(),player)
-                    player.sendMessage(this.color.toString()+ "You deal 4 damage to ${enemy.displayName}.")
-                    enemy.sendMessage(this.color.toString() + "You received 4 damage from ${player.displayName}.")
+                    mwhealth.trueDamage(target,4.toDouble(),player)
+                    player.sendMessage(this.color.toString()+ "You deal 4 damage to ${target.displayName}.")
+                    target.sendMessage(this.color.toString() + "You received 4 damage from ${player.displayName}.")
                     player.heal(2)
                 }
                 in 40..100->{
-                    val enemy=PlayerUtils.getClosestEnemyInRange(player, 35.0)
-                    if (enemy==null) return
+                    if (target==null){
+                        target= PlayerUtils.getClosestEnemyInRange(player, 35.0)
+                    }
+                    if (target==null){
+                        return
+                    }
                     energyManager[player] -=40
-                    mwhealth.trueDamage(enemy,9.toDouble(),player)
-                    player.sendMessage(this.color.toString()+ "You deal 9 damage to ${enemy.displayName}.")
-                    enemy.sendMessage(this.color.toString() + "You received 9 damage from ${player.displayName}.")
+                    mwhealth.trueDamage(target,9.toDouble(),player)
+                    player.sendMessage(this.color.toString()+ "You deal 9 damage to ${target.displayName}.")
+                    target.sendMessage(this.color.toString() + "You received 9 damage from ${player.displayName}.")
                     player.heal(5)
 
                 }

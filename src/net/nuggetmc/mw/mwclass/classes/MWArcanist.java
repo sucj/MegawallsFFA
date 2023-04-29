@@ -10,6 +10,7 @@ import net.nuggetmc.mw.mwclass.info.Playstyle;
 import net.nuggetmc.mw.mwclass.items.MWItem;
 import net.nuggetmc.mw.mwclass.items.MWKit;
 import net.nuggetmc.mw.mwclass.items.MWPotions;
+import net.nuggetmc.mw.special.SpecialEventsManager;
 import net.nuggetmc.mw.special.TeamsManager;
 import net.nuggetmc.mw.utils.*;
 import org.bukkit.*;
@@ -78,12 +79,15 @@ public class MWArcanist extends MWClass {
     public void ability(Player player) {
         energyManager.clear(player);
         final List<Player> damaged = new ArrayList<Player>();
-        for (final Block block : player.getLineOfSight(set, 12)) {
+        for (final Block block : player.getLineOfSight(set, 3)) {
             ParticleEffect.REDSTONE.display(0.0f, 0.0f, 0.0f, 0.0f, 3, block.getLocation(), 10.0);
             block.getWorld().playSound(block.getLocation(), Sound.DIG_STONE, 1.0f, 1.0f);
-            for (final Block block2 : LocationUtils.getCube(block.getLocation(), 3)) {
+            for (final Block block2 : LocationUtils.getCube(block.getLocation(), 2)) {
                 if ( ((block2.getType() != Material.FURNACE && block2.getType() != Material.BURNING_FURNACE && block2.getType() != Material.TRAPPED_CHEST) )) {
                     if (block2.getType() == Material.BEDROCK) {
+                        continue;
+                    }
+                    if(SpecialEventsManager.rp != null&&SpecialEventsManager.rp.getAPI(plugin).getRegion("spawn").isLocationInRegion(block2.getLocation())){
                         continue;
                     }
                     Material material = block2.getType();

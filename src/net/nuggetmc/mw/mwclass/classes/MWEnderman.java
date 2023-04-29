@@ -71,7 +71,7 @@ public class MWEnderman extends MWClass {
 
         public int time;
     }
-    private static final Set<Material> set = new HashSet<>();
+    public static final Set<Material> set = new HashSet<>();
     static {
         set.addAll(Arrays.asList(Material.values()));
     }

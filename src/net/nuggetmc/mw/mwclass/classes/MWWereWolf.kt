@@ -40,7 +40,7 @@ class MWWereWolf : MWClass() {
         )
         classInfo = MWClassInfo(
             "Lycanthropy",
-            "You will gain Speed II for §a8§7 seconds. §7During this time,you will heal for 30% of the damage you deal,and deal 2 additional true damage every hit.",
+            "You will gain Speed II for §a8§7 seconds. §7During this time,you will heal for 20% of the damage you deal,and deal 2 additional true damage every hit.",
             "Blood Lust",
             "§7Gain Speed I and Resistance II for §a8 §7seconds after landing any combination of 3 consecutive attacks without taking any damage.",
             "Devour",
@@ -48,8 +48,8 @@ class MWWereWolf : MWClass() {
             "Carnivore" + "" + ChatColor.RED + "unavailable",
             "§7Every §a1§7 player killed will drop §71§7 extra steak, and enemies that are final killed §7will drop §a4§7 extra steak"
         )
-        classInfo.addEnergyGainType("Melee", 20)
-        classInfo.addEnergyGainType("Bow", 20)
+        classInfo.addEnergyGainType("Melee", 10)
+        classInfo.addEnergyGainType("Bow", 10)
     }
 
     override fun ability(player: Player) {
@@ -71,9 +71,9 @@ class MWWereWolf : MWClass() {
         if (manager[player] == this) {
 
 
-            energyManager.add(player, 20)
+            energyManager.add(player, 10)
             if (inAbility.contains(player)) {
-                mwhealth.heal(player, 0.3 * event.damage)
+                mwhealth.heal(player, 0.2 * event.damage)
                 object:BukkitRunnable(){
                     override fun run() {
                         mwhealth.trueDamage(victim, 2.0, player)

@@ -30,7 +30,7 @@ import static net.nuggetmc.mw.MegaWalls.OPBYPASSGM;
 
 public class SpecialEventsManager implements Listener {
     MegaWalls plugin;
-    RegionPreservePlugin rp;
+   public static RegionPreservePlugin rp;
 
     public SpecialEventsManager() {
         this.plugin = MegaWalls.getInstance();
