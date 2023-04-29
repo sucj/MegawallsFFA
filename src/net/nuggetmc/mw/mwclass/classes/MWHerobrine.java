@@ -145,7 +145,7 @@ public class MWHerobrine extends MWClass {
 
             List<ItemStack> potions = MWPotions.createBasic(this, 2, 7, 2);
 
-            items = MWKit.generate(this, sword, null, tool, null, null, potions, helmet, null, null, null, null);
+            items = MWKit.generate(this, sword, null, tool, null, potions, helmet, null, null, null, null);
         
 
         MWKit.assignItems(player, items);

@@ -227,7 +227,7 @@ class MWAsn :MWClass(){
             val potions = ArrayList<ItemStack>()
             potions.add(MWPotions.createAsnPotions(this.color,5))
 
-            items = MWKit.generate(this, sword, bow, tool, null, null, potions, null, null, null, boots, null)
+            items = MWKit.generate(this, sword, bow, tool, null, potions, null, null, null, boots, null)
 
         MWKit.assignItems(player, items)
 

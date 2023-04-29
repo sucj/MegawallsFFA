@@ -146,7 +146,7 @@ class MWWereWolf : MWClass() {
             val tool = MWItem.createTool(this, Material.DIAMOND_PICKAXE)
             val chestplate = MWItem.createArmor(this, Material.DIAMOND_CHESTPLATE, armorEnch)
             val potions = MWPotions.createWolfBasic(this, 1, 8, 3)
-            items = MWKit.generate(this, sword, bow, tool, null, null, potions, null, chestplate, null, null, null)
+            items = MWKit.generate(this, sword, bow, tool, null, potions, null, chestplate, null, null, null)
 
         MWKit.assignItems(player, items)
         inAbility.remove(player)

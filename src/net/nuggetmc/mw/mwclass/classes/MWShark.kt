@@ -143,7 +143,7 @@ class MWShark : MWClass() {
             val boots = MWItem.createArmor(this, Material.DIAMOND_BOOTS, armorEnch)
             val potions = MWPotions.createBasic(this, 2, 8, 2)
 
-            items = MWKit.generate(this, sword, bow, tool, null, null, potions, null, null, null, boots, null)
+            items = MWKit.generate(this, sword, bow, tool, null,  potions, null, null, null, boots, null)
         
         MWKit.assignItems(player, items)
 

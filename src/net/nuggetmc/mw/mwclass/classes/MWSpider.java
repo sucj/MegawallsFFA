@@ -292,14 +292,14 @@ public class MWSpider extends MWClass {
 
             ItemStack sword = MWItem.createSword(this, Material.DIAMOND_SWORD, swordEnch,player);
             ItemStack tool = MWItem.createTool(this, Material.DIAMOND_PICKAXE);
-            ItemStack toolShovel = MWItem.createTool(this, Material.IRON_SPADE);
+            //ItemStack toolShovel = MWItem.createTool(this, Material.IRON_SPADE);
             ItemStack boots = MWItem.createArmor(this, Material.DIAMOND_BOOTS, armorEnch);
             //ItemStack leggings = MWItem.createArmor(this, Material.IRON_LEGGINGS, armorEnch2);
 
             List<ItemStack> potions = MWPotions.createBasic(this, 2, 8, 2);
 
             //items = MWKit.generate(this, sword, null, tool, null, toolShovel, potions, null, null, leggings, boots, null);
-            items = MWKit.generate(this, sword, null, tool, null, toolShovel, potions, null, null, null, boots, null);
+            items = MWKit.generate(this, sword, null, tool, null, potions, null, null, null, boots, null);
         
 
         MWKit.assignItems(player, items);

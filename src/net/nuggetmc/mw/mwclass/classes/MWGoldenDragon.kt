@@ -176,7 +176,7 @@ class MWGoldenDragon : MWClass() {
             val leg = MWItem.createArmor(this, Material.IRON_LEGGINGS, leggingsEnch)
             val potions = MWPotions.createBasic(this, 2, 8, 2)
 
-            items = MWKit.generate(this, sword, bow, tool, null, null, potions, null, null, leg, boots, null)
+            items = MWKit.generate(this, sword, bow, tool, null, potions, null, null, leg, boots, null)
         
         MWKit.assignItems(player, items)
         cdCache.remove(player)

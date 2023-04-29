@@ -205,7 +205,7 @@ public class MWZombie extends MWClass {
 
             List<ItemStack> potions = MWPotions.createBasic(this, 1, 10, 2);
 
-            items = MWKit.generate(this, sword, null, tool, null, null, potions, helmet, chestplate, null, null, null);
+            items = MWKit.generate(this, sword, null, tool, null, potions, helmet, chestplate, null, null, null);
         
 
         MWKit.assignItems(player, items);

@@ -228,7 +228,7 @@ public class MWGolem extends MWClass {
             potions.add(MWPotions.createRegenerationPotions(plugin.isChinese() ? this.name[0] : this.name[1], this.color, 3, 12, 10));
             potions.add(MWPotions.createSlowSplash(plugin.isChinese() ? this.name[0] : this.name[1], this.color));
 
-            items = MWKit.generate(this, sword, null, tool, toolAxe, null, potions, null, chestplate, null, boots, null);
+            items = MWKit.generate(this, sword, null, tool, toolAxe, potions, null, chestplate, null, boots, null);
         
 
         MWKit.assignItems(player, items);

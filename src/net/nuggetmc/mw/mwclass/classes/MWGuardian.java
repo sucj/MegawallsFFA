@@ -207,7 +207,7 @@ public class MWGuardian extends MWClass {
 
             List<ItemStack> potions = MWPotions.createBasic(this, 1, 8, 2);
 
-            items = MWKit.generate(this, sword, null, tool, null, null, potions, null, null, null, boots, null);
+            items = MWKit.generate(this, sword, null, tool, null, potions, null, null, null, boots, null);
         
 
         MWKit.assignItems(player, items);

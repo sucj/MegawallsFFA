@@ -24,7 +24,7 @@ public class MWKit {
     }
 
 
-    public static Map<Integer, ItemStack> generate(MWClass mwclass, ItemStack sword, ItemStack bow, ItemStack tool, ItemStack toolAxe, ItemStack toolShovel, List<ItemStack> potions,
+    public static Map<Integer, ItemStack> generate(MWClass mwclass, ItemStack sword, ItemStack bow, ItemStack tool, ItemStack toolAxe, List<ItemStack> potions,
                                                    ItemStack helmet, ItemStack chestplate, ItemStack leggings, ItemStack boots, List<ItemStack> extra) {
 
         Map<Integer, ItemStack> items = new HashMap<>();
@@ -38,9 +38,9 @@ public class MWKit {
             bow = MWItem.createBow(mwclass, bowEnch);
         }
 
-        if (toolShovel == null) {
+        /*if (toolShovel == null) {
             toolShovel = new ItemStack(Material.IRON_SPADE);
-        }
+        }*/
         ItemStack enderchest = ItemStackCreator.createItem(Material.ENDER_CHEST, mwclass.getColor() + mwclass.getName() + (MegaWalls.getInstance().isChinese() ? " 末影箱" : " Enderchest"), 1);
         ItemStack compass = ItemUtils.toMWItem(ItemStackCreator.createItem(Material.COMPASS, mwclass.getColor() + mwclass.getName() + (MegaWalls.getInstance().isChinese() ? " 指南针" : " Compass"), 1));
         List<ItemStack> contents = new ArrayList<>();
@@ -54,7 +54,8 @@ public class MWKit {
         contents.add(new ItemStack(Material.COOKED_BEEF, 64));
         contents.add(compass);
         contents.add(enderchest);
-        contents.add(toolShovel);
+        //contents.add(toolShovel);
+        contents.add(MWItem.createAOTR());
         contents.add(new ItemStack(Material.ARROW, 48));
         contents.add(new ItemStack(Material.STONE, 64));
         contents.add(new ItemStack(Material.DIRT, 64));

@@ -7,6 +7,7 @@ import net.md_5.bungee.api.ChatColor;
 import net.nuggetmc.mw.MegaWalls;
 import net.nuggetmc.mw.mwclass.classes.MWCow;
 import net.nuggetmc.mw.utils.ItemUtils;
+import net.nuggetmc.mw.utils.PlayerUtils;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
@@ -22,15 +23,20 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
+import java.util.UUID;
 
 import static net.nuggetmc.mw.MegaWalls.OPBYPASSGM;
 
 public class SpecialEventsManager implements Listener {
     MegaWalls plugin;
-   public static RegionPreservePlugin rp;
+    public static RegionPreservePlugin rp;
+    Set<Player> aotrCD = new HashSet<>();
 
     public SpecialEventsManager() {
         this.plugin = MegaWalls.getInstance();
@@ -187,7 +193,7 @@ public class SpecialEventsManager implements Listener {
     @EventHandler
     public void onRespawn(PlayerRespawnEvent event) {
         Player player = event.getPlayer();
-        if ((player.isOp()|| event.getPlayer().hasPermission("mw.admin")) && OPBYPASSGM) {
+        if ((player.isOp() || event.getPlayer().hasPermission("mw.admin")) && OPBYPASSGM) {
             //
         } else {
             event.getPlayer().setGameMode(GameMode.ADVENTURE);
@@ -234,8 +240,8 @@ public class SpecialEventsManager implements Listener {
         if (killer == null) {
             return;
         }
-        e.setDeathMessage(String.format("%s%s%s was killed by %s%s with %s", ChatColor.GREEN, e.getEntity().getName(), ChatColor.WHITE, ChatColor.RED, killer.getName(),killer.getItemInHand().getItemMeta().getDisplayName()));
-        if (plugin.getKillEffectManager().get(killer)!=null){
+        e.setDeathMessage(String.format("%s%s%s was killed by %s%s with %s", ChatColor.GREEN, e.getEntity().getName(), ChatColor.WHITE, ChatColor.RED, killer.getName(), killer.getItemInHand().getItemMeta().getDisplayName()));
+        if (plugin.getKillEffectManager().get(killer) != null) {
             plugin.getKillEffectManager().get(killer).update(e.getEntity());
         }
     }
@@ -311,28 +317,28 @@ public class SpecialEventsManager implements Listener {
             }
         }, plugin.breakResetTime * 20L);
     }
+
     @EventHandler
     public void onResetExplosion(EntityExplodeEvent e) {
-        for (Block b:e.blockList()){
+        for (Block b : e.blockList()) {
             Material material = b.getType();
             if (material.name().toLowerCase().contains("diamond")) {
                 return;
             }
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                if(!e.isCancelled()) {
+                if (!e.isCancelled()) {
                     b.setType(material);
                 }
             }, plugin.breakResetTime * 20L);
         }
 
     }
+
     @EventHandler
     public void onEntityChangeBlock(EntityChangeBlockEvent e) {
         if (e.getEntity().hasMetadata(MegaWalls.getMetadataValue()))
             e.setCancelled(true);
     }
-
-
 
 
     @EventHandler
@@ -356,11 +362,11 @@ public class SpecialEventsManager implements Listener {
             if (projectile.getShooter() instanceof Player) {
 
                 if (e.getEntity() instanceof Player) {
-                    if (plugin.getTeamsManager().isOnSameTeam(((Player) projectile.getShooter()).getPlayer(),((Player) e.getEntity()).getPlayer())){
+                    if (plugin.getTeamsManager().isOnSameTeam(((Player) projectile.getShooter()).getPlayer(), ((Player) e.getEntity()).getPlayer())) {
                         e.setCancelled(true);
                     }
-                    if (projectile instanceof WitherSkull){
-                        if (projectile.hasMetadata(MegaWalls.getMetadataValue())){
+                    if (projectile instanceof WitherSkull) {
+                        if (projectile.hasMetadata(MegaWalls.getMetadataValue())) {
                             e.setCancelled(true);
                         }
                     }
@@ -369,6 +375,46 @@ public class SpecialEventsManager implements Listener {
         }
     }
 
+    /////AOTR
+    @EventHandler
+    public void onAOTR(PlayerInteractEvent e) {
+        Player p = e.getPlayer();
+        if (!e.getAction().name().contains("RIGHT")) return;
+        if (p.getItemInHand() == null || p.getItemInHand().getType() == Material.AIR) return;
+        if (!p.getItemInHand().getItemMeta().hasDisplayName()) return;
+        if (!p.getItemInHand().getItemMeta().getDisplayName().toLowerCase().contains("rogues")) return;
+        if (!ItemUtils.isKitItem(p.getItemInHand())) return;
+        e.setCancelled(true);
+        if (aotrCD.contains(p)) {
+            p.sendMessage("this item is in cooldown!");
+            return;
+        }
+        Player closestEnemy=PlayerUtils.getClosestEnemy(p);
+        if ((closestEnemy!=null && closestEnemy.getLocation().distance(p.getLocation()) < 30)) {
+            p.sendMessage("There's at least an enemy in 30 blocks!");
+            return;
+        }
+        aotrCD.add(p);
+        p.sendMessage("You have used your "+ChatColor.GOLD+"Speed Boost "+ChatColor.RESET+"ability!");
+        p.setWalkSpeed(0.9f);
+        UUID uuid=p.getUniqueId();
+        Bukkit.getScheduler().runTaskLater(MegaWalls.getInstance(), new BukkitRunnable() {
+            @Override
+            public void run() {
+                aotrCD.remove(p);
+            }
+        },40*20);
+        Bukkit.getScheduler().runTaskLater(MegaWalls.getInstance(), new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (Bukkit.getPlayer(uuid)!=null) {
+                    p.setWalkSpeed(0.2f);
+                }
+            }
+        }, 10 * 20);
+
+
+    }
 
 
 }
