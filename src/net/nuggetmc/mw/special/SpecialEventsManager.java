@@ -390,8 +390,8 @@ public class SpecialEventsManager implements Listener {
             return;
         }
         Player closestEnemy=PlayerUtils.getClosestEnemy(p);
-        if ((closestEnemy!=null && closestEnemy.getLocation().distance(p.getLocation()) < 30)) {
-            p.sendMessage("There's at least an enemy in 30 blocks!");
+        if ((closestEnemy!=null && closestEnemy.getLocation().distance(p.getLocation()) < 50)) {
+            p.sendMessage("There's at least an enemy in 50 blocks!");
             return;
         }
         aotrCD.add(p);
@@ -411,7 +411,7 @@ public class SpecialEventsManager implements Listener {
                     p.setWalkSpeed(0.2f);
                 }
             }
-        }, 10 * 20);
+        }, 5 * 20);
 
 
     }
