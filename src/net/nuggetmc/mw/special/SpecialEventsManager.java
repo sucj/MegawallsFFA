@@ -37,6 +37,7 @@ public class SpecialEventsManager implements Listener {
     MegaWalls plugin;
     public static RegionPreservePlugin rp;
     Set<Player> aotrCD = new HashSet<>();
+    Set<Player> inAotr = new HashSet<>();
 
     public SpecialEventsManager() {
         this.plugin = MegaWalls.getInstance();
@@ -95,12 +96,21 @@ public class SpecialEventsManager implements Listener {
         p.openInventory(p.getEnderChest());
     }
 
-    ///////////////////////////PLAYER TRACK
+    ///////////////////////////PLAYERMOVEEVENT
     @EventHandler
     public void onMove(PlayerMoveEvent e) {
         Player plr = e.getPlayer();
         if (!plugin.getCombatManager().isInCombat(plr)) {
             return;
+        }
+        if (inAotr.contains(plr)) {
+            Player closestEnemy = PlayerUtils.getClosestEnemy(plr);
+            if ((closestEnemy != null && closestEnemy.getLocation().distance(plr.getLocation()) <= 15)) {
+                plr.sendMessage("There's at least an enemy in 15 blocks,so disabled your "+ChatColor.GOLD+"Speed Boost "+ChatColor.RESET+"ability!");
+                plr.setWalkSpeed(0.2f);
+                inAotr.remove(plr);
+                return;
+            }
         }
         Location plrLocation = plr.getLocation();
         if (plr.getWorld().getEnvironment() == World.Environment.NORMAL) {
@@ -396,6 +406,7 @@ public class SpecialEventsManager implements Listener {
         }
         aotrCD.add(p);
         p.sendMessage("You have used your "+ChatColor.GOLD+"Speed Boost "+ChatColor.RESET+"ability!");
+        inAotr.add(p);
         p.setWalkSpeed(0.9f);
         UUID uuid=p.getUniqueId();
         Bukkit.getScheduler().runTaskLater(MegaWalls.getInstance(), new BukkitRunnable() {
@@ -409,6 +420,8 @@ public class SpecialEventsManager implements Listener {
             public void run() {
                 if (Bukkit.getPlayer(uuid)!=null) {
                     p.setWalkSpeed(0.2f);
+                    inAotr.remove(p);
+                    p.sendMessage("Your "+ChatColor.GOLD+"Speed Boost "+ChatColor.RESET+"expired!");
                 }
             }
         }, 5 * 20);
