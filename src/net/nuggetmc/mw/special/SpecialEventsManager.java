@@ -37,11 +37,16 @@ public class SpecialEventsManager implements Listener {
     MegaWalls plugin;
     public static RegionPreservePlugin rp;
     Set<Player> aotrCD = new HashSet<>();
-    Set<Player> inAotr = new HashSet<>();
+    public Set<Player> inAotr = new HashSet<>();
+    static SpecialEventsManager instance;
+    public static SpecialEventsManager getInstance(){
+        return instance;
+    }
 
     public SpecialEventsManager() {
         this.plugin = MegaWalls.getInstance();
         rp = Bukkit.getPluginManager().getPlugin("RegionPreserve") == null ? null : (RegionPreservePlugin) Bukkit.getPluginManager().getPlugin("RegionPreserve");
+        instance=this;
     }
 
     ///////////////////////////COW BUCKET
@@ -102,15 +107,6 @@ public class SpecialEventsManager implements Listener {
         Player plr = e.getPlayer();
         if (!plugin.getCombatManager().isInCombat(plr)) {
             return;
-        }
-        if (inAotr.contains(plr)) {
-            Player closestEnemy = PlayerUtils.getClosestEnemy(plr);
-            if ((closestEnemy != null && closestEnemy.getLocation().distance(plr.getLocation()) <= 15)) {
-                plr.sendMessage("There's at least an enemy in 15 blocks,so disabled your "+ChatColor.GOLD+"Speed Boost "+ChatColor.RESET+"ability!");
-                plr.setWalkSpeed(0.2f);
-                inAotr.remove(plr);
-                return;
-            }
         }
         Location plrLocation = plr.getLocation();
         if (plr.getWorld().getEnvironment() == World.Environment.NORMAL) {
