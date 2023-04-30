@@ -150,11 +150,6 @@ public class MegaWalls extends JavaPlugin {
     public double hbrTrueDamage= 2.5;
     public int swordLuckDrawPrice;
 
-    public HideManager getHideManager() {
-        return hideManager;
-    }
-
-    private HideManager hideManager;
     FileConfiguration swordNames;
    public HashMap<SwordNameRarity, List<String>> swordNameMap=new HashMap<>();
     File file;
@@ -257,7 +252,6 @@ public class MegaWalls extends JavaPlugin {
         this.compassManager = new CompassManager();
         this.keMenu=new KEMenu();
         this.killEffectManager=new KillEffectManager();
-        this.hideManager=new HideManager();
         this.swordNameManager=new SwordNameManager();
 
         // Register commands
