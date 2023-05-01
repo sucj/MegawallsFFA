@@ -70,7 +70,7 @@ public class MWItem {
         List<String> lore = new ArrayList<>();
 
 
-        item.addUnsafeEnchantment(Enchantment.DIG_SPEED,10);
+        item.addUnsafeEnchantment(Enchantment.PROTECTION_EXPLOSIONS,10);
 
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(ChatColor.LIGHT_PURPLE.toString()+ChatColor.BOLD+"Aspect of the Rogues");

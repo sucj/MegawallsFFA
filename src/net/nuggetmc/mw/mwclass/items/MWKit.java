@@ -3,6 +3,7 @@ package net.nuggetmc.mw.mwclass.items;
 
 import net.nuggetmc.mw.MegaWalls;
 import net.nuggetmc.mw.mwclass.MWClass;
+import net.nuggetmc.mw.mwclass.classes.MWMole;
 import net.nuggetmc.mw.utils.ItemStackCreator;
 import net.nuggetmc.mw.utils.ItemUtils;
 import org.bukkit.Material;
@@ -56,7 +57,9 @@ public class MWKit {
         contents.add(enderchest);
         //contents.add(toolShovel);
         ItemStack is=MWItem.createAOTR();
-        is.setType(Material.IRON_SPADE);
+        if (mwclass instanceof MWMole) {
+            is.setType(Material.IRON_SPADE);
+        }
         contents.add(is);
         contents.add(new ItemStack(Material.ARROW, 48));
         contents.add(new ItemStack(Material.STONE, 64));
