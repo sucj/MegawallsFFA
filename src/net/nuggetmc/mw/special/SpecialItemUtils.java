@@ -7,6 +7,7 @@ import net.nuggetmc.mw.mwclass.items.MWPotions;
 import net.nuggetmc.mw.utils.ItemUtils;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
@@ -84,6 +85,14 @@ public class SpecialItemUtils {
         NBTTagCompound compound = nmsItem.hasTag() ? nmsItem.getTag() : new NBTTagCompound();
         return compound.getBoolean(cowBucketTag);
     }
+    public boolean isCowBucketNotOwn(ItemStack itemStack) {
+        if (itemStack == null) return false;
+        net.minecraft.server.v1_8_R3.ItemStack nmsItem = CraftItemStack.asNMSCopy(itemStack);
+        if (nmsItem == null) return false;
+
+        NBTTagCompound compound = nmsItem.hasTag() ? nmsItem.getTag() : new NBTTagCompound();
+        return (compound.getBoolean(cowBucketTag)&&(!compound.getBoolean("cowown")));
+    }
 
     public boolean isCowBucket(net.minecraft.server.v1_8_R3.ItemStack itemStack1) {
         ItemStack itemStack = CraftItemStack.asBukkitCopy(itemStack1);
@@ -110,5 +119,27 @@ public class SpecialItemUtils {
     }
     public ItemStack getPhxPot() {
         return getPhxPot(1);
+    }
+    public ItemStack getJunkApple(int amount) {
+        ItemStack apple = new ItemStack(Material.APPLE, amount);
+        ItemMeta itemMeta = apple.getItemMeta();
+        itemMeta.addEnchant(Enchantment.DURABILITY,1,false);
+        itemMeta.setDisplayName(ChatColor.YELLOW + "Junk apple");
+        apple.setItemMeta(itemMeta);
+        net.minecraft.server.v1_8_R3.ItemStack nmsItem = CraftItemStack.asNMSCopy(apple);
+        NBTTagCompound compound = nmsItem.hasTag() ? nmsItem.getTag() : new NBTTagCompound();
+
+        compound.setBoolean("junk_apple", true);
+        nmsItem.setTag(compound);
+
+        return CraftItemStack.asBukkitCopy(nmsItem);
+    }
+    public boolean isJunkApple(ItemStack itemStack) {
+        if (itemStack == null) return false;
+        net.minecraft.server.v1_8_R3.ItemStack nmsItem = CraftItemStack.asNMSCopy(itemStack);
+        if (nmsItem == null) return false;
+
+        NBTTagCompound compound = nmsItem.hasTag() ? nmsItem.getTag() : new NBTTagCompound();
+        return compound.getBoolean("junk_apple");
     }
 }

@@ -58,6 +58,9 @@ public class EnergyManager implements Listener {
                 case "god":
                     add(player,1);
                     break;
+                case "mol":
+                    add(player,5);
+                    break;
             }
         }
     }

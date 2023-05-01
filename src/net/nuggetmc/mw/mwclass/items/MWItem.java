@@ -4,6 +4,7 @@ import net.md_5.bungee.api.ChatColor;
 import net.nuggetmc.mw.MegaWalls;
 import net.nuggetmc.mw.luckdraw.SwordNameManager;
 import net.nuggetmc.mw.mwclass.MWClass;
+import net.nuggetmc.mw.mwclass.classes.MWMole;
 import net.nuggetmc.mw.mwclass.info.EnumInfoType;
 import net.nuggetmc.mw.mwclass.info.MWClassInfo;
 import net.nuggetmc.mw.utils.ItemUtils;
@@ -38,7 +39,7 @@ public class MWItem {
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(
                 swordNameManager.get(player)==null?
-                mwclass.getColor() + mwclass.getName() + " Sword":
+                mwclass.getColor() + mwclass.getName() + (mwclass instanceof MWMole?" Spade":" Sword" ):
                 swordNameManager.get(player)
         );
 

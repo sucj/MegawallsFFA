@@ -293,7 +293,8 @@ public class MegaWalls extends JavaPlugin {
                 new MWArcanist(),
                 new MWAsn(),
                 new MWGoldenDragon(),
-                new MWWereWolf()
+                new MWWereWolf(),
+                new MWMole()
         );
 
 

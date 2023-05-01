@@ -117,6 +117,22 @@ public class ItemUtils {
 
 
     }
+    public static int findCowBucketNotOwn(Player player, ItemStack thing) {
+        try {
+            for (int i = 0; i < 36; i++) {
+                ItemStack stack = player.getInventory().getContents()[i];
+                if (stack != null && MegaWalls.getInstance().getSpecialItemUtils().isCowBucketNotOwn(stack)) {
+                    return i;
+                }
+            }
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+            return -1;
+        }
+        return -1;
+
+
+    }
 
     public static boolean isSword(Material material) {
         return material == Material.WOOD_SWORD || material == Material.STONE_SWORD || material == Material.IRON_SWORD || material == Material.GOLD_SWORD || material == Material.DIAMOND_SWORD;
@@ -148,5 +164,21 @@ public class ItemUtils {
             }
         }
         return result;
+    }
+    public static int findJunkApple(Player player) {
+        try {
+            for (int i = 0; i < 36; i++) {
+                ItemStack stack = player.getInventory().getContents()[i];
+                if (stack != null && MegaWalls.getInstance().getSpecialItemUtils().isJunkApple(stack)) {
+                    return i;
+                }
+            }
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+            return -1;
+        }
+        return -1;
+
+
     }
 }

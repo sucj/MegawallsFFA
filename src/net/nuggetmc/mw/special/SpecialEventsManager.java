@@ -6,6 +6,7 @@ import io.isles.nametagapi.NametagAPI;
 import net.md_5.bungee.api.ChatColor;
 import net.nuggetmc.mw.MegaWalls;
 import net.nuggetmc.mw.mwclass.classes.MWCow;
+import net.nuggetmc.mw.mwclass.classes.MWMole;
 import net.nuggetmc.mw.utils.ItemUtils;
 import net.nuggetmc.mw.utils.PlayerUtils;
 import org.bukkit.*;
@@ -179,7 +180,7 @@ public class SpecialEventsManager implements Listener {
         if (arrow.getShooter() instanceof Player) {
             Player player = (Player) arrow.getShooter();
 
-
+            player.playSound(player.getLocation(),Sound.SUCCESSFUL_HIT,1,0);
             player.sendMessage(ChatColor.YELLOW + victim.getDisplayName() + ChatColor.RESET + " is on " + (new BigDecimal(victim.getHealth()).setScale(1, BigDecimal.ROUND_HALF_UP)).doubleValue() + " health!");
         }
     }
@@ -423,6 +424,16 @@ public class SpecialEventsManager implements Listener {
         }, 5 * 20);
 
 
+    }
+    ////////Junk Apple
+    @EventHandler
+    public void onJunkApple(PlayerItemConsumeEvent e) {
+        if (specialItemUtils.isJunkApple(e.getItem())) {
+            Player player = e.getPlayer();
+            if (plugin.getClassManager().get(player) instanceof MWMole) {
+                player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,5*20,1));
+            }
+        }
     }
 
 

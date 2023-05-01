@@ -29,6 +29,16 @@ public class MWPotions {
 
         return items;
     }
+    public static List<ItemStack> createBasic(MWClass mwclass, int hPotCount, int hPotAmount) {
+        List<ItemStack> items = new ArrayList<>();
+
+        String name = mwclass.getName();
+        ChatColor color = mwclass.getColor();
+
+        items.add(createHealPotions(name, color, hPotCount, hPotAmount));
+
+        return items;
+    }
 
     public static List<ItemStack> createWolfBasic(MWClass mwclass, int hPotCount, int hPotAmount, int sPotCount) {
         List<ItemStack> items = new ArrayList<>();

@@ -8,6 +8,7 @@ import net.nuggetmc.mw.mwclass.info.Playstyle;
 import net.nuggetmc.mw.mwclass.items.MWItem;
 import net.nuggetmc.mw.mwclass.items.MWKit;
 import net.nuggetmc.mw.mwclass.items.MWPotions;
+import net.nuggetmc.mw.utils.ItemUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -113,7 +114,15 @@ public class MWCow extends MWClass {
         }
         if (mine.get(player) == cowBucketValue) {
             mine.replace(player, 0);
-            player.getInventory().addItem(plugin.getSpecialItemUtils().getCowBucket(2));
+            int slot=ItemUtils.findCowBucketNotOwn(player,plugin.getSpecialItemUtils().getCowBucket());
+            if (slot!=-1&&player.getInventory().getItem(slot).getAmount()<=62) {
+                int amount=player.getInventory().getItem(slot).getAmount();
+                ItemStack itemStack=player.getInventory().getItem(slot).clone();
+                itemStack.setAmount(amount+2);
+                player.getInventory().setItem(slot,itemStack);
+            }else {
+                player.getInventory().addItem(plugin.getSpecialItemUtils().getCowBucket(2));
+            }
             //ActionBar.send(player,this.getColor()+"Ultra Pasteurized "+ChatColor.GREEN+"✔");
         }
         //❤❥✔✖✗✘❂⋆✢✭✬✫✪✩✦✥✤✣✮✷➡➧⬅⬇➟➢➙➴➽▄▜▛➝▄⚔
