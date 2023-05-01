@@ -191,7 +191,7 @@ public class MWDriver extends MWClass {
         Player player = e.getPlayer();
 
         if (manager.get(player) == this) {
-            if (e.getBlock().getType()!=Material.GRASS&&e.getBlock().getType()!=Material.LONG_GRASS&&e.getBlock().getType()!=Material.YELLOW_FLOWER&&e.getBlock().getType()!=Material.LONG_GRASS&&e.getBlock().getType()!=Material.SAPLING) {
+            if (e.getBlock().getType()!=Material.YELLOW_FLOWER&&e.getBlock().getType()!=Material.LONG_GRASS&&e.getBlock().getType()!=Material.SAPLING) {
                 energyManager.add(player, 1);
             }
 
