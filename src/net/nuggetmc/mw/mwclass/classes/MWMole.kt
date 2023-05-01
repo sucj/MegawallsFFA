@@ -1,6 +1,7 @@
 package net.nuggetmc.mw.mwclass.classes
 
 import net.md_5.bungee.api.ChatColor
+import net.nuggetmc.mw.MegaWalls
 import net.nuggetmc.mw.mwclass.MWClass
 import net.nuggetmc.mw.mwclass.info.Diamond
 import net.nuggetmc.mw.mwclass.info.MWClassInfo
@@ -8,10 +9,16 @@ import net.nuggetmc.mw.mwclass.info.Playstyle
 import net.nuggetmc.mw.mwclass.items.MWItem
 import net.nuggetmc.mw.mwclass.items.MWKit
 import net.nuggetmc.mw.mwclass.items.MWPotions
+import net.nuggetmc.mw.special.SpecialEventsManager
 import net.nuggetmc.mw.utils.ActionBar
 import net.nuggetmc.mw.utils.ItemUtils
+import net.nuggetmc.mw.utils.LocationUtils
+import net.nuggetmc.mw.utils.PlayerUtils
+import org.bukkit.Bukkit
+import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.enchantments.Enchantment
+import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.block.BlockBreakEvent
@@ -20,6 +27,10 @@ import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
+import org.bukkit.scheduler.BukkitRunnable
+import org.bukkit.util.Vector
+import java.util.*
+
 
 class MWMole : MWClass() {
     var shortCut:HashMap<Player,Int> = HashMap()
@@ -54,7 +65,60 @@ class MWMole : MWClass() {
 
     override fun ability(player: Player) {
         energyManager.clear(player)
-
+        player.addPotionEffect(PotionEffect(PotionEffectType.DAMAGE_RESISTANCE,2*20,0))
+        val from: Location = player.location.clone()
+        object : BukkitRunnable() {
+            var ticks = 0
+            var damaged: MutableList<Player> = ArrayList()
+            override fun run() {
+                if (player.isDead || player.location.distance(from) > 8 || ticks >= 60
+                ) {
+                    player.velocity = Vector(0.0, 0.0, 0.0)
+                    cancel()
+                    return
+                }
+                player.velocity = player.eyeLocation.direction.multiply(0.8)
+                for (block1 in LocationUtils.getSphere(player.location, 2)) {
+                        if (block1.type === Material.BEDROCK) {
+                            continue
+                        }
+                    if (block1.type === Material.BARRIER) {
+                        continue
+                    }
+                    if (SpecialEventsManager.rp != null && SpecialEventsManager.rp.getAPI(plugin).getRegion("spawn")
+                            .isLocationInRegion(block1.getLocation())
+                    ) {
+                        continue
+                    }
+                    val material: Material = block1.getType()
+                    if (!material.name.lowercase(Locale.getDefault()).contains("diamond")) {
+                        Bukkit.getScheduler()
+                            .runTaskLater(plugin, { block1.setType(material) }, plugin.breakResetTime * 20L)
+                    }
+                        block1.breakNaturally()
+                }
+                for (nearby in getNearbyEnemies(player, 5.toDouble())!!) {
+                    if (damaged.contains(nearby)) {
+                        continue
+                    }
+                    nearby.damage(6.0, player as Entity)
+                    damaged.add(nearby)
+                }
+                ++ticks
+            }
+        }.runTaskTimer(plugin, 0L, 1L)
+    }
+    private fun getNearbyEnemies(player: Player, radius: Double): List<Player>? {
+        val players: MutableList<Player> = ArrayList()
+        for (other in PlayerUtils.getNearbyPlayers(player.location, radius)) {
+            if (plugin.combatManager.isInCombat(other)) {
+                if (plugin.teamsManager.isOnSameTeam(player,other)) {
+                    continue
+                }
+                players.add(other)
+            }
+        }
+        return players
     }
 
 

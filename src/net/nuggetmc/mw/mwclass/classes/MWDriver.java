@@ -13,10 +13,12 @@ import net.nuggetmc.mw.utils.PlayerUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -53,12 +55,13 @@ public class MWDriver extends MWClass {
                 "Once you are below 7 HP,you get 5 seconds of Absorption XX(20) , speed &aIII&r and jump boost &aIII&r for 12 seconds.\nIf that damage cause you to be dead,it will be cancelled.\nCooldown: &a50 &rseconds.",
                 "Solo handjob god",
                 "Once you were shoot by a player,you automatically throw 10 snowball to where you face,gaining Absorption I for 2 seconds",
-                "Stupid dev",
-                "There is no gathering talent because this kit is made for mwffa."
+                "Energy",
+                "mining any blocks gives you 1 energy!"
         );
 
         this.classInfo.addEnergyGainType("Melee", 15);
         this.classInfo.addEnergyGainType("Bow", 15);
+        this.classInfo.addEnergyGainType("Block Break", 1);
     }
 
     @EventHandler
@@ -182,5 +185,15 @@ public class MWDriver extends MWClass {
         MWKit.assignItems(player, items);
         runnerList.remove(player);
         abilitycache.remove(player);
+    }
+    @EventHandler
+    public void gathering(BlockBreakEvent e) {
+        Player player = e.getPlayer();
+
+        if (manager.get(player) == this) {
+                energyManager.add(player, 1);
+
+
+        }
     }
 }

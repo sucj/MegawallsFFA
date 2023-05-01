@@ -5,6 +5,7 @@ import net.nuggetmc.mw.mwclass.MWClass;
 import net.nuggetmc.mw.mwclass.MWClassManager;
 import net.nuggetmc.mw.mwclass.classes.MWDriver;
 import net.nuggetmc.mw.mwclass.classes.MWGoldenDragon;
+import net.nuggetmc.mw.mwclass.classes.MWMole;
 import net.nuggetmc.mw.utils.ActionBar;
 import net.nuggetmc.mw.utils.ItemUtils;
 import org.bukkit.Bukkit;
@@ -184,6 +185,9 @@ public class EnergyManager implements Listener {
         }
 
         if (type.name().contains("SWORD") && action.contains("RIGHT_CLICK")) {
+            callAbility(player);
+        }
+        if (type.name().toLowerCase().contains("spade")&& action.contains("RIGHT_CLICK")&&manager.get(player) instanceof MWMole){
             callAbility(player);
         }
     }

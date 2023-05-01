@@ -55,7 +55,9 @@ public class MWKit {
         contents.add(compass);
         contents.add(enderchest);
         //contents.add(toolShovel);
-        contents.add(MWItem.createAOTR());
+        ItemStack is=MWItem.createAOTR();
+        is.setType(Material.IRON_SPADE);
+        contents.add(is);
         contents.add(new ItemStack(Material.ARROW, 48));
         contents.add(new ItemStack(Material.STONE, 64));
         contents.add(new ItemStack(Material.DIRT, 64));
