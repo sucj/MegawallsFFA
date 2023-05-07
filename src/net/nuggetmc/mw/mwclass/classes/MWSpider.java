@@ -54,7 +54,7 @@ public class MWSpider extends MWClass {
 
         this.classInfo = new MWClassInfo(
                 "Leap",
-                "Leap forward into the air, applying Slowness I to all enemies in a 4 block radius for &a4 &rseconds.\nYou deal &a0.9x &rthe amount of fall damage you take, up to a maximum of &a12 HP &rdealt,and a minium of 7.\nYou gain Regeneration III for &a3 &rseconds upon casting.",
+                "Leap forward into the air, applying Slowness I to all enemies in a 4 block radius for &a4 &rseconds.\nYou deal &a0.9x &rthe amount of fall damage you take, up to a maximum of &a12 HP &rdealt,and a minium of 7.\nYou gain Regeneration II for &a3 &rseconds upon casting.",
                 "Venom Strike",
                 "For every &a4 &rmelee attacks, you will poison your opponent, dealing 3 damage over &a5 &rseconds.",
                 "Skitter",
@@ -74,7 +74,7 @@ public class MWSpider extends MWClass {
     public void ability(Player player) {
         energyManager.clear(player);
         //PotionUtils.effect(player, PotionEffectType.ABSORPTION, 5);
-        player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,3*20,2));
+        player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,3*20,1));
         World world = player.getWorld();
         Location loc = player.getLocation();
 
@@ -127,7 +127,7 @@ public class MWSpider extends MWClass {
 
                 skitter(player);
                 spiderDamage(player, event);
-                event.setDamage(0);
+                event.setDamage(event.getDamage()*0.6);
             }
         }
     }

@@ -10,6 +10,8 @@ import net.nuggetmc.mw.mwclass.items.MWItem
 import net.nuggetmc.mw.mwclass.items.MWKit
 import net.nuggetmc.mw.mwclass.items.MWPotions
 import net.nuggetmc.mw.special.SpecialEventsManager
+
+import net.nuggetmc.mw.special.SpecialItemUtils
 import net.nuggetmc.mw.utils.ActionBar
 import net.nuggetmc.mw.utils.ItemUtils
 import net.nuggetmc.mw.utils.LocationUtils
@@ -151,8 +153,9 @@ class MWMole : MWClass() {
             val leggings = MWItem.createArmor(this, Material.DIAMOND_LEGGINGS, legginsEnch)
             val helmet=MWItem.createArmor(this,Material.GOLD_HELMET,helmetEnch)
             val potions = MWPotions.createBasic(this, 2, 8)
+            val junkApples=plugin.specialItemUtils.getJunkApple(5)
 
-            items = MWKit.generate(this, sword, bow, tool, null,  potions, helmet, null, leggings, null, null)
+            items = MWKit.generate(this, sword, bow, tool, null,  potions, helmet, null, leggings, null, Collections.singletonList(junkApples))
         
         MWKit.assignItems(player, items)
         shortCut[player] = 0
