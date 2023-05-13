@@ -57,6 +57,7 @@ class getItemCommand() : CommandExecutor, TabCompleter {
                 "golempot" -> si.getGolemPot(amount)
                 "milk" -> si.getCowBucket(amount)
                 "aotv" -> si.aotv
+                "hype" -> si.hyperion
                 else -> {
                     null
                 }

@@ -98,6 +98,18 @@ public class PlayerUtils {
     }
     return target;
   }
+  public static List<Player> getNearbyEnemies(Player player,double radius){
+    List<Player> players=new ArrayList<>();
+    for (Player other: PlayerUtils.getNearbyPlayers(player.getLocation(), radius)) {
+      if (plugin.getCombatManager().isInCombat(other)) {
+        if (plugin.getTeamsManager().isOnSameTeam(player,other)) {
+          continue;
+        }
+        players.add(other);
+      }
+    }
+    return players;
+  }
 
   
 

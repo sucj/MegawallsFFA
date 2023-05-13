@@ -178,4 +178,39 @@ public class SpecialItemUtils {
         NBTTagCompound compound = nmsItem.hasTag() ? nmsItem.getTag() : new NBTTagCompound();
         return compound.getBoolean("aspect_of_the_void");
     }
+    public ItemStack getHyperion() {
+        ItemStack item = new ItemStack(Material.IRON_SWORD);
+        List<String> lore = new ArrayList<>();
+
+
+        item.addUnsafeEnchantment(Enchantment.DAMAGE_ALL,1);
+
+        ItemMeta meta = item.getItemMeta();
+        meta.setDisplayName(ChatColor.GOLD +"Withered Hyperion");
+
+
+        lore.add("");
+        lore.add(ChatColor.GOLD.toString()+ChatColor.BOLD+"LEGENDARY DUNGEON SWORD");
+
+
+        meta.setLore(lore);
+        meta.spigot().setUnbreakable(true);
+
+        item.setItemMeta(meta);
+        net.minecraft.server.v1_8_R3.ItemStack nmsItem = CraftItemStack.asNMSCopy(item);
+        NBTTagCompound compound = nmsItem.hasTag() ? nmsItem.getTag() : new NBTTagCompound();
+
+        compound.setBoolean("hyperion", true);
+        nmsItem.setTag(compound);
+
+        return ItemUtils.toMWItem(CraftItemStack.asBukkitCopy(nmsItem));
+    }
+    public boolean isHyperion(ItemStack itemStack) {
+        if (itemStack == null) return false;
+        net.minecraft.server.v1_8_R3.ItemStack nmsItem = CraftItemStack.asNMSCopy(itemStack);
+        if (nmsItem == null) return false;
+
+        NBTTagCompound compound = nmsItem.hasTag() ? nmsItem.getTag() : new NBTTagCompound();
+        return compound.getBoolean("hyperion");
+    }
 }
