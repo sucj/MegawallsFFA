@@ -25,6 +25,7 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
 
 import java.math.BigDecimal;
 import java.util.HashSet;
@@ -435,12 +436,35 @@ public class SpecialEventsManager implements Listener {
             }
         }
     }
+    //ANTI PICKUP
     @EventHandler
     public void onPlayerPickupItem(final PlayerPickupItemEvent e) {
         if (e.getItem().hasMetadata(MegaWalls.getMetadataValue())) {
             e.setCancelled(true);
         }
     }
+    //AOTV
+    @EventHandler
+    public void onAOTV(PlayerInteractEvent e) {
+        Player p = e.getPlayer();
+        if (!e.getAction().name().contains("RIGHT")) return;
+        if (p.getItemInHand() == null || p.getItemInHand().getType() == Material.AIR) return;
+        if (!specialItemUtils.isAOTV(e.getItem())) return;
+        teleport(p);
+
+    }
+    public  void teleport(Player player) {
+        Location mainLoc = player.getEyeLocation();
+        for(int i=1;i<=8*2;i++) {
+            Location loc = player.getLocation();
+            Vector dir = loc.getDirection();
+            dir.normalize();
+            dir.multiply(0.5); //1 blocks a way
+            mainLoc.add(dir);
+
+            if(mainLoc.getBlock().isEmpty() || mainLoc.getBlock().isLiquid()) {
+                player.teleport(mainLoc);
+            }else break;}}
 
 
 }
