@@ -30,6 +30,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -151,6 +152,12 @@ public class MegaWalls extends JavaPlugin {
     public int swordLuckDrawPrice;
 
     FileConfiguration swordNames;
+
+    public static Random getRandom() {
+        return random;
+    }
+
+    static Random random=new Random();
    public HashMap<SwordNameRarity, List<String>> swordNameMap=new HashMap<>();
     File file;
 
@@ -356,6 +363,9 @@ public class MegaWalls extends JavaPlugin {
         }
         saveConfig();
         return result;
+    }
+    public static FixedMetadataValue getFixedMetadataValue() {
+        return new FixedMetadataValue(MegaWalls.getInstance(), true);
     }
 
     private void initEnergy() {

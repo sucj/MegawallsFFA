@@ -1,6 +1,7 @@
 package net.nuggetmc.mw.mwclass.classes;
 
 import net.md_5.bungee.api.ChatColor;
+import net.nuggetmc.mw.MegaWalls;
 import net.nuggetmc.mw.mwclass.MWClass;
 import net.nuggetmc.mw.mwclass.info.Diamond;
 import net.nuggetmc.mw.mwclass.info.MWClassInfo;
@@ -12,6 +13,7 @@ import net.nuggetmc.mw.utils.ItemUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -20,6 +22,8 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
 
 import java.util.*;
 
@@ -192,6 +196,26 @@ public class MWCow extends MWClass {
             willpowerList.add(player);
             if (dmgcount.get(player).equals(0)) {
                 player.sendMessage(this.getColor() + "You have activated the Bucket Barrier !");
+                new BukkitRunnable() {
+                    private int ticks = 0;
+                    private final List<Item> items = new ArrayList<>();
+
+                    public void run() {
+                        if (!player.isOnline() || this.ticks >= 400) {
+                            for (final Item item : this.items) {
+                                item.remove();
+                            }
+                            this.cancel();
+                            return;
+                        }
+                        final Item item2 = player.getWorld().dropItem(player.getLocation().add(0.0, 2.0, 0.0), new ItemStack(Material.MILK_BUCKET));
+                        item2.setMetadata(MegaWalls.getMetadataValue(), MegaWalls.getFixedMetadataValue());
+                        final org.bukkit.util.Vector vector = new Vector((MegaWalls.getRandom().nextDouble() - 0.5) / 1.7, 0.35, (MegaWalls.getRandom().nextDouble() - 0.5) / 1.7);
+                        item2.setVelocity(vector);
+                        this.items.add(item2);
+                        this.ticks += 10;
+                    }
+                }.runTaskTimer(MegaWalls.getInstance(), 0L, 5L);
             }
 
             int n = 20;

@@ -435,6 +435,12 @@ public class SpecialEventsManager implements Listener {
             }
         }
     }
+    @EventHandler
+    public void onPlayerPickupItem(final PlayerPickupItemEvent e) {
+        if (e.getItem().hasMetadata(MegaWalls.getMetadataValue())) {
+            e.setCancelled(true);
+        }
+    }
 
 
 }
