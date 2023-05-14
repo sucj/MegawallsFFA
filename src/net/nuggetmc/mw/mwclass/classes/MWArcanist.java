@@ -176,7 +176,7 @@ public class MWArcanist extends MWClass {
         if (manager.get(player) == this) {
             Block block = e.getBlock();
             if (block.getType().name().toLowerCase().contains("ore")) {
-                energyManager.add(player, 20);
+                energyManager.add(player, 25);
             }
 
         }

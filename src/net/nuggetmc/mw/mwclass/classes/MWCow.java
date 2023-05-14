@@ -167,12 +167,14 @@ public class MWCow extends MWClass {
             ItemStack sword = MWItem.createSword(this, Material.IRON_SWORD, swordEnch,player);
             ItemStack tool = MWItem.createTool(this, Material.DIAMOND_PICKAXE);
             ItemStack chestplate = MWItem.createArmor(this, Material.DIAMOND_CHESTPLATE, armorEnch);
+            ItemStack boots = MWItem.createArmor(this, Material.DIAMOND_BOOTS, armorEnch);
+
 
             List<ItemStack> potions = MWPotions.createBasic(this, 1, 10, 2);
             List<ItemStack> extra = new ArrayList<>();
             extra.add(plugin.getSpecialItemUtils().getCowOwnBucket(3));
 
-            items = MWKit.generate(this, sword, null, tool, null, potions, null, chestplate, null, null, extra);
+            items = MWKit.generate(this, sword, null, tool, null, potions, null, chestplate, null, boots, extra);
         
 
         MWKit.assignItems(player, items);
