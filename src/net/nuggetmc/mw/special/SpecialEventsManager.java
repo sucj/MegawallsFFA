@@ -275,7 +275,9 @@ public class SpecialEventsManager implements Listener {
     public void onFallDamage(EntityDamageEvent e) {
         if (e.getEntity() instanceof Player) {
             if (teleportNoFallDMG.contains(((Player) e.getEntity()))){
-                e.setCancelled(true);
+                if (((Player) e.getEntity()).hasPotionEffect(PotionEffectType.ABSORPTION)) {
+                    e.setCancelled(true);
+                }
                 teleportNoFallDMG.remove(((Player) e.getEntity()));
             }
             if (e.getCause().equals(EntityDamageEvent.DamageCause.FALL)) {
@@ -455,6 +457,7 @@ public class SpecialEventsManager implements Listener {
         if (p.getItemInHand() == null || p.getItemInHand().getType() == Material.AIR) return;
         if (!specialItemUtils.isAOTV(e.getItem())) return;
         teleport(p);
+        p.playSound(p.getLocation(),Sound.ENDERMAN_TELEPORT,0.2f,2f);
 
     }
     public  void teleport(Player player) {
@@ -469,9 +472,6 @@ public class SpecialEventsManager implements Listener {
             if(mainLoc.getBlock().isEmpty() || mainLoc.getBlock().isLiquid()||canBePassed(mainLoc.getBlock())) {
                 player.teleport(mainLoc);
                 teleportNoFallDMG.add(player);
-                Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                    teleportNoFallDMG.remove(player);
-                }, 3*20);
             }else break;}}
     public static boolean canBePassed(Block block){
         switch (block.getType()){
@@ -490,19 +490,22 @@ public class SpecialEventsManager implements Listener {
             player.teleport(player.getLocation().add(0, 1, 0));
         }
         teleport(player);
+        player.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,60,0),true);
         player.getWorld().playSound(player.getLocation(), Sound.ZOMBIE_REMEDY, 0.2f, 2f);
         Particle.play(player.getLocation().add(0.0, 0.5, 0.0), Effect.EXPLOSION_LARGE);
         List<Player> close= PlayerUtils.getNearbyEnemies(player,6);
         close.remove(player);
         for (Player target : close) {
-
-            MegaWalls.getInstance().getMWHealth().trueDamage(target,2,null);
-            plugin.getServer().getPluginManager().callEvent(new EntityDamageByEntityEvent(player,target, EntityDamageEvent.DamageCause.CUSTOM,2));
+            Vector velocity=target.getVelocity();
+            MegaWalls.getInstance().getMWHealth().trueDamage(target,2,player);
+            target.setVelocity(velocity);//so that using this ability won't change the targets' velocity
 
 
 
         }
-        player.sendMessage("Your "+ChatColor.RED+"Implosion "+ChatColor.RESET+"hit "+ChatColor.RED+close.size()+ChatColor.RESET+" enemy.");
+        if (close.size()!=0) {
+            player.sendMessage("Your " + ChatColor.RED + "Implosion " + ChatColor.RESET + "hit " + ChatColor.RED + close.size() + ChatColor.RESET + " enemy.");
+        }
         player.getWorld().playSound(player.getLocation(), Sound.EXPLODE, 0.4f, 1.2f);
         return false;
     }
