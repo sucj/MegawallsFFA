@@ -18,6 +18,9 @@ class getItemCommand() : CommandExecutor, TabCompleter {
         groupnames.add("squpot")
         groupnames.add("golempot")
         groupnames.add("milk")
+        groupnames.add("aotv")
+        groupnames.add("hype")
+        groupnames.add("term")
     }
 
     val si = MegaWalls.getInstance().specialItemUtils;
@@ -58,6 +61,7 @@ class getItemCommand() : CommandExecutor, TabCompleter {
                 "milk" -> si.getCowBucket(amount)
                 "aotv" -> si.aotv
                 "hype" -> si.hyperion
+                "term" ->si.term
                 else -> {
                     null
                 }

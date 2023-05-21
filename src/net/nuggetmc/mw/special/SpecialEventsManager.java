@@ -44,6 +44,7 @@ public class SpecialEventsManager implements Listener {
     public static SpecialEventsManager getInstance(){
         return instance;
     }
+    public static HashMap<Player, Boolean> canfire = new HashMap<>();
 
     public SpecialEventsManager() {
         this.plugin = MegaWalls.getInstance();
@@ -160,7 +161,68 @@ public class SpecialEventsManager implements Listener {
                 plugin.getCompassManager().changeTrackingTarget(player);
             }
         }
+        if(e.getItem().getType().equals(Material.BOW)){
+            if (specialItemUtils.isTerm(e.getItem())) {
+                termClick(e.getPlayer());
+            }
+        }
 
+    }
+    private void termClick(Player player){
+        if (!canfire.containsKey(player)) {
+            canfire.put(player, true);
+        }
+        Arrow a1;
+        Arrow a2;
+        Arrow a3;
+        if (canfire.get(player)) {
+            canfire.put(player, false);
+            a1 = player.launchProjectile(Arrow.class);
+            a1.setVelocity(a1.getVelocity().multiply(2.5));
+            a1.setMetadata(MegaWalls.getMetadataValue(),MegaWalls.getFixedMetadataValue());
+
+            a2 = player.launchProjectile(Arrow.class);
+
+            a2.setCustomName("terminator");
+            a2.setVelocity(rotateVector(a1.getVelocity(), 50.38));
+            a2.setMetadata(MegaWalls.getMetadataValue(),MegaWalls.getFixedMetadataValue());
+
+            a3 = player.launchProjectile(Arrow.class);
+
+            a3.setCustomName("terminator");
+            a3.setMetadata(MegaWalls.getMetadataValue(),MegaWalls.getFixedMetadataValue());
+            player.playSound(player.getLocation(), Sound.SHOOT_ARROW, 1, 1);
+            a3.setVelocity(rotateVector(a1.getVelocity(), -50.38));
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    if (a1.isValid()) {
+                        a1.remove();
+                    }
+                    if (a2.isValid()) {
+                        a2.remove();
+                    }
+                    if (a3.isValid()) {
+                        a3.remove();
+                    }
+                }
+            }.runTaskLater(plugin, 300);
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    canfire.put(player, true);
+                }
+            }.runTaskLater(plugin, 87 / 13);
+
+        }
+    }
+    public Vector rotateVector(Vector vector, double whatAngle) {
+        double cos = Math.cos(whatAngle);
+        double sin = Math.sin(whatAngle);
+        double x = vector.getX() * cos + vector.getZ() * sin;
+        double z = vector.getX() * -sin + vector.getZ() * cos;
+
+        return vector.setX(x).setZ(z);
     }
 
     ///////////////////////////EXPORB
