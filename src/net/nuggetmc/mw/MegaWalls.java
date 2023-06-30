@@ -37,6 +37,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import java.io.File;
 import java.io.IOException;
@@ -426,12 +428,32 @@ public class MegaWalls extends JavaPlugin {
         return isChinese;
     }
 
-    //  @EventHandler
-    //public void onClearPot(PlayerDropItemEvent e){
-
-    //        e.getPlayer().getInventory().remove(Material.GLASS_BOTTLE);
-    //               return;
-    //Why not working?
+    public void breakDiamond(Player player){
+        int i=random.nextInt(6);
+        PotionEffectType pet=null;
+        switch (i){
+            case 0:
+                pet=PotionEffectType.JUMP;
+                break;
+            case 1:
+                pet=PotionEffectType.DAMAGE_RESISTANCE;
+                break;
+            case 2:
+                pet=PotionEffectType.SPEED;
+                break;
+            case 3:
+                pet=PotionEffectType.REGENERATION;
+                break;
+            case 4:
+                pet=PotionEffectType.INCREASE_DAMAGE;
+                break;
+            case 5:
+                pet=PotionEffectType.FAST_DIGGING;
+                break;
+        }
+        player.addPotionEffect(new PotionEffect(pet,5*20,1));
+        player.sendMessage("You were given "+pet.getName()+" for breaking a diamond ore!");
+    }
 }
 
 

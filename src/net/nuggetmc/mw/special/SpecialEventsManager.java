@@ -384,8 +384,10 @@ public class SpecialEventsManager implements Listener {
     @EventHandler
     public void onResetBreak(BlockBreakEvent e) {
         Material material = e.getBlock().getType();
-        if (material.name().toLowerCase().contains("diamond")) {
-            return;
+        if (material==Material.DIAMOND_ORE) {
+            e.setCancelled(true);
+            e.getBlock().setType(Material.AIR);
+            plugin.breakDiamond(e.getPlayer());
         }
         plugin.resetMap.put(e.getBlock(),material);
     }

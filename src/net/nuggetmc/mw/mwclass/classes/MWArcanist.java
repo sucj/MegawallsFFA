@@ -91,11 +91,16 @@ public class MWArcanist extends MWClass {
                         continue;
                     }
                     Material material = block2.getType();
-                    if (!material.name().toLowerCase().contains("diamond")) {
+                    if (material!=Material.DIAMOND_ORE) {
                         plugin.resetMap.put(block2,material);
+                    }else {
+                        plugin.breakDiamond(player);
                     }
-
-                    block2.breakNaturally();
+                    if (material!=Material.DIAMOND_ORE) {
+                        block2.breakNaturally();
+                    }else {
+                        block2.setType(Material.AIR);
+                    }
 
                 }
             }
