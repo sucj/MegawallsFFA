@@ -23,6 +23,10 @@ import net.nuggetmc.mw.utils.ItemUtils;
 import net.nuggetmc.mw.utils.MWHealth;
 import net.nuggetmc.mw.utils.WorldUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.command.TabCompleter;
@@ -160,6 +164,25 @@ public class MegaWalls extends JavaPlugin {
     static Random random=new Random();
    public HashMap<SwordNameRarity, List<String>> swordNameMap=new HashMap<>();
     File file;
+    public Map<Block, Material> resetMap=new HashMap<>();
+    public void tickBlockReset(){
+        if (resetMap.isEmpty()) {
+            return;
+        }
+        if (!combatManager.getInCombatPlayers().isEmpty()) {
+            for (Player player : this.combatManager.getInCombatPlayers()) {
+                player.sendTitle(ChatColor.RED + "THE MAP IS GOING TO BE RESET", ChatColor.BOLD + "PLEASE WAIT...");
+                player.sendMessage(ChatColor.RED.toString() + ChatColor.BOLD + "[ALERT]  " + ChatColor.RESET + "THE MAP IS GOING TO BE RESET!!!");
+                List<Double> list = MegaWalls.getInstance().getTeamsManager().getSpawnLocOfPlayer(player);
+                Location loc = new Location(player.getWorld(), list.get(0), list.get(1), list.get(2));
+                player.teleport(loc);
+            }
+        }
+        for (Block block:resetMap.keySet()){
+            block.setType(resetMap.get(block));
+        }
+        resetMap.clear();
+    }
 
     @Override
     public void onEnable() {
@@ -377,42 +400,6 @@ public class MegaWalls extends JavaPlugin {
             }
         });
     }
-
-// 已弃用的方法删了得了
-//    @Deprecated
-//    private void restore() {
-//        ConfigurationSection section = getConfig().getConfigurationSection("active_classes");
-//        if (section == null) return;
-//
-//        ConfigurationSection sectionEnergy = getConfig().getConfigurationSection("energy");
-//        boolean checkEnergy = sectionEnergy != null;
-//
-//        for (String key : section.getKeys(false)) {
-//            String name = section.getString(key);
-//
-//            section.set(key, null);
-//
-//            Player player = Bukkit.getPlayer(key);
-//            if (player == null || !player.isOnline()) continue;
-//
-//            MWClass mwclass = mwClassManager.fetch(name);
-//            if (mwclass == null) continue;
-//
-//            mwClassManager.assign(player, mwclass, null);
-//
-//            if (checkEnergy) {
-//                if (sectionEnergy.contains(key)) {
-//                    int energy = sectionEnergy.getInt(key);
-//
-//                    energyManager.set(player, energy);
-//
-//                    sectionEnergy.set(key, null);
-//                }
-//            }
-//        }
-//
-//        saveConfig();
-//    }
 
 
     private void setExecutor(String name, CommandExecutor executor) {

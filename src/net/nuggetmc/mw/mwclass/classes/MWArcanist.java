@@ -92,11 +92,7 @@ public class MWArcanist extends MWClass {
                     }
                     Material material = block2.getType();
                     if (!material.name().toLowerCase().contains("diamond")) {
-                        Bukkit.getScheduler().runTaskLater(plugin, () -> {
-
-                                block2.setType(material);
-
-                        }, plugin.breakResetTime * 20L);
+                        plugin.resetMap.put(block2,material);
                     }
 
                     block2.breakNaturally();

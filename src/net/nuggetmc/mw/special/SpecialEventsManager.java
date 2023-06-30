@@ -387,25 +387,20 @@ public class SpecialEventsManager implements Listener {
         if (material.name().toLowerCase().contains("diamond")) {
             return;
         }
-        Bukkit.getScheduler().runTaskLater(plugin, () -> {
-            if (!e.isCancelled()) {
-                e.getBlock().setType(material);
-            }
-        }, plugin.breakResetTime * 20L);
+        plugin.resetMap.put(e.getBlock(),material);
+    }
+    @EventHandler
+    public void onResetPlace(BlockPlaceEvent e) {
+        if (!plugin.resetMap.containsKey(e.getBlock())) {
+            plugin.resetMap.put(e.getBlock(), Material.AIR);
+        }
     }
 
     @EventHandler
     public void onResetExplosion(EntityExplodeEvent e) {
         for (Block b : e.blockList()) {
             Material material = b.getType();
-            if (material.name().toLowerCase().contains("diamond")) {
-                return;
-            }
-            Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                if (!e.isCancelled()) {
-                    b.setType(material);
-                }
-            }, plugin.breakResetTime * 20L);
+            plugin.resetMap.put(b,material);
         }
 
     }
