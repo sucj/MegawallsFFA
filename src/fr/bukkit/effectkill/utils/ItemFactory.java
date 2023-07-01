@@ -1,31 +1,30 @@
 package fr.bukkit.effectkill.utils;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.MaterialData;
 
-public class ItemFactory{
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+public class ItemFactory {
     public static ItemStack create(Material material, byte data, String displayName, String... lore) {
         @SuppressWarnings("deprecation")
-		ItemStack itemStack = new MaterialData(material, data).toItemStack(1);
+        ItemStack itemStack = new MaterialData(material, data).toItemStack(1);
         ItemMeta itemMeta = itemStack.getItemMeta();
         itemMeta.setDisplayName(displayName);
         if (lore != null) {
             List<String> finalLore = new ArrayList<String>();
-            for (final String s : lore) {
-                finalLore.add(s);
-            }
+            Collections.addAll(finalLore, lore);
             itemMeta.setLore(finalLore);
         }
         itemStack.setItemMeta(itemMeta);
         return itemStack;
     }
-    
+
     public static ItemStack create(Material material, byte data, String displayName) {
-        return create(material, data, displayName, (String[])null);
+        return create(material, data, displayName, (String[]) null);
     }
 }

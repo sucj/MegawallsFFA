@@ -25,7 +25,7 @@ public class SellMenu implements Listener {
 
 
     private final String menuTitle = "Sell";
-    private static Map<ItemStack, Integer> things = new HashMap<>();
+    private static final Map<ItemStack, Integer> things = new HashMap<>();
 
 
     public SellMenu() {

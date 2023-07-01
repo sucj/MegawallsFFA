@@ -18,6 +18,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
+
 import java.util.*;
 
 public class MWHerobrine extends MWClass {
@@ -26,7 +27,7 @@ public class MWHerobrine extends MWClass {
     private final Set<Player> wrathList = new HashSet<>();
 
     public MWHerobrine() {
-        this.name = new String[]{"Herobrine", "Herobrine", "HBR"/*, "RockstarGamesOL", "张泽旭"*/};
+        this.name = new String[]{"Herobrine", "HBR"};
         this.icon = Material.DIAMOND_SWORD;
         this.color = ChatColor.YELLOW;
 
@@ -130,23 +131,23 @@ public class MWHerobrine extends MWClass {
     public void assign(Player player) {
         Map<Integer, ItemStack> items;
 
-        
-            Map<Enchantment, Integer> swordEnch = new HashMap<>();
-            swordEnch.put(Enchantment.DURABILITY, 10);
 
-            Map<Enchantment, Integer> armorEnch = new HashMap<>();
-            armorEnch.put(Enchantment.PROTECTION_ENVIRONMENTAL, 2);
-            armorEnch.put(Enchantment.DURABILITY, 10);
-            armorEnch.put(Enchantment.WATER_WORKER, 1);
+        Map<Enchantment, Integer> swordEnch = new HashMap<>();
+        swordEnch.put(Enchantment.DURABILITY, 10);
 
-            ItemStack sword = MWItem.createSword(this, Material.DIAMOND_SWORD, swordEnch,player);
-            ItemStack tool = MWItem.createTool(this, Material.DIAMOND_PICKAXE);
-            ItemStack helmet = MWItem.createArmor(this, Material.IRON_HELMET, armorEnch);
+        Map<Enchantment, Integer> armorEnch = new HashMap<>();
+        armorEnch.put(Enchantment.PROTECTION_ENVIRONMENTAL, 2);
+        armorEnch.put(Enchantment.DURABILITY, 10);
+        armorEnch.put(Enchantment.WATER_WORKER, 1);
 
-            List<ItemStack> potions = MWPotions.createBasic(this, 2, 7, 2);
+        ItemStack sword = MWItem.createSword(this, Material.DIAMOND_SWORD, swordEnch, player);
+        ItemStack tool = MWItem.createTool(this, Material.DIAMOND_PICKAXE);
+        ItemStack helmet = MWItem.createArmor(this, Material.IRON_HELMET, armorEnch);
 
-            items = MWKit.generate(this, sword, null, tool, null, potions, helmet, null, null, null, null);
-        
+        List<ItemStack> potions = MWPotions.createBasic(this, 2, 7, 2);
+
+        items = MWKit.generate(this, sword, null, tool, null, potions, helmet, null, null, null, null);
+
 
         MWKit.assignItems(player, items);
         wrathList.remove(player);

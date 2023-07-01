@@ -36,7 +36,7 @@ public class MWEnderman extends MWClass {
     private final Map<Player, Integer> incrementEChest = new HashMap<>();
 
     public MWEnderman() {
-        this.name = new String[]{"末影人", "Enderman", "END"};
+        this.name = new String[]{"Enderman", "END"};
         this.icon = Material.ENDER_PEARL;
         this.color = ChatColor.DARK_PURPLE;
 
@@ -71,7 +71,9 @@ public class MWEnderman extends MWClass {
 
         public int time;
     }
+
     public static final Set<Material> set = new HashSet<>();
+
     static {
         set.addAll(Arrays.asList(Material.values()));
     }
@@ -199,7 +201,7 @@ public class MWEnderman extends MWClass {
 
     @EventHandler
     public void gathering(BlockBreakEvent event) {
-        if(event.isCancelled() ) return;
+        if (event.isCancelled()) return;
         Player player = event.getPlayer();
 
         if (manager.get(player) == this) {
@@ -236,23 +238,23 @@ public class MWEnderman extends MWClass {
     public void assign(Player player) {
         Map<Integer, ItemStack> items;
 
-        
-            Map<Enchantment, Integer> swordEnch = new HashMap<>();
-            swordEnch.put(Enchantment.DURABILITY, 10);
 
-            Map<Enchantment, Integer> armorEnch = new HashMap<>();
-            armorEnch.put(Enchantment.PROTECTION_ENVIRONMENTAL, 2);
-            armorEnch.put(Enchantment.PROTECTION_FALL, 4);
-            armorEnch.put(Enchantment.DURABILITY, 10);
+        Map<Enchantment, Integer> swordEnch = new HashMap<>();
+        swordEnch.put(Enchantment.DURABILITY, 10);
 
-            ItemStack sword = MWItem.createSword(this, Material.IRON_SWORD, swordEnch,player);
-            ItemStack tool = MWItem.createTool(this, Material.DIAMOND_PICKAXE);
-            ItemStack boots = MWItem.createArmor(this, Material.DIAMOND_BOOTS, armorEnch);
+        Map<Enchantment, Integer> armorEnch = new HashMap<>();
+        armorEnch.put(Enchantment.PROTECTION_ENVIRONMENTAL, 2);
+        armorEnch.put(Enchantment.PROTECTION_FALL, 4);
+        armorEnch.put(Enchantment.DURABILITY, 10);
 
-            List<ItemStack> potions = MWPotions.createBasic(this, 2, 8, 2);
+        ItemStack sword = MWItem.createSword(this, Material.IRON_SWORD, swordEnch, player);
+        ItemStack tool = MWItem.createTool(this, Material.DIAMOND_PICKAXE);
+        ItemStack boots = MWItem.createArmor(this, Material.DIAMOND_BOOTS, armorEnch);
 
-            items = MWKit.generate(this, sword, null, tool, null, potions, null, null, null, boots, null);
-        
+        List<ItemStack> potions = MWPotions.createBasic(this, 2, 8, 2);
+
+        items = MWKit.generate(this, sword, null, tool, null, potions, null, null, null, boots, null);
+
 
         MWKit.assignItems(player, items);
     }
@@ -260,7 +262,7 @@ public class MWEnderman extends MWClass {
     @Override
     public String getActionBar(Player player) {
         String sc = this.getColor() + "Soul Charge " + (cooldownCacheRegen.contains(player) ? ChatColor.RED + "✖" : ChatColor.GREEN + "✔") + ChatColor.RESET;
-        String ab = this.getColor() + "Teleport " + (((!cooldownCacheAbility.containsKey(player)) || cooldownCacheAbility.get(player) == null || cooldownCacheAbility.get(player).time <= 0) ? ChatColor.GREEN + "✔" : cooldownCacheAbility.get(player).time/100 + " s") + ChatColor.RESET;
+        String ab = this.getColor() + "Teleport " + (((!cooldownCacheAbility.containsKey(player)) || cooldownCacheAbility.get(player) == null || cooldownCacheAbility.get(player).time <= 0) ? ChatColor.GREEN + "✔" : cooldownCacheAbility.get(player).time / 100 + " s") + ChatColor.RESET;
 
         return ActionBar.joinActionBar(ab, sc);
     }

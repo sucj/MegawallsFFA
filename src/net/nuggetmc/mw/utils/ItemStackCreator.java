@@ -124,7 +124,7 @@ public class ItemStackCreator {
         itemMeta.setLore(lore);
         if (!enchants.isEmpty()) {
             for (Enchantment enchantment : enchants.keySet()) {
-                itemMeta.addEnchant(enchantment, ((Integer) enchants.get(enchantment)).intValue(), true);
+                itemMeta.addEnchant(enchantment, enchants.get(enchantment).intValue(), true);
             }
         }
         item.setItemMeta(itemMeta);
@@ -147,7 +147,7 @@ public class ItemStackCreator {
             itemMeta.setLore(lore);
             if (!enchants.isEmpty()) {
                 for (Enchantment enchantment : enchants.keySet()) {
-                    itemMeta.addEnchant(enchantment, ((Integer) enchants.get(enchantment)).intValue(), true);
+                    itemMeta.addEnchant(enchantment, enchants.get(enchantment).intValue(), true);
                 }
             }
             item.setItemMeta(itemMeta);
@@ -167,7 +167,7 @@ public class ItemStackCreator {
             itemMeta.setLore(list);
             if (!enchants.isEmpty()) {
                 for (Enchantment enchantment : enchants.keySet()) {
-                    itemMeta.addEnchant(enchantment, ((Integer) enchants.get(enchantment)).intValue(), true);
+                    itemMeta.addEnchant(enchantment, enchants.get(enchantment).intValue(), true);
                 }
             }
             item.setItemMeta(itemMeta);
@@ -193,7 +193,7 @@ public class ItemStackCreator {
             itemMeta.setLore(lore);
             if (!enchants.isEmpty()) {
                 for (Enchantment enchantment : enchants.keySet()) {
-                    itemMeta.addEnchant(enchantment, ((Integer) enchants.get(enchantment)).intValue(), true);
+                    itemMeta.addEnchant(enchantment, enchants.get(enchantment).intValue(), true);
                 }
             }
 

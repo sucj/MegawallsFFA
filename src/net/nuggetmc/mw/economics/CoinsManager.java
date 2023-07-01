@@ -2,11 +2,9 @@ package net.nuggetmc.mw.economics;
 
 import me.kaaseigenaar.scoreboard.ScoreboardBuilder;
 import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
-import net.minecraft.server.v1_8_R3.ChatClickable;
 import net.nuggetmc.mw.MegaWalls;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
@@ -16,10 +14,12 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CoinsManager implements Listener {
-    private Map<Player, Integer> coinsData = new HashMap<>();
+    private final Map<Player, Integer> coinsData = new HashMap<>();
     private final MegaWalls plugin = MegaWalls.getInstance();
     private final boolean sbExists = (Bukkit.getPluginManager().getPlugin("ScoreboardPlus") != null);
 
@@ -79,8 +79,8 @@ public class CoinsManager implements Listener {
     }
 
     public TextComponent[] getBalTopPage(int page) {
-        TextComponent textComponent=new TextComponent();
-        TextComponent[] list=new TextComponent[4];
+        TextComponent textComponent = new TextComponent();
+        TextComponent[] list = new TextComponent[4];
         StringBuilder result = new StringBuilder();
         result.append(ChatColor.AQUA + "------------BalTop------------\n");
         Map<String, Integer> data = new HashMap<>();
@@ -98,27 +98,28 @@ public class CoinsManager implements Listener {
                 return -1;
             }
         });
-        int startsAt=((page-1)*10);
-        int endsAt=page*10-1;
-        for (int i = startsAt; i < mapArrayList.size()&&i<=endsAt; i++) {
+        int startsAt = ((page - 1) * 10);
+        int endsAt = page * 10 - 1;
+        for (int i = startsAt; i < mapArrayList.size() && i <= endsAt; i++) {
             result.append(getColorOfGrade(i + 1) + "[" + (i + 1) + "] " + mapArrayList.get(i) + " : " + data.get(mapArrayList.get(i)) + "\n");
         }
         result.append(ChatColor.AQUA + "------------------------------\n");
-        result.append(ChatColor.YELLOW+ChatColor.BOLD.toString()+ "this is page "+page+" .\n");
-        TextComponent lastPage=new TextComponent(ChatColor.RED+ChatColor.BOLD.toString()+"[<<<PREVIOUS PAGE]");
-        lastPage.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,"/mwbaltop "+(page-1)));
+        result.append(ChatColor.YELLOW + ChatColor.BOLD.toString() + "this is page " + page + " .\n");
+        TextComponent lastPage = new TextComponent(ChatColor.RED + ChatColor.BOLD.toString() + "[<<<PREVIOUS PAGE]");
+        lastPage.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/mwbaltop " + (page - 1)));
         lastPage.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent[]{new TextComponent("CLICK TO GO TO THE PREVIOUS PAGE!")}));
-        TextComponent t1=new TextComponent("        ");
-        TextComponent nextPage=new TextComponent(ChatColor.GREEN+ChatColor.BOLD.toString()+ "[>>>NEXT PAGE]");
-        nextPage.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,"/mwbaltop "+(page+1)));
+        TextComponent t1 = new TextComponent("        ");
+        TextComponent nextPage = new TextComponent(ChatColor.GREEN + ChatColor.BOLD.toString() + "[>>>NEXT PAGE]");
+        nextPage.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/mwbaltop " + (page + 1)));
         nextPage.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent[]{new TextComponent("CLICK TO GO TO THE NEXT PAGE!")}));
         textComponent.setText(result.toString());
-        list[0]=textComponent;
-        list[1]=lastPage;
-        list[2]=t1;
-        list[3]=nextPage;
+        list[0] = textComponent;
+        list[1] = lastPage;
+        list[2] = t1;
+        list[3] = nextPage;
         return list;
     }
+
     public String getBalTopPageCONSOLE(int page) {
         StringBuilder result = new StringBuilder();
         result.append(ChatColor.AQUA + "------------BalTop------------\n");
@@ -137,9 +138,9 @@ public class CoinsManager implements Listener {
                 return -1;
             }
         });
-        int startsAt=((page-1)*10);
-        int endsAt=page*10-1;
-        for (int i = startsAt; i < mapArrayList.size()&&i<=endsAt; i++) {
+        int startsAt = ((page - 1) * 10);
+        int endsAt = page * 10 - 1;
+        for (int i = startsAt; i < mapArrayList.size() && i <= endsAt; i++) {
             result.append(getColorOfGrade(i + 1) + "[" + (i + 1) + "] " + mapArrayList.get(i) + " : " + data.get(mapArrayList.get(i)) + "\n");
         }
         result.append(ChatColor.AQUA + "------------------------------\n");

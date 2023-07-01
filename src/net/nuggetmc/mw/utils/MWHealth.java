@@ -22,8 +22,6 @@ import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 
 public class MWHealth implements Listener {
 
@@ -35,11 +33,11 @@ public class MWHealth implements Listener {
         this.plugin = MegaWalls.getInstance();
         this.manager = plugin.getClassManager();
         this.energyManager = plugin.getEnergyManager();
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin,()->{
-            if (Bukkit.getOnlinePlayers().isEmpty()){
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
+            if (Bukkit.getOnlinePlayers().isEmpty()) {
                 timeMillis.clear();
             }
-        },600*20,600*20);
+        }, 600 * 20, 600 * 20);
     }
 
     private void healthSetup(Player player) {
@@ -143,9 +141,10 @@ public class MWHealth implements Listener {
             player.damage(250, damager);
         }
     }
-    public void dreadTrueDamage(Player player ,Player damager, WitherSkull witherSkull) {
-        double amount=8;
-        if (timeMillis.contains(witherSkull.getMetadata("TimeMillis").get(0).asInt())){
+
+    public void dreadTrueDamage(Player player, Player damager, WitherSkull witherSkull) {
+        double amount = 8;
+        if (timeMillis.contains(witherSkull.getMetadata("TimeMillis").get(0).asInt())) {
             return;
         }
         timeMillis.add(witherSkull.getMetadata("TimeMillis").get(0).asInt());
@@ -171,5 +170,6 @@ public class MWHealth implements Listener {
         }
 
     }
-    ArrayList<Integer> timeMillis=new ArrayList<>();
+
+    ArrayList<Integer> timeMillis = new ArrayList<>();
 }

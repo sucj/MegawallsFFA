@@ -28,7 +28,6 @@ import org.spigotmc.event.player.PlayerSpawnLocationEvent;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static net.nuggetmc.mw.MegaWalls.OPBYPASSGM;
 
 public class MWClassManager implements Listener {
 
@@ -103,11 +102,9 @@ public class MWClassManager implements Listener {
         active.put(player, mwclass);
       /*  plugin.getConfig().set("active_classes." + player.getName(), mwclass.getName());
         plugin.saveConfig();*/
-        if (player.isOp() && OPBYPASSGM) {
-            //
-        } else {
-            player.getPlayer().setGameMode(GameMode.SURVIVAL);
-        }
+
+        player.getPlayer().setGameMode(GameMode.SURVIVAL);
+
         String str = ((plugin.getTeamsManager().getSymbolOfTeam(team)));
         plugin.getCombatManager().addInCombat(player);
         if (plugin.getCombatManager().isInCombat(player)) {
@@ -201,11 +198,9 @@ public class MWClassManager implements Listener {
                 player.sendMessage(ChatColor.GREEN + "Do " + ChatColor.YELLOW + "/mw" + ChatColor.GREEN + " to select a class!");
             }
         }, 10);
-        if (player.isOp() && OPBYPASSGM) {
-            //
-        } else {
-            event.getPlayer().setGameMode(GameMode.ADVENTURE);
-        }
+
+        event.getPlayer().setGameMode(GameMode.ADVENTURE);
+
         player.setHealth(0);
     }
 

@@ -37,7 +37,7 @@ public class MWSkeleton extends MWClass {
     private final Set<Player> cooldownCache = new HashSet<>();
 
     public MWSkeleton() {
-        this.name = new String[]{"骷髅", "Skeleton", "SKE"};
+        this.name = new String[]{"Skeleton", "SKE"};
         this.icon = Material.BONE;
         this.color = ChatColor.AQUA;
 
@@ -218,27 +218,27 @@ public class MWSkeleton extends MWClass {
     public void assign(Player player) {
         Map<Integer, ItemStack> items;
 
-        
-            Map<Enchantment, Integer> swordEnch = new HashMap<>();
-            swordEnch.put(Enchantment.DURABILITY, 10);
 
-            Map<Enchantment, Integer> bowEnch = new HashMap<>();
-            bowEnch.put(Enchantment.ARROW_DAMAGE, 3);
-            bowEnch.put(Enchantment.DURABILITY, 10);
+        Map<Enchantment, Integer> swordEnch = new HashMap<>();
+        swordEnch.put(Enchantment.DURABILITY, 10);
 
-            Map<Enchantment, Integer> armorEnch = new HashMap<>();
-            armorEnch.put(Enchantment.PROTECTION_PROJECTILE, 3);
-            armorEnch.put(Enchantment.DURABILITY, 10);
+        Map<Enchantment, Integer> bowEnch = new HashMap<>();
+        bowEnch.put(Enchantment.ARROW_DAMAGE, 3);
+        bowEnch.put(Enchantment.DURABILITY, 10);
 
-            ItemStack sword = MWItem.createSword(this, Material.IRON_SWORD, swordEnch,player);
-            ItemStack tool = MWItem.createTool(this, Material.DIAMOND_PICKAXE);
-            ItemStack helmet = MWItem.createArmor(this, Material.DIAMOND_HELMET, armorEnch);
-            ItemStack bow=MWItem.createBow(this,bowEnch);
+        Map<Enchantment, Integer> armorEnch = new HashMap<>();
+        armorEnch.put(Enchantment.PROTECTION_PROJECTILE, 3);
+        armorEnch.put(Enchantment.DURABILITY, 10);
 
-            List<ItemStack> potions = MWPotions.createBasic(this, 2, 8, 2);
+        ItemStack sword = MWItem.createSword(this, Material.IRON_SWORD, swordEnch, player);
+        ItemStack tool = MWItem.createTool(this, Material.DIAMOND_PICKAXE);
+        ItemStack helmet = MWItem.createArmor(this, Material.DIAMOND_HELMET, armorEnch);
+        ItemStack bow = MWItem.createBow(this, bowEnch);
 
-            items = MWKit.generate(this, sword, bow, tool, null, potions, helmet, null, null, null, null);
-        
+        List<ItemStack> potions = MWPotions.createBasic(this, 2, 8, 2);
+
+        items = MWKit.generate(this, sword, bow, tool, null, potions, helmet, null, null, null, null);
+
 
         MWKit.assignItems(player, items);
     }

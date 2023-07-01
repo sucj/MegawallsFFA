@@ -31,23 +31,23 @@ public abstract class MWClass implements Listener {
 
     protected String[] name;
     protected Material icon;
-    protected ItemStack iconAsItemStack=null;
+    protected ItemStack iconAsItemStack = null;
     protected ChatColor color;
     protected Playstyle[] playstyles;
     protected Diamond[] diamonds;
     protected MWClassInfo classInfo;
-    private CombatManager combatManager;
+    private final CombatManager combatManager;
 
     public MWClass() {
         this.plugin = MegaWalls.getInstance();
         this.manager = plugin.getClassManager();
         this.mwhealth = plugin.getMWHealth();
         this.energyManager = plugin.getEnergyManager();
-        this.combatManager= plugin.getCombatManager();
+        this.combatManager = plugin.getCombatManager();
     }
 
     public String getName() {
-        return plugin.isChinese() ? name[0] : name[1];
+        return name[0];
     }
 
     protected Set<Player> inRange(Player player, double radius) {
@@ -84,6 +84,7 @@ public abstract class MWClass implements Listener {
     public Material getIcon() {
         return icon;
     }
+
     public ItemStack getIconAsItemStack() {
         return iconAsItemStack;
     }
@@ -105,7 +106,7 @@ public abstract class MWClass implements Listener {
     }
 
     public String getShortName() {
-        return plugin.isChinese() ? name[0] : name[2];
+        return name[1];
     }
 
     public abstract void ability(Player player);
@@ -117,14 +118,14 @@ public abstract class MWClass implements Listener {
         Player player = energyManager.validate(e);
         if (player == null) return;
         Player victim = (Player) e.getEntity();
-        if(!combatManager.isInCombat(player)||!combatManager.isInCombat(victim)){
+        if (!combatManager.isInCombat(player) || !combatManager.isInCombat(victim)) {
             return;
         }
         if (MegaWalls.getInstance().getTeamsManager().isOnSameTeam(player, victim)) {
             e.setCancelled(true);
         }
-        if (SpecialEventsManager.getInstance().inAotr.contains(player)){
-            player.sendMessage("You hit an ememy,so disabled your "+ChatColor.GOLD+"Speed Boost "+ChatColor.RESET+"ability!");
+        if (SpecialEventsManager.getInstance().inAotr.contains(player)) {
+            player.sendMessage("You hit an ememy,so disabled your " + ChatColor.GOLD + "Speed Boost " + ChatColor.RESET + "ability!");
             player.setWalkSpeed(0.2f);
             SpecialEventsManager.getInstance().inAotr.remove(player);
         }

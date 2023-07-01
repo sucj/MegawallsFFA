@@ -32,7 +32,7 @@ public class MWGuardian extends MWClass {
 
 
     public MWGuardian() {
-        this.name = new String[]{"守卫者", "Guardian", "GUA"};
+        this.name = new String[]{"Guardian", "GUA"};
         this.icon = Material.MOB_SPAWNER;
         this.color = ChatColor.DARK_GREEN;
 
@@ -193,22 +193,22 @@ public class MWGuardian extends MWClass {
     public void assign(Player player) {
         Map<Integer, ItemStack> items;
 
-        
-            Map<Enchantment, Integer> swordEnch = new HashMap<>();
-            swordEnch.put(Enchantment.DURABILITY, 10);
 
-            Map<Enchantment, Integer> armorEnch = new HashMap<>();
-            armorEnch.put(Enchantment.DEPTH_STRIDER, 5);
-            armorEnch.put(Enchantment.DURABILITY, 10);
+        Map<Enchantment, Integer> swordEnch = new HashMap<>();
+        swordEnch.put(Enchantment.DURABILITY, 10);
 
-            ItemStack sword = MWItem.createSword(this, Material.DIAMOND_SWORD, swordEnch,player);
-            ItemStack tool = MWItem.createTool(this, Material.DIAMOND_PICKAXE);
-            ItemStack boots = MWItem.createArmor(this, Material.DIAMOND_BOOTS, armorEnch);
+        Map<Enchantment, Integer> armorEnch = new HashMap<>();
+        armorEnch.put(Enchantment.DEPTH_STRIDER, 5);
+        armorEnch.put(Enchantment.DURABILITY, 10);
 
-            List<ItemStack> potions = MWPotions.createBasic(this, 1, 8, 2);
+        ItemStack sword = MWItem.createSword(this, Material.DIAMOND_SWORD, swordEnch, player);
+        ItemStack tool = MWItem.createTool(this, Material.DIAMOND_PICKAXE);
+        ItemStack boots = MWItem.createArmor(this, Material.DIAMOND_BOOTS, armorEnch);
 
-            items = MWKit.generate(this, sword, null, tool, null, potions, null, null, null, boots, null);
-        
+        List<ItemStack> potions = MWPotions.createBasic(this, 1, 8, 2);
+
+        items = MWKit.generate(this, sword, null, tool, null, potions, null, null, null, boots, null);
+
 
         MWKit.assignItems(player, items);
         extrimityList.remove(player);

@@ -4,9 +4,6 @@ import fr.bukkit.effectkill.effect.KillEffect;
 import fr.bukkit.effectkill.effect.animation.*;
 import net.md_5.bungee.api.ChatColor;
 import net.nuggetmc.mw.MegaWalls;
-import net.nuggetmc.mw.energy.EnergyManager;
-import net.nuggetmc.mw.mwclass.MWClassManager;
-import net.nuggetmc.mw.utils.ItemUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -17,7 +14,9 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class KEMenu implements Listener {
     MegaWalls plugin = MegaWalls.getInstance();
@@ -26,18 +25,17 @@ public class KEMenu implements Listener {
     private static final String CLOSE_NAME = ChatColor.RED + "Close";
 
 
-
     private final String menuTitle = "Kill effects";
     public static List<KillEffect> effects = new ArrayList<>();
 
 
-    private void registerke(KillEffect...array) {
+    private void registerke(KillEffect... array) {
         Collections.addAll(effects, array);
     }
 
     public KillEffect getKEByName(String name) {
-        for (KillEffect ke:effects){
-            if (ke.getName().equals(name)){
+        for (KillEffect ke : effects) {
+            if (ke.getName().equals(name)) {
                 return ke;
             }
         }
@@ -59,16 +57,13 @@ public class KEMenu implements Listener {
     }
 
 
-
-
-
     public void openGUI(Player player) {
         Inventory inv = Bukkit.createInventory(null, 54, menuTitle);
 
 
-        int i=0;
-        for (KillEffect ke:effects){
-            inv.setItem(i,ke.itemStack);
+        int i = 0;
+        for (KillEffect ke : effects) {
+            inv.setItem(i, ke.itemStack);
             i++;
         }
         //  inv.setItem(11, example);
@@ -79,17 +74,16 @@ public class KEMenu implements Listener {
     }
 
     private void select(Player player, String name) {
-        KillEffect killEffect=getKEByName(name);
+        KillEffect killEffect = getKEByName(name);
         if (killEffect == null) return;
 
         select(player, killEffect);
     }
 
 
-
     public void select(Player player, KillEffect killEffect) {
-        plugin.getKillEffectManager().select(player,killEffect);
-            player.sendMessage("You have selected " + ChatColor.YELLOW + killEffect.getName() + ChatColor.RESET + ".");
+        plugin.getKillEffectManager().select(player, killEffect);
+        player.sendMessage("You have selected " + ChatColor.YELLOW + killEffect.getName() + ChatColor.RESET + ".");
 
     }
 

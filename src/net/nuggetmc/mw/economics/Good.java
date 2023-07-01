@@ -10,16 +10,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Good {
-    private ItemStack displayItem;
+    private final ItemStack displayItem;
 
     public void setPrice(int price) {
         this.price = price;
     }
 
     private int price;
-    private String extralore;
-    private String displayname;
-    private ItemStack theItem;
+    private final String extralore;
+    private final String displayname;
+    private final ItemStack theItem;
 
     public Good(ItemStack displayItem, String displayname, int price, ItemStack theItem, @Nullable String extralore) {
         this.displayItem = displayItem;

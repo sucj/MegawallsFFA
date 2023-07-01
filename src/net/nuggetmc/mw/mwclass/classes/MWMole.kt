@@ -1,7 +1,6 @@
 package net.nuggetmc.mw.mwclass.classes
 
 import net.md_5.bungee.api.ChatColor
-import net.nuggetmc.mw.MegaWalls
 import net.nuggetmc.mw.mwclass.MWClass
 import net.nuggetmc.mw.mwclass.info.Diamond
 import net.nuggetmc.mw.mwclass.info.MWClassInfo
@@ -10,8 +9,6 @@ import net.nuggetmc.mw.mwclass.items.MWItem
 import net.nuggetmc.mw.mwclass.items.MWKit
 import net.nuggetmc.mw.mwclass.items.MWPotions
 import net.nuggetmc.mw.special.SpecialEventsManager
-
-import net.nuggetmc.mw.special.SpecialItemUtils
 import net.nuggetmc.mw.utils.ActionBar
 import net.nuggetmc.mw.utils.ItemUtils
 import net.nuggetmc.mw.utils.LocationUtils
@@ -35,12 +32,12 @@ import java.util.*
 
 
 class MWMole : MWClass() {
-    var shortCut:HashMap<Player,Int> = HashMap()
-    var junkApple:HashMap<Player,Int> = HashMap()
+    var shortCut: HashMap<Player, Int> = HashMap()
+    var junkApple: HashMap<Player, Int> = HashMap()
 
 
     init {
-        name = arrayOf("鼹鼠", "Mole", "MOL")
+        name = arrayOf("Mole", "MOL")
         icon = Material.GOLD_SPADE
         color = ChatColor.YELLOW
         playstyles = arrayOf(
@@ -67,7 +64,7 @@ class MWMole : MWClass() {
 
     override fun ability(player: Player) {
         energyManager.clear(player)
-        player.addPotionEffect(PotionEffect(PotionEffectType.DAMAGE_RESISTANCE,2*20,0))
+        player.addPotionEffect(PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 2 * 20, 0))
         val from: Location = player.location.clone()
         object : BukkitRunnable() {
             var ticks = 0
@@ -81,23 +78,23 @@ class MWMole : MWClass() {
                 }
                 player.velocity = player.eyeLocation.direction.multiply(0.8)
                 for (block1 in LocationUtils.getSphere(player.location, 2)) {
-                        if (block1.type === Material.BEDROCK) {
-                            continue
-                        }
+                    if (block1.type === Material.BEDROCK) {
+                        continue
+                    }
                     if (block1.type === Material.BARRIER) {
                         continue
                     }
                     if (SpecialEventsManager.rp != null && SpecialEventsManager.rp.getAPI(plugin).getRegion("spawn")
-                            .isLocationInRegion(block1.getLocation())
+                            .isLocationInRegion(block1.location)
                     ) {
                         continue
                     }
-                    val material: Material = block1.getType()
+                    val material: Material = block1.type
                     if (!material.name.lowercase(Locale.getDefault()).contains("diamond")) {
                         Bukkit.getScheduler()
-                            .runTaskLater(plugin, { block1.setType(material) }, plugin.breakResetTime * 20L)
+                            .runTaskLater(plugin, { block1.type = material }, plugin.breakResetTime * 20L)
                     }
-                        block1.breakNaturally()
+                    block1.breakNaturally()
                 }
                 for (nearby in getNearbyEnemies(player, 5.toDouble())!!) {
                     if (damaged.contains(nearby)) {
@@ -110,11 +107,12 @@ class MWMole : MWClass() {
             }
         }.runTaskTimer(plugin, 0L, 1L)
     }
-    private fun getNearbyEnemies(player: Player, radius: Double): List<Player>? {
+
+    private fun getNearbyEnemies(player: Player, radius: Double): List<Player> {
         val players: MutableList<Player> = ArrayList()
         for (other in PlayerUtils.getNearbyPlayers(player.location, radius)) {
             if (plugin.combatManager.isInCombat(other)) {
-                if (plugin.teamsManager.isOnSameTeam(player,other)) {
+                if (plugin.teamsManager.isOnSameTeam(player, other)) {
                     continue
                 }
                 players.add(other)
@@ -133,30 +131,41 @@ class MWMole : MWClass() {
     }
 
 
-
     override fun assign(player: Player) {
         val items: Map<Int, ItemStack>
-        
-            val swordEnch: MutableMap<Enchantment, Int> = HashMap()
-            swordEnch[Enchantment.DURABILITY] = 10
-            swordEnch[Enchantment.DIG_SPEED] = 10
-            swordEnch[Enchantment.DAMAGE_ALL] = 2
-            val legginsEnch: MutableMap<Enchantment, Int> = HashMap()
-            legginsEnch[Enchantment.PROTECTION_ENVIRONMENTAL] = 3
-            legginsEnch[Enchantment.DURABILITY] = 10
-            val helmetEnch:MutableMap<Enchantment,Int> =HashMap()
-            helmetEnch[Enchantment.DURABILITY] =10
-            helmetEnch[Enchantment.PROTECTION_ENVIRONMENTAL] = 1
-            val sword = MWItem.createSword(this, Material.DIAMOND_SPADE, swordEnch,player)
-            val bow = MWItem.createBow(this, null)
-            val tool = MWItem.createTool(this, Material.DIAMOND_PICKAXE)
-            val leggings = MWItem.createArmor(this, Material.DIAMOND_LEGGINGS, legginsEnch)
-            val helmet=MWItem.createArmor(this,Material.GOLD_HELMET,helmetEnch)
-            val potions = MWPotions.createBasic(this, 2, 8)
-            val junkApples=plugin.specialItemUtils.getJunkApple(5)
 
-            items = MWKit.generate(this, sword, bow, tool, null,  potions, helmet, null, leggings, null, Collections.singletonList(junkApples))
-        
+        val swordEnch: MutableMap<Enchantment, Int> = HashMap()
+        swordEnch[Enchantment.DURABILITY] = 10
+        swordEnch[Enchantment.DIG_SPEED] = 10
+        swordEnch[Enchantment.DAMAGE_ALL] = 2
+        val legginsEnch: MutableMap<Enchantment, Int> = HashMap()
+        legginsEnch[Enchantment.PROTECTION_ENVIRONMENTAL] = 3
+        legginsEnch[Enchantment.DURABILITY] = 10
+        val helmetEnch: MutableMap<Enchantment, Int> = HashMap()
+        helmetEnch[Enchantment.DURABILITY] = 10
+        helmetEnch[Enchantment.PROTECTION_ENVIRONMENTAL] = 1
+        val sword = MWItem.createSword(this, Material.DIAMOND_SPADE, swordEnch, player)
+        val bow = MWItem.createBow(this, null)
+        val tool = MWItem.createTool(this, Material.DIAMOND_PICKAXE)
+        val leggings = MWItem.createArmor(this, Material.DIAMOND_LEGGINGS, legginsEnch)
+        val helmet = MWItem.createArmor(this, Material.GOLD_HELMET, helmetEnch)
+        val potions = MWPotions.createBasic(this, 2, 8)
+        val junkApples = plugin.specialItemUtils.getJunkApple(5)
+
+        items = MWKit.generate(
+            this,
+            sword,
+            bow,
+            tool,
+            null,
+            potions,
+            helmet,
+            null,
+            leggings,
+            null,
+            Collections.singletonList(junkApples)
+        )
+
         MWKit.assignItems(player, items)
         shortCut[player] = 0
         junkApple[player] = 0
@@ -167,26 +176,25 @@ class MWMole : MWClass() {
     fun shortCut(event: BlockBreakEvent) {
         val player = event.player
         if (manager[player] === this) {
-            when (event.block.type){
-                Material.SNOW_BLOCK,Material.SNOW,Material.GRASS,Material.DIRT,Material.SAND,Material.GRAVEL
-                ->{
-                    if (!shortCut.containsKey(player)){
-                        shortCut.put(player,1)
-                    }else{
-                        when(shortCut[player]){
-                         0,1-> shortCut[player] = shortCut[player]!! + 1
-                         2->shortCut[player] =0
+            when (event.block.type) {
+                Material.SNOW_BLOCK, Material.SNOW, Material.GRASS, Material.DIRT, Material.SAND, Material.GRAVEL
+                -> {
+                    if (!shortCut.containsKey(player)) {
+                        shortCut.put(player, 1)
+                    } else {
+                        when (shortCut[player]) {
+                            0, 1 -> shortCut[player] = shortCut[player]!! + 1
+                            2 -> shortCut[player] = 0
                         }
                     }
-                    if (shortCut[player]==0){
-                        player.addPotionEffect(PotionEffect(PotionEffectType.SPEED,4*20,1))
-                        player.addPotionEffect(PotionEffect(PotionEffectType.FAST_DIGGING,4*20,1))
+                    if (shortCut[player] == 0) {
+                        player.addPotionEffect(PotionEffect(PotionEffectType.SPEED, 4 * 20, 1))
+                        player.addPotionEffect(PotionEffect(PotionEffectType.FAST_DIGGING, 4 * 20, 1))
                     }
-
-
 
 
                 }
+
                 else -> {
                     return
                 }
@@ -194,36 +202,35 @@ class MWMole : MWClass() {
 
         }
     }
+
     @EventHandler
-    fun JunkApple(e:BlockBreakEvent){
+    fun JunkApple(e: BlockBreakEvent) {
         val player = e.player
         if (manager[player] === this) {
-                    if (!junkApple.containsKey(player)){
-                        junkApple.put(player,1)
-                    }else{
-                        when(junkApple[player]){
-                            in 0..98-> junkApple[player] =junkApple[player]!! + 1
-                            99->junkApple[player] =0
-                        }
-                    }
-                    if (junkApple[player]==0){
-                        val slot = ItemUtils.findJunkApple(player)
-                        if (slot != -1 && player.inventory.getItem(slot).amount <= 63) {
-                            val amount = player.inventory.getItem(slot).amount
-                            val itemStack = player.inventory.getItem(slot).clone()
-                            itemStack.amount = amount + 1
-                            player.inventory.setItem(slot, itemStack)
-                        } else {
-                            player.inventory.addItem(plugin.specialItemUtils.getJunkApple(1))
-                        }
-                    }
-
-
-
+            if (!junkApple.containsKey(player)) {
+                junkApple.put(player, 1)
+            } else {
+                when (junkApple[player]) {
+                    in 0..98 -> junkApple[player] = junkApple[player]!! + 1
+                    99 -> junkApple[player] = 0
+                }
+            }
+            if (junkApple[player] == 0) {
+                val slot = ItemUtils.findJunkApple(player)
+                if (slot != -1 && player.inventory.getItem(slot).amount <= 63) {
+                    val amount = player.inventory.getItem(slot).amount
+                    val itemStack = player.inventory.getItem(slot).clone()
+                    itemStack.amount = amount + 1
+                    player.inventory.setItem(slot, itemStack)
+                } else {
+                    player.inventory.addItem(plugin.specialItemUtils.getJunkApple(1))
+                }
+            }
 
 
         }
     }
+
     @EventHandler
     fun onLeftClick(e: PlayerInteractEvent) {
         val p = e.player
@@ -238,8 +245,8 @@ class MWMole : MWClass() {
 
     override fun getActionBar(player: Player?): String {
         return ActionBar.joinActionBar(
-            this.color.toString()+ChatColor.BOLD+"ShortCut "+ChatColor.RESET+ChatColor.RESET+shortCut[player]+ChatColor.RESET,
-            this.color.toString()+ChatColor.BOLD+"Junk Apple "+ChatColor.RESET+ChatColor.RESET+junkApple[player]+ChatColor.RESET
+            this.color.toString() + ChatColor.BOLD + "ShortCut " + ChatColor.RESET + ChatColor.RESET + shortCut[player] + ChatColor.RESET,
+            this.color.toString() + ChatColor.BOLD + "Junk Apple " + ChatColor.RESET + ChatColor.RESET + junkApple[player] + ChatColor.RESET
         )
     }
 }

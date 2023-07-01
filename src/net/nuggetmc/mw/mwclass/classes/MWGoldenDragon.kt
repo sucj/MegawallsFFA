@@ -20,14 +20,15 @@ import org.bukkit.potion.PotionEffectType
 import org.bukkit.scheduler.BukkitRunnable
 
 class MWGoldenDragon : MWClass() {
-    val plugin: MegaWalls =MegaWalls.getInstance()!!
-    val energyManager=plugin.energyManager!!
+    val plugin: MegaWalls = MegaWalls.getInstance()!!
+    val energyManager = plugin.energyManager!!
+
     @get:Synchronized
-    val cdCache= HashSet<Player>()
+    val cdCache = HashSet<Player>()
 
     init {
-        name = arrayOf("金龙", "GoldenDragon", "GOD")
-        icon=Material.DRAGON_EGG
+        name = arrayOf("GoldenDragon", "GOD")
+        icon = Material.DRAGON_EGG
         color = ChatColor.RED
         playstyles = arrayOf(
             Playstyle.RANGED,
@@ -36,15 +37,15 @@ class MWGoldenDragon : MWClass() {
         diamonds = emptyArray()
         classInfo = MWClassInfo(
             "Echo",
-            "You will deal 4 damage to the closest enemy in 30 blocks and gain 2 HP."+
-            "\n how to activate:Left click with your bow"+
-            "\n Energy cost:21"+
-            "\n Cooldown:1s",
+            "You will deal 4 damage to the closest enemy in 30 blocks and gain 2 HP." +
+                    "\n how to activate:Left click with your bow" +
+                    "\n Energy cost:21" +
+                    "\n Cooldown:1s",
             "Echo+",
-            "You will deal 9 damage to the closest enemy in 35 blocks and gain 5 Hp."+
-                    "\n how to activate:Left click with your bow"+
-                    "\n Energy cost:40"+
-            "\n the cooldown of this counts as the cooldown of Echo.",
+            "You will deal 9 damage to the closest enemy in 35 blocks and gain 5 Hp." +
+                    "\n how to activate:Left click with your bow" +
+                    "\n Energy cost:40" +
+                    "\n the cooldown of this counts as the cooldown of Echo.",
             "Heal",
             "Right click with your sword and all players in your team will get Regeneration III for 4 seconds.\n" +
                     " Energy cost:65",
@@ -60,81 +61,82 @@ class MWGoldenDragon : MWClass() {
         //Nothing here.
     }
 
-        fun Player.heal(amount: Int){
-            if (this.health+amount>this.maxHealth){
-                this.health=this.maxHealth
-            }else{
-                this.health+=amount
+    fun Player.heal(amount: Int) {
+        if (this.health + amount > this.maxHealth) {
+            this.health = this.maxHealth
+        } else {
+            this.health += amount
+        }
+    }
+
+    fun callEcho(player: Player) {
+        if (cdCache.contains(player)) {
+            return
+        }
+        val energy = energyManager[player]
+        if (energy < 21) {
+            return
+        }
+        var target: Player? = null
+        for (block in player
+            .getLineOfSight(MWEnderman.set, 25)) {
+            for (player2 in PlayerUtils.getNearbyPlayers(block.location, player, 2)) {
+                if (target == null || player2
+                        .location.distance(player.location) < target
+                        .location.distance(player.location)
+                ) target = player2
             }
         }
-        fun callEcho(player: Player){
-            if (cdCache.contains(player)){
-                return
-            }
-            val energy= energyManager[player]
-            if (energy<21){
-                return
-            }
-            var target: Player? = null
-            for (block in player
-                .getLineOfSight(MWEnderman.set, 25)) {
-                for (player2 in PlayerUtils.getNearbyPlayers(block.location, player, 2)) {
-                    if (target == null || player2
-                            .location.distance(player.location) < target
-                            .location.distance(player.location)
-                    ) target = player2
+        when (energy) {
+            in 21..39 -> {
+                if (target == null) {
+                    target = PlayerUtils.getClosestEnemyInRange(player, 30.0)
                 }
-            }
-            when(energy){
-                in 21..39->{
-                    if (target==null){
-                        target=PlayerUtils.getClosestEnemyInRange(player, 30.0)
-                    }
-                    if (target==null){
-                        return
-                    }
-                    energyManager[player] -=21
-                    mwhealth.trueDamage(target,4.toDouble(),player)
-                    player.sendMessage(this.color.toString()+ "You deal 4 damage to ${target.displayName}.")
-                    target.sendMessage(this.color.toString() + "You received 4 damage from ${player.displayName}.")
-                    player.heal(2)
+                if (target == null) {
+                    return
                 }
-                in 40..100->{
-                    if (target==null){
-                        target= PlayerUtils.getClosestEnemyInRange(player, 35.0)
-                    }
-                    if (target==null){
-                        return
-                    }
-                    energyManager[player] -=40
-                    mwhealth.trueDamage(target,9.toDouble(),player)
-                    player.sendMessage(this.color.toString()+ "You deal 9 damage to ${target.displayName}.")
-                    target.sendMessage(this.color.toString() + "You received 9 damage from ${player.displayName}.")
-                    player.heal(5)
+                energyManager[player] -= 21
+                mwhealth.trueDamage(target, 4.toDouble(), player)
+                player.sendMessage(this.color.toString() + "You deal 4 damage to ${target.displayName}.")
+                target.sendMessage(this.color.toString() + "You received 4 damage from ${player.displayName}.")
+                player.heal(2)
+            }
 
+            in 40..100 -> {
+                if (target == null) {
+                    target = PlayerUtils.getClosestEnemyInRange(player, 35.0)
                 }
+                if (target == null) {
+                    return
+                }
+                energyManager[player] -= 40
+                mwhealth.trueDamage(target, 9.toDouble(), player)
+                player.sendMessage(this.color.toString() + "You deal 9 damage to ${target.displayName}.")
+                target.sendMessage(this.color.toString() + "You received 9 damage from ${player.displayName}.")
+                player.heal(5)
+
             }
-            cdCache.add(player)
-
-            object :BukkitRunnable(){
-                override fun run() {
-                    cdCache.remove(player)
-                }
-            }.runTaskLater(plugin,20)
-
         }
-        fun callHeal(p: Player){
-            val energy= energyManager[p]
-            if (energy<65){
-                return
+        cdCache.add(player)
+
+        object : BukkitRunnable() {
+            override fun run() {
+                cdCache.remove(player)
             }
-            plugin.teamsManager.getTeamMembers(plugin.teamsManager.getTeamOfPlayer(p)!!).forEach {
-                player -> player.addPotionEffect(PotionEffect(PotionEffectType.REGENERATION,4*20,2))
-            }
-            energyManager[p] -=65
+        }.runTaskLater(plugin, 20)
+
+    }
+
+    fun callHeal(p: Player) {
+        val energy = energyManager[p]
+        if (energy < 65) {
+            return
         }
-
-
+        plugin.teamsManager.getTeamMembers(plugin.teamsManager.getTeamOfPlayer(p)!!).forEach { player ->
+            player.addPotionEffect(PotionEffect(PotionEffectType.REGENERATION, 4 * 20, 2))
+        }
+        energyManager[p] -= 65
+    }
 
 
     override fun hit(event: EntityDamageByEntityEvent) {
@@ -147,47 +149,51 @@ class MWGoldenDragon : MWClass() {
     }
 
 
-
     override fun assign(player: Player) {
         val items: Map<Int, ItemStack>
-        
-            val swordEnch: MutableMap<Enchantment, Int> = HashMap()
-            swordEnch[Enchantment.DURABILITY] = 10
+
+        val swordEnch: MutableMap<Enchantment, Int> = HashMap()
+        swordEnch[Enchantment.DURABILITY] = 10
 
 
-            val bowEnch:MutableMap<Enchantment, Int> = HashMap()
-            bowEnch[Enchantment.ARROW_INFINITE] = 1
-            bowEnch[Enchantment.ARROW_DAMAGE] = 2
+        val bowEnch: MutableMap<Enchantment, Int> = HashMap()
+        bowEnch[Enchantment.ARROW_INFINITE] = 1
+        bowEnch[Enchantment.ARROW_DAMAGE] = 2
 
-            val bootEnch: MutableMap<Enchantment, Int> = HashMap()
-            bootEnch[Enchantment.PROTECTION_FALL] = 2
-            bootEnch[Enchantment.PROTECTION_ENVIRONMENTAL] = 3
-            bootEnch[Enchantment.DURABILITY] = 10
+        val bootEnch: MutableMap<Enchantment, Int> = HashMap()
+        bootEnch[Enchantment.PROTECTION_FALL] = 2
+        bootEnch[Enchantment.PROTECTION_ENVIRONMENTAL] = 3
+        bootEnch[Enchantment.DURABILITY] = 10
 
-            val leggingsEnch: MutableMap<Enchantment, Int> = HashMap()
-            leggingsEnch[Enchantment.PROTECTION_PROJECTILE] = 1
-            leggingsEnch[Enchantment.PROTECTION_ENVIRONMENTAL] = 2
-            leggingsEnch[Enchantment.DURABILITY] = 10
+        val leggingsEnch: MutableMap<Enchantment, Int> = HashMap()
+        leggingsEnch[Enchantment.PROTECTION_PROJECTILE] = 1
+        leggingsEnch[Enchantment.PROTECTION_ENVIRONMENTAL] = 2
+        leggingsEnch[Enchantment.DURABILITY] = 10
 
-            val sword = MWItem.createSword(this, Material.IRON_SWORD, swordEnch,player)
-            val bow = MWItem.createBow(this, bowEnch)
-            val tool = MWItem.createTool(this, Material.DIAMOND_PICKAXE)
-            val boots = MWItem.createArmor(this, Material.IRON_BOOTS, bootEnch)
-            val leg = MWItem.createArmor(this, Material.IRON_LEGGINGS, leggingsEnch)
-            val potions = MWPotions.createBasic(this, 2, 8, 2)
+        val sword = MWItem.createSword(this, Material.IRON_SWORD, swordEnch, player)
+        val bow = MWItem.createBow(this, bowEnch)
+        val tool = MWItem.createTool(this, Material.DIAMOND_PICKAXE)
+        val boots = MWItem.createArmor(this, Material.IRON_BOOTS, bootEnch)
+        val leg = MWItem.createArmor(this, Material.IRON_LEGGINGS, leggingsEnch)
+        val potions = MWPotions.createBasic(this, 2, 8, 2)
 
-            items = MWKit.generate(this, sword, bow, tool, null, potions, null, null, leg, boots, null)
-        
+        items = MWKit.generate(this, sword, bow, tool, null, potions, null, null, leg, boots, null)
+
         MWKit.assignItems(player, items)
         cdCache.remove(player)
 
     }
 
     override fun getActionBar(player: Player?): String {
-        val echo=this.color.toString()+ChatColor.BOLD.toString() + "Echo ${if (energyManager[player]>=21&&!cdCache.contains(player)) ChatColor.GREEN.toString()+ChatColor.BOLD.toString() + "✔" else ChatColor.RED.toString() +ChatColor.BOLD.toString() + "✖" }"
-        val echoPlus=this.color.toString()+ChatColor.BOLD.toString() + "Echo+ ${if (energyManager[player]>=40&&!cdCache.contains(player)) ChatColor.GREEN.toString()+ChatColor.BOLD.toString() + "✔" else ChatColor.RED.toString() +ChatColor.BOLD.toString() + "✖" }"
-        val heal=this.color.toString()+ChatColor.BOLD.toString() + "Heal ${if (energyManager[player]>=70) ChatColor.GREEN.toString()+ChatColor.BOLD.toString() + "✔" else ChatColor.RED.toString() +ChatColor.BOLD.toString() + "✖" }"
-        return echo+"       "+echoPlus+"     " +heal
+        val echo = this.color.toString() + ChatColor.BOLD.toString() + "Echo ${
+            if (energyManager[player] >= 21 && !cdCache.contains(player)) ChatColor.GREEN.toString() + ChatColor.BOLD.toString() + "✔" else ChatColor.RED.toString() + ChatColor.BOLD.toString() + "✖"
+        }"
+        val echoPlus = this.color.toString() + ChatColor.BOLD.toString() + "Echo+ ${
+            if (energyManager[player] >= 40 && !cdCache.contains(player)) ChatColor.GREEN.toString() + ChatColor.BOLD.toString() + "✔" else ChatColor.RED.toString() + ChatColor.BOLD.toString() + "✖"
+        }"
+        val heal =
+            this.color.toString() + ChatColor.BOLD.toString() + "Heal ${if (energyManager[player] >= 70) ChatColor.GREEN.toString() + ChatColor.BOLD.toString() + "✔" else ChatColor.RED.toString() + ChatColor.BOLD.toString() + "✖"}"
+        return echo + "       " + echoPlus + "     " + heal
     }
 
 

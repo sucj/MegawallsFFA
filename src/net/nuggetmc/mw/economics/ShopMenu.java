@@ -12,7 +12,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -31,7 +30,7 @@ public class ShopMenu implements Listener {
     private final MWClassManager classmanager = plugin.getClassManager();
     private final EnergyManager energyManager = plugin.getEnergyManager();
     private final String menuTitle = "Shop";
-    private static Map<String, Good> goods = new HashMap<>();
+    private static final Map<String, Good> goods = new HashMap<>();
     public Good gapple = new Good(new ItemStack(Material.GOLDEN_APPLE, 1), "Golden Apple", 8, new ItemStack(Material.GOLDEN_APPLE, 1), null);
     public Good milk = new Good(new ItemStack(Material.MILK_BUCKET, 1), "Cow Bucket", 5, specialItemUtils.getCowBucket(), null);
     Good squpot = new Good(specialItemUtils.getSquidPot(), ChatColor.stripColor(specialItemUtils.getSquidPot().getItemMeta().getDisplayName()), 15, specialItemUtils.getSquidPot(), null);
@@ -197,7 +196,6 @@ public class ShopMenu implements Listener {
             }
             if (amount == 0) {
                 e.getPlayer().sendMessage("please enter a valid integer!");
-                return;
             } else {
                 String str = waitingForInputList.get(e.getPlayer());
                 select(e.getPlayer(), str, amount);

@@ -16,17 +16,16 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class MWItem {
-   static SwordNameManager swordNameManager;
+    static SwordNameManager swordNameManager;
 
 
     public static ItemStack createSword(MWClass mwclass, Material type, Map<Enchantment, Integer> enchantments, Player player) {
-        if (swordNameManager==null){
-            swordNameManager=MegaWalls.getInstance().getSwordNameManager();
+        if (swordNameManager == null) {
+            swordNameManager = MegaWalls.getInstance().getSwordNameManager();
         }
         ItemStack item = new ItemStack(type);
         List<String> lore = new ArrayList<>();
@@ -38,9 +37,9 @@ public class MWItem {
 
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(
-                swordNameManager.get(player)==null?
-                mwclass.getColor() + mwclass.getName() + (mwclass instanceof MWMole?" Spade":" Sword" ):
-                swordNameManager.get(player)
+                swordNameManager.get(player) == null ?
+                        mwclass.getColor() + mwclass.getName() + (mwclass instanceof MWMole ? " Spade" : " Sword") :
+                        swordNameManager.get(player)
         );
 
         MWClassInfo info = mwclass.getInfo();
@@ -65,29 +64,30 @@ public class MWItem {
 
         return ItemUtils.toMWItem(item);
     }
+
     public static ItemStack createAOTR() {
         ItemStack item = new ItemStack(Material.DIAMOND_SPADE);
         List<String> lore = new ArrayList<>();
 
 
-        item.addUnsafeEnchantment(Enchantment.PROTECTION_EXPLOSIONS,10);
+        item.addUnsafeEnchantment(Enchantment.PROTECTION_EXPLOSIONS, 10);
 
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(ChatColor.LIGHT_PURPLE.toString()+ChatColor.BOLD+"Aspect of the Rogues");
+        meta.setDisplayName(ChatColor.LIGHT_PURPLE.toString() + ChatColor.BOLD + "Aspect of the Rogues");
 
 
         lore.add("");
 
-        lore.add(ChatColor.GOLD + "Ability:Speed Boost "+ChatColor.YELLOW+ChatColor.BOLD+"RIGHT CLICK");
-        lore.add(ChatColor.GRAY+"Grants you a walk speed boost for "+ChatColor.GREEN+"5s"+ChatColor.GRAY+".");
-        lore.add(ChatColor.RED.toString()+ChatColor.BOLD+"CANT BE USED WHEN THERE'S ANY ENEMY WITHIN "+ChatColor.GREEN+ChatColor.BOLD+"50 "+ChatColor.RED+ChatColor.BOLD+"blocks!");
+        lore.add(ChatColor.GOLD + "Ability:Speed Boost " + ChatColor.YELLOW + ChatColor.BOLD + "RIGHT CLICK");
+        lore.add(ChatColor.GRAY + "Grants you a walk speed boost for " + ChatColor.GREEN + "5s" + ChatColor.GRAY + ".");
+        lore.add(ChatColor.RED.toString() + ChatColor.BOLD + "CANT BE USED WHEN THERE'S ANY ENEMY WITHIN " + ChatColor.GREEN + ChatColor.BOLD + "50 " + ChatColor.RED + ChatColor.BOLD + "blocks!");
         lore.add("Cooldown:40s");
         lore.add("");
         lore.add("");
-        lore.add(ChatColor.GRAY.toString()+ChatColor.ITALIC+"Being inspired by Rogue Sword in Hypixel Skyblock,the Aspect of the Rogues was invented.");
-        lore.add(ChatColor.GRAY.toString()+ChatColor.ITALIC+"This item can also be used as a shovel.");
+        lore.add(ChatColor.GRAY.toString() + ChatColor.ITALIC + "Being inspired by Rogue Sword in Hypixel Skyblock,the Aspect of the Rogues was invented.");
+        lore.add(ChatColor.GRAY.toString() + ChatColor.ITALIC + "This item can also be used as a shovel.");
         lore.add("");
-        lore.add(ChatColor.LIGHT_PURPLE.toString()+ChatColor.BOLD+"MYTHIC");
+        lore.add(ChatColor.LIGHT_PURPLE.toString() + ChatColor.BOLD + "MYTHIC");
 
 
         meta.setLore(lore);

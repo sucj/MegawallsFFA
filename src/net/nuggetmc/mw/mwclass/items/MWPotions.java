@@ -29,6 +29,7 @@ public class MWPotions {
 
         return items;
     }
+
     public static List<ItemStack> createBasic(MWClass mwclass, int hPotCount, int hPotAmount) {
         List<ItemStack> items = new ArrayList<>();
 
@@ -124,6 +125,7 @@ public class MWPotions {
 
         return ItemUtils.toMWItem(item);
     }
+
     public static ItemStack createAsnPotions(ChatColor color, int count) {
         Potion potion = new Potion(PotionType.INSTANT_DAMAGE);
         ItemStack item = potion.toItemStack(count);

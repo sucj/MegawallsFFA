@@ -11,7 +11,7 @@ import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.event.player.PlayerRespawnEvent
 
 class TeamsManager : Listener {
-    private var teamsMap = HashMap<Player, Team>();
+    private var teamsMap = HashMap<Player, Team>()
     private var plugin = MegaWalls.getInstance()
 
     /**
@@ -68,18 +68,18 @@ class TeamsManager : Listener {
      * tell if players are in the same team.
      */
     fun isOnSameTeam(player: Player, player1: Player): Boolean {
-        if ((!plugin.combatManager.isInCombat(player)) || (!plugin.combatManager.isInCombat(player1))) return false;
+        if ((!plugin.combatManager.isInCombat(player)) || (!plugin.combatManager.isInCombat(player1))) return false
         return getTeamOfPlayer(player) == getTeamOfPlayer(player1)
     }
 
     fun isOnSameTeam(array: Array<Player>): Boolean {
         if (array.size == 1) {
-            return true;
+            return true
         }
-        var allSameTeam = false;
+        var allSameTeam = false
         for (index in 0..array.size) {
             if (isOnSameTeam(array.get(index), array.get(index + 1))) {
-                allSameTeam = true;
+                allSameTeam = true
                 break
             }
         }
@@ -156,18 +156,18 @@ class TeamsManager : Listener {
      * get team of player
      */
     fun getTeamOfPlayer(player: Player): Team? {
-        return teamsMap.get(player);
+        return teamsMap.get(player)
     }
 
     /**
      * get all the members of a team.
      */
     fun getTeamMembers(team: Team): HashSet<Player> {
-        var result = HashSet<Player>();
+        var result = HashSet<Player>()
         for (player: Player in teamsMap.keys) {
             if (teamsMap.get(player) == team) result.add(player)
         }
-        return result;
+        return result
     }
 
     enum class Team {

@@ -31,7 +31,7 @@ public class MWSquid extends MWClass {
     private final Set<Player> rejuvenateList = new HashSet<>();
 
     public MWSquid() {
-        this.name = new String[]{"鱿鱼", "Squid", "SQU"};
+        this.name = new String[]{"Squid", "SQU"};
         this.icon = Material.INK_SACK;
         this.color = ChatColor.BLUE;
 
@@ -119,7 +119,7 @@ public class MWSquid extends MWClass {
     }
 
     private void givePotions(Player player) {
-        ItemStack potions = MWPotions.createAbsorptionPotions(plugin.isChinese() ? this.name[0] : this.name[1], this.color, 2, 60);
+        ItemStack potions = MWPotions.createAbsorptionPotions(this.name[0], this.color, 2, 60);
         ItemUtils.givePlayerItemStack(player, potions);
     }
 
@@ -188,24 +188,24 @@ public class MWSquid extends MWClass {
     public void assign(Player player) {
         Map<Integer, ItemStack> items;
 
-        
-            Map<Enchantment, Integer> swordEnch = new HashMap<>();
-            swordEnch.put(Enchantment.DURABILITY, 10);
 
-            Map<Enchantment, Integer> armorEnch = new HashMap<>();
-            armorEnch.put(Enchantment.PROTECTION_ENVIRONMENTAL, 3);
-            armorEnch.put(Enchantment.DEPTH_STRIDER, 2);
-            armorEnch.put(Enchantment.DURABILITY, 10);
+        Map<Enchantment, Integer> swordEnch = new HashMap<>();
+        swordEnch.put(Enchantment.DURABILITY, 10);
 
-            ItemStack sword = MWItem.createSword(this, Material.IRON_SWORD, swordEnch,player);
-            ItemStack bow = MWItem.createBow(this, null);
-            ItemStack tool = MWItem.createTool(this, Material.DIAMOND_PICKAXE);
-            ItemStack boots = MWItem.createArmor(this, Material.DIAMOND_BOOTS, armorEnch);
+        Map<Enchantment, Integer> armorEnch = new HashMap<>();
+        armorEnch.put(Enchantment.PROTECTION_ENVIRONMENTAL, 3);
+        armorEnch.put(Enchantment.DEPTH_STRIDER, 2);
+        armorEnch.put(Enchantment.DURABILITY, 10);
 
-            List<ItemStack> potions = MWPotions.createBasic(this, 3, 6, 1);
+        ItemStack sword = MWItem.createSword(this, Material.IRON_SWORD, swordEnch, player);
+        ItemStack bow = MWItem.createBow(this, null);
+        ItemStack tool = MWItem.createTool(this, Material.DIAMOND_PICKAXE);
+        ItemStack boots = MWItem.createArmor(this, Material.DIAMOND_BOOTS, armorEnch);
 
-            items = MWKit.generate(this, sword, null, tool, null, potions, null, null, null, boots, null);
-        
+        List<ItemStack> potions = MWPotions.createBasic(this, 3, 6, 1);
+
+        items = MWKit.generate(this, sword, null, tool, null, potions, null, null, null, boots, null);
+
 
         MWKit.assignItems(player, items);
     }

@@ -20,9 +20,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SpecialItemUtils {
-    private MegaWalls plugin = MegaWalls.getInstance();
-    private String[] squidname = new String[]{"鱿鱼", "Squid", "SQU"};
-    private String[] golemname = new String[]{"傀儡", "Golem", "GOL"};
+    private final MegaWalls plugin = MegaWalls.getInstance();
+    private final String[] squidname = new String[]{"Squid", "SQU"};
+    private final String[] golemname = new String[]{"Golem", "GOL"};
     String cowBucketTag = "cowbucket";
 
     public ItemStack getSquidPot() {
@@ -30,7 +30,7 @@ public class SpecialItemUtils {
     }
 
     public ItemStack getSquidPot(int count) {
-        return MWPotions.createAbsorptionPotions(plugin.isChinese() ? this.squidname[0] : this.squidname[1], ChatColor.BLUE, count, 60);
+        return MWPotions.createAbsorptionPotions(this.squidname[0], ChatColor.BLUE, count, 60);
     }
 
     public ItemStack getGolemPot() {
@@ -38,7 +38,7 @@ public class SpecialItemUtils {
     }
 
     public ItemStack getGolemPot(int count) {
-        return MWPotions.createRegenerationPotions(plugin.isChinese() ? golemname[0] : golemname[1], ChatColor.WHITE, count, 12, 10);
+        return MWPotions.createRegenerationPotions(golemname[0], ChatColor.WHITE, count, 12, 10);
     }
 
     public ItemStack getCowBucket() {
@@ -86,13 +86,14 @@ public class SpecialItemUtils {
         NBTTagCompound compound = nmsItem.hasTag() ? nmsItem.getTag() : new NBTTagCompound();
         return compound.getBoolean(cowBucketTag);
     }
+
     public boolean isCowBucketNotOwn(ItemStack itemStack) {
         if (itemStack == null) return false;
         net.minecraft.server.v1_8_R3.ItemStack nmsItem = CraftItemStack.asNMSCopy(itemStack);
         if (nmsItem == null) return false;
 
         NBTTagCompound compound = nmsItem.hasTag() ? nmsItem.getTag() : new NBTTagCompound();
-        return (compound.getBoolean(cowBucketTag)&&(!compound.getBoolean("cowown")));
+        return (compound.getBoolean(cowBucketTag) && (!compound.getBoolean("cowown")));
     }
 
     public boolean isCowBucket(net.minecraft.server.v1_8_R3.ItemStack itemStack1) {
@@ -104,6 +105,7 @@ public class SpecialItemUtils {
 
         return compound.getBoolean(cowBucketTag);
     }
+
     public ItemStack getPhxPot(int amount) {
         Potion potion = new Potion(PotionType.REGEN);
         potion.setSplash(true);
@@ -118,13 +120,15 @@ public class SpecialItemUtils {
 
         return ItemUtils.toMWItem(item);
     }
+
     public ItemStack getPhxPot() {
         return getPhxPot(1);
     }
+
     public ItemStack getJunkApple(int amount) {
         ItemStack apple = new ItemStack(Material.APPLE, amount);
         ItemMeta itemMeta = apple.getItemMeta();
-        itemMeta.addEnchant(Enchantment.DURABILITY,1,false);
+        itemMeta.addEnchant(Enchantment.DURABILITY, 1, false);
         itemMeta.setDisplayName(ChatColor.YELLOW + "Junk apple");
         apple.setItemMeta(itemMeta);
         net.minecraft.server.v1_8_R3.ItemStack nmsItem = CraftItemStack.asNMSCopy(apple);
@@ -135,6 +139,7 @@ public class SpecialItemUtils {
 
         return CraftItemStack.asBukkitCopy(nmsItem);
     }
+
     public boolean isJunkApple(ItemStack itemStack) {
         if (itemStack == null) return false;
         net.minecraft.server.v1_8_R3.ItemStack nmsItem = CraftItemStack.asNMSCopy(itemStack);
@@ -143,19 +148,20 @@ public class SpecialItemUtils {
         NBTTagCompound compound = nmsItem.hasTag() ? nmsItem.getTag() : new NBTTagCompound();
         return compound.getBoolean("junk_apple");
     }
+
     public ItemStack getAOTV() {
         ItemStack item = new ItemStack(Material.DIAMOND_SPADE);
         List<String> lore = new ArrayList<>();
 
 
-        item.addUnsafeEnchantment(Enchantment.PROTECTION_FALL,10);
+        item.addUnsafeEnchantment(Enchantment.PROTECTION_FALL, 10);
 
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(ChatColor.DARK_PURPLE.toString()+ChatColor.BOLD+"Aspect of the Void");
+        meta.setDisplayName(ChatColor.DARK_PURPLE.toString() + ChatColor.BOLD + "Aspect of the Void");
 
 
         lore.add("");
-        lore.add(ChatColor.LIGHT_PURPLE.toString()+ChatColor.BOLD+"EPIC");
+        lore.add(ChatColor.LIGHT_PURPLE.toString() + ChatColor.BOLD + "EPIC");
 
 
         meta.setLore(lore);
@@ -170,6 +176,7 @@ public class SpecialItemUtils {
 
         return ItemUtils.toMWItem(CraftItemStack.asBukkitCopy(nmsItem));
     }
+
     public boolean isAOTV(ItemStack itemStack) {
         if (itemStack == null) return false;
         net.minecraft.server.v1_8_R3.ItemStack nmsItem = CraftItemStack.asNMSCopy(itemStack);
@@ -178,19 +185,20 @@ public class SpecialItemUtils {
         NBTTagCompound compound = nmsItem.hasTag() ? nmsItem.getTag() : new NBTTagCompound();
         return compound.getBoolean("aspect_of_the_void");
     }
+
     public ItemStack getHyperion() {
         ItemStack item = new ItemStack(Material.IRON_SWORD);
         List<String> lore = new ArrayList<>();
 
 
-        item.addUnsafeEnchantment(Enchantment.DAMAGE_ALL,1);
+        item.addUnsafeEnchantment(Enchantment.DAMAGE_ALL, 1);
 
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(ChatColor.GOLD +"Withered Hyperion");
+        meta.setDisplayName(ChatColor.GOLD + "Withered Hyperion");
 
 
         lore.add("");
-        lore.add(ChatColor.GOLD.toString()+ChatColor.BOLD+"LEGENDARY DUNGEON SWORD");
+        lore.add(ChatColor.GOLD.toString() + ChatColor.BOLD + "LEGENDARY DUNGEON SWORD");
 
 
         meta.setLore(lore);
@@ -205,6 +213,7 @@ public class SpecialItemUtils {
 
         return ItemUtils.toMWItem(CraftItemStack.asBukkitCopy(nmsItem));
     }
+
     public boolean isHyperion(ItemStack itemStack) {
         if (itemStack == null) return false;
         net.minecraft.server.v1_8_R3.ItemStack nmsItem = CraftItemStack.asNMSCopy(itemStack);
@@ -213,19 +222,20 @@ public class SpecialItemUtils {
         NBTTagCompound compound = nmsItem.hasTag() ? nmsItem.getTag() : new NBTTagCompound();
         return compound.getBoolean("hyperion");
     }
+
     public ItemStack getTerm() {
         ItemStack item = new ItemStack(Material.BOW);
         List<String> lore = new ArrayList<>();
 
 
-        item.addUnsafeEnchantment(Enchantment.DAMAGE_ALL,1);
+        item.addUnsafeEnchantment(Enchantment.DAMAGE_ALL, 1);
 
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(ChatColor.GOLD +"Spiritual Terminator");
+        meta.setDisplayName(ChatColor.GOLD + "Spiritual Terminator");
 
 
         lore.add("");
-        lore.add(ChatColor.GOLD.toString()+ChatColor.BOLD+"LEGENDARY BOW");
+        lore.add(ChatColor.GOLD.toString() + ChatColor.BOLD + "LEGENDARY BOW");
 
 
         meta.setLore(lore);
@@ -240,6 +250,7 @@ public class SpecialItemUtils {
 
         return ItemUtils.toMWItem(CraftItemStack.asBukkitCopy(nmsItem));
     }
+
     public boolean isTerm(ItemStack itemStack) {
         if (itemStack == null) return false;
         net.minecraft.server.v1_8_R3.ItemStack nmsItem = CraftItemStack.asNMSCopy(itemStack);

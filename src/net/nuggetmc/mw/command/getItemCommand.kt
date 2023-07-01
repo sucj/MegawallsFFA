@@ -8,7 +8,7 @@ import org.bukkit.command.CommandSender
 import org.bukkit.command.TabCompleter
 import org.bukkit.entity.Player
 
-class getItemCommand() : CommandExecutor, TabCompleter {
+class getItemCommand : CommandExecutor, TabCompleter {
     val groupnames: MutableList<String> = ArrayList()
     val classManager = MegaWalls.getInstance().classManager
 
@@ -23,10 +23,10 @@ class getItemCommand() : CommandExecutor, TabCompleter {
         groupnames.add("term")
     }
 
-    val si = MegaWalls.getInstance().specialItemUtils;
+    val si = MegaWalls.getInstance().specialItemUtils
     override fun onCommand(sender: CommandSender?, cmd: Command?, label: String?, args: Array<String?>?): Boolean {
         if (!(sender is Player)) return true
-        val player = sender as Player
+        val player = sender
         if (!MegaWalls.getInstance().combatManager.isInCombat(player)) {
             return true
         }
@@ -61,7 +61,7 @@ class getItemCommand() : CommandExecutor, TabCompleter {
                 "milk" -> si.getCowBucket(amount)
                 "aotv" -> si.aotv
                 "hype" -> si.hyperion
-                "term" ->si.term
+                "term" -> si.term
                 else -> {
                     null
                 }
@@ -75,7 +75,7 @@ class getItemCommand() : CommandExecutor, TabCompleter {
             sender.sendMessage("invalid syntax!Correct usage: /mwitem item count")
             return true
         }
-        return true;
+        return true
     }
 
     override fun onTabComplete(
@@ -93,7 +93,7 @@ class getItemCommand() : CommandExecutor, TabCompleter {
     }
 
 
-    private fun autofill(groupnames: List<String>, input: String): List<String>? {
+    private fun autofill(groupnames: List<String>, input: String): List<String> {
         val list: MutableList<String> = ArrayList()
         for (entry in groupnames) {
             if (entry.length >= input.length) {

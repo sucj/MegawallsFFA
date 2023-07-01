@@ -1,7 +1,6 @@
 package net.nuggetmc.mw.command;
 
 import net.nuggetmc.mw.MegaWalls;
-import net.nuggetmc.mw.mwclass.MWClassManager;
 import net.nuggetmc.mw.special.TeamsManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

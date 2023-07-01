@@ -28,7 +28,7 @@ class MWShark : MWClass() {
     private var waterMap: HashMap<Player, HashSet<Block>> = HashMap()
 
     init {
-        name = arrayOf("鲨鱼", "Shark", "SRK")
+        name = arrayOf("Shark", "SRK")
         icon = Material.WATER_BUCKET
         color = ChatColor.DARK_AQUA
         playstyles = arrayOf(
@@ -130,21 +130,21 @@ class MWShark : MWClass() {
 
     override fun assign(player: Player) {
         val items: Map<Int, ItemStack>
-        
-            val swordEnch: MutableMap<Enchantment, Int> = HashMap()
-            swordEnch[Enchantment.DURABILITY] = 10
-            val armorEnch: MutableMap<Enchantment, Int> = HashMap()
-            armorEnch[Enchantment.DEPTH_STRIDER] = 3
-            armorEnch[Enchantment.PROTECTION_ENVIRONMENTAL] = 2
-            armorEnch[Enchantment.DURABILITY] = 10
-            val sword = MWItem.createSword(this, Material.DIAMOND_SWORD, swordEnch,player)
-            val bow = MWItem.createBow(this, null)
-            val tool = MWItem.createTool(this, Material.DIAMOND_PICKAXE)
-            val boots = MWItem.createArmor(this, Material.DIAMOND_BOOTS, armorEnch)
-            val potions = MWPotions.createBasic(this, 2, 8, 2)
 
-            items = MWKit.generate(this, sword, bow, tool, null,  potions, null, null, null, boots, null)
-        
+        val swordEnch: MutableMap<Enchantment, Int> = HashMap()
+        swordEnch[Enchantment.DURABILITY] = 10
+        val armorEnch: MutableMap<Enchantment, Int> = HashMap()
+        armorEnch[Enchantment.DEPTH_STRIDER] = 3
+        armorEnch[Enchantment.PROTECTION_ENVIRONMENTAL] = 2
+        armorEnch[Enchantment.DURABILITY] = 10
+        val sword = MWItem.createSword(this, Material.DIAMOND_SWORD, swordEnch, player)
+        val bow = MWItem.createBow(this, null)
+        val tool = MWItem.createTool(this, Material.DIAMOND_PICKAXE)
+        val boots = MWItem.createArmor(this, Material.DIAMOND_BOOTS, armorEnch)
+        val potions = MWPotions.createBasic(this, 2, 8, 2)
+
+        items = MWKit.generate(this, sword, bow, tool, null, potions, null, null, null, boots, null)
+
         MWKit.assignItems(player, items)
 
 

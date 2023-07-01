@@ -117,6 +117,7 @@ public class ItemUtils {
 
 
     }
+
     public static int findCowBucketNotOwn(Player player, ItemStack thing) {
         try {
             for (int i = 0; i < 36; i++) {
@@ -165,6 +166,7 @@ public class ItemUtils {
         }
         return result;
     }
+
     public static int findJunkApple(Player player) {
         try {
             for (int i = 0; i < 36; i++) {

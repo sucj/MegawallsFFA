@@ -10,7 +10,9 @@ import net.nuggetmc.mw.mwclass.info.Playstyle;
 import net.nuggetmc.mw.mwclass.items.MWItem;
 import net.nuggetmc.mw.mwclass.items.MWKit;
 import net.nuggetmc.mw.mwclass.items.MWPotions;
-import net.nuggetmc.mw.utils.*;
+import net.nuggetmc.mw.utils.ParticleUtils;
+import net.nuggetmc.mw.utils.PlayerUtils;
+import net.nuggetmc.mw.utils.PotionUtils;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
@@ -34,7 +36,7 @@ public class MWDreadlord extends MWClass {
     private final Map<Player, Integer> increment = new HashMap<>();
 
     public MWDreadlord() {
-        this.name = new String[]{"恐惧魔王", "Dreadlord", "DRE"};
+        this.name = new String[]{"Dreadlord", "DRE"};
         this.icon = Material.NETHER_BRICK_ITEM;
         this.color = ChatColor.DARK_RED;
 
@@ -78,15 +80,15 @@ public class MWDreadlord extends MWClass {
                 public void run() {
                     if (witherSkull.isDead() || witherSkull.isOnGround()) {
 
-                            ParticleUtils.play(EnumParticle.EXPLOSION_HUGE, witherSkull.getLocation(), 0.0F, 0.0F, 0.0F, 1.0F, 1);
+                        ParticleUtils.play(EnumParticle.EXPLOSION_HUGE, witherSkull.getLocation(), 0.0F, 0.0F, 0.0F, 1.0F, 1);
 
                         witherSkull.getWorld()
                                 .playSound(witherSkull.getLocation(), Sound.EXPLODE, 1.0F, 0.0F);
                         for (Player player1 : PlayerUtils.getNearbyPlayers(witherSkull, 10.0D)) {
 
-                            if (player1.getGameMode().equals(GameMode.SPECTATOR) || plugin.getTeamsManager().isOnSameTeam(player,player1))
+                            if (player1.getGameMode().equals(GameMode.SPECTATOR) || plugin.getTeamsManager().isOnSameTeam(player, player1))
                                 continue;
-                            mwhealth.dreadTrueDamage(player1,player,witherSkull);
+                            mwhealth.dreadTrueDamage(player1, player, witherSkull);
                         }
                         if (!witherSkull.isDead())
                             witherSkull.remove();
@@ -94,7 +96,7 @@ public class MWDreadlord extends MWClass {
                         return;
                     }
 
-                        ParticleUtils.play(EnumParticle.LAVA, witherSkull.getLocation(), 0.0F, 0.0F, 0.0F, 1.0F, 5);
+                    ParticleUtils.play(EnumParticle.LAVA, witherSkull.getLocation(), 0.0F, 0.0F, 0.0F, 1.0F, 5);
 
                 }
             }).runTaskTimer(MegaWalls.getInstance(), 0L, 1L);
@@ -162,24 +164,24 @@ public class MWDreadlord extends MWClass {
     public void assign(Player player) {
         Map<Integer, ItemStack> items;
 
-        
-            Map<Enchantment, Integer> swordEnch = new HashMap<>();
-            swordEnch.put(Enchantment.DAMAGE_UNDEAD, 1);
-            swordEnch.put(Enchantment.DURABILITY, 10);
 
-            Map<Enchantment, Integer> armorEnch = new HashMap<>();
-            armorEnch.put(Enchantment.DURABILITY, 10);
-            armorEnch.put(Enchantment.PROTECTION_FIRE, 1);
-            armorEnch.put(Enchantment.PROTECTION_EXPLOSIONS, 2);
+        Map<Enchantment, Integer> swordEnch = new HashMap<>();
+        swordEnch.put(Enchantment.DAMAGE_UNDEAD, 1);
+        swordEnch.put(Enchantment.DURABILITY, 10);
 
-            ItemStack sword = MWItem.createSword(this, Material.DIAMOND_SWORD, swordEnch,player);
-            ItemStack tool = MWItem.createTool(this, Material.DIAMOND_PICKAXE);
-            ItemStack helmet = MWItem.createArmor(this, Material.DIAMOND_HELMET, armorEnch);
+        Map<Enchantment, Integer> armorEnch = new HashMap<>();
+        armorEnch.put(Enchantment.DURABILITY, 10);
+        armorEnch.put(Enchantment.PROTECTION_FIRE, 1);
+        armorEnch.put(Enchantment.PROTECTION_EXPLOSIONS, 2);
 
-            List<ItemStack> potions = MWPotions.createBasic(this, 2, 8, 2);
+        ItemStack sword = MWItem.createSword(this, Material.DIAMOND_SWORD, swordEnch, player);
+        ItemStack tool = MWItem.createTool(this, Material.DIAMOND_PICKAXE);
+        ItemStack helmet = MWItem.createArmor(this, Material.DIAMOND_HELMET, armorEnch);
 
-            items = MWKit.generate(this, sword, null, tool, null, potions, helmet, null, null, null, null);
-        
+        List<ItemStack> potions = MWPotions.createBasic(this, 2, 8, 2);
+
+        items = MWKit.generate(this, sword, null, tool, null, potions, helmet, null, null, null, null);
+
 
         MWKit.assignItems(player, items);
     }

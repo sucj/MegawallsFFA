@@ -143,7 +143,6 @@ public class MegaWalls extends JavaPlugin {
 
     private KEMenu keMenu;
 
-    private boolean isChinese;
     public boolean antistealDiamond;
     //it is used to stop players from mining diamonds when there is only themselves.
     // 主播你不会用Vec3d或者BlockPos或者数组吗
@@ -153,7 +152,6 @@ public class MegaWalls extends JavaPlugin {
     public List<Double> bluespawn;
     public List<Double> yellowspawn;
     public int breakResetTime;
-    public static boolean OPBYPASSGM = false;
     public double hbrTrueDamage= 2.5;
     public int swordLuckDrawPrice;
 
@@ -190,13 +188,6 @@ public class MegaWalls extends JavaPlugin {
     public void onEnable() {
         INSTANCE = this;
         //cfg
-        try {
-            isChinese = (getConfig().get("use_chinese").equals(true));
-        } catch (Exception e) {
-            getConfig().set("use_chinese", false);
-            isChinese = false;
-            saveConfig();
-        }
         try {
             hbrTrueDamage = (double) getConfig().get("hbr_true_damage");
         } catch (Exception e) {
@@ -253,13 +244,6 @@ public class MegaWalls extends JavaPlugin {
             yellowspawn.add(0d);
             yellowspawn.add(100d);
             yellowspawn.add(0d);
-        }
-
-        try {
-            OPBYPASSGM = (boolean) getConfig().get("opbypassgamemode");
-        } catch (Exception e) {
-            getConfig().set("opbypassgamemode", false);
-            saveConfig();
         }
         try {
             swordLuckDrawPrice = getConfig().getInt("swordLuckDrawPrice");
@@ -424,9 +408,6 @@ public class MegaWalls extends JavaPlugin {
         Arrays.stream(mwclasses).forEach(this::registerEvents);
     }
 
-    public boolean isChinese() {
-        return isChinese;
-    }
 
     public void breakDiamond(Player player){
         int i=random.nextInt(6);

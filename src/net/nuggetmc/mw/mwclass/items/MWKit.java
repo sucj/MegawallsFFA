@@ -1,7 +1,6 @@
 package net.nuggetmc.mw.mwclass.items;
 
 
-import net.nuggetmc.mw.MegaWalls;
 import net.nuggetmc.mw.mwclass.MWClass;
 import net.nuggetmc.mw.mwclass.classes.MWMole;
 import net.nuggetmc.mw.utils.ItemStackCreator;
@@ -33,17 +32,17 @@ public class MWKit {
         if (toolAxe == null) {
             toolAxe = new ItemStack(Material.IRON_AXE);
         }
-        if (bow==null){
+        if (bow == null) {
             Map<Enchantment, Integer> bowEnch = new HashMap<>();
-            bowEnch.put(Enchantment.DURABILITY,10);
+            bowEnch.put(Enchantment.DURABILITY, 10);
             bow = MWItem.createBow(mwclass, bowEnch);
         }
 
         /*if (toolShovel == null) {
             toolShovel = new ItemStack(Material.IRON_SPADE);
         }*/
-        ItemStack enderchest = ItemStackCreator.createItem(Material.ENDER_CHEST, mwclass.getColor() + mwclass.getName() + (MegaWalls.getInstance().isChinese() ? " 末影箱" : " Enderchest"), 1);
-        ItemStack compass = ItemUtils.toMWItem(ItemStackCreator.createItem(Material.COMPASS, mwclass.getColor() + mwclass.getName() + (MegaWalls.getInstance().isChinese() ? " 指南针" : " Compass"), 1));
+        ItemStack enderchest = ItemStackCreator.createItem(Material.ENDER_CHEST, mwclass.getColor() + mwclass.getName() + (" Enderchest"), 1);
+        ItemStack compass = ItemUtils.toMWItem(ItemStackCreator.createItem(Material.COMPASS, mwclass.getColor() + mwclass.getName() + (" Compass"), 1));
         List<ItemStack> contents = new ArrayList<>();
 
         contents.add(sword);
@@ -56,7 +55,7 @@ public class MWKit {
         contents.add(compass);
         contents.add(enderchest);
         //contents.add(toolShovel);
-        ItemStack is=MWItem.createAOTR();
+        ItemStack is = MWItem.createAOTR();
         if (mwclass instanceof MWMole) {
             is.setType(Material.IRON_SPADE);
         }

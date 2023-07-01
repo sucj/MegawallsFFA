@@ -58,10 +58,10 @@ public class EnergyManager implements Listener {
                     add(player, 2);
                     break;
                 case "god":
-                    add(player,1);
+                    add(player, 1);
                     break;
                 case "mol":
-                    add(player,5);
+                    add(player, 5);
                     break;
             }
         }
@@ -132,7 +132,7 @@ public class EnergyManager implements Listener {
             }
 
         } else {
-            player = (Player) event.getEntity().getKiller();
+            player = event.getEntity().getKiller();
         }
 
 
@@ -172,10 +172,10 @@ public class EnergyManager implements Listener {
         if (item == null) return;
 
         Material type = player.getInventory().getItemInHand().getType();
-        if (manager.get(player) instanceof MWGoldenDragon){
-            if (type == Material.BOW && action.contains("LEFT_CLICK") ) {
+        if (manager.get(player) instanceof MWGoldenDragon) {
+            if (type == Material.BOW && action.contains("LEFT_CLICK")) {
                 ((MWGoldenDragon) manager.get(player)).callEcho(player);
-            }else if(type.name().contains("SWORD") && action.contains("RIGHT_CLICK")){
+            } else if (type.name().contains("SWORD") && action.contains("RIGHT_CLICK")) {
                 ((MWGoldenDragon) manager.get(player)).callHeal(player);
             }
             return;
@@ -188,7 +188,7 @@ public class EnergyManager implements Listener {
         if (type.name().contains("SWORD") && action.contains("RIGHT_CLICK")) {
             callAbility(player);
         }
-        if (type.name().contains("DIAMOND_SPADE")&& action.contains("RIGHT_CLICK")&&manager.get(player) instanceof MWMole){
+        if (type.name().contains("DIAMOND_SPADE") && action.contains("RIGHT_CLICK") && manager.get(player) instanceof MWMole) {
             callAbility(player);
         }
     }

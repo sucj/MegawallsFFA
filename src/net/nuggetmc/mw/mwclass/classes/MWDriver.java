@@ -11,9 +11,7 @@ import net.nuggetmc.mw.mwclass.items.MWPotions;
 import net.nuggetmc.mw.utils.ActionBar;
 import net.nuggetmc.mw.utils.PlayerUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
@@ -35,7 +33,7 @@ public class MWDriver extends MWClass {
 
 
     public MWDriver() {
-        this.name = new String[]{"司机", "Driver", "DRI"};
+        this.name = new String[]{"Driver", "DRI"};
         this.icon = Material.IRON_FENCE;
         this.color = ChatColor.DARK_AQUA;
 
@@ -121,7 +119,7 @@ public class MWDriver extends MWClass {
         if (abilitycache.contains(player)) {
             return;
         }
-        Player target= PlayerUtils.getClosestEnemyInRange(player,20);
+        Player target = PlayerUtils.getClosestEnemyInRange(player, 20);
         if (target == null) {
             ActionBar.send(player, "No players within " + ChatColor.RED + 20 + ChatColor.RESET + " blocks!");
         } else {
@@ -164,34 +162,35 @@ public class MWDriver extends MWClass {
     public void assign(Player player) {
         Map<Integer, ItemStack> items;
 
-        
-            Map<Enchantment, Integer> swordEnch = new HashMap<>();
-            swordEnch.put(Enchantment.DURABILITY, 10);
-            swordEnch.put(Enchantment.DAMAGE_ALL, 1);
 
-            Map<Enchantment, Integer> armorEnch = new HashMap<>();
-            armorEnch.put(Enchantment.PROTECTION_ENVIRONMENTAL, 2);
-            armorEnch.put(Enchantment.DURABILITY, 10);
+        Map<Enchantment, Integer> swordEnch = new HashMap<>();
+        swordEnch.put(Enchantment.DURABILITY, 10);
+        swordEnch.put(Enchantment.DAMAGE_ALL, 1);
 
-            ItemStack sword = MWItem.createSword(this, Material.IRON_SWORD, swordEnch,player);
-            ItemStack tool = MWItem.createTool(this, Material.DIAMOND_PICKAXE);
-            ItemStack leggings = MWItem.createArmor(this, Material.DIAMOND_LEGGINGS, armorEnch);
+        Map<Enchantment, Integer> armorEnch = new HashMap<>();
+        armorEnch.put(Enchantment.PROTECTION_ENVIRONMENTAL, 2);
+        armorEnch.put(Enchantment.DURABILITY, 10);
 
-            List<ItemStack> potions = MWPotions.createBasic(this, 2, 7, 2);
+        ItemStack sword = MWItem.createSword(this, Material.IRON_SWORD, swordEnch, player);
+        ItemStack tool = MWItem.createTool(this, Material.DIAMOND_PICKAXE);
+        ItemStack leggings = MWItem.createArmor(this, Material.DIAMOND_LEGGINGS, armorEnch);
 
-            items = MWKit.generate(this, sword, null, tool, null, potions, null, null, leggings, null, null);
-        
+        List<ItemStack> potions = MWPotions.createBasic(this, 2, 7, 2);
+
+        items = MWKit.generate(this, sword, null, tool, null, potions, null, null, leggings, null, null);
+
 
         MWKit.assignItems(player, items);
         runnerList.remove(player);
         abilitycache.remove(player);
     }
+
     @EventHandler
     public void gathering(BlockBreakEvent e) {
         Player player = e.getPlayer();
 
         if (manager.get(player) == this) {
-            if (e.getBlock().getType()!=Material.YELLOW_FLOWER&&e.getBlock().getType()!=Material.LONG_GRASS&&e.getBlock().getType()!=Material.SAPLING) {
+            if (e.getBlock().getType() != Material.YELLOW_FLOWER && e.getBlock().getType() != Material.LONG_GRASS && e.getBlock().getType() != Material.SAPLING) {
                 energyManager.add(player, 1);
             }
 

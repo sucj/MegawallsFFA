@@ -28,17 +28,18 @@ import kotlin.math.absoluteValue
 import kotlin.math.cos
 import kotlin.math.sin
 
-class MWAsn :MWClass(){
-    var sc=HashMap<Player,Int>()
-    var plugin=MegaWalls.getInstance()
-    val dmgHandle= HashMap<Player,Double>()
+class MWAsn : MWClass() {
+    var sc = HashMap<Player, Int>()
+    var plugin = MegaWalls.getInstance()
+    val dmgHandle = HashMap<Player, Double>()
     private val shadowStepCache: HashSet<Player> = HashSet()
     private val maCache: HashSet<Player> = HashSet()
+
     init {
         Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, { this.tickArrowCatch() }, 0, 1)
-        name = arrayOf("刺客", "Assassin", "ASN")
-        val its=ItemStack(Material.STAINED_GLASS)
-        its.durability= DyeColor.BLACK.data.toShort()
+        name = arrayOf("Assassin", "ASN")
+        val its = ItemStack(Material.STAINED_GLASS)
+        its.durability = DyeColor.BLACK.data.toShort()
         iconAsItemStack = its
         color = ChatColor.BLACK
         playstyles = arrayOf(
@@ -61,128 +62,131 @@ class MWAsn :MWClass(){
         classInfo.addEnergyGainType("Melee", 10)
         classInfo.addEnergyGainType("Bow", 10)
     }
-    fun tickArrowCatch(){
-        for (p in plugin.combatManager.inCombatPlayers){
-            if (manager[p]==this){
-                if (ItemUtils.isFullInventory(p.inventory)){
+
+    fun tickArrowCatch() {
+        for (p in plugin.combatManager.inCombatPlayers) {
+            if (manager[p] == this) {
+                if (ItemUtils.isFullInventory(p.inventory)) {
                     continue
                 }
-                for (e:Entity in p.getNearbyEntities(1.5,1.5,1.5)){
-                    if (e is Arrow&&p.hasLineOfSight(e)){
-                        if(e.shooter !is Player || plugin.teamsManager.isOnSameTeam(p,e.shooter as Player)){
+                for (e: Entity in p.getNearbyEntities(1.5, 1.5, 1.5)) {
+                    if (e is Arrow && p.hasLineOfSight(e)) {
+                        if (e.shooter !is Player || plugin.teamsManager.isOnSameTeam(p, e.shooter as Player)) {
                             continue
                         }
                         e.remove()
-                        p.inventory.addItem(ItemStack(Material.ARROW,1))
+                        p.inventory.addItem(ItemStack(Material.ARROW, 1))
                     }
                 }
             }
         }
     }
+
     @EventHandler
-    fun onShadowStep(e:EntityDamageByEntityEvent){
+    fun onShadowStep(e: EntityDamageByEntityEvent) {
         super.hit(e)
         if (e.isCancelled) return
-        val player= energyManager.validate(e) ?: return
-        val victim=e.entity as Player
+        val player = energyManager.validate(e) ?: return
+        val victim = e.entity as Player
         if (manager[victim] !== this) return
         if (sc.containsKey(victim)) return
-        if (shadowStepCache.contains(victim)){
+        if (shadowStepCache.contains(victim)) {
             return
         }
-        if (player.location.distance(victim.location)>25){
+        if (player.location.distance(victim.location) > 25) {
             return
         }
         if (!victim.isSneaking) return
-        e.isCancelled=true
+        e.isCancelled = true
         shadowStepCache.add(victim)
-        val loc=player.location.clone()
-        val yaw=loc.yaw
-        val abs=yaw.absoluteValue
-        val amount=2
-        when(abs){
-            0.toFloat()->loc.x-=amount
-            180.toFloat(),-180.toFloat()->loc.x+=amount
-            90.toFloat()->loc.z-=amount
-            -90.toFloat()->loc.z+=amount
+        val loc = player.location.clone()
+        val yaw = loc.yaw
+        val abs = yaw.absoluteValue
+        val amount = 2
+        when (abs) {
+            0.toFloat() -> loc.x -= amount
+            180.toFloat(), -180.toFloat() -> loc.x += amount
+            90.toFloat() -> loc.z -= amount
+            -90.toFloat() -> loc.z += amount
         }
-        if (yaw<0&&yaw>-90){
+        if (yaw < 0 && yaw > -90) {
             loc.z -= sin(yaw)
-            loc.x-= cos(amount.toDouble())
-        }else if(yaw>90&&yaw<180){
+            loc.x -= cos(amount.toDouble())
+        } else if (yaw > 90 && yaw < 180) {
             loc.z -= sin(yaw)
-            loc.x+= cos(amount.toDouble())
-        }else if (yaw>0&&yaw<90){
+            loc.x += cos(amount.toDouble())
+        } else if (yaw > 0 && yaw < 90) {
             loc.z += sin(yaw)
             loc.x -= cos(amount.toDouble())
-        }else if (yaw<-90&&yaw>-180){
+        } else if (yaw < -90 && yaw > -180) {
             loc.z += sin(yaw)
             loc.x += cos(amount.toDouble())
         }
         victim.teleport(loc)
-        object:BukkitRunnable(){
+        object : BukkitRunnable() {
             override fun run() {
                 shadowStepCache.remove(victim)
             }
-        }.runTaskLater(plugin,10*20)
+        }.runTaskLater(plugin, 10 * 20)
     }
+
     @EventHandler
-    fun onMA(e: EntityDamageEvent){
-        if(e.entity !is Player) return
+    fun onMA(e: EntityDamageEvent) {
+        if (e.entity !is Player) return
         if (e.isCancelled) return
-        val victim=e.entity as Player
+        val victim = e.entity as Player
         if (manager[victim] !== this) return
-        if (maCache.contains(victim)&&!dmgHandle.containsKey(victim)) {
+        if (maCache.contains(victim) && !dmgHandle.containsKey(victim)) {
             return
         }
         maCache.add(victim)
-        if (dmgHandle.containsKey(victim)){
+        if (dmgHandle.containsKey(victim)) {
             dmgHandle[victim] = dmgHandle[victim]!! + e.damage
-        }else{
-            dmgHandle[victim]=e.damage
+        } else {
+            dmgHandle[victim] = e.damage
         }
-        object:BukkitRunnable(){
+        object : BukkitRunnable() {
             override fun run() {
-                if (dmgHandle.containsKey(victim)&& dmgHandle[victim]!! >=10){
-                    victim.addPotionEffect(PotionEffect(PotionEffectType.REGENERATION,5*20,2))
+                if (dmgHandle.containsKey(victim) && dmgHandle[victim]!! >= 10) {
+                    victim.addPotionEffect(PotionEffect(PotionEffectType.REGENERATION, 5 * 20, 2))
                     dmgHandle.remove(victim)
                 }
             }
-        }.runTaskLater(plugin,20)
-        object:BukkitRunnable(){
+        }.runTaskLater(plugin, 20)
+        object : BukkitRunnable() {
             override fun run() {
                 maCache.remove(victim)
             }
-        }.runTaskLater(plugin,12*20)
+        }.runTaskLater(plugin, 12 * 20)
     }
 
     override fun ability(player: Player) {
         energyManager.clear(player)
-        sc.put(player,4)
-        object :BukkitRunnable(){
+        sc.put(player, 4)
+        object : BukkitRunnable() {
             override fun run() {
-                if ((!sc.containsKey(player))|| sc[player]!! <=0){
+                if ((!sc.containsKey(player)) || sc[player]!! <= 0) {
                     cancel()
                     sc.remove(player)
-                    for (p:Player in plugin.combatManager.inCombatPlayers){
+                    for (p: Player in plugin.combatManager.inCombatPlayers) {
                         p.showPlayer(player)
                     }
                     return
                 }
-                sc[player]=(sc[player] as Int) -1
-                if ((!sc.containsKey(player))|| sc[player]!! <=0){
+                sc[player] = (sc[player] as Int) - 1
+                if ((!sc.containsKey(player)) || sc[player]!! <= 0) {
                     cancel()
                     sc.remove(player)
-                    for (p:Player in plugin.combatManager.inCombatPlayers){
+                    for (p: Player in plugin.combatManager.inCombatPlayers) {
                         p.showPlayer(player)
                     }
                 }
             }
-        }.runTaskTimer(plugin,0,20)
-        player.addPotionEffect(PotionEffect(PotionEffectType.SPEED,4*20,0))
-        player.addPotionEffect(PotionEffect(PotionEffectType.DAMAGE_RESISTANCE,4*20,0))
-        player.addPotionEffect(PotionEffect(PotionEffectType.INVISIBILITY,4*20,0))
-        for (p:Player in plugin.combatManager.inCombatPlayers){
+        }.runTaskTimer(plugin, 0, 20)
+        player.addPotionEffect(PotionEffect(PotionEffectType.SPEED, 4 * 20, 0))
+        player.addPotionEffect(PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 4 * 20, 0))
+        player.addPotionEffect(PotionEffect(PotionEffectType.INVISIBILITY, 4 * 20, 0))
+        for (p: Player in plugin.combatManager.inCombatPlayers) {
             p.hidePlayer(player)
         }
     }
@@ -192,42 +196,40 @@ class MWAsn :MWClass(){
         super.hit(event)
         if (event.isCancelled) return
         val player = energyManager.validate(event) ?: return
-        val victim=event.entity as Player
+        val victim = event.entity as Player
         if (manager[player] !== this) return
         energyManager.add(player, 10)
-        if (sc.containsKey(player)){
+        if (sc.containsKey(player)) {
             player.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE)
             player.removePotionEffect(PotionEffectType.INVISIBILITY)
-            plugin.energyManager.add(player,sc[player] as Int *4)
+            plugin.energyManager.add(player, sc[player] as Int * 4)
             sc.remove(player)
-            mwhealth.trueDamage(victim,event.damage/10,player)
-            for (p:Player in plugin.combatManager.inCombatPlayers){
+            mwhealth.trueDamage(victim, event.damage / 10, player)
+            for (p: Player in plugin.combatManager.inCombatPlayers) {
                 p.showPlayer(player)
             }
         }
     }
 
 
-
-
     override fun assign(player: Player) {
         val items: Map<Int, ItemStack>
 
-            val swordEnch: MutableMap<Enchantment, Int> = HashMap()
-            swordEnch.put(Enchantment.DURABILITY, 10)
-            swordEnch.put(Enchantment.DAMAGE_ALL, 1)
-            val armorEnch: MutableMap<Enchantment, Int> = HashMap()
-            armorEnch.put(Enchantment.PROTECTION_FALL, 2)
-            armorEnch.put(Enchantment.PROTECTION_PROJECTILE, 2)
-            armorEnch.put(Enchantment.DURABILITY, 10)
-            val sword = MWItem.createSword(this, Material.DIAMOND_SWORD, swordEnch,player)
-            val bow = MWItem.createBow(this, null)
-            val tool = MWItem.createTool(this, Material.DIAMOND_PICKAXE)
-            val boots = MWItem.createArmor(this, Material.DIAMOND_BOOTS, armorEnch)
-            val potions = ArrayList<ItemStack>()
-            potions.add(MWPotions.createAsnPotions(this.color,5))
+        val swordEnch: MutableMap<Enchantment, Int> = HashMap()
+        swordEnch.put(Enchantment.DURABILITY, 10)
+        swordEnch.put(Enchantment.DAMAGE_ALL, 1)
+        val armorEnch: MutableMap<Enchantment, Int> = HashMap()
+        armorEnch.put(Enchantment.PROTECTION_FALL, 2)
+        armorEnch.put(Enchantment.PROTECTION_PROJECTILE, 2)
+        armorEnch.put(Enchantment.DURABILITY, 10)
+        val sword = MWItem.createSword(this, Material.DIAMOND_SWORD, swordEnch, player)
+        val bow = MWItem.createBow(this, null)
+        val tool = MWItem.createTool(this, Material.DIAMOND_PICKAXE)
+        val boots = MWItem.createArmor(this, Material.DIAMOND_BOOTS, armorEnch)
+        val potions = ArrayList<ItemStack>()
+        potions.add(MWPotions.createAsnPotions(this.color, 5))
 
-            items = MWKit.generate(this, sword, bow, tool, null, potions, null, null, null, boots, null)
+        items = MWKit.generate(this, sword, bow, tool, null, potions, null, null, null, boots, null)
 
         MWKit.assignItems(player, items)
 
@@ -237,7 +239,6 @@ class MWAsn :MWClass(){
 
 
     }
-
 
 
 }

@@ -37,7 +37,7 @@ public class MWGolem extends MWClass {
     private final Map<Player, Integer> increment = new HashMap<>();
 
     public MWGolem() {
-        this.name = new String[]{"傀儡", "Golem", "GOL"};
+        this.name = new String[]{"Golem", "GOL"};
         this.icon = Material.IRON_CHESTPLATE;
         this.color = ChatColor.WHITE;
 
@@ -205,31 +205,31 @@ public class MWGolem extends MWClass {
     public void assign(Player player) {
         Map<Integer, ItemStack> items;
 
-        
-            Map<Enchantment, Integer> swordEnch = new HashMap<>();
-            swordEnch.put(Enchantment.DURABILITY, 10);
 
-            Map<Enchantment, Integer> chestplateEnch = new HashMap<>();
-            chestplateEnch.put(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
-            chestplateEnch.put(Enchantment.DURABILITY, 10);
+        Map<Enchantment, Integer> swordEnch = new HashMap<>();
+        swordEnch.put(Enchantment.DURABILITY, 10);
 
-            Map<Enchantment, Integer> bootsEnch = new HashMap<>();
-            bootsEnch.put(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
-            bootsEnch.put(Enchantment.DURABILITY, 10);
+        Map<Enchantment, Integer> chestplateEnch = new HashMap<>();
+        chestplateEnch.put(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+        chestplateEnch.put(Enchantment.DURABILITY, 10);
 
-            ItemStack sword = MWItem.createSword(this, Material.IRON_SWORD, swordEnch,player);
-            ItemStack tool = MWItem.createTool(this, Material.DIAMOND_PICKAXE);
-            ItemStack toolAxe = MWItem.createTool(this, Material.IRON_AXE);
-            ItemStack chestplate = MWItem.createArmor(this, Material.DIAMOND_CHESTPLATE, chestplateEnch);
-            ItemStack boots = MWItem.createArmor(this, Material.DIAMOND_BOOTS, bootsEnch);
+        Map<Enchantment, Integer> bootsEnch = new HashMap<>();
+        bootsEnch.put(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+        bootsEnch.put(Enchantment.DURABILITY, 10);
 
-            List<ItemStack> potions = new ArrayList<>();
+        ItemStack sword = MWItem.createSword(this, Material.IRON_SWORD, swordEnch, player);
+        ItemStack tool = MWItem.createTool(this, Material.DIAMOND_PICKAXE);
+        ItemStack toolAxe = MWItem.createTool(this, Material.IRON_AXE);
+        ItemStack chestplate = MWItem.createArmor(this, Material.DIAMOND_CHESTPLATE, chestplateEnch);
+        ItemStack boots = MWItem.createArmor(this, Material.DIAMOND_BOOTS, bootsEnch);
 
-            potions.add(MWPotions.createRegenerationPotions(plugin.isChinese() ? this.name[0] : this.name[1], this.color, 3, 12, 10));
-            potions.add(MWPotions.createSlowSplash(plugin.isChinese() ? this.name[0] : this.name[1], this.color));
+        List<ItemStack> potions = new ArrayList<>();
 
-            items = MWKit.generate(this, sword, null, tool, toolAxe, potions, null, chestplate, null, boots, null);
-        
+        potions.add(MWPotions.createRegenerationPotions(this.name[0], this.color, 3, 12, 10));
+        potions.add(MWPotions.createSlowSplash(this.name[0], this.color));
+
+        items = MWKit.generate(this, sword, null, tool, toolAxe, potions, null, chestplate, null, boots, null);
+
 
         MWKit.assignItems(player, items);
     }

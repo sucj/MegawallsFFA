@@ -35,7 +35,7 @@ public class MWCow extends MWClass {
     Map<Player, Integer> dmgcount = new HashMap<>();
 
     public MWCow() {
-        this.name = new String[]{"牛", "Cow", "COW"};
+        this.name = new String[]{"Cow", "COW"};
         this.icon = Material.MILK_BUCKET;
         this.color = ChatColor.LIGHT_PURPLE;
 
@@ -118,13 +118,13 @@ public class MWCow extends MWClass {
         }
         if (mine.get(player) == cowBucketValue) {
             mine.replace(player, 0);
-            int slot=ItemUtils.findCowBucketNotOwn(player,plugin.getSpecialItemUtils().getCowBucket());
-            if (slot!=-1&&player.getInventory().getItem(slot).getAmount()<=62) {
-                int amount=player.getInventory().getItem(slot).getAmount();
-                ItemStack itemStack=player.getInventory().getItem(slot).clone();
-                itemStack.setAmount(amount+2);
-                player.getInventory().setItem(slot,itemStack);
-            }else {
+            int slot = ItemUtils.findCowBucketNotOwn(player, plugin.getSpecialItemUtils().getCowBucket());
+            if (slot != -1 && player.getInventory().getItem(slot).getAmount() <= 62) {
+                int amount = player.getInventory().getItem(slot).getAmount();
+                ItemStack itemStack = player.getInventory().getItem(slot).clone();
+                itemStack.setAmount(amount + 2);
+                player.getInventory().setItem(slot, itemStack);
+            } else {
                 player.getInventory().addItem(plugin.getSpecialItemUtils().getCowBucket(2));
             }
             //ActionBar.send(player,this.getColor()+"Ultra Pasteurized "+ChatColor.GREEN+"✔");
@@ -156,26 +156,26 @@ public class MWCow extends MWClass {
     public void assign(Player player) {
         Map<Integer, ItemStack> items;
 
-        
-            Map<Enchantment, Integer> swordEnch = new HashMap<>();
-            swordEnch.put(Enchantment.DURABILITY, 10);
 
-            Map<Enchantment, Integer> armorEnch = new HashMap<>();
-            armorEnch.put(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
-            armorEnch.put(Enchantment.DURABILITY, 10);
+        Map<Enchantment, Integer> swordEnch = new HashMap<>();
+        swordEnch.put(Enchantment.DURABILITY, 10);
 
-            ItemStack sword = MWItem.createSword(this, Material.IRON_SWORD, swordEnch,player);
-            ItemStack tool = MWItem.createTool(this, Material.DIAMOND_PICKAXE);
-            ItemStack chestplate = MWItem.createArmor(this, Material.DIAMOND_CHESTPLATE, armorEnch);
-            ItemStack boots = MWItem.createArmor(this, Material.DIAMOND_BOOTS, armorEnch);
+        Map<Enchantment, Integer> armorEnch = new HashMap<>();
+        armorEnch.put(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+        armorEnch.put(Enchantment.DURABILITY, 10);
+
+        ItemStack sword = MWItem.createSword(this, Material.IRON_SWORD, swordEnch, player);
+        ItemStack tool = MWItem.createTool(this, Material.DIAMOND_PICKAXE);
+        ItemStack chestplate = MWItem.createArmor(this, Material.DIAMOND_CHESTPLATE, armorEnch);
+        ItemStack boots = MWItem.createArmor(this, Material.DIAMOND_BOOTS, armorEnch);
 
 
-            List<ItemStack> potions = MWPotions.createBasic(this, 1, 10, 2);
-            List<ItemStack> extra = new ArrayList<>();
-            extra.add(plugin.getSpecialItemUtils().getCowOwnBucket(3));
+        List<ItemStack> potions = MWPotions.createBasic(this, 1, 10, 2);
+        List<ItemStack> extra = new ArrayList<>();
+        extra.add(plugin.getSpecialItemUtils().getCowOwnBucket(3));
 
-            items = MWKit.generate(this, sword, null, tool, null, potions, null, chestplate, null, boots, extra);
-        
+        items = MWKit.generate(this, sword, null, tool, null, potions, null, chestplate, null, boots, extra);
+
 
         MWKit.assignItems(player, items);
         if (mine.containsKey(player)) {

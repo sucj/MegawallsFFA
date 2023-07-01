@@ -38,7 +38,7 @@ public class MWSpider extends MWClass {
     private final Map<Player, Integer> increment = new HashMap<>();
 
     public MWSpider() {
-        this.name = new String[]{"蜘蛛", "Spider", "SPI"};
+        this.name = new String[]{"Spider", "SPI"};
         this.icon = Material.WEB;
         this.color = ChatColor.DARK_GRAY;
 
@@ -74,7 +74,7 @@ public class MWSpider extends MWClass {
     public void ability(Player player) {
         energyManager.clear(player);
         //PotionUtils.effect(player, PotionEffectType.ABSORPTION, 5);
-        player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,3*20,1));
+        player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 3 * 20, 1));
         World world = player.getWorld();
         Location loc = player.getLocation();
 
@@ -127,7 +127,7 @@ public class MWSpider extends MWClass {
 
                 skitter(player);
                 spiderDamage(player, event);
-                event.setDamage(event.getDamage()*0.6);
+                event.setDamage(event.getDamage() * 0.6);
             }
         }
     }
@@ -138,7 +138,7 @@ public class MWSpider extends MWClass {
 
         double dmg = event.getDamage() * 0.9;
         if (dmg > 12) dmg = 12;
-        if(dmg<7) dmg=7;
+        if (dmg < 7) dmg = 7;
 
         for (Player victim : Bukkit.getOnlinePlayers()) {
             if (plugin.getTeamsManager().isOnSameTeam(player, victim)) continue;
@@ -279,28 +279,28 @@ public class MWSpider extends MWClass {
     public void assign(Player player) {
         Map<Integer, ItemStack> items;
 
-        
-            Map<Enchantment, Integer> swordEnch = new HashMap<>();
-            swordEnch.put(Enchantment.DURABILITY, 10);
 
-            Map<Enchantment, Integer> armorEnch = new HashMap<>();
-            armorEnch.put(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
-            armorEnch.put(Enchantment.DURABILITY, 10);
-            //Map<Enchantment, Integer> armorEnch2 = new HashMap<>();
-            //armorEnch2.put(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
-            //armorEnch2.put(Enchantment.DURABILITY, 10);
+        Map<Enchantment, Integer> swordEnch = new HashMap<>();
+        swordEnch.put(Enchantment.DURABILITY, 10);
 
-            ItemStack sword = MWItem.createSword(this, Material.DIAMOND_SWORD, swordEnch,player);
-            ItemStack tool = MWItem.createTool(this, Material.DIAMOND_PICKAXE);
-            //ItemStack toolShovel = MWItem.createTool(this, Material.IRON_SPADE);
-            ItemStack boots = MWItem.createArmor(this, Material.DIAMOND_BOOTS, armorEnch);
-            //ItemStack leggings = MWItem.createArmor(this, Material.IRON_LEGGINGS, armorEnch2);
+        Map<Enchantment, Integer> armorEnch = new HashMap<>();
+        armorEnch.put(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+        armorEnch.put(Enchantment.DURABILITY, 10);
+        //Map<Enchantment, Integer> armorEnch2 = new HashMap<>();
+        //armorEnch2.put(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+        //armorEnch2.put(Enchantment.DURABILITY, 10);
 
-            List<ItemStack> potions = MWPotions.createBasic(this, 2, 8, 2);
+        ItemStack sword = MWItem.createSword(this, Material.DIAMOND_SWORD, swordEnch, player);
+        ItemStack tool = MWItem.createTool(this, Material.DIAMOND_PICKAXE);
+        //ItemStack toolShovel = MWItem.createTool(this, Material.IRON_SPADE);
+        ItemStack boots = MWItem.createArmor(this, Material.DIAMOND_BOOTS, armorEnch);
+        //ItemStack leggings = MWItem.createArmor(this, Material.IRON_LEGGINGS, armorEnch2);
 
-            //items = MWKit.generate(this, sword, null, tool, null, toolShovel, potions, null, null, leggings, boots, null);
-            items = MWKit.generate(this, sword, null, tool, null, potions, null, null, null, boots, null);
-        
+        List<ItemStack> potions = MWPotions.createBasic(this, 2, 8, 2);
+
+        //items = MWKit.generate(this, sword, null, tool, null, toolShovel, potions, null, null, leggings, boots, null);
+        items = MWKit.generate(this, sword, null, tool, null, potions, null, null, null, boots, null);
+
 
         MWKit.assignItems(player, items);
     }

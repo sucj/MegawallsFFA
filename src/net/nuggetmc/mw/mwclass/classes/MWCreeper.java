@@ -40,7 +40,7 @@ public class MWCreeper extends MWClass {
     private final Set<Player> willpowerList = new HashSet<>();
 
     public MWCreeper() {
-        this.name = new String[]{"苦力怕", "Creeper", "CRE"};
+        this.name = new String[]{"Creeper", "CRE"};
         this.icon = Material.TNT;
         this.color = ChatColor.GREEN;
 
@@ -254,26 +254,26 @@ public class MWCreeper extends MWClass {
     public void assign(Player player) {
         Map<Integer, ItemStack> items;
 
-        
-            Map<Enchantment, Integer> swordEnch = new HashMap<>();
-            swordEnch.put(Enchantment.DURABILITY, 10);
 
-            Map<Enchantment, Integer> armorEnch = new HashMap<>();
-            armorEnch.put(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
-            armorEnch.put(Enchantment.DURABILITY, 10);
-            armorEnch.put(Enchantment.PROTECTION_EXPLOSIONS, 5);
+        Map<Enchantment, Integer> swordEnch = new HashMap<>();
+        swordEnch.put(Enchantment.DURABILITY, 10);
 
-            ItemStack sword = MWItem.createSword(this, Material.IRON_SWORD, swordEnch,player);
-            ItemStack tool = MWItem.createTool(this, Material.DIAMOND_PICKAXE);
-            ItemStack leggings = MWItem.createArmor(this, Material.DIAMOND_LEGGINGS, armorEnch);
+        Map<Enchantment, Integer> armorEnch = new HashMap<>();
+        armorEnch.put(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+        armorEnch.put(Enchantment.DURABILITY, 10);
+        armorEnch.put(Enchantment.PROTECTION_EXPLOSIONS, 5);
 
-            List<ItemStack> potions = MWPotions.createBasic(this, 2, 8, 2);
+        ItemStack sword = MWItem.createSword(this, Material.IRON_SWORD, swordEnch, player);
+        ItemStack tool = MWItem.createTool(this, Material.DIAMOND_PICKAXE);
+        ItemStack leggings = MWItem.createArmor(this, Material.DIAMOND_LEGGINGS, armorEnch);
 
-            List<ItemStack> extra = new ArrayList<>();
-            extra.add(new ItemStack(Material.TNT, 16));
+        List<ItemStack> potions = MWPotions.createBasic(this, 2, 8, 2);
 
-            items = MWKit.generate(this, sword, null, tool, null, potions, null, null, leggings, null, extra);
-        
+        List<ItemStack> extra = new ArrayList<>();
+        extra.add(new ItemStack(Material.TNT, 16));
+
+        items = MWKit.generate(this, sword, null, tool, null, potions, null, null, leggings, null, extra);
+
 
         MWKit.assignItems(player, items);
     }

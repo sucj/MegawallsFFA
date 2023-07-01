@@ -12,7 +12,10 @@ import net.nuggetmc.mw.mwclass.items.MWKit;
 import net.nuggetmc.mw.mwclass.items.MWPotions;
 import net.nuggetmc.mw.special.SpecialEventsManager;
 import net.nuggetmc.mw.special.TeamsManager;
-import net.nuggetmc.mw.utils.*;
+import net.nuggetmc.mw.utils.FireworkEffectPlayer;
+import net.nuggetmc.mw.utils.LocationUtils;
+import net.nuggetmc.mw.utils.ParticleEffect;
+import net.nuggetmc.mw.utils.PlayerUtils;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
@@ -36,7 +39,7 @@ public class MWArcanist extends MWClass {
 
 
     public MWArcanist() {
-        this.name = new String[]{"奥术师", "Arcanist", "ARC"};
+        this.name = new String[]{"Arcanist", "ARC"};
         this.icon = Material.FIREWORK;
         this.color = ChatColor.AQUA;
 
@@ -67,11 +70,10 @@ public class MWArcanist extends MWClass {
         this.classInfo.addEnergyGainType("Bow", 35);
     }
 
-      static HashSet<Material> set = new HashSet<Material>();
+    static HashSet<Material> set = new HashSet<Material>();
+
     static {
-        for (final Material material : Material.values()) {
-            set.add(material);
-        }
+        Collections.addAll(set, Material.values());
     }
 
 
@@ -83,22 +85,22 @@ public class MWArcanist extends MWClass {
             ParticleEffect.REDSTONE.display(0.0f, 0.0f, 0.0f, 0.0f, 3, block.getLocation(), 10.0);
             block.getWorld().playSound(block.getLocation(), Sound.DIG_STONE, 1.0f, 1.0f);
             for (final Block block2 : LocationUtils.getCube(block.getLocation(), 2)) {
-                if ( ((block2.getType() != Material.FURNACE && block2.getType() != Material.BURNING_FURNACE && block2.getType() != Material.TRAPPED_CHEST) )) {
+                if (((block2.getType() != Material.FURNACE && block2.getType() != Material.BURNING_FURNACE && block2.getType() != Material.TRAPPED_CHEST))) {
                     if (block2.getType() == Material.BEDROCK) {
                         continue;
                     }
-                    if(SpecialEventsManager.rp != null&&SpecialEventsManager.rp.getAPI(plugin).getRegion("spawn").isLocationInRegion(block2.getLocation())){
+                    if (SpecialEventsManager.rp != null && SpecialEventsManager.rp.getAPI(plugin).getRegion("spawn").isLocationInRegion(block2.getLocation())) {
                         continue;
                     }
                     Material material = block2.getType();
-                    if (material!=Material.DIAMOND_ORE) {
-                        plugin.resetMap.put(block2,material);
-                    }else {
+                    if (material != Material.DIAMOND_ORE) {
+                        plugin.resetMap.put(block2, material);
+                    } else {
                         plugin.breakDiamond(player);
                     }
-                    if (material!=Material.DIAMOND_ORE) {
+                    if (material != Material.DIAMOND_ORE) {
                         block2.breakNaturally();
-                    }else {
+                    } else {
                         block2.setType(Material.AIR);
                     }
 
@@ -108,16 +110,17 @@ public class MWArcanist extends MWClass {
                 if (damaged.contains(player2)) {
                     continue;
                 }
-                mwhealth.trueDamage(player2,2d,player);
+                mwhealth.trueDamage(player2, 2d, player);
                 damaged.add(player2);
             }
         }
     }
+
     private List<Player> getNearbyPlayers(final Location location, final Player player, final int radius) {
         final List<Player> players = new ArrayList<>();
 
         for (final Player other : PlayerUtils.getNearbyPlayers(location, radius)) {
-            if (combatManager.isInCombat(other) && !teamsManager.isOnSameTeam(player,other)) {
+            if (combatManager.isInCombat(other) && !teamsManager.isOnSameTeam(player, other)) {
                 if (other.getLocation().distance(location) > radius) {
                     continue;
                 }
@@ -197,23 +200,23 @@ public class MWArcanist extends MWClass {
     public void assign(Player player) {
         Map<Integer, ItemStack> items;
 
-        
-            Map<Enchantment, Integer> swordEnch = new HashMap<>();
-            swordEnch.put(Enchantment.DURABILITY, 10);
 
-            Map<Enchantment, Integer> armorEnch = new HashMap<>();
-            armorEnch.put(Enchantment.PROTECTION_ENVIRONMENTAL, 2);
-            armorEnch.put(Enchantment.PROTECTION_EXPLOSIONS, 2);
-            armorEnch.put(Enchantment.DURABILITY, 10);
+        Map<Enchantment, Integer> swordEnch = new HashMap<>();
+        swordEnch.put(Enchantment.DURABILITY, 10);
 
-            ItemStack sword = MWItem.createSword(this, Material.DIAMOND_SWORD, swordEnch,player);
-            ItemStack tool = MWItem.createTool(this, Material.DIAMOND_PICKAXE);
-            ItemStack leggings = MWItem.createArmor(this, Material.DIAMOND_LEGGINGS, armorEnch);
+        Map<Enchantment, Integer> armorEnch = new HashMap<>();
+        armorEnch.put(Enchantment.PROTECTION_ENVIRONMENTAL, 2);
+        armorEnch.put(Enchantment.PROTECTION_EXPLOSIONS, 2);
+        armorEnch.put(Enchantment.DURABILITY, 10);
 
-            List<ItemStack> potions = MWPotions.createBasic(this, 2, 8, 2);
+        ItemStack sword = MWItem.createSword(this, Material.DIAMOND_SWORD, swordEnch, player);
+        ItemStack tool = MWItem.createTool(this, Material.DIAMOND_PICKAXE);
+        ItemStack leggings = MWItem.createArmor(this, Material.DIAMOND_LEGGINGS, armorEnch);
 
-            items = MWKit.generate(this, sword, null, tool, null, potions, null, null, leggings, null, null);
-        
+        List<ItemStack> potions = MWPotions.createBasic(this, 2, 8, 2);
+
+        items = MWKit.generate(this, sword, null, tool, null, potions, null, null, leggings, null, null);
+
         MWKit.assignItems(player, items);
         if (dmgcount.containsKey(player)) {
             dmgcount.replace(player, 0);
