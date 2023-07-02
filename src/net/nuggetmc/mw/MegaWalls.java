@@ -173,9 +173,11 @@ public class MegaWalls extends JavaPlugin {
             for (Player player : this.combatManager.getInCombatPlayers()) {
                 player.sendTitle(ChatColor.RED + "THE MAP IS GOING TO BE RESET", ChatColor.BOLD + "PLEASE WAIT...");
                 player.sendMessage(ChatColor.RED.toString() + ChatColor.BOLD + "[ALERT]  " + ChatColor.RESET + "THE MAP IS GOING TO BE RESET!!!");
-                List<Double> list = MegaWalls.getInstance().getTeamsManager().getSpawnLocOfPlayer(player);
-                Location loc = new Location(player.getWorld(), list.get(0), list.get(1), list.get(2));
-                player.teleport(loc);
+                if (getTeamsManager().getTeamOfPlayer(player)!=null) {
+                    List<Double> list = MegaWalls.getInstance().getTeamsManager().getSpawnLocOfPlayer(player);
+                    Location loc = new Location(player.getWorld(), list.get(0), list.get(1), list.get(2));
+                    player.teleport(loc);
+                }
             }
         }
         for (Block block:resetMap.keySet()){

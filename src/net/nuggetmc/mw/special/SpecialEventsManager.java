@@ -212,7 +212,7 @@ public class SpecialEventsManager implements Listener {
                 public void run() {
                     canfire.put(player, true);
                 }
-            }.runTaskLater(plugin, 87 / 13);
+            }.runTaskLater(plugin, 3);
 
         }
     }
@@ -237,16 +237,17 @@ public class SpecialEventsManager implements Listener {
     ///////////////////////////TELL ARROW DAMAGE
     @EventHandler
     public void onArrowDamageTell(EntityDamageByEntityEvent e) {
-        if (!(e.getEntity() instanceof Player)) return;
+        if (!(e.getEntity() instanceof LivingEntity)) return;
         if (!(e.getDamager() instanceof Arrow)) return;
         Arrow arrow = (Arrow) e.getDamager();
-        Player victim = ((Player) e.getEntity()).getPlayer();
-        if (arrow.getShooter() instanceof Player) {
+        if (!(arrow.getShooter() instanceof Player)) return;
+        LivingEntity victim = (LivingEntity) e.getEntity();
             Player player = (Player) arrow.getShooter();
 
             player.playSound(player.getLocation(), Sound.SUCCESSFUL_HIT, 1, 0);
-            player.sendMessage(ChatColor.YELLOW + victim.getDisplayName() + ChatColor.RESET + " is on " + (BigDecimal.valueOf(victim.getHealth()).setScale(1, RoundingMode.HALF_UP)).doubleValue() + " health!");
-        }
+            if (victim instanceof Player) {
+                player.sendMessage(ChatColor.YELLOW + ((Player) victim).getDisplayName() + ChatColor.RESET + " is on " + (BigDecimal.valueOf(victim.getHealth()).setScale(1, RoundingMode.HALF_UP)).doubleValue() + " health!");
+            }
     }
 
     ///////////////////////////NO DAMAGE BEFORE JOINING
@@ -382,7 +383,9 @@ public class SpecialEventsManager implements Listener {
             e.getBlock().setType(Material.AIR);
             plugin.breakDiamond(e.getPlayer());
         }
-        plugin.resetMap.put(e.getBlock(), material);
+        if(!plugin.resetMap.containsKey(e.getBlock())) {
+            plugin.resetMap.put(e.getBlock(), material);
+        }
     }
 
     @EventHandler
@@ -396,7 +399,9 @@ public class SpecialEventsManager implements Listener {
     public void onResetExplosion(EntityExplodeEvent e) {
         for (Block b : e.blockList()) {
             Material material = b.getType();
-            plugin.resetMap.put(b, material);
+            if(!plugin.resetMap.containsKey(b)) {
+                plugin.resetMap.put(b, material);
+            }
         }
 
     }
@@ -512,9 +517,29 @@ public class SpecialEventsManager implements Listener {
         if (!e.getAction().name().contains("RIGHT")) return;
         if (p.getItemInHand() == null || p.getItemInHand().getType() == Material.AIR) return;
         if (!specialItemUtils.isAOTV(e.getItem())) return;
-        teleport(p);
+        if(p.isSneaking()){
+            Block block = p.getTargetBlock((HashSet<Byte>) null,56);
+            if(block == null)
+                return;
+            if(checkValid(block)) {
+                Location loc = block.getLocation().add(0.5, 1, 0.5);
+                loc.setYaw(p.getLocation().getYaw());
+                loc.setPitch(p.getLocation().getPitch());
+                p.teleport(loc);
+            }
+        }else {
+            teleport(p);
+        }
         p.playSound(p.getLocation(), Sound.ENDERMAN_TELEPORT, 0.2f, 2f);
 
+    }
+    private boolean checkValid(Block block){
+
+        Location loc1 = block.getLocation().clone().add(0,1,1);
+        Location loc2 = block.getLocation().clone().add(0,2,1);
+        if((canBePassed(loc1.getBlock()) || loc1.getBlock().isEmpty() || loc1.getBlock().isLiquid()) && (canBePassed(loc2.getBlock()) || loc2.getBlock().isEmpty() || loc2.getBlock().isLiquid()))
+            return true;
+        return false;
     }
 
     public void teleport(Player player) {
