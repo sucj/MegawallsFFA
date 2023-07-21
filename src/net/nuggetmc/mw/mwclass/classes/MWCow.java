@@ -30,7 +30,7 @@ import java.util.*;
 public class MWCow extends MWClass {
 
     Map<Player, Integer> mine = new HashMap<>();
-    final int cowBucketValue = 60;
+    final int cowBucketValue = 30;
     private final Set<Player> willpowerList = new HashSet<>();
     Map<Player, Integer> dmgcount = new HashMap<>();
 
@@ -172,6 +172,7 @@ public class MWCow extends MWClass {
 
         List<ItemStack> potions = MWPotions.createBasic(this, 1, 10, 2);
         List<ItemStack> extra = new ArrayList<>();
+        extra.add(plugin.getSpecialItemUtils().getCowBucket(5));
         extra.add(plugin.getSpecialItemUtils().getCowOwnBucket(3));
 
         items = MWKit.generate(this, sword, null, tool, null, potions, null, chestplate, null, boots, extra);

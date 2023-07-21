@@ -23,7 +23,7 @@ public class SpecialItemUtils {
     private final MegaWalls plugin = MegaWalls.getInstance();
     private final String[] squidname = new String[]{"Squid", "SQU"};
     private final String[] golemname = new String[]{"Golem", "GOL"};
-    String cowBucketTag = "cowbucket";
+    public static String cowBucketTag = "cowbucket";
 
     public ItemStack getSquidPot() {
         return getSquidPot(1);

@@ -4,6 +4,7 @@ import com.earth2me.essentials.Essentials;
 import io.isles.nametagapi.NametagAPI;
 import net.md_5.bungee.api.ChatColor;
 import net.nuggetmc.mw.MegaWalls;
+import net.nuggetmc.mw.special.SpecialItemUtils;
 import net.nuggetmc.mw.special.TeamsManager;
 import net.nuggetmc.mw.utils.ItemUtils;
 import org.bukkit.Bukkit;
@@ -177,6 +178,10 @@ public class MWClassManager implements Listener {
         InventoryType type = event.getInventory().getType();
 
         if (type == InventoryType.PLAYER || type == InventoryType.CRAFTING) {
+            return;
+        }
+        if (plugin.getSpecialItemUtils().isCowBucket(event.getCurrentItem())){
+            event.setCancelled(true);
             return;
         }
 
