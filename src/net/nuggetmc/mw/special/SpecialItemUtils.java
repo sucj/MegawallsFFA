@@ -288,6 +288,6 @@ public class SpecialItemUtils {
         meta.setDisplayName("Quiver Arrow");
         item.setItemMeta(meta);
 
-        return item;
+        return ItemUtils.toMWItem(item);
     }
 }

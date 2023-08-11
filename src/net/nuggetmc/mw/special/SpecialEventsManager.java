@@ -624,7 +624,7 @@ public class SpecialEventsManager implements Listener {
         if (verify(newSlotItem)&& newSlotItem.getType().equals(Material.BOW)&&!specialItemUtils.isTerm(newSlotItem)){
             for (int i = 0; i < player.getInventory().getSize(); i++) {
                 ItemStack itemStack = player.getInventory().getItem(i);
-                if (itemStack.getItemMeta().getDisplayName().toLowerCase().contains("rogues")){
+                if (itemStack.getItemMeta()!=null&&itemStack.getItemMeta().hasDisplayName()&& itemStack.getItemMeta().getDisplayName().toLowerCase().contains("rogues")){
                     player.getInventory().setItem(i,specialItemUtils.getQuiverArrow());
                     break;
                 }
@@ -635,7 +635,7 @@ public class SpecialEventsManager implements Listener {
                 if (itemStack == null) continue;
                 net.minecraft.server.v1_8_R3.ItemStack nmsItem = CraftItemStack.asNMSCopy(itemStack);
                 if (nmsItem == null) continue;
-                if (itemStack.getItemMeta().getDisplayName().equals("Quiver Arrow")){
+                if (itemStack.getItemMeta()!=null&&itemStack.getItemMeta().hasDisplayName()&& itemStack.getItemMeta().getDisplayName().equals("Quiver Arrow")){
                     player.getInventory().setItem(i, MWItem.createAOTR());
                     break;
                 }
@@ -651,6 +651,16 @@ public class SpecialEventsManager implements Listener {
             return false;
         }
         return true;
+    }
+    @EventHandler
+    public void onShoot(EntityShootBowEvent e){
+        if (e.getEntity() instanceof Player){
+            for (ItemStack is: ((Player) e.getEntity()).getInventory()){
+                if (verify(is)&& is.getItemMeta()!=null&& is.getItemMeta().hasDisplayName()&&is.getItemMeta().getDisplayName().equals("Quiver Arrow")){
+                    is.setAmount(64);
+                }
+            }
+        }
     }
 
 
