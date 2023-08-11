@@ -434,7 +434,7 @@ public class MegaWalls extends JavaPlugin {
                 pet=PotionEffectType.FAST_DIGGING;
                 break;
         }
-        player.addPotionEffect(new PotionEffect(pet,5*20,1));
+        player.addPotionEffect(new PotionEffect(pet,120*20,1));
         player.sendMessage("You were given "+pet.getName()+" for breaking a diamond ore!");
     }
 }

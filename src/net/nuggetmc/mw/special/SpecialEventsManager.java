@@ -512,6 +512,9 @@ public class SpecialEventsManager implements Listener {
         if (e.getItem().hasMetadata(MegaWalls.getMetadataValue())) {
             e.setCancelled(true);
         }
+        if (e.getItem().getType().equals(Material.ARROW)){
+            e.setCancelled(true);
+        }
     }
 
     //AOTV
