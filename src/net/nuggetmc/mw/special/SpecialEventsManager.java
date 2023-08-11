@@ -8,10 +8,12 @@ import net.md_5.bungee.api.ChatColor;
 import net.nuggetmc.mw.MegaWalls;
 import net.nuggetmc.mw.mwclass.classes.MWCow;
 import net.nuggetmc.mw.mwclass.classes.MWMole;
+import net.nuggetmc.mw.mwclass.items.MWItem;
 import net.nuggetmc.mw.utils.ItemUtils;
 import net.nuggetmc.mw.utils.PlayerUtils;
 import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -611,6 +613,35 @@ public class SpecialEventsManager implements Listener {
         if (e.getRecipe().getResult().getType().equals(Material.DIAMOND_BLOCK)){
             e.setCancelled(true);
             e.getWhoClicked().sendMessage("This recipe has been banned here!");
+        }
+    }
+    @EventHandler
+    public void onHeldItemChange(PlayerItemHeldEvent e){
+        Player player=e.getPlayer();
+        ItemStack newSlotItem=player.getInventory().getItem(e.getNewSlot());
+        ItemStack previousItem=player.getInventory().getItem(e.getPreviousSlot());
+        if (newSlotItem.getType().equals(Material.BOW)&&!specialItemUtils.isTerm(newSlotItem)){
+            for (int i = 0; i < player.getInventory().getSize(); i++) {
+                ItemStack itemStack = player.getInventory().getItem(i);
+                if (itemStack == null) continue;
+                net.minecraft.server.v1_8_R3.ItemStack nmsItem = CraftItemStack.asNMSCopy(itemStack);
+                if (nmsItem == null) continue;
+                if (itemStack.getItemMeta().getDisplayName().toLowerCase().contains("rogues")){
+                    player.getInventory().setItem(i,specialItemUtils.getQuiverArrow());
+                    break;
+                }
+            }
+        } else if (previousItem.getType().equals(Material.BOW)&&!specialItemUtils.isTerm(previousItem)) {
+            for (int i = 0; i < player.getInventory().getSize(); i++) {
+                ItemStack itemStack = player.getInventory().getItem(i);
+                if (itemStack == null) continue;
+                net.minecraft.server.v1_8_R3.ItemStack nmsItem = CraftItemStack.asNMSCopy(itemStack);
+                if (nmsItem == null) continue;
+                if (itemStack.getItemMeta().getDisplayName().equals("Quiver Arrow")){
+                    player.getInventory().setItem(i, MWItem.createAOTR());
+                    break;
+                }
+            }
         }
     }
 

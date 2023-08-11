@@ -95,6 +95,13 @@ class MWMole : MWClass() {
                             .runTaskLater(plugin, { block1.type = material }, plugin.breakResetTime * 20L)
                     }
                     block1.breakNaturally()
+                    if (material != Material.DIAMOND_ORE) {
+                        if (!plugin.resetMap.containsKey(block1)) {
+                            plugin.resetMap[block1] = material
+                        }
+                    } else {
+                        plugin.breakDiamond(player)
+                    }
                 }
                 for (nearby in getNearbyEnemies(player, 5.toDouble())!!) {
                     if (damaged.contains(nearby)) {

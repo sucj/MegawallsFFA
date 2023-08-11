@@ -100,11 +100,9 @@ public class MWArcanist extends MWClass {
                     } else {
                         plugin.breakDiamond(player);
                     }
-                    if (material != Material.DIAMOND_ORE) {
-                        block2.breakNaturally();
-                    } else {
+
                         block2.setType(Material.AIR);
-                    }
+
 
                 }
             }

@@ -262,17 +262,13 @@ public class SpecialItemUtils {
     public ItemStack getGoodDiamond() {
         ItemStack item = new ItemStack(Material.DIAMOND);
 
-
-        ItemMeta meta = item.getItemMeta();
-
-        item.setItemMeta(meta);
         net.minecraft.server.v1_8_R3.ItemStack nmsItem = CraftItemStack.asNMSCopy(item);
         NBTTagCompound compound = nmsItem.hasTag() ? nmsItem.getTag() : new NBTTagCompound();
 
         compound.setBoolean("goodDia", true);
         nmsItem.setTag(compound);
 
-        return ItemUtils.toMWItem(CraftItemStack.asBukkitCopy(nmsItem));
+        return CraftItemStack.asBukkitCopy(nmsItem);
     }
 
     public static boolean isGoodDiamond(ItemStack itemStack) {
@@ -281,6 +277,17 @@ public class SpecialItemUtils {
         if (nmsItem == null) return false;
 
         NBTTagCompound compound = nmsItem.hasTag() ? nmsItem.getTag() : new NBTTagCompound();
-        return compound.getBoolean("term");
+        return compound.getBoolean("goodDia");
+    }
+    public ItemStack getQuiverArrow() {
+        ItemStack item = new ItemStack(Material.ARROW,64);
+        item.addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL,1);
+
+
+        ItemMeta meta = item.getItemMeta();
+        meta.setDisplayName("Quiver Arrow");
+        item.setItemMeta(meta);
+
+        return item;
     }
 }
