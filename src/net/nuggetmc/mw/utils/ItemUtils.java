@@ -185,27 +185,42 @@ public class ItemUtils {
 
 
     }
-    public static void refundCowBucket(Player player){
-        int count=0;
-        for (int i=0;i<player.getEnderChest().getSize();i++){
-            ItemStack itemStack=player.getEnderChest().getItem(i);
-            if (!SpecialItemUtils.isCowBucketNotOwn(itemStack)){
+
+    public static void refundCowBucket(Player player) {
+        int count = 0;
+        for (int i = 0; i < player.getEnderChest().getSize(); i++) {
+            ItemStack itemStack = player.getEnderChest().getItem(i);
+            if (!SpecialItemUtils.isCowBucketNotOwn(itemStack)) {
                 continue;
             }
-            count+=player.getEnderChest().getItem(i).getAmount();
+            count += player.getEnderChest().getItem(i).getAmount();
             player.getEnderChest().clear(i);
         }
-        int coinsRefunded=MegaWalls.getInstance().getShopMenu().milk.getPrice()*count;
-        MegaWalls.getInstance().getCoinsManager().add(player,coinsRefunded);
-        player.sendMessage(ChatColor.RED+ChatColor.BOLD.toString() +"Cow buckets detected in your ender chest.For some reason,they can no longer be stored.");
-        player.sendMessage(ChatColor.RED+ChatColor.BOLD.toString() +"Deleted them,refunded "+coinsRefunded+" coins.");
+        int coinsRefunded = MegaWalls.getInstance().getShopMenu().milk.getPrice() * count;
+        MegaWalls.getInstance().getCoinsManager().add(player, coinsRefunded);
+        player.sendMessage(ChatColor.RED + ChatColor.BOLD.toString() + "Cow buckets detected in your ender chest.For some reason,they can no longer be stored.");
+        player.sendMessage(ChatColor.RED + ChatColor.BOLD.toString() + "Deleted them,refunded " + coinsRefunded + " coins.");
     }
-    public static boolean haveCowBucketInEnderChest(Player player){
-        for (ItemStack is:player.getEnderChest()){
-            if (SpecialItemUtils.isCowBucketNotOwn(is)){
+
+    public static boolean haveCowBucketInEnderChest(Player player) {
+        for (ItemStack is : player.getEnderChest()) {
+            if (SpecialItemUtils.isCowBucketNotOwn(is)) {
                 return true;
             }
         }
         return false;
+    }
+
+    public static void clearUnlegitDiamonds(Player player) {
+        for (int i = 0; i < player.getEnderChest().getSize(); i++) {
+            ItemStack itemStack = player.getEnderChest().getItem(i);
+            if (itemStack.getType().equals(Material.DIAMOND_BLOCK)){
+                player.getEnderChest().clear(i);
+                continue;
+            }
+            if (itemStack.getType().equals(Material.DIAMOND) && !SpecialItemUtils.isGoodDiamond(itemStack)) {
+                player.getEnderChest().clear(i);
+            }
+        }
     }
 }

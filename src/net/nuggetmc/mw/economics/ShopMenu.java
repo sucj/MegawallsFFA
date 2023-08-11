@@ -36,7 +36,7 @@ public class ShopMenu implements Listener {
     Good squpot = new Good(specialItemUtils.getSquidPot(), ChatColor.stripColor(specialItemUtils.getSquidPot().getItemMeta().getDisplayName()), 15, specialItemUtils.getSquidPot(), null);
     Good phxpot = new Good(specialItemUtils.getPhxPot(), ChatColor.stripColor(specialItemUtils.getPhxPot().getItemMeta().getDisplayName()), 20, specialItemUtils.getPhxPot(), null);
     Good golempot = new Good(specialItemUtils.getGolemPot(), ChatColor.stripColor(specialItemUtils.getGolemPot().getItemMeta().getDisplayName()), 25, specialItemUtils.getGolemPot(), null);
-    Good diamond = new Good(new ItemStack(Material.DIAMOND, 1), "Diamond", 50, new ItemStack(Material.DIAMOND, 1), null);
+    Good diamond = new Good(new ItemStack(Material.DIAMOND, 1), "Diamond", 50, specialItemUtils.getGoodDiamond(), null);
     Good ironHelmet = new Good(new ItemStack(Material.IRON_HELMET, 1), "Iron Helmet", 1, new ItemStack(Material.IRON_HELMET, 1), null);
     Good ironChestplate = new Good(new ItemStack(Material.IRON_CHESTPLATE, 1), "Iron Chestplate", 1, new ItemStack(Material.IRON_CHESTPLATE, 1), null);
     Good ironLeggings = new Good(new ItemStack(Material.IRON_LEGGINGS, 1), "Iron Leggings", 1, new ItemStack(Material.IRON_LEGGINGS, 1), null);

@@ -133,6 +133,7 @@ public class MWClassManager implements Listener {
         if (ItemUtils.haveCowBucketInEnderChest(player)){
             ItemUtils.refundCowBucket(player);
         }
+        ItemUtils.clearUnlegitDiamonds(player);
         if (mwclass.getShortName().equals("ZOM")) {
             player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, 9999 * 20, 2));
         }

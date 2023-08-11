@@ -19,6 +19,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.*;
+import org.bukkit.event.inventory.CraftItemEvent;
+import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -603,6 +605,13 @@ public class SpecialEventsManager implements Listener {
         if (!specialItemUtils.isHyperion(e.getItem())) return;
         triggerHypeAbility(p);
 
+    }
+    @EventHandler
+    public void onCraft(CraftItemEvent e){
+        if (e.getRecipe().getResult().getType().equals(Material.DIAMOND_BLOCK)){
+            e.setCancelled(true);
+            e.getWhoClicked().sendMessage("This recipe has been banned here!");
+        }
     }
 
 

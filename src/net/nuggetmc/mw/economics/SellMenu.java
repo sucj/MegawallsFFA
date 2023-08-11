@@ -29,7 +29,6 @@ public class SellMenu implements Listener {
 
 
     public SellMenu() {
-        things.put(new ItemStack(Material.DIAMOND), 50);
         things.put(new ItemStack(Material.IRON_ORE), 1);
         //things.put(new ItemStack(Material.COBBLESTONE),1);
     }
