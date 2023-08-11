@@ -620,18 +620,16 @@ public class SpecialEventsManager implements Listener {
         Player player=e.getPlayer();
         ItemStack newSlotItem=player.getInventory().getItem(e.getNewSlot());
         ItemStack previousItem=player.getInventory().getItem(e.getPreviousSlot());
-        if (newSlotItem.getType().equals(Material.BOW)&&!specialItemUtils.isTerm(newSlotItem)){
+
+        if (verify(newSlotItem)&& newSlotItem.getType().equals(Material.BOW)&&!specialItemUtils.isTerm(newSlotItem)){
             for (int i = 0; i < player.getInventory().getSize(); i++) {
                 ItemStack itemStack = player.getInventory().getItem(i);
-                if (itemStack == null) continue;
-                net.minecraft.server.v1_8_R3.ItemStack nmsItem = CraftItemStack.asNMSCopy(itemStack);
-                if (nmsItem == null) continue;
                 if (itemStack.getItemMeta().getDisplayName().toLowerCase().contains("rogues")){
                     player.getInventory().setItem(i,specialItemUtils.getQuiverArrow());
                     break;
                 }
             }
-        } else if (previousItem.getType().equals(Material.BOW)&&!specialItemUtils.isTerm(previousItem)) {
+        } else if (verify(previousItem)&&previousItem.getType().equals(Material.BOW)&&!specialItemUtils.isTerm(previousItem)) {
             for (int i = 0; i < player.getInventory().getSize(); i++) {
                 ItemStack itemStack = player.getInventory().getItem(i);
                 if (itemStack == null) continue;
@@ -643,6 +641,16 @@ public class SpecialEventsManager implements Listener {
                 }
             }
         }
+    }
+    public boolean verify(ItemStack itemStack){
+        if (itemStack == null) {
+            return false;
+        }
+        net.minecraft.server.v1_8_R3.ItemStack nmsItem = CraftItemStack.asNMSCopy(itemStack);
+        if (nmsItem == null) {
+            return false;
+        }
+        return true;
     }
 
 
