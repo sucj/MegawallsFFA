@@ -87,7 +87,7 @@ public class SpecialItemUtils {
         return compound.getBoolean(cowBucketTag);
     }
 
-    public boolean isCowBucketNotOwn(ItemStack itemStack) {
+    public static boolean isCowBucketNotOwn(ItemStack itemStack) {
         if (itemStack == null) return false;
         net.minecraft.server.v1_8_R3.ItemStack nmsItem = CraftItemStack.asNMSCopy(itemStack);
         if (nmsItem == null) return false;

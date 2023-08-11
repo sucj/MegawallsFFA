@@ -2,7 +2,9 @@ package net.nuggetmc.mw.utils;
 
 import net.minecraft.server.v1_8_R3.NBTTagCompound;
 import net.nuggetmc.mw.MegaWalls;
+import net.nuggetmc.mw.special.SpecialItemUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.entity.Entity;
@@ -122,7 +124,7 @@ public class ItemUtils {
         try {
             for (int i = 0; i < 36; i++) {
                 ItemStack stack = player.getInventory().getContents()[i];
-                if (stack != null && MegaWalls.getInstance().getSpecialItemUtils().isCowBucketNotOwn(stack)) {
+                if (stack != null && SpecialItemUtils.isCowBucketNotOwn(stack)) {
                     return i;
                 }
             }
@@ -182,5 +184,28 @@ public class ItemUtils {
         return -1;
 
 
+    }
+    public static void refundCowBucket(Player player){
+        int count=0;
+        for (int i=0;i<player.getEnderChest().getSize();i++){
+            ItemStack itemStack=player.getEnderChest().getItem(i);
+            if (!SpecialItemUtils.isCowBucketNotOwn(itemStack)){
+                continue;
+            }
+            count+=player.getEnderChest().getItem(i).getAmount();
+            player.getEnderChest().clear(i);
+        }
+        int coinsRefunded=MegaWalls.getInstance().getShopMenu().milk.getPrice()*count;
+        MegaWalls.getInstance().getCoinsManager().add(player,coinsRefunded);
+        player.sendMessage(ChatColor.RED+ChatColor.BOLD.toString() +"Cow buckets detected in your ender chest.For some reason,they can no longer be stored.");
+        player.sendMessage(ChatColor.RED+ChatColor.BOLD.toString() +"Deleted them,refunded "+coinsRefunded+" coins.");
+    }
+    public static boolean haveCowBucketInEnderChest(Player player){
+        for (ItemStack is:player.getEnderChest()){
+            if (SpecialItemUtils.isCowBucketNotOwn(is)){
+                return true;
+            }
+        }
+        return false;
     }
 }

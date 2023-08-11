@@ -9,6 +9,7 @@ import net.nuggetmc.mw.special.TeamsManager;
 import net.nuggetmc.mw.utils.ItemUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
@@ -129,6 +130,9 @@ public class MWClassManager implements Listener {
             NametagAPI.setNametagHard(player.getName(), prefix, suffix);
         }
         player.sendMessage(ChatColor.YELLOW + "You can use /mwshop and /mwsell to buy and sell items.Use /echest to open your enderchest.");
+        if (ItemUtils.haveCowBucketInEnderChest(player)){
+            ItemUtils.refundCowBucket(player);
+        }
         if (mwclass.getShortName().equals("ZOM")) {
             player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, 9999 * 20, 2));
         }

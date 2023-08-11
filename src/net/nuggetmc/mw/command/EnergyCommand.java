@@ -4,6 +4,7 @@ import net.md_5.bungee.api.ChatColor;
 import net.nuggetmc.mw.MegaWalls;
 import net.nuggetmc.mw.energy.EnergyManager;
 import net.nuggetmc.mw.mwclass.MWClassManager;
+import net.nuggetmc.mw.utils.ItemUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -30,7 +31,6 @@ public class EnergyCommand implements CommandExecutor {
         }
 
         Player player = Bukkit.getPlayer(args[0]);
-
         if (player != null) {
             maxEnergy(player);
         }
