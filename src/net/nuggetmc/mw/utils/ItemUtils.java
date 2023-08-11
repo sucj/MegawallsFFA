@@ -214,6 +214,9 @@ public class ItemUtils {
     public static void clearUnlegitDiamonds(Player player) {
         for (int i = 0; i < player.getEnderChest().getSize(); i++) {
             ItemStack itemStack = player.getEnderChest().getItem(i);
+            if (itemStack == null) continue;
+            net.minecraft.server.v1_8_R3.ItemStack nmsItem = CraftItemStack.asNMSCopy(itemStack);
+            if (nmsItem == null) continue;
             if (itemStack.getType().equals(Material.DIAMOND_BLOCK)){
                 player.getEnderChest().clear(i);
                 continue;
