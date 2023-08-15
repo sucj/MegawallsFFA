@@ -651,7 +651,11 @@ public class SpecialEventsManager implements Listener {
                 net.minecraft.server.v1_8_R3.ItemStack nmsItem = CraftItemStack.asNMSCopy(itemStack);
                 if (nmsItem == null) continue;
                 if (verify(itemStack)&& itemStack.getItemMeta()!=null&&itemStack.getItemMeta().hasDisplayName()&& itemStack.getItemMeta().getDisplayName().equals("Quiver Arrow")){
-                    player.getInventory().setItem(i, MWItem.createAOTR());
+                    ItemStack AOTR=MWItem.createAOTR();
+                    if (plugin.getClassManager().get(player)!=null&&plugin.getClassManager().get(player) instanceof MWMole){
+                        AOTR.setType(Material.IRON_SPADE);
+                    }
+                    player.getInventory().setItem(i,AOTR);
                     break;
                 }
             }

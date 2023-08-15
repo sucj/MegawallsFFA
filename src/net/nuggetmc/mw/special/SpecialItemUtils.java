@@ -17,6 +17,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class SpecialItemUtils {
@@ -286,6 +287,7 @@ public class SpecialItemUtils {
 
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName("Quiver Arrow");
+        meta.setLore(Collections.singletonList("This item is in your inventory because you are holding a bow."));
         item.setItemMeta(meta);
 
         return ItemUtils.toMWItem(item);
