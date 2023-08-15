@@ -5,6 +5,7 @@ import net.minecraft.server.v1_8_R3.NBTTagCompound;
 import net.nuggetmc.mw.MegaWalls;
 import net.nuggetmc.mw.energy.EnergyManager;
 import net.nuggetmc.mw.mwclass.MWClassManager;
+import net.nuggetmc.mw.mwclass.classes.MWMagician;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
@@ -120,6 +121,13 @@ public class MWHealth implements Listener {
     }
 
     public void trueDamage(Player player, double amount, Player damager) {
+        if (MWMagician.Companion.getInCloakCache().contains(player)){
+            if (MWMagician.Companion.consumeEnergy(player,20)){
+                return;
+            }else{
+                player.sendMessage(ChatColor.RED.toString() +ChatColor.BOLD+"You didn't block a hit because you don't have enough energy!");
+            }
+        }
         if (plugin.bloodRageList.contains(damager)) {
             amount *= 1.75;
         }
@@ -143,6 +151,13 @@ public class MWHealth implements Listener {
     }
 
     public void dreadTrueDamage(Player player, Player damager, WitherSkull witherSkull) {
+        if (MWMagician.Companion.getInCloakCache().contains(player)){
+            if (MWMagician.Companion.consumeEnergy(player,20)){
+                return;
+            }else{
+                player.sendMessage(ChatColor.RED.toString() +ChatColor.BOLD+"You didn't block a hit because you don't have enough energy!");
+            }
+        }
         double amount = 8;
         if (timeMillis.contains(witherSkull.getMetadata("TimeMillis").get(0).asInt())) {
             return;

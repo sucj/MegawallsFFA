@@ -5,6 +5,7 @@ import net.nuggetmc.mw.mwclass.MWClass;
 import net.nuggetmc.mw.mwclass.MWClassManager;
 import net.nuggetmc.mw.mwclass.classes.MWDriver;
 import net.nuggetmc.mw.mwclass.classes.MWGoldenDragon;
+import net.nuggetmc.mw.mwclass.classes.MWMagician;
 import net.nuggetmc.mw.mwclass.classes.MWMole;
 import net.nuggetmc.mw.utils.ActionBar;
 import net.nuggetmc.mw.utils.ItemUtils;
@@ -58,6 +59,7 @@ public class EnergyManager implements Listener {
                     add(player, 2);
                     break;
                 case "god":
+                case "mag":
                     add(player, 1);
                     break;
                 case "mol":
@@ -195,7 +197,7 @@ public class EnergyManager implements Listener {
 
     private void callAbility(Player player) {
         if (!manager.isMW(player)) return;
-        if (fetch(player) < 100) return;
+        if (fetch(player) < 100&&(!(manager.get(player) instanceof MWMagician))) return;
 
         manager.get(player).ability(player);
     }
