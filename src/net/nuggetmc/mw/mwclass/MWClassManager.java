@@ -129,11 +129,11 @@ public class MWClassManager implements Listener {
             player.setDisplayName((plugin.getTeamsManager().getColorOfTeam(team) + "[" + plugin.getTeamsManager().getTeamOfPlayer(player).name()) + "] " + player.getDisplayName() + ChatColor.RESET);
             NametagAPI.setNametagHard(player.getName(), prefix, suffix);
         }
-        player.sendMessage(ChatColor.YELLOW + "You can use /mwshop and /mwsell to buy and sell items.Use /echest to open your enderchest.");
+        player.sendMessage(ChatColor.RED.toString() + ChatColor.BOLD+ "[Tip]"+ChatColor.RESET+ChatColor.YELLOW+ "Feeling poor?Mine some cobblestone and sell them at /mwsell.Use /mwshop to buy things.");
         if (ItemUtils.haveCowBucketInEnderChest(player)){
             ItemUtils.refundCowBucket(player);
         }
-        ItemUtils.clearUnlegitDiamonds(player);
+        ItemUtils.clearUnlegitDiamonds(player.getEnderChest());
         if (mwclass.getShortName().equals("ZOM")) {
             player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, 9999 * 20, 2));
         }

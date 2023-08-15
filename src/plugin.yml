@@ -72,10 +72,6 @@ commands:
     description: give player a megawalls item.
     usage: /mwitem
     permission: mw.admin
-  milikiller:
-    description: for fun.
-    usage: /milikiller
-    permission: mw.admin
   setwalkspeed:
     description: set a player's walk speed.
     usage: /setwalkspeed

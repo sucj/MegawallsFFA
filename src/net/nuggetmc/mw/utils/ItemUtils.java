@@ -211,19 +211,20 @@ public class ItemUtils {
         return false;
     }
 
-    public static void clearUnlegitDiamonds(Player player) {
-        for (int i = 0; i < player.getEnderChest().getSize(); i++) {
-            ItemStack itemStack = player.getEnderChest().getItem(i);
+    public static void clearUnlegitDiamonds(Inventory inventory) {
+        for (int i = 0; i < inventory.getSize(); i++) {
+            ItemStack itemStack = inventory.getItem(i);
             if (itemStack == null) continue;
             net.minecraft.server.v1_8_R3.ItemStack nmsItem = CraftItemStack.asNMSCopy(itemStack);
             if (nmsItem == null) continue;
             if (itemStack.getType().equals(Material.DIAMOND_BLOCK)){
-                player.getEnderChest().clear(i);
+                inventory.clear(i);
                 continue;
             }
             if (itemStack.getType().equals(Material.DIAMOND) && !SpecialItemUtils.isGoodDiamond(itemStack)) {
-                player.getEnderChest().clear(i);
+                inventory.clear(i);
             }
         }
     }
+
 }

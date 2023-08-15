@@ -38,7 +38,7 @@ public class EnergyManager implements Listener {
 
         Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, this::tick, 20, 20);
         Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, plugin::tickBlockReset, 20, 20L * plugin.breakResetTime);
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, this::tickActionBar, 0, 5);
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, this::tickActionBar, 10, 10);
     }
 
     public void tick() {

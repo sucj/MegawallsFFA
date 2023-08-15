@@ -24,8 +24,7 @@ import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.*;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.*;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -616,7 +615,27 @@ public class SpecialEventsManager implements Listener {
         if (e.getRecipe().getResult().getType().equals(Material.DIAMOND_BLOCK)){
             e.setCancelled(true);
             e.getWhoClicked().sendMessage("This recipe has been banned here!");
+        } else if (recipeHasUnlegitDiamond(e.getRecipe())) {
+            e.setCancelled(true);
+            ItemUtils.clearUnlegitDiamonds(e.getWhoClicked().getInventory());
+            ItemUtils.clearUnlegitDiamonds(e.getInventory());
         }
+    }
+    private boolean recipeHasUnlegitDiamond(Recipe recipe){
+        if (recipe instanceof ShapelessRecipe){
+            for (ItemStack itemStack: ((ShapelessRecipe) recipe).getIngredientList()){
+                if (itemStack.getType().equals(Material.DIAMOND) && !SpecialItemUtils.isGoodDiamond(itemStack)) {
+                    return true;
+                }
+            }
+        } else if (recipe instanceof ShapedRecipe) {
+            for (ItemStack itemStack: ((ShapedRecipe) recipe).getIngredientMap().values()){
+                if (itemStack.getType().equals(Material.DIAMOND) && !SpecialItemUtils.isGoodDiamond(itemStack)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
     @EventHandler
     public void onHeldItemChange(PlayerItemHeldEvent e){
