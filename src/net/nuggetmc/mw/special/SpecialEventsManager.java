@@ -615,24 +615,17 @@ public class SpecialEventsManager implements Listener {
         if (e.getRecipe().getResult().getType().equals(Material.DIAMOND_BLOCK)){
             e.setCancelled(true);
             e.getWhoClicked().sendMessage("This recipe has been banned here!");
-        } else if (recipeHasUnlegitDiamond(e.getRecipe())) {
+        } else if (hasUnlegitDiamond(e.getInventory())) {
             e.setCancelled(true);
             ItemUtils.clearUnlegitDiamonds(e.getWhoClicked().getInventory());
             ItemUtils.clearUnlegitDiamonds(e.getInventory());
         }
     }
-    private boolean recipeHasUnlegitDiamond(Recipe recipe){
-        if (recipe instanceof ShapelessRecipe){
-            for (ItemStack itemStack: ((ShapelessRecipe) recipe).getIngredientList()){
-                if (itemStack.getType().equals(Material.DIAMOND) && !SpecialItemUtils.isGoodDiamond(itemStack)) {
-                    return true;
-                }
-            }
-        } else if (recipe instanceof ShapedRecipe) {
-            for (ItemStack itemStack: ((ShapedRecipe) recipe).getIngredientMap().values()){
-                if (itemStack.getType().equals(Material.DIAMOND) && !SpecialItemUtils.isGoodDiamond(itemStack)) {
-                    return true;
-                }
+
+    private boolean hasUnlegitDiamond(Inventory inventory) {
+        for (ItemStack itemStack : inventory.getContents()) {
+            if (itemStack.getType().equals(Material.DIAMOND) && !SpecialItemUtils.isGoodDiamond(itemStack)) {
+                return true;
             }
         }
         return false;
