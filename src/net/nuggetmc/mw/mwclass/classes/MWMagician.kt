@@ -5,7 +5,7 @@ import net.citizensnpcs.api.CitizensAPI
 import net.md_5.bungee.api.ChatColor
 import net.nuggetmc.mw.MegaWalls
 import net.nuggetmc.mw.mwclass.MWClass
-import net.nuggetmc.mw.mwclass.classes.MWMagician.Companion.consumeEnergy
+import net.nuggetmc.mw.mwclass.info.Diamond
 import net.nuggetmc.mw.mwclass.info.MWClassInfo
 import net.nuggetmc.mw.mwclass.info.Playstyle
 import net.nuggetmc.mw.mwclass.items.MWItem
@@ -16,7 +16,6 @@ import net.nuggetmc.mw.utils.FakePlayer
 import org.bukkit.*
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Creeper
-import org.bukkit.entity.Entity
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -24,20 +23,21 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.event.player.PlayerTeleportEvent
+import org.bukkit.event.player.PlayerVelocityEvent
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 import org.bukkit.metadata.FixedMetadataValue
-import org.bukkit.metadata.MetadataValueAdapter
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import org.bukkit.scheduler.BukkitRunnable
-import org.bukkit.util.Vector
+import kotlin.collections.HashMap
+import kotlin.collections.HashSet
 
 class MWMagician : MWClass() {
     val plugin: MegaWalls = MegaWalls.getInstance()!!
     val energyManager = plugin.energyManager!!
     val usedBluffOut=HashSet<Player> ()
-
+    val bluffOutCache=HashSet<Player> ()
 
 
     init {
@@ -51,7 +51,7 @@ class MWMagician : MWClass() {
             Playstyle.SUPPORT,
             Playstyle.RUSHER
         )
-        diamonds = emptyArray()
+        diamonds = arrayOf(Diamond.SWORD)
         classInfo = MWClassInfo(
             "Magical Cloak",
             "After you toggle this ability on you will get a walkspeed boost,and all damage " +
@@ -62,7 +62,9 @@ class MWMagician : MWClass() {
                     "\n how to toggle:Left click with your bow",
             "Bluff Out!",
             "When your health comes to lower than 10,you will immediately create a splitting magic of yourself that lasts for 8s," +
-                    "then hide yourself for 5s,while jumping into the air.Then fill your ${ChatColor.BOLD.toString() +ChatColor.RED+"✎Overflow Energy"}." +
+                    "then hide yourself for 5s.In the next 12 seconds,you will be immune to" +
+                    "knockback , and heal 50% damage on every hit." +
+                    "Then fill your ${ChatColor.BOLD.toString() +ChatColor.RED+"✎Overflow Energy"}." +
                     "This can only be activated per life.",
             "Overflow Energy",
             "Hitting an enemy gives you ${ChatColor.BOLD.toString() +ChatColor.RED+"✎Overflow Energy"} instead of energy." +
@@ -81,6 +83,9 @@ class MWMagician : MWClass() {
 
     override fun ability(player: Player) {
         veilCreeper(player)
+        toggle(player)
+    }
+    fun toggle(player: Player){
         if (inCloakCache.contains(player)){
             inCloakCache.remove(player)
             player.walkSpeed=0.2f
@@ -91,7 +96,12 @@ class MWMagician : MWClass() {
             player.sendMessage(ChatColor.GREEN.toString()+ChatColor.BOLD+"You activated your ${ChatColor.RESET.toString()+ ChatColor.YELLOW+"Magical Cloak"+ChatColor.GREEN.toString()+ChatColor.BOLD} ability!")
         }
     }
-
+    @EventHandler
+    fun onVelocity(e:PlayerVelocityEvent){
+        if(bluffOutCache.contains(e.player)){
+            e.isCancelled=true
+        }
+    }
 
 
     override fun hit(event: EntityDamageByEntityEvent) {
@@ -103,6 +113,7 @@ class MWMagician : MWClass() {
                 event.isCancelled=true
                 return
             }
+            mwhealth.heal(player,0.5*event.damage)
             if (overflowEnergyMap[player]!! >=50) {
                 energyManager.add(player, 3)
             }else{
@@ -118,8 +129,11 @@ class MWMagician : MWClass() {
         if (!(e.damager is Player)) return
         val owner=Bukkit.getPlayerExact(e.entity.getMetadata("OwnerName")[0].asString()) ?: return
         if (owner.uniqueId.equals(e.damager.uniqueId)) return
+        if ((e.damager as Player).itemInHand.type.equals(Material.BOW)&&manager[e.damager as Player]==this){
+            toggle(e.damager as Player)
+        }
         if (inCloakCache.contains(owner)){
-            if (owner.consumeEnergy(15)){
+            if (owner.consumeEnergy(20)){
                 e.isCancelled=true
                 owner.world.playSound(owner.location,Sound.CREEPER_HISS,1.5f,1f)
                 e.damager.sendMessage("Your damage dealt to ${ChatColor.RED.toString()+ChatColor.BOLD+owner.displayName+ChatColor.RESET} was cancelled due to their ${ChatColor.AQUA.toString()+ChatColor.BOLD+"Magical Cloak"+ChatColor.RESET} ability!")
@@ -139,7 +153,7 @@ class MWMagician : MWClass() {
             return
         }
         if (inCloakCache.contains(victim)){
-            if (victim.consumeEnergy(15)){
+            if (victim.consumeEnergy(20)){
                 e.isCancelled=true
                 victim.world.playSound(victim.location,Sound.CREEPER_HISS,1.5f,1f)
                 if (e is EntityDamageByEntityEvent){
@@ -165,33 +179,25 @@ class MWMagician : MWClass() {
         swordEnch[Enchantment.DURABILITY] = 10
 
 
-        val bowEnch: MutableMap<Enchantment, Int> = HashMap()
-        bowEnch[Enchantment.ARROW_INFINITE] = 1
-        bowEnch[Enchantment.ARROW_DAMAGE] = 2
+        val helmetench: MutableMap<Enchantment, Int> = HashMap()
+        helmetench[Enchantment.PROTECTION_PROJECTILE] = 1
+        helmetench[Enchantment.PROTECTION_ENVIRONMENTAL] = 2
+        helmetench[Enchantment.DURABILITY] = 10
 
-        val bootEnch: MutableMap<Enchantment, Int> = HashMap()
-        bootEnch[Enchantment.PROTECTION_FALL] = 2
-        bootEnch[Enchantment.PROTECTION_ENVIRONMENTAL] = 3
-        bootEnch[Enchantment.DURABILITY] = 10
-
-        val leggingsEnch: MutableMap<Enchantment, Int> = HashMap()
-        leggingsEnch[Enchantment.PROTECTION_PROJECTILE] = 1
-        leggingsEnch[Enchantment.PROTECTION_ENVIRONMENTAL] = 2
-        leggingsEnch[Enchantment.DURABILITY] = 10
-
-        val sword = MWItem.createSword(this, Material.IRON_SWORD, swordEnch, player)
-        val bow = MWItem.createBow(this, bowEnch)
+        val sword = MWItem.createSword(this, Material.DIAMOND_SWORD, swordEnch, player)
         val tool = MWItem.createTool(this, Material.DIAMOND_PICKAXE)
-        val boots = MWItem.createArmor(this, Material.IRON_BOOTS, bootEnch)
-        val leg = MWItem.createArmor(this, Material.IRON_LEGGINGS, leggingsEnch)
+        val helmet = MWItem.createArmor(this, Material.DIAMOND_HELMET, helmetench)
         val potions = MWPotions.createBasic(this, 2, 8, 2)
 
-        items = MWKit.generate(this, sword, bow, tool, null, potions, null, null, leg, boots, null)
+        items = MWKit.generate(this, sword, null, tool, null, potions, helmet, null, null, null, null)
 
         MWKit.assignItems(player, items)
         overflowEnergyMap[player] = 0
         if (usedBluffOut.contains(player)){
             usedBluffOut.remove(player)
+        }
+        if (bluffOutCache.contains(player)){
+            bluffOutCache.remove(player)
         }
     }
 
@@ -251,7 +257,12 @@ class MWMagician : MWClass() {
     fun bluffOut(player: Player){
         val location=player.location
         val fakePlayer= FakePlayer(player)
-        player.velocity = player.velocity.add(Vector(0, 5, 0))
+        bluffOutCache.add(player)
+        object : BukkitRunnable() {
+            override fun run() {
+                bluffOutCache.remove(player)
+            }
+        }.runTaskLater(plugin,12*20)
         for (p: Player in plugin.combatManager.inCombatPlayers) {
             p.hidePlayer(player)
         }

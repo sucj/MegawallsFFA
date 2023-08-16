@@ -122,7 +122,7 @@ public class MWHealth implements Listener {
 
     public void trueDamage(Player player, double amount, Player damager) {
         if (MWMagician.Companion.getInCloakCache().contains(player)){
-            if (MWMagician.Companion.consumeEnergy(player,15)){
+            if (MWMagician.Companion.consumeEnergy(player,20)){
                 return;
             }else{
                 player.sendMessage(ChatColor.RED.toString() +ChatColor.BOLD+"You didn't block a hit because you don't have enough energy!");
@@ -152,7 +152,7 @@ public class MWHealth implements Listener {
 
     public void dreadTrueDamage(Player player, Player damager, WitherSkull witherSkull) {
         if (MWMagician.Companion.getInCloakCache().contains(player)){
-            if (MWMagician.Companion.consumeEnergy(player,15)){
+            if (MWMagician.Companion.consumeEnergy(player,20)){
                 return;
             }else{
                 player.sendMessage(ChatColor.RED.toString() +ChatColor.BOLD+"You didn't block a hit because you don't have enough energy!");
