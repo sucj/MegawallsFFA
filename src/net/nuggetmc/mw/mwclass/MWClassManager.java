@@ -87,7 +87,7 @@ public class MWClassManager implements Listener {
         player.setHealth(40);
         player.setFoodLevel(20);
         player.setSaturation(20);
-
+        player.setWalkSpeed(0.2f);
 
         if (team != null) {
             List<ItemStack> contents = ItemUtils.getAllContents(inventory).stream().filter(i -> !ItemUtils.isKitItem(i)).collect(Collectors.toList());

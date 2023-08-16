@@ -113,7 +113,9 @@ class MWMagician : MWClass() {
                 event.isCancelled=true
                 return
             }
-            mwhealth.heal(player,0.5*event.damage)
+            if (bluffOutCache.contains(player)) {
+                mwhealth.heal(player, 0.5 * event.damage)
+            }
             if (overflowEnergyMap[player]!! >=50) {
                 energyManager.add(player, 3)
             }else{
@@ -177,6 +179,7 @@ class MWMagician : MWClass() {
 
         val swordEnch: MutableMap<Enchantment, Int> = HashMap()
         swordEnch[Enchantment.DURABILITY] = 10
+        swordEnch[Enchantment.DAMAGE_ALL] = 1
 
 
         val helmetench: MutableMap<Enchantment, Int> = HashMap()
@@ -253,6 +256,10 @@ class MWMagician : MWClass() {
         if (inCloakCache.contains(e.entity)) {
             inCloakCache.remove(e.entity)
         }
+        if (bluffOutCache.contains(e.entity)){
+            bluffOutCache.remove(e.entity)
+        }
+        e.entity.walkSpeed=0.2f
     }
     fun bluffOut(player: Player){
         val location=player.location
