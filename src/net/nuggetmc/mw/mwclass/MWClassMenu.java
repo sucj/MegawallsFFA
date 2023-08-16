@@ -45,11 +45,7 @@ public class MWClassMenu implements Listener {
         int n = 1;
 
         for (Map.Entry<String, MWClass> entry : manager.getClasses().entrySet()) {
-            //TODO:WHAT?
             ItemStack item = generateClassInfo(entry.getValue());
-            if (item.getItemMeta().getDisplayName().contains("Magican")){
-                continue;
-            }
             inv.setItem(n + 9 + 2 * ((n - 1) / 7), item);
 
             n++;

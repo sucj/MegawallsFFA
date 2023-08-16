@@ -187,7 +187,7 @@ public class EnergyManager implements Listener {
             callAbility(player);
         }
 
-        if (type.name().contains("SWORD") && action.contains("RIGHT_CLICK")) {
+        if (type.name().contains("SWORD") && action.contains("RIGHT_CLICK")&&(!(manager.get(player) instanceof MWMagician))) {
             callAbility(player);
         }
         if (type.name().contains("DIAMOND_SPADE") && action.contains("RIGHT_CLICK") && manager.get(player) instanceof MWMole) {

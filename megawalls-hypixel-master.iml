@@ -28,5 +28,6 @@
     <orderEntry type="library" name="spigot" level="project" />
     <orderEntry type="library" name="ProtocolLib 4.4.0" level="project" />
     <orderEntry type="library" name="nametagAPI" level="project" />
+    <orderEntry type="library" name="Citizens-2.0.32-b3188" level="project" />
   </component>
 </module>

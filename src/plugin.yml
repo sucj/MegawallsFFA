@@ -3,7 +3,7 @@ main: net.nuggetmc.mw.MegaWalls
 version: 1.0
 api-version: 1.16
 authors: [ HorseNuggets,keaidehuangpi ]
-depend: [ NametagAPI ]
+depend: [ NametagAPI,Citizens ]
 softdepend: [ Essentials,RegionPreserve,ScoreboardPlus ]
 commands:
   megawalls:
