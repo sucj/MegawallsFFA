@@ -59,7 +59,7 @@ class MWMagician : MWClass() {
                     "When energy is not enough,this won't work." +
                     "When this is on,you cannot attack." +
                     "\n Energy cost upon blocking a hit:15"+
-                    "\n how to toggle:Left click with your bow or right click with your sword",
+                    "\n how to toggle:Left click with your bow",
             "Bluff Out!",
             "When your health comes to lower than 10,you will immediately create a splitting magic of yourself that lasts for 8s," +
                     "then hide yourself for 5s,while jumping into the air.Then fill your ${ChatColor.BOLD.toString() +ChatColor.RED+"✎Overflow Energy"}." +
