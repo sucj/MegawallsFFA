@@ -82,7 +82,6 @@ class MWMagician : MWClass() {
     }
 
     override fun ability(player: Player) {
-        veilCreeper(player)
         toggle(player)
     }
     fun toggle(player: Player){
@@ -91,6 +90,7 @@ class MWMagician : MWClass() {
             player.walkSpeed=0.2f
             player.sendMessage(ChatColor.RED.toString()+ChatColor.BOLD+"You deactivated your ${ChatColor.YELLOW.toString()+"Magical Cloak"+ChatColor.RED.toString()+ChatColor.BOLD} ability!")
         }else{
+            veilCreeper(player)
             inCloakCache.add(player)
             player.walkSpeed=0.3f
             player.sendMessage(ChatColor.GREEN.toString()+ChatColor.BOLD+"You activated your ${ChatColor.RESET.toString()+ ChatColor.YELLOW+"Magical Cloak"+ChatColor.GREEN.toString()+ChatColor.BOLD} ability!")
@@ -243,10 +243,11 @@ class MWMagician : MWClass() {
         creeper.entity.setMetadata("OwnerName",FixedMetadataValue(plugin,player.name))
         object :BukkitRunnable(){
             override fun run() {
-                creeper.teleport(player.location,PlayerTeleportEvent.TeleportCause.PLUGIN)
                 if (!inCloakCache.contains(player)){
                     creeper.destroy()
                     cancel()
+                }else {
+                    creeper.teleport(player.location, PlayerTeleportEvent.TeleportCause.PLUGIN)
                 }
             }
         }.runTaskTimer(plugin,5,5)
