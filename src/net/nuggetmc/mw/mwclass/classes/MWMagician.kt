@@ -1,8 +1,8 @@
 package net.nuggetmc.mw.mwclass.classes
 
-import fr.bukkit.effectkill.utils.Particle
 import net.citizensnpcs.api.CitizensAPI
 import net.md_5.bungee.api.ChatColor
+import net.minecraft.server.v1_8_R3.EnumParticle
 import net.nuggetmc.mw.MegaWalls
 import net.nuggetmc.mw.mwclass.MWClass
 import net.nuggetmc.mw.mwclass.info.Diamond
@@ -13,6 +13,7 @@ import net.nuggetmc.mw.mwclass.items.MWKit
 import net.nuggetmc.mw.mwclass.items.MWPotions
 import net.nuggetmc.mw.utils.ActionBar
 import net.nuggetmc.mw.utils.FakePlayer
+import net.nuggetmc.mw.utils.ParticleUtils
 import org.bukkit.*
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Creeper
@@ -30,14 +31,13 @@ import org.bukkit.metadata.FixedMetadataValue
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import org.bukkit.scheduler.BukkitRunnable
-import kotlin.collections.HashMap
-import kotlin.collections.HashSet
 
 class MWMagician : MWClass() {
     val plugin: MegaWalls = MegaWalls.getInstance()!!
     val energyManager = plugin.energyManager!!
     val usedBluffOut=HashSet<Player> ()
     val bluffOutCache=HashSet<Player> ()
+    val bluffOutCooldownCache=HashSet<Player> ()
 
 
     init {
@@ -64,8 +64,12 @@ class MWMagician : MWClass() {
             "When your health comes to lower than 10,you will immediately create a splitting magic of yourself that lasts for 8s," +
                     "then hide yourself for 5s.In the next 12 seconds,you will be immune to" +
                     "knockback , and heal 50% damage on every hit." +
-                    "Then fill your ${ChatColor.BOLD.toString() +ChatColor.RED+"✎Overflow Energy"}." +
-                    "This can only be activated per life.",
+                    "Then fill your ${ChatColor.BOLD.toString() +ChatColor.RED+"✎Overflow Energy"+ChatColor.RESET}." +
+                    "By default,you have only one chance to use it." +
+                    "However,if Both your energy and ${ChatColor.BOLD.toString() +ChatColor.RED+"✎Overflow Energy"+ChatColor.RESET}" +
+                    " this can be activivited but consumes all your energy ," +
+                    "and does not fill your ${ChatColor.BOLD.toString() +ChatColor.RED+"✎Overflow Energy"+ChatColor.RESET}." +
+                    "it still has a cooldown of 180 seconds.",
             "Overflow Energy",
             "Hitting an enemy gives you ${ChatColor.BOLD.toString() +ChatColor.RED+"✎Overflow Energy"} instead of energy." +
                     "${ChatColor.BOLD.toString() +ChatColor.RED+"✎Overflow Energy"} will be used as energy as well." +
@@ -168,7 +172,17 @@ class MWMagician : MWClass() {
         if(!e.isCancelled&&victim.health-e.damage<10){
             if (!usedBluffOut.contains(victim)){
                 usedBluffOut.add(victim)
-            bluffOut(victim)
+                bluffOut(victim,true)
+            }else if(energyManager[victim]==100&& overflowEnergyMap[victim]!! >=50&&!bluffOutCooldownCache.contains(victim)){
+                energyManager.clear(victim)
+                overflowEnergyMap[victim] = 0
+                bluffOutCooldownCache.add(victim)
+                object :BukkitRunnable(){
+                    override fun run() {
+                        bluffOutCooldownCache.remove(victim)
+                    }
+                }.runTaskLater(plugin,180*20)
+                bluffOut(victim,false)
             }
         }
     }
@@ -202,6 +216,9 @@ class MWMagician : MWClass() {
         if (bluffOutCache.contains(player)){
             bluffOutCache.remove(player)
         }
+        if (bluffOutCooldownCache.contains(player)){
+            bluffOutCooldownCache.remove(player)
+        }
     }
 
     override fun getActionBar(player: Player?): String {
@@ -209,7 +226,7 @@ class MWMagician : MWClass() {
             if (inCloakCache.contains(player)) ChatColor.GREEN.toString() + ChatColor.BOLD.toString() + "ENABLED" else ChatColor.RED.toString() + ChatColor.BOLD.toString() + "DISABLED"
         }"
         val bluffOut = this.color.toString() + ChatColor.BOLD.toString() + "Bluff Out ${
-            if (!usedBluffOut.contains(player)) ChatColor.GREEN.toString() + ChatColor.BOLD.toString() + "✔" else ChatColor.RED.toString() + ChatColor.BOLD.toString() + "✖"
+            if ((!usedBluffOut.contains(player))||(energyManager[player]==100&& overflowEnergyMap[player]!! >=50&&!bluffOutCooldownCache.contains(player))) ChatColor.GREEN.toString() + ChatColor.BOLD.toString() + "✔" else ChatColor.RED.toString() + ChatColor.BOLD.toString() + "✖"
         }"
         val overflow =
             this.color.toString() + ChatColor.BOLD.toString() + "✎Overflow Energy ${overflowEnergyMap[player]}"
@@ -262,7 +279,7 @@ class MWMagician : MWClass() {
         }
         e.entity.walkSpeed=0.2f
     }
-    fun bluffOut(player: Player){
+    fun bluffOut(player: Player,fillOverflow:Boolean){
         val location=player.location
         val fakePlayer= FakePlayer(player)
         bluffOutCache.add(player)
@@ -286,8 +303,10 @@ class MWMagician : MWClass() {
                 fakePlayer.delete()
             }
         }.runTaskLater(plugin,8*20)
-        overflowEnergyMap[player] =54
-        Particle.play(location,Effect.EXPLOSION_LARGE)
+        if (fillOverflow) {
+            overflowEnergyMap[player] = 54
+        }
+        ParticleUtils.play(EnumParticle.SMOKE_LARGE,location, 0.1, 0.1, 0.1, 0.0, 3)
     }
 
 
