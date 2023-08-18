@@ -23,6 +23,8 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.event.entity.PlayerDeathEvent
+import org.bukkit.event.player.PlayerKickEvent
+import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.event.player.PlayerTeleportEvent
 import org.bukkit.event.player.PlayerVelocityEvent
 import org.bukkit.inventory.ItemFlag
@@ -279,7 +281,26 @@ class MWMagician : MWClass() {
         }
         e.entity.walkSpeed=0.2f
     }
+    @EventHandler
+    fun onDisconnect(e:PlayerQuitEvent){
+        if (inCloakCache.contains(e.player)) {
+            inCloakCache.remove(e.player)
+        }
+        if (bluffOutCache.contains(e.player)){
+            bluffOutCache.remove(e.player)
+        }
+    }
+    @EventHandler
+    fun onKick(e:PlayerKickEvent){
+        if (inCloakCache.contains(e.player)) {
+            inCloakCache.remove(e.player)
+        }
+        if (bluffOutCache.contains(e.player)){
+            bluffOutCache.remove(e.player)
+        }
+    }
     fun bluffOut(player: Player,fillOverflow:Boolean){
+        player.sendTitle(null,"BLUFF OUT ACTIVATED")
         val location=player.location
         val fakePlayer= FakePlayer(player)
         bluffOutCache.add(player)
