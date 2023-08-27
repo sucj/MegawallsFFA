@@ -38,7 +38,7 @@ public class MWClassManager implements Listener {
     private final Map<String, MWClass> classes;
     private final Map<Player, MWClass> active;
 
-    private boolean kitLock = true;
+    public Set<MWClass> kitLock=new HashSet<>();
 
     public MWClassManager(MegaWalls instance) {
         this.plugin = instance;
@@ -46,13 +46,6 @@ public class MWClassManager implements Listener {
         this.active = new HashMap<>();
     }
 
-    public boolean getKitLock() {
-        return kitLock;
-    }
-
-    public void setKitLock(boolean lock) {
-        kitLock = lock;
-    }
 
     public void register(MWClass... mwclasses) {
         Arrays.stream(mwclasses).forEach(m -> classes.put(m.getName(), m));
@@ -194,7 +187,7 @@ public class MWClassManager implements Listener {
     }
 
     private void check(Cancellable event, Player player, ItemStack item) {
-        if (ItemUtils.isKitItem(item) && player.getGameMode() == GameMode.SURVIVAL && kitLock) {
+        if (ItemUtils.isKitItem(item) && player.getGameMode() == GameMode.SURVIVAL) {
             event.setCancelled(true);
         }
     }

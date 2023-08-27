@@ -63,6 +63,11 @@ public class MWClassMenu implements Listener {
     }
 
     public void select(Player player, MWClass mwclass) {
+        if (manager.kitLock.contains(mwclass)){
+            player.sendMessage("You cannot select this class because this is locked!Please contact admins.");
+            player.closeInventory();
+            return;
+        }
         player.sendMessage("You have selected " + mwclass.getColor() + mwclass.getName() + ChatColor.RESET + ".");
         player.closeInventory();
 

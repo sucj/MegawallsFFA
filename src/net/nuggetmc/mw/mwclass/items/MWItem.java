@@ -1,8 +1,6 @@
 package net.nuggetmc.mw.mwclass.items;
 
 import net.md_5.bungee.api.ChatColor;
-import net.nuggetmc.mw.MegaWalls;
-import net.nuggetmc.mw.luckdraw.SwordNameManager;
 import net.nuggetmc.mw.mwclass.MWClass;
 import net.nuggetmc.mw.mwclass.classes.MWMole;
 import net.nuggetmc.mw.mwclass.info.EnumInfoType;
@@ -20,13 +18,9 @@ import java.util.List;
 import java.util.Map;
 
 public class MWItem {
-    static SwordNameManager swordNameManager;
 
 
     public static ItemStack createSword(MWClass mwclass, Material type, Map<Enchantment, Integer> enchantments, Player player) {
-        if (swordNameManager == null) {
-            swordNameManager = MegaWalls.getInstance().getSwordNameManager();
-        }
         ItemStack item = new ItemStack(type);
         List<String> lore = new ArrayList<>();
 
@@ -36,11 +30,7 @@ public class MWItem {
         }
 
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(
-                swordNameManager.get(player) == null ?
-                        mwclass.getColor() + mwclass.getName() + (mwclass instanceof MWMole ? " Spade" : " Sword") :
-                        swordNameManager.get(player)
-        );
+        meta.setDisplayName(mwclass.getColor() + mwclass.getName() + (mwclass instanceof MWMole ? " Spade" : " Sword"));
 
         MWClassInfo info = mwclass.getInfo();
 

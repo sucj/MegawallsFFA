@@ -8,7 +8,7 @@ import org.bukkit.command.CommandSender
 import org.bukkit.command.TabCompleter
 import org.bukkit.entity.Player
 
-class getItemCommand : CommandExecutor, TabCompleter {
+class GetItemCommand : CommandExecutor, TabCompleter {
     val groupnames: MutableList<String> = ArrayList()
     val classManager = MegaWalls.getInstance().classManager
 

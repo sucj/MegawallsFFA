@@ -9,9 +9,6 @@ import net.nuggetmc.mw.economics.ShopMenu;
 import net.nuggetmc.mw.energy.EnergyManager;
 import net.nuggetmc.mw.killeffects.KEMenu;
 import net.nuggetmc.mw.killeffects.KillEffectManager;
-import net.nuggetmc.mw.luckdraw.SwordLuckDraw;
-import net.nuggetmc.mw.luckdraw.SwordNameManager;
-import net.nuggetmc.mw.luckdraw.SwordNameRarity;
 import net.nuggetmc.mw.mwclass.MWClass;
 import net.nuggetmc.mw.mwclass.MWClassManager;
 import net.nuggetmc.mw.mwclass.MWClassMenu;
@@ -97,11 +94,6 @@ public class MegaWalls extends JavaPlugin {
 
     private CombatManager combatManager;
 
-    public SwordNameManager getSwordNameManager() {
-        return swordNameManager;
-    }
-
-    private SwordNameManager swordNameManager;
 
     public static MegaWalls getInstance() {
         return INSTANCE;
@@ -140,10 +132,6 @@ public class MegaWalls extends JavaPlugin {
 
     private KEMenu keMenu;
 
-    public boolean antistealDiamond;
-    //it is used to stop players from mining diamonds when there is only themselves.
-    // 主播你不会用Vec3d或者BlockPos或者数组吗
-    // 因为主播是在省电模式写的代码
     public List<Double> redspawn;
     public List<Double> greenspawn;
     public List<Double> bluespawn;
@@ -159,7 +147,6 @@ public class MegaWalls extends JavaPlugin {
     }
 
     static Random random=new Random();
-   public HashMap<SwordNameRarity, List<String>> swordNameMap=new HashMap<>();
     File file;
     public Map<Block, Material> resetMap=new HashMap<>();
     public void tickBlockReset(){
@@ -186,6 +173,9 @@ public class MegaWalls extends JavaPlugin {
     @Override
     public void onEnable() {
         INSTANCE = this;
+        System.out.println("-----------------------------------");
+        System.out.println("--------MEGAWALLSFFA LOADED--------");
+        System.out.println("-----------------------------------");
         //cfg
         try {
             hbrTrueDamage = (double) getConfig().get("hbr_true_damage");
@@ -199,13 +189,6 @@ public class MegaWalls extends JavaPlugin {
         } catch (Exception e) {
             getConfig().set("break_reset_time", 60);
             breakResetTime = 60;
-            saveConfig();
-        }
-        try {
-            antistealDiamond = (getConfig().get("antistealDiamond").equals(true));
-        } catch (Exception e) {
-            getConfig().set("antistealDiamond", true);
-            antistealDiamond = true;
             saveConfig();
         }
         try {
@@ -267,12 +250,10 @@ public class MegaWalls extends JavaPlugin {
         this.compassManager = new CompassManager();
         this.keMenu=new KEMenu();
         this.killEffectManager=new KillEffectManager();
-        this.swordNameManager=new SwordNameManager();
 
         // Register commands
         setExecutor("energy", new EnergyCommand());
-        setExecutor("debug", new DebugCommand());
-        setExecutor("mwinfo", new InfoCommand());
+        setExecutor("kitlock", new KitLockCommand());
         setExecutor("mwspawn", new SetMWSpawnCommand());
         setExecutor("echest", new EchestCommand());
         setExecutor("mwcoins", new MWCoinsCommand());
@@ -283,11 +264,9 @@ public class MegaWalls extends JavaPlugin {
         setExecutor("mwride", new MWRideCommand());
         setExecutor("mwbaltop", new MWBalTopCommand());
         setExecutor("mwmakeride", new MWMakeRideCommand());
-        setExecutor("mwresel", new MWReselCommand());
-        setExecutor("killeffects", new killEffectCommand());
+        setExecutor("killeffects", new KillEffectCommand());
         setExecutor("setwalkspeed",new WalkSpeedCommand());
-        setExecutor("luckdraw",new LuckDrawCommand());
-        setExecutorAndTabCompleter("mwitem", new getItemCommand());
+        setExecutorAndTabCompleter("mwitem", new GetItemCommand());
         setExecutorAndTabCompleter("megawalls", new MegaWallsCommand());
 
         this.registerClasses(
@@ -340,15 +319,6 @@ public class MegaWalls extends JavaPlugin {
             System.out.println("UNABLE TO LOAD swordNames from the config.");
             System.out.println("-------------------------------------------------------------");
             e.printStackTrace();
-        }
-        for (SwordNameRarity swordNameRarity:SwordNameRarity.values()){
-            if (swordNames.getStringList(swordNameRarity.name().toLowerCase()).isEmpty()){
-                swordNames.set(swordNameRarity.name().toLowerCase(),Collections.singletonList(swordNameRarity.name() + "SWORD EXAMPLE"));
-                saveSwordNames();
-            }
-        }
-        for (SwordNameRarity swordNameRarity:SwordNameRarity.values()) {
-            swordNameMap.put(swordNameRarity, swordNames.getStringList(swordNameRarity.name().toLowerCase()));
         }
     }
     public void saveSwordNames(){
