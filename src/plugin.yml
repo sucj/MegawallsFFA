@@ -64,10 +64,13 @@ commands:
     description: give player a megawalls item.
     usage: /mwitem
     permission: mw.admin
-  setwalkspeed:
+  walkspeed:
     description: set a player's walk speed.
-    usage: /setwalkspeed
+    usage: /walkspeed
     permission: mw.admin
+  pay:
+    description: pay coins.
+    usage: /pay
 permissions:
   mw.*:
     description: MegaWalls parent permission.

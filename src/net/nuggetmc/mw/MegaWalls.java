@@ -16,6 +16,7 @@ import net.nuggetmc.mw.mwclass.classes.*;
 import net.nuggetmc.mw.special.*;
 import net.nuggetmc.mw.utils.ItemUtils;
 import net.nuggetmc.mw.utils.MWHealth;
+import net.nuggetmc.mw.utils.ReflectionUtils;
 import net.nuggetmc.mw.utils.WorldUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -170,6 +171,7 @@ public class MegaWalls extends JavaPlugin {
         resetMap.clear();
     }
 
+
     @Override
     public void onEnable() {
         INSTANCE = this;
@@ -265,7 +267,8 @@ public class MegaWalls extends JavaPlugin {
         setExecutor("mwbaltop", new MWBalTopCommand());
         setExecutor("mwmakeride", new MWMakeRideCommand());
         setExecutor("killeffects", new KillEffectCommand());
-        setExecutor("setwalkspeed",new WalkSpeedCommand());
+        setExecutor("pay",new PayCommand());
+        setExecutor("walkspeed",new WalkSpeedCommand());
         setExecutorAndTabCompleter("mwitem", new GetItemCommand());
         setExecutorAndTabCompleter("megawalls", new MegaWallsCommand());
 
