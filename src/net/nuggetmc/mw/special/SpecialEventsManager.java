@@ -489,7 +489,7 @@ public class SpecialEventsManager implements Listener {
                     p.sendMessage("Your " + ChatColor.GOLD + "Speed Boost " + ChatColor.RESET + "expired!");
                 }
             }
-        }, 20 * 20);
+        }, 5 * 20);
 
 
     }
