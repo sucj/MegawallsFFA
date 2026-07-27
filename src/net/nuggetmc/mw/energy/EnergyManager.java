@@ -40,6 +40,7 @@ public class EnergyManager implements Listener {
         Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, this::tick, 20, 20);
         Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, plugin::tickBlockReset, 20, 20L * plugin.breakResetTime);
         Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, this::tickActionBar, 10, 10);
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, this::tickMegaBreaker, 20, 20);
     }
 
     public void tick() {
@@ -80,6 +81,22 @@ public class EnergyManager implements Listener {
             }
             if (manager.get(player).getActionBar(player) != null) {
                 ActionBar.send(player, manager.get(player).getActionBar(player));
+            }
+        }
+    }
+    public void tickMegaBreaker(){
+        for (Player player : Bukkit.getOnlinePlayers()){
+            for (int i = 0; i < player.getInventory().getSize(); i++) {
+                ItemStack item = player.getInventory().getItem(i);
+                if (plugin.getSpecialItemUtils().isMegaBreaker(item)){
+                    if (plugin.getSpecialItemUtils().getMegaBreakerCharges(item)>=50){
+                        continue;
+                    } else if (plugin.getSpecialItemUtils().getMegaBreakerCharges(item) == 49) {
+                        player.getInventory().setItem(i,plugin.getSpecialItemUtils().addMegaBreakerCharges(item,1));
+                    }else {
+                    player.getInventory().setItem(i,plugin.getSpecialItemUtils().addMegaBreakerCharges(item,2));
+                    }
+                }
             }
         }
     }

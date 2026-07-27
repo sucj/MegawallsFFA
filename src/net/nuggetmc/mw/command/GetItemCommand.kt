@@ -21,6 +21,7 @@ class GetItemCommand : CommandExecutor, TabCompleter {
         groupnames.add("aotv")
         groupnames.add("hype")
         groupnames.add("term")
+        groupnames.add("megabreaker")
     }
 
     val si = MegaWalls.getInstance().specialItemUtils
@@ -62,6 +63,7 @@ class GetItemCommand : CommandExecutor, TabCompleter {
                 "aotv" -> si.aotv
                 "hype" -> si.hyperion
                 "term" -> si.term
+                "megabreaker" -> si.getMegaBreaker(50)
                 else -> {
                     null
                 }

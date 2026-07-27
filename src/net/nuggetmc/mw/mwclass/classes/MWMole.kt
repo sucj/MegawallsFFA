@@ -1,6 +1,7 @@
 package net.nuggetmc.mw.mwclass.classes
 
 import net.md_5.bungee.api.ChatColor
+import net.minecraft.server.v1_8_R3.BlockPosition
 import net.nuggetmc.mw.mwclass.MWClass
 import net.nuggetmc.mw.mwclass.info.Diamond
 import net.nuggetmc.mw.mwclass.info.MWClassInfo
@@ -14,8 +15,10 @@ import net.nuggetmc.mw.utils.ItemUtils
 import net.nuggetmc.mw.utils.LocationUtils
 import net.nuggetmc.mw.utils.PlayerUtils
 import org.bukkit.Bukkit
+import org.bukkit.Effect
 import org.bukkit.Location
 import org.bukkit.Material
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
@@ -250,10 +253,11 @@ class MWMole : MWClass() {
         }
     }
 
+
     override fun getActionBar(player: Player?): String {
         return ActionBar.joinActionBar(
             this.color.toString() + ChatColor.BOLD + "ShortCut " + ChatColor.RESET + ChatColor.RESET + shortCut[player] + ChatColor.RESET,
-            this.color.toString() + ChatColor.BOLD + "Junk Apple " + ChatColor.RESET + ChatColor.RESET + junkApple[player] + ChatColor.RESET
+            this.color.toString() + ChatColor.BOLD + "Junk Apple " + ChatColor.RESET + ChatColor.RESET + junkApple[player] + "/100" + ChatColor.RESET
         )
     }
 }

@@ -5,6 +5,7 @@ import com.joshargent.RegionPreserve.RegionPreservePlugin;
 import fr.bukkit.effectkill.utils.Particle;
 import io.isles.nametagapi.NametagAPI;
 import net.md_5.bungee.api.ChatColor;
+import net.minecraft.server.v1_8_R3.BlockPosition;
 import net.nuggetmc.mw.MegaWalls;
 import net.nuggetmc.mw.mwclass.classes.MWCow;
 import net.nuggetmc.mw.mwclass.classes.MWMole;
@@ -13,6 +14,7 @@ import net.nuggetmc.mw.utils.ItemUtils;
 import net.nuggetmc.mw.utils.PlayerUtils;
 import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -180,17 +182,17 @@ public class SpecialEventsManager implements Listener {
         Arrow a3;
         if (canfire.get(player)) {
             canfire.put(player, false);
-            a1 = player.launchProjectile(Arrow.class);
+            a1 = player.<Arrow>launchProjectile(Arrow.class);
             a1.setVelocity(a1.getVelocity().multiply(2.5));
             a1.setMetadata(MegaWalls.getMetadataValue(), MegaWalls.getFixedMetadataValue());
 
-            a2 = player.launchProjectile(Arrow.class);
+            a2 = player.<Arrow>launchProjectile(Arrow.class);
 
             a2.setCustomName("terminator");
             a2.setVelocity(rotateVector(a1.getVelocity(), 50.38));
             a2.setMetadata(MegaWalls.getMetadataValue(), MegaWalls.getFixedMetadataValue());
 
-            a3 = player.launchProjectile(Arrow.class);
+            a3 = player.<Arrow>launchProjectile(Arrow.class);
 
             a3.setCustomName("terminator");
             a3.setMetadata(MegaWalls.getMetadataValue(), MegaWalls.getFixedMetadataValue());
@@ -680,6 +682,24 @@ public class SpecialEventsManager implements Listener {
                 }
             }
         }
+    }
+    @EventHandler
+    public void onMegaBreaker(PlayerInteractEvent e) {
+        Player p = e.getPlayer();
+
+        if (!e.getAction().name().contains("LEFT")) return;
+        if (p.getItemInHand() == null) return;
+        if (!plugin.getSpecialItemUtils().isMegaBreaker(p.getItemInHand())) return;
+
+        if (plugin.getSpecialItemUtils().getMegaBreakerCharges(p.getItemInHand())<=0) return;
+
+        Block clickedBlock = e.getClickedBlock();
+        if (clickedBlock == null || clickedBlock.getType() == Material.AIR) return;
+
+        ((CraftPlayer) p).getHandle().playerInteractManager.breakBlock(
+                new BlockPosition(clickedBlock.getX(), clickedBlock.getY(), clickedBlock.getZ())
+        );
+        p.setItemInHand(plugin.getSpecialItemUtils().addMegaBreakerCharges(p.getItemInHand(),-1));
     }
 
 
