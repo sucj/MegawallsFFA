@@ -22,6 +22,8 @@ import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -41,6 +43,7 @@ public class EnergyManager implements Listener {
         Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, plugin::tickBlockReset, 20, 20L * plugin.breakResetTime);
         Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, this::tickActionBar, 10, 10);
         Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, this::tickMegaBreaker, 20, 20);
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, this::tickMegaBreakerSlowness, 5, 5);
     }
 
     public void tick() {
@@ -97,6 +100,17 @@ public class EnergyManager implements Listener {
                     player.getInventory().setItem(i,plugin.getSpecialItemUtils().addMegaBreakerCharges(item,2));
                     }
                 }
+            }
+        }
+    }
+    public void tickMegaBreakerSlowness(){
+        if (!MegaWalls.getInstance().balancedMegaBreaker){
+            return;
+        }
+
+        for (Player player : Bukkit.getOnlinePlayers()){
+            if (plugin.getSpecialItemUtils().isMegaBreaker(player.getItemInHand())){
+                player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,5,3));
             }
         }
     }

@@ -140,6 +140,7 @@ public class MegaWalls extends JavaPlugin {
     public int breakResetTime;
     public double hbrTrueDamage= 2.5;
     public int swordLuckDrawPrice;
+    public boolean balancedMegaBreaker = false;
 
     FileConfiguration swordNames;
 
@@ -234,6 +235,12 @@ public class MegaWalls extends JavaPlugin {
         } catch (Exception e) {
             getConfig().set("swordLuckDrawPrice", 500);
             hbrTrueDamage = 500;
+            saveConfig();
+        }
+        try {
+            balancedMegaBreaker = getConfig().getBoolean("balancedMegaBreaker");
+        } catch (Exception e) {
+            getConfig().set("balancedMegaBreaker", true);
             saveConfig();
         }
         // Create instances

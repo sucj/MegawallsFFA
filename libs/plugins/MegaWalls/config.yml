@@ -1,6 +1,3 @@
-use_chinese: false
-antistealDiamond: true
-opbypassgamemode: false
 shop:
   price:
     Golden Apple: 16
