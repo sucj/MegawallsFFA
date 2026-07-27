@@ -266,7 +266,7 @@ public class SpecialItemUtils {
         List<String> lore = new ArrayList<>();
 
 
-        item.addUnsafeEnchantment(Enchantment.DIG_SPEED, 1);
+        item.addUnsafeEnchantment(Enchantment.DAMAGE_ALL, 1);
 
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(ChatColor.GOLD + "Mega Breaker");
