@@ -696,6 +696,7 @@ public class SpecialEventsManager implements Listener {
         Block clickedBlock = e.getClickedBlock();
         if (clickedBlock == null || clickedBlock.getType() == Material.AIR) return;
         if (clickedBlock.getType()==Material.BEDROCK) return;
+        if (clickedBlock.getType()==Material.BARRIER) return;
         ((CraftPlayer) p).getHandle().playerInteractManager.breakBlock(
                 new BlockPosition(clickedBlock.getX(), clickedBlock.getY(), clickedBlock.getZ())
         );
