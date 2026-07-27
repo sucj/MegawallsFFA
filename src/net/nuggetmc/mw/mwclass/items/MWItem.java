@@ -69,7 +69,7 @@ public class MWItem {
         lore.add("");
 
         lore.add(ChatColor.GOLD + "Ability:Speed Boost " + ChatColor.YELLOW + ChatColor.BOLD + "RIGHT CLICK");
-        lore.add(ChatColor.GRAY + "Grants you a walk speed boost for " + ChatColor.GREEN + "5s" + ChatColor.GRAY + ".");
+        lore.add(ChatColor.GRAY + "Grants you a walk speed boost for " + ChatColor.GREEN + "20s" + ChatColor.GRAY + ".");
         lore.add(ChatColor.RED.toString() + ChatColor.BOLD + "CANT BE USED WHEN THERE'S ANY ENEMY WITHIN " + ChatColor.GREEN + ChatColor.BOLD + "50 " + ChatColor.RED + ChatColor.BOLD + "blocks!");
         lore.add("Cooldown:40s");
         lore.add("");

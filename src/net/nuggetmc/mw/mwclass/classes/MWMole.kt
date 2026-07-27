@@ -184,7 +184,7 @@ class MWMole : MWClass() {
         val player = event.player
         if (manager[player] === this) {
             when (event.block.type) {
-                Material.SNOW_BLOCK, Material.SNOW, Material.GRASS, Material.DIRT, Material.SAND, Material.GRAVEL
+                Material.SNOW_BLOCK, Material.SNOW, Material.GRASS, Material.DIRT, Material.SAND, Material.GRAVEL,Material.NETHERRACK
                 -> {
                     if (!shortCut.containsKey(player)) {
                         shortCut.put(player, 1)
