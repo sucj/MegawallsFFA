@@ -534,25 +534,7 @@ public class SpecialEventsManager implements Listener {
             }
         }
     }
-    @EventHandler
-    public void onMegaBreaker(PlayerInteractEvent e) {
-        Player p = e.getPlayer();
 
-        if (!e.getAction().name().contains("LEFT")) return;
-        if (p.getItemInHand() == null) return;
-        if (!plugin.getSpecialItemUtils().isMegaBreaker(p.getItemInHand())) return;
-
-        if (plugin.getSpecialItemUtils().getMegaBreakerCharges(p.getItemInHand())<=0) return;
-
-        Block clickedBlock = e.getClickedBlock();
-        if (clickedBlock == null || clickedBlock.getType() == Material.AIR) return;
-        if (clickedBlock.getType()==Material.BEDROCK) return;
-        if (clickedBlock.getType()==Material.BARRIER) return;
-        ((CraftPlayer) p).getHandle().playerInteractManager.breakBlock(
-                new BlockPosition(clickedBlock.getX(), clickedBlock.getY(), clickedBlock.getZ())
-        );
-        p.setItemInHand(plugin.getSpecialItemUtils().addMegaBreakerCharges(p.getItemInHand(),-1));
-    }
 
 
 }

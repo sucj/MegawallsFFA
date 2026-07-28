@@ -4,6 +4,7 @@ import net.nuggetmc.mw.MegaWalls
 import net.nuggetmc.mw.mwclass.items.MWPotions
 import net.nuggetmc.mw.special.specialItems.AOTV
 import net.nuggetmc.mw.special.specialItems.Hyperion
+import net.nuggetmc.mw.special.specialItems.MegaBreaker
 import net.nuggetmc.mw.special.specialItems.Terminator
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
@@ -66,7 +67,7 @@ class GetItemCommand : CommandExecutor, TabCompleter {
                 "aotv" -> AOTV.buildItem()
                 "hype" -> Hyperion.buildItem()
                 "term" -> Terminator.buildItem()
-                "megabreaker" -> si.getMegaBreaker(50)
+                "megabreaker" -> MegaBreaker.buildMegaBreaker(50)
                 else -> {
                     null
                 }

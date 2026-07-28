@@ -7,6 +7,7 @@ import net.nuggetmc.mw.mwclass.classes.MWDriver;
 import net.nuggetmc.mw.mwclass.classes.MWGoldenDragon;
 import net.nuggetmc.mw.mwclass.classes.MWMagician;
 import net.nuggetmc.mw.mwclass.classes.MWMole;
+import net.nuggetmc.mw.special.specialItems.MegaBreaker;
 import net.nuggetmc.mw.utils.ActionBar;
 import net.nuggetmc.mw.utils.ItemUtils;
 import org.bukkit.Bukkit;
@@ -91,13 +92,13 @@ public class EnergyManager implements Listener {
         for (Player player : Bukkit.getOnlinePlayers()){
             for (int i = 0; i < player.getInventory().getSize(); i++) {
                 ItemStack item = player.getInventory().getItem(i);
-                if (plugin.getSpecialItemUtils().isMegaBreaker(item)){
-                    if (plugin.getSpecialItemUtils().getMegaBreakerCharges(item)>=50){
+                if (MegaBreaker.INSTANCE.check(item)){
+                    if (MegaBreaker.INSTANCE.getMegaBreakerCharges(item)>=50){
                         continue;
-                    } else if (plugin.getSpecialItemUtils().getMegaBreakerCharges(item) == 49) {
-                        player.getInventory().setItem(i,plugin.getSpecialItemUtils().addMegaBreakerCharges(item,1));
+                    } else if (MegaBreaker.INSTANCE.getMegaBreakerCharges(item) == 49) {
+                        player.getInventory().setItem(i,MegaBreaker.INSTANCE.addMegaBreakerCharges(item,1));
                     }else {
-                    player.getInventory().setItem(i,plugin.getSpecialItemUtils().addMegaBreakerCharges(item,2));
+                    player.getInventory().setItem(i,MegaBreaker.INSTANCE.addMegaBreakerCharges(item,2));
                     }
                 }
             }
@@ -109,7 +110,7 @@ public class EnergyManager implements Listener {
         }
 
         for (Player player : Bukkit.getOnlinePlayers()){
-            if (plugin.getSpecialItemUtils().isMegaBreaker(player.getItemInHand())){
+            if (MegaBreaker.INSTANCE.check(player.getItemInHand())){
                 player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,5,3));
             }
         }

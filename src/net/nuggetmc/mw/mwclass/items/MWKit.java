@@ -4,6 +4,7 @@ package net.nuggetmc.mw.mwclass.items;
 import net.nuggetmc.mw.MegaWalls;
 import net.nuggetmc.mw.mwclass.MWClass;
 import net.nuggetmc.mw.mwclass.classes.MWMole;
+import net.nuggetmc.mw.special.specialItems.MegaBreaker;
 import net.nuggetmc.mw.utils.ItemStackCreator;
 import net.nuggetmc.mw.utils.ItemUtils;
 import org.bukkit.Material;
@@ -62,7 +63,7 @@ public class MWKit {
         }
         contents.add(is);
 
-        ItemStack megaBreaker = MegaWalls.getInstance().getSpecialItemUtils().getMegaBreaker(50);
+        ItemStack megaBreaker = MegaBreaker.INSTANCE.buildMegaBreaker(50);
         contents.add(megaBreaker);
         //contents.add(new ItemStack(Material.ARROW, 48));
         contents.add(new ItemStack(Material.STONE, 64));
