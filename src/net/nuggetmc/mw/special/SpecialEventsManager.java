@@ -49,7 +49,7 @@ public class SpecialEventsManager implements Listener {
         return instance;
     }
 
-    public static HashMap<Player, Boolean> canfire = new HashMap<>();
+
 
     public SpecialEventsManager() {
         this.plugin = MegaWalls.getInstance();
@@ -166,71 +166,11 @@ public class SpecialEventsManager implements Listener {
                 plugin.getCompassManager().changeTrackingTarget(player);
             }
         }
-        if (e.getItem().getType().equals(Material.BOW)) {
-            if (Terminator.INSTANCE.check(e.getItem())) {
-                termClick(e.getPlayer());
-            }
-        }
-
     }
 
-    private void termClick(Player player) {
-        if (!canfire.containsKey(player)) {
-            canfire.put(player, true);
-        }
-        Arrow a1;
-        Arrow a2;
-        Arrow a3;
-        if (canfire.get(player)) {
-            canfire.put(player, false);
-            a1 = player.<Arrow>launchProjectile(Arrow.class);
-            a1.setVelocity(a1.getVelocity().multiply(2.5));
-            a1.setMetadata(MegaWalls.getMetadataValue(), MegaWalls.getFixedMetadataValue());
 
-            a2 = player.<Arrow>launchProjectile(Arrow.class);
 
-            a2.setCustomName("terminator");
-            a2.setVelocity(rotateVector(a1.getVelocity(), 50.38));
-            a2.setMetadata(MegaWalls.getMetadataValue(), MegaWalls.getFixedMetadataValue());
 
-            a3 = player.<Arrow>launchProjectile(Arrow.class);
-
-            a3.setCustomName("terminator");
-            a3.setMetadata(MegaWalls.getMetadataValue(), MegaWalls.getFixedMetadataValue());
-            player.playSound(player.getLocation(), Sound.SHOOT_ARROW, 1, 1);
-            a3.setVelocity(rotateVector(a1.getVelocity(), -50.38));
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    if (a1.isValid()) {
-                        a1.remove();
-                    }
-                    if (a2.isValid()) {
-                        a2.remove();
-                    }
-                    if (a3.isValid()) {
-                        a3.remove();
-                    }
-                }
-            }.runTaskLater(plugin, 300);
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    canfire.put(player, true);
-                }
-            }.runTaskLater(plugin, 3);
-
-        }
-    }
-
-    public Vector rotateVector(Vector vector, double whatAngle) {
-        double cos = Math.cos(whatAngle);
-        double sin = Math.sin(whatAngle);
-        double x = vector.getX() * cos + vector.getZ() * sin;
-        double z = vector.getX() * -sin + vector.getZ() * cos;
-
-        return vector.setX(x).setZ(z);
-    }
 
     ///////////////////////////EXPORB
     @EventHandler
@@ -519,100 +459,9 @@ public class SpecialEventsManager implements Listener {
         }
     }
 
-    //AOTV
-    @EventHandler
-    public void onAOTV(PlayerInteractEvent e) {
-        Player p = e.getPlayer();
-        if (!e.getAction().name().contains("RIGHT")) return;
-        if (p.getItemInHand() == null || p.getItemInHand().getType() == Material.AIR) return;
-        if (!specialItemUtils.isAOTV(e.getItem())) return;
-        if(p.isSneaking()){
-            Block block = p.getTargetBlock((HashSet<Byte>) null,56);
-            if(block == null)
-                return;
-            if(checkValid(block)) {
-                Location loc = block.getLocation().add(0.5, 1, 0.5);
-                loc.setYaw(p.getLocation().getYaw());
-                loc.setPitch(p.getLocation().getPitch());
-                p.teleport(loc);
-            }
-        }else {
-            teleport(p);
-        }
-        p.playSound(p.getLocation(), Sound.ENDERMAN_TELEPORT, 0.2f, 2f);
-
-    }
-    private boolean checkValid(Block block){
-
-        Location loc1 = block.getLocation().clone().add(0,1,1);
-        Location loc2 = block.getLocation().clone().add(0,2,1);
-        if((canBePassed(loc1.getBlock()) || loc1.getBlock().isEmpty() || loc1.getBlock().isLiquid()) && (canBePassed(loc2.getBlock()) || loc2.getBlock().isEmpty() || loc2.getBlock().isLiquid()))
-            return true;
-        return false;
-    }
-
-    public void teleport(Player player) {
-        Location mainLoc = player.getEyeLocation();
-        for (int i = 1; i <= 8 * 2; i++) {
-            Location loc = player.getLocation();
-            Vector dir = loc.getDirection();
-            dir.normalize();
-            dir.multiply(0.5); //1 blocks a way
-            mainLoc.add(dir);
-
-            if (mainLoc.getBlock().isEmpty() || mainLoc.getBlock().isLiquid() || canBePassed(mainLoc.getBlock())) {
-                player.teleport(mainLoc);
-                player.setFallDistance(0);
-            } else break;
-        }
-    }
-
-    public static boolean canBePassed(Block block) {
-        switch (block.getType()) {
-            case YELLOW_FLOWER:
-            case LONG_GRASS:
-            case AIR:
-            case DOUBLE_PLANT:
-                return true;
-            default:
-                return false;
-        }
-    }
-
-    public void triggerHypeAbility(Player player) {
-        player.setVelocity(player.getVelocity().setY(0));
-        if (player.getEyeLocation().add(0, 1, 0).getBlock().isEmpty() || player.getEyeLocation().add(0, 1, 0).getBlock().isLiquid()) {
-            player.teleport(player.getLocation().add(0, 1, 0));
-        }
-        teleport(player);
-        player.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 60, 0), true);
-        player.getWorld().playSound(player.getLocation(), Sound.ZOMBIE_REMEDY, 0.2f, 2f);
-        Particle.play(player.getLocation().add(0.0, 0.5, 0.0), Effect.EXPLOSION_LARGE);
-        List<Player> close = PlayerUtils.getNearbyEnemies(player, 6);
-        close.remove(player);
-        for (Player target : close) {
-            Vector velocity = target.getVelocity();
-            MegaWalls.getInstance().getMWHealth().trueDamage(target, 2, player);
-            target.setVelocity(velocity);//so that using this ability won't change the targets' velocity
 
 
-        }
-        if (close.size() != 0) {
-            player.sendMessage("Your " + ChatColor.RED + "Implosion " + ChatColor.RESET + "hit " + ChatColor.RED + close.size() + ChatColor.RESET + " enemy.");
-        }
-        player.getWorld().playSound(player.getLocation(), Sound.EXPLODE, 0.4f, 1.2f);
-    }
 
-    //Hype
-    @EventHandler
-    public void onHyperion(PlayerInteractEvent e) {
-        Player p = e.getPlayer();
-        if (!e.getAction().name().contains("RIGHT")) return;
-        if (p.getItemInHand() == null || p.getItemInHand().getType() == Material.AIR) return;
-        if (!specialItemUtils.isHyperion(e.getItem())) return;
-        triggerHypeAbility(p);
-
-    }
     @EventHandler
     public void onCraft(CraftItemEvent e){
         if (e.getRecipe().getResult().getType().equals(Material.DIAMOND_BLOCK)){
@@ -633,6 +482,7 @@ public class SpecialEventsManager implements Listener {
         }
         return false;
     }
+    //SWITCH BETWEEN AOTR AND TERM
     @EventHandler
     public void onHeldItemChange(PlayerItemHeldEvent e){
         Player player=e.getPlayer();

@@ -44,7 +44,7 @@ public class MegaWalls extends JavaPlugin {
 
     private static MegaWalls INSTANCE;
 
-    private PluginManager pluginManager;
+    public PluginManager pluginManager;
     private MWClassManager mwClassManager;
     private MWClassMenu mwClassMenu;
     private ShopMenu shopMenu;

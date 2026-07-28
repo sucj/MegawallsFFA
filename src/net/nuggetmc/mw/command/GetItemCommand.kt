@@ -2,6 +2,8 @@ package net.nuggetmc.mw.command
 
 import net.nuggetmc.mw.MegaWalls
 import net.nuggetmc.mw.mwclass.items.MWPotions
+import net.nuggetmc.mw.special.specialItems.AOTV
+import net.nuggetmc.mw.special.specialItems.Hyperion
 import net.nuggetmc.mw.special.specialItems.Terminator
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
@@ -61,8 +63,8 @@ class GetItemCommand : CommandExecutor, TabCompleter {
                 "squpot" -> si.getSquidPot(amount)
                 "golempot" -> si.getGolemPot(amount)
                 "milk" -> si.getCowBucket(amount)
-                "aotv" -> si.aotv
-                "hype" -> si.hyperion
+                "aotv" -> AOTV.buildItem()
+                "hype" -> Hyperion.buildItem()
                 "term" -> Terminator.buildItem()
                 "megabreaker" -> si.getMegaBreaker(50)
                 else -> {

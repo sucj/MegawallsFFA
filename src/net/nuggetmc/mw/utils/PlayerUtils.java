@@ -5,9 +5,11 @@ import net.nuggetmc.mw.MegaWalls;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -107,6 +109,41 @@ public class PlayerUtils {
             }
         }
         return players;
+    }
+    public static void teleport(Player player) {
+        Location mainLoc = player.getEyeLocation();
+        for (int i = 1; i <= 8 * 2; i++) {
+            Location loc = player.getLocation();
+            Vector dir = loc.getDirection();
+            dir.normalize();
+            dir.multiply(0.5); //1 blocks a way
+            mainLoc.add(dir);
+
+            if (mainLoc.getBlock().isEmpty() || mainLoc.getBlock().isLiquid() || canBePassed(mainLoc.getBlock())) {
+                player.teleport(mainLoc);
+                player.setFallDistance(0);
+            } else break;
+        }
+    }
+    public static boolean canBePassed(Block block) {
+        switch (block.getType()) {
+            case YELLOW_FLOWER:
+            case LONG_GRASS:
+            case AIR:
+            case DOUBLE_PLANT:
+                return true;
+            default:
+                return false;
+        }
+    }
+    public static boolean checkValid(Block block){
+
+        Location loc1 = block.getLocation().clone().add(0,1,1);
+        Location loc2 = block.getLocation().clone().add(0,2,1);
+        if((canBePassed(loc1.getBlock()) || loc1.getBlock().isEmpty() || loc1.getBlock().isLiquid()) && (canBePassed(loc2.getBlock()) || loc2.getBlock().isEmpty() || loc2.getBlock().isLiquid())) {
+            return true;
+        }
+        return false;
     }
 
 
