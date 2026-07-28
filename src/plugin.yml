@@ -71,6 +71,9 @@ commands:
   pay:
     description: pay coins.
     usage: /pay
+  mk2:
+    description: ride on a mk2.
+    usage: /mk2
 permissions:
   mw.*:
     description: MegaWalls parent permission.

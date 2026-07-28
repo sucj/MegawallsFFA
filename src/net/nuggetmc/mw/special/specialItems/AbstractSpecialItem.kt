@@ -23,7 +23,8 @@ abstract class AbstractSpecialItem: Listener {
             MegaWalls.getInstance().pluginManager.registerEvents(this,MegaWalls.getInstance())
         }
     }
-    open fun check(itemStack: ItemStack): Boolean{
+    open fun check(itemStack: ItemStack?): Boolean{
+        if (itemStack==null) return false
         val nmsItem = CraftItemStack.asNMSCopy(itemStack)
         if (nmsItem == null) return false
 

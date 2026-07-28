@@ -80,7 +80,7 @@ public class MegaWalls extends JavaPlugin {
     }
 
     public KillEffectManager killEffectManager;
-
+    public MK2 mk2;
 
 
 
@@ -259,6 +259,7 @@ public class MegaWalls extends JavaPlugin {
         this.compassManager = new CompassManager();
         this.keMenu=new KEMenu();
         this.killEffectManager=new KillEffectManager();
+        this.mk2 = new MK2();
 
         // Register commands
         setExecutor("energy", new EnergyCommand());
@@ -276,6 +277,7 @@ public class MegaWalls extends JavaPlugin {
         setExecutor("killeffects", new KillEffectCommand());
         setExecutor("pay",new PayCommand());
         setExecutor("walkspeed",new WalkSpeedCommand());
+        setExecutor("mk2",new MK2Command());
         setExecutorAndTabCompleter("mwitem", new GetItemCommand());
         setExecutorAndTabCompleter("megawalls", new MegaWallsCommand());
 
@@ -313,7 +315,8 @@ public class MegaWalls extends JavaPlugin {
                 this.specialEventsManager,
                 this.teamsManager,
                 this.keMenu,
-                new WorldUtils()
+                new WorldUtils(),
+                this.mk2
         );
 
         // this.restore();
