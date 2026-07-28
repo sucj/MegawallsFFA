@@ -1,23 +1,29 @@
 package net.nuggetmc.mw.special
 
-import net.minecraft.server.v1_8_R3.EntityPig
+import net.minecraft.server.v1_8_R3.EntityFireball
 import net.nuggetmc.mw.MegaWalls
+import net.nuggetmc.mw.special.specialItems.MegaBreaker
+import net.nuggetmc.mw.special.specialItems.MegaBreaker.addMegaBreakerCharges
+import net.nuggetmc.mw.special.specialItems.MegaBreaker.getMegaBreakerCharges
 import net.nuggetmc.mw.utils.PlayerUtils.getNearbyEnemies
+import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.entity.Entity
+import org.bukkit.entity.EntityType
 import org.bukkit.entity.Fireball
 import org.bukkit.entity.Pig
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
+import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.scheduler.BukkitRunnable
 import org.bukkit.util.Vector
-import java.util.ArrayList
 
 
 class MK2 : Listener {
     val onPig : Map<Player, Pig> = HashMap()
+    val inCD : HashSet<Player> = HashSet()
     fun launchPig(player: Player){
         val pig = PigManager.spawnInvinciblePig(player.location)
         pig.passenger = player
@@ -25,8 +31,9 @@ class MK2 : Listener {
             var ticks = 0
             var damaged: MutableList<Player> = ArrayList()
             override fun run() {
-                if (pig.isDead || player.isDead || pig.passenger==null || ticks >= 600
+                if (pig.isDead || player.isDead || pig.passenger==null /*|| ticks >= 600*/
                 ) {
+                    player.inventory.remove(Material.CARROT_STICK)
                     pig.remove()
                     pig.velocity = Vector(0.0, 0.0, 0.0)
                     cancel()
@@ -48,13 +55,33 @@ class MK2 : Listener {
     @EventHandler
     fun onRC(e: PlayerInteractEvent){
         val player = e.getPlayer()
-        if (player.itemInHand == null || player.itemInHand.getType() == Material.AIR) return
+        if (player.itemInHand == null || player.itemInHand.type == Material.AIR) return
+        if (inCD.contains(player)){
+            return
+        }
         if (player.itemInHand.type.equals(Material.CARROT_STICK)){
-            //launchGhastFireball(p)
-            launchPig(player)
+            launchGhastFireball(player)
+            inCD.add(player)
+            object : BukkitRunnable() {
+                override fun run() {
+                    inCD.remove(player)
+                }
+            }.runTaskLater(MegaWalls.getInstance(), 5)
         }
     }
-
+    @EventHandler
+    fun antiHitSelfPig(e: EntityDamageByEntityEvent){
+        if (e.damager is Fireball&&(e.damager as Fireball).shooter is Player){
+            println("FB,player")
+            if (e.entity.type== EntityType.PIG){
+                val uuid = ((e.damager as Fireball).shooter as Player).uniqueId
+                if (e.entity.passenger.uniqueId.equals(uuid)){
+                    println("CANCEL")
+                    e.isCancelled = true
+                }
+            }
+        }
+    }
     fun launchGhastFireball(player: Player) {
         // 1. 让玩家生成并发射一个大火球（Fireball 代表恶魂火球，SmallFireball 代表烈焰人小火球）
         val fireball = player.launchProjectile(Fireball::class.java)
@@ -66,12 +93,12 @@ class MK2 : Listener {
 
         // 3. 设置火球的飞行速度和方向（朝向玩家视线方向）
         val direction: Vector = player.getLocation().getDirection()
-        fireball.velocity = direction.multiply(1.5) // 1.5 为速度系数，可自由调整
+        fireball.velocity = direction.multiply(1) // 1.5 为速度系数，可自由调整
 
 
         // 4. 设置恶魂火球特有的属性：方向向量与爆炸威力
         fireball.setDirection(direction)
-        fireball.setYield(1.0f) // 爆炸威力（恶魂默认值为 1.0）
+        fireball.setYield(2.5f) // 爆炸威力（恶魂默认值为 1.0）
         fireball.setIsIncendiary(true) // 是否产生火焰（设置为 true 会在爆炸处着火）
     }
 }

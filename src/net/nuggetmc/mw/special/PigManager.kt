@@ -25,7 +25,7 @@ object PigManager {
         val pig = location.world.spawnEntity(location, EntityType.PIG) as Pig
         
         // 1. 设置基本 Bukkit 属性
-        pig.customName = "§c无敌神猪"
+        pig.customName = "§c暴君 马克猪"
         pig.isCustomNameVisible = true
         pig.setSaddle(true)
 
