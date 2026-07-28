@@ -10,6 +10,7 @@ import net.nuggetmc.mw.MegaWalls;
 import net.nuggetmc.mw.mwclass.classes.MWCow;
 import net.nuggetmc.mw.mwclass.classes.MWMole;
 import net.nuggetmc.mw.mwclass.items.MWItem;
+import net.nuggetmc.mw.special.specialItems.Terminator;
 import net.nuggetmc.mw.utils.ItemUtils;
 import net.nuggetmc.mw.utils.PlayerUtils;
 import org.bukkit.*;
@@ -166,7 +167,7 @@ public class SpecialEventsManager implements Listener {
             }
         }
         if (e.getItem().getType().equals(Material.BOW)) {
-            if (specialItemUtils.isTerm(e.getItem())) {
+            if (Terminator.INSTANCE.check(e.getItem())) {
                 termClick(e.getPlayer());
             }
         }
@@ -513,7 +514,7 @@ public class SpecialEventsManager implements Listener {
         if (e.getItem().hasMetadata(MegaWalls.getMetadataValue())) {
             e.setCancelled(true);
         }
-        if (e.getItem().getType().equals(Material.ARROW)){
+        if (e.getItem().getItemStack().getType().equals(Material.ARROW)){
             e.setCancelled(true);
         }
     }
@@ -638,7 +639,7 @@ public class SpecialEventsManager implements Listener {
         ItemStack newSlotItem=player.getInventory().getItem(e.getNewSlot());
         ItemStack previousItem=player.getInventory().getItem(e.getPreviousSlot());
 
-        if (verify(newSlotItem)&& newSlotItem.getType().equals(Material.BOW)&&!specialItemUtils.isTerm(newSlotItem)){
+        if (verify(newSlotItem)&& newSlotItem.getType().equals(Material.BOW)&&!Terminator.INSTANCE.check(newSlotItem)){
             for (int i = 0; i < player.getInventory().getSize(); i++) {
                 ItemStack itemStack = player.getInventory().getItem(i);
                 if (verify(itemStack)&& itemStack.getItemMeta()!=null&&itemStack.getItemMeta().hasDisplayName()&& itemStack.getItemMeta().getDisplayName().toLowerCase().contains("rogues")){
@@ -646,7 +647,7 @@ public class SpecialEventsManager implements Listener {
                     break;
                 }
             }
-        } else if (verify(previousItem)&&previousItem.getType().equals(Material.BOW)&&!specialItemUtils.isTerm(previousItem)) {
+        } else if (verify(previousItem)&&previousItem.getType().equals(Material.BOW)&&!Terminator.INSTANCE.check(previousItem)) {
             for (int i = 0; i < player.getInventory().getSize(); i++) {
                 ItemStack itemStack = player.getInventory().getItem(i);
                 if (itemStack == null) continue;
