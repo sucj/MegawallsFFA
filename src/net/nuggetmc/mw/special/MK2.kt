@@ -1,18 +1,9 @@
 package net.nuggetmc.mw.special
 
-import net.minecraft.server.v1_8_R3.EntityFireball
 import net.nuggetmc.mw.MegaWalls
-import net.nuggetmc.mw.special.specialItems.MegaBreaker
-import net.nuggetmc.mw.special.specialItems.MegaBreaker.addMegaBreakerCharges
-import net.nuggetmc.mw.special.specialItems.MegaBreaker.getMegaBreakerCharges
 import net.nuggetmc.mw.utils.PlayerUtils.getNearbyEnemies
-import org.bukkit.Bukkit
 import org.bukkit.Material
-import org.bukkit.entity.Entity
-import org.bukkit.entity.EntityType
-import org.bukkit.entity.Fireball
-import org.bukkit.entity.Pig
-import org.bukkit.entity.Player
+import org.bukkit.entity.*
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.entity.EntityDamageByEntityEvent
@@ -55,6 +46,9 @@ class MK2 : Listener {
     @EventHandler
     fun onRC(e: PlayerInteractEvent){
         val player = e.getPlayer()
+        if (!MegaWalls.getInstance().getClassManager().isMW(player)) {
+            return
+        }
         if (player.itemInHand == null || player.itemInHand.type == Material.AIR) return
         if (inCD.contains(player)){
             return

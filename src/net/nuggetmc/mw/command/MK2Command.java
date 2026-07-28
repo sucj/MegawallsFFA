@@ -19,6 +19,9 @@ public class MK2Command implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (sender instanceof Player) {
             Player player = (Player) sender;
+            if (!MegaWalls.getInstance().getClassManager().isMW(player)){
+                return true;
+            }
             player.setItemInHand(new ItemStack(Material.CARROT_STICK));
             MegaWalls.getInstance().mk2.launchPig(player);
             return true;
