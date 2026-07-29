@@ -1,6 +1,15 @@
 package net.nuggetmc.mw;
 
 
+import com.dragoncommissions.mixbukkit.MixBukkit;
+import com.dragoncommissions.mixbukkit.addons.AutoMapper;
+import com.dragoncommissions.mixbukkit.api.MixinPlugin;
+import com.dragoncommissions.mixbukkit.api.action.impl.MActionInsertShellCode;
+import com.dragoncommissions.mixbukkit.api.locator.impl.HLocatorHead;
+import com.dragoncommissions.mixbukkit.api.shellcode.impl.api.CallbackInfo;
+import com.dragoncommissions.mixbukkit.api.shellcode.impl.api.ShellCodeReflectionMixinPluginMethodCall;
+import net.minecraft.server.v1_8_R3.EntityEnderman;
+import net.minecraft.server.v1_8_R3.Item;
 import net.nuggetmc.mw.combat.CombatManager;
 import net.nuggetmc.mw.command.*;
 import net.nuggetmc.mw.economics.CoinsManager;
@@ -9,6 +18,7 @@ import net.nuggetmc.mw.economics.ShopMenu;
 import net.nuggetmc.mw.energy.EnergyManager;
 import net.nuggetmc.mw.killeffects.KEMenu;
 import net.nuggetmc.mw.killeffects.KillEffectManager;
+import net.nuggetmc.mw.mixins.TestMixin;
 import net.nuggetmc.mw.mwclass.MWClass;
 import net.nuggetmc.mw.mwclass.MWClassManager;
 import net.nuggetmc.mw.mwclass.MWClassMenu;
@@ -28,6 +38,7 @@ import org.bukkit.command.PluginCommand;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Enderman;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -176,6 +187,29 @@ public class MegaWalls extends JavaPlugin {
     @Override
     public void onEnable() {
         INSTANCE = this;
+
+        MixinPlugin mixinPlugin = MixBukkit.registerMixinPlugin(this, AutoMapper.getMappingAsStream());
+        try {
+            mixinPlugin.registerMixin(
+                    "Test Mixin",  // 命名空间，随便起，用于防止重复注入
+                    new MActionInsertShellCode(
+                            new ShellCodeReflectionMixinPluginMethodCall(
+                                    TestMixin.class.getDeclaredMethod("getLoot",
+                                            EntityEnderman.class, CallbackInfo.class)
+                                    /*false*/
+                            ),
+                            new HLocatorHead()  // 注入到方法顶部
+                    ),
+                    EntityEnderman.class,           // 目标类
+                    "getLoot",                   // 反混淆方法名
+                    Item.class
+
+            );
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        }
+
+
         System.out.println("-----------------------------------");
         System.out.println("--------MEGAWALLSFFA LOADED--------");
         System.out.println("-----------------------------------");

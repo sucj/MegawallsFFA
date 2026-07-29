@@ -29,5 +29,6 @@
     <orderEntry type="library" name="nametagAPI" level="project" />
     <orderEntry type="library" name="Citizens-2.0.32-b3188" level="project" />
     <orderEntry type="library" name="KotlinJavaRuntime" level="project" />
+    <orderEntry type="library" name="MixBukkit-1.0-SNAPSHOT" level="project" />
   </component>
 </module>
