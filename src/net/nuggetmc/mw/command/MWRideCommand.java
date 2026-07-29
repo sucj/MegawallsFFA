@@ -12,7 +12,7 @@ public class MWRideCommand implements CommandExecutor {
         if (!(sender instanceof Player)) return true;
         Player player = (Player) sender;
         if (args.length != 1) {
-            sender.sendMessage("invaild syntax!usage:/mwride <player>");
+            sender.sendMessage("invalid syntax!usage:/mwride <player>");
         } else {
             Player player1;
             try {
