@@ -254,7 +254,7 @@ class MWMole : MWClass() {
     }
 
 
-    override fun getActionBar(player: Player?): String {
+    override fun getActionBar(player: Player?): String? {
         return ActionBar.joinActionBar(
             this.color.toString() + ChatColor.BOLD + "ShortCut " + ChatColor.RESET + ChatColor.RESET + shortCut[player] + ChatColor.RESET,
             this.color.toString() + ChatColor.BOLD + "Junk Apple " + ChatColor.RESET + ChatColor.RESET + junkApple[player] + "/100" + ChatColor.RESET

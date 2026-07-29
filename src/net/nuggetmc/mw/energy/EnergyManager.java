@@ -83,8 +83,9 @@ public class EnergyManager implements Listener {
                 ActionBar.send(player, ChatColor.BOLD + plugin.getCompassManager().getCompassActionBarOfPlayer(player));
                 return;
             }
-            if (manager.get(player).getActionBar(player) != null) {
-                ActionBar.send(player, manager.get(player).getActionBar(player));
+            String buildActionBar = ActionBar.buildActionBar(player);
+            if (buildActionBar != null) {
+                ActionBar.send(player,buildActionBar);
             }
         }
     }

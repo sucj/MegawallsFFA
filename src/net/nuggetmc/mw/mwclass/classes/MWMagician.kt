@@ -223,7 +223,7 @@ class MWMagician : MWClass() {
         }
     }
 
-    override fun getActionBar(player: Player?): String {
+    override fun getActionBar(player: Player?): String? {
         val echo = this.color.toString() + ChatColor.BOLD.toString() + "Magical Cloak ${
             if (inCloakCache.contains(player)) ChatColor.GREEN.toString() + ChatColor.BOLD.toString() + "ENABLED" else ChatColor.RED.toString() + ChatColor.BOLD.toString() + "DISABLED"
         }"

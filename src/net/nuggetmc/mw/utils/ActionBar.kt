@@ -1,32 +1,61 @@
-package net.nuggetmc.mw.utils;
+package net.nuggetmc.mw.utils
 
-import net.minecraft.server.v1_8_R3.IChatBaseComponent;
-import net.minecraft.server.v1_8_R3.PacketPlayOutChat;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
-import org.bukkit.entity.Player;
+import net.minecraft.server.v1_8_R3.IChatBaseComponent
+import net.minecraft.server.v1_8_R3.PacketPlayOutChat
+import net.nuggetmc.mw.MegaWalls
+import net.nuggetmc.mw.special.specialItems.MegaBreaker
+import org.bukkit.ChatColor
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer
+import org.bukkit.entity.Player
 
-public class ActionBar {
+object ActionBar {
+    var instance: MegaWalls = MegaWalls.getInstance()
 
-    public static void send(Player player, String message) {
-        PacketPlayOutChat packet = new PacketPlayOutChat(IChatBaseComponent.ChatSerializer.a("{\"text\":\"" + message + "\"}"), (byte) 2);
-        ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
+    @JvmStatic
+    fun send(player: Player, message: String?) {
+        val packet =
+            PacketPlayOutChat(IChatBaseComponent.ChatSerializer.a("{\"text\":\"" + message + "\"}"), 2.toByte())
+        (player as CraftPlayer).getHandle().playerConnection.sendPacket(packet)
     }
 
-    public static void clear(Player player) {
-        send(player, "");
+    @JvmStatic
+    fun clear(player: Player) {
+        send(player, "")
     }
 
-    public static String joinActionBar(String... s) {
-        if (s.length == 1) {
-            return s[0];
+    @JvmStatic
+    fun joinActionBar(vararg s: String?): String? {
+        if (s.size == 1) {
+            return s[0]
         }
-        StringBuilder stringBuilder = new StringBuilder();
-        for (int i = 0; i < s.length; i++) {
-            stringBuilder.append(s[i]);
-            if (i + 1 < s.length) {
-                stringBuilder.append("      ");
+        val stringBuilder = StringBuilder()
+        for (i in s.indices) {
+            stringBuilder.append(s[i])
+            if (i + 1 < s.size) {
+                stringBuilder.append("      ")
             }
         }
-        return stringBuilder.toString();
+        return stringBuilder.toString()
+    }
+
+    @JvmStatic
+    fun buildActionBar(player: Player): String? {
+        var originalActionBar = instance.getClassManager().get(player).getActionBar(player)
+        if (originalActionBar == null) {
+            if (MegaBreaker.check(player.itemInHand)) {
+                val currentCharges = MegaBreaker.getMegaBreakerCharges(player.itemInHand)
+                return ""+ChatColor.GOLD+ ChatColor.BOLD+"${currentCharges}/50 ↖"
+            }
+        } else {
+            if (MegaBreaker.check(player.itemInHand)) {
+                val currentCharges = MegaBreaker.getMegaBreakerCharges(player.itemInHand)
+                originalActionBar+="      "+ ChatColor.GOLD+ ChatColor.BOLD+"${currentCharges}/50 ↖"
+            }
+
+
+
+
+        }
+        return originalActionBar
     }
 }

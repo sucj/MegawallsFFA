@@ -187,6 +187,7 @@ public class SpecialEventsManager implements Listener {
         if (!(e.getDamager() instanceof Arrow)) return;
         Arrow arrow = (Arrow) e.getDamager();
         if (!(arrow.getShooter() instanceof Player)) return;
+        if (((Player) arrow.getShooter()).getUniqueId().equals(e.getEntity().getUniqueId())) return;
         LivingEntity victim = (LivingEntity) e.getEntity();
             Player player = (Player) arrow.getShooter();
 

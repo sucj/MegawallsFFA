@@ -1,7 +1,9 @@
 package net.nuggetmc.mw.special
 
 import net.nuggetmc.mw.MegaWalls
+import net.nuggetmc.mw.utils.PlayerUtils
 import net.nuggetmc.mw.utils.PlayerUtils.getNearbyEnemies
+import net.nuggetmc.mw.utils.PlayerUtils.getNearbyMobs
 import org.bukkit.Material
 import org.bukkit.entity.*
 import org.bukkit.event.EventHandler
@@ -21,6 +23,7 @@ class MK2 : Listener {
         object : BukkitRunnable() {
             var ticks = 0
             var damaged: MutableList<Player> = ArrayList()
+            var damagedMobs: MutableList<LivingEntity> = ArrayList()
             override fun run() {
                 if (pig.isDead || player.isDead || pig.passenger==null /*|| ticks >= 600*/
                 ) {
@@ -37,6 +40,17 @@ class MK2 : Listener {
                     }
                     nearby.damage(6.0, player as Entity)
                     damaged.add(nearby)
+                }
+                for (nearby in getNearbyMobs(player.location, 5.toDouble())!!) {
+                    if (damagedMobs.contains(nearby)) {
+                        continue
+                    }
+                    if (nearby.uniqueId.equals(pig.uniqueId)){
+                        continue
+                    }
+                    nearby.damage(6.0, player as Entity)
+                    //damagedMobs.add(nearby)
+                    //Bu
                 }
                 ++ticks
             }

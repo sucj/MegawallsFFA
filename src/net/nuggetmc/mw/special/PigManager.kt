@@ -28,6 +28,8 @@ object PigManager {
         pig.customName = "§c暴君 马克猪"
         pig.isCustomNameVisible = true
         pig.setSaddle(true)
+        pig.maxHealth = 40.0
+        pig.health = 40.0
 
         // 2. 处理 NMS / NBT 标签
         val nmsPig: EntityPig = (pig as CraftPig).handle

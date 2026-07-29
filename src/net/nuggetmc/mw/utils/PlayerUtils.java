@@ -8,7 +8,9 @@ import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Zombie;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
@@ -27,6 +29,15 @@ public class PlayerUtils {
                 players.add((Player) e);
         }
         return players;
+    }
+    public static List<LivingEntity> getNearbyMobs(Location location, double radius) {
+        List<LivingEntity> mobs = new ArrayList<>();
+        for (Entity e : location.getWorld()
+                .getNearbyEntities(location, radius, radius, radius)) {
+            if (e instanceof LivingEntity && e.getLocation().distance(location) <= radius)
+                mobs.add((LivingEntity) e);
+        }
+        return mobs;
     }
 
     public static List<Player> getNearbyPlayers(Entity entity, double radius) {
