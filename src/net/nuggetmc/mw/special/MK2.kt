@@ -66,11 +66,9 @@ class MK2 : Listener {
     @EventHandler
     fun antiHitSelfPig(e: EntityDamageByEntityEvent){
         if (e.damager is Fireball&&(e.damager as Fireball).shooter is Player){
-            println("FB,player")
             if (e.entity.type== EntityType.PIG){
                 val uuid = ((e.damager as Fireball).shooter as Player).uniqueId
                 if (e.entity.passenger.uniqueId.equals(uuid)){
-                    println("CANCEL")
                     e.isCancelled = true
                 }
             }
