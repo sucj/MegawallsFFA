@@ -91,6 +91,9 @@ public class MWGuardian extends MWClass {
         if (shuaQiCooldown.containsKey(player)){
             return;
         }
+        if (e.getBlock().getType().equals(Material.DIAMOND_ORE)){
+            return;
+        }
         shuaQiCooldown.put(player,System.currentTimeMillis());
         Bukkit.getScheduler().runTaskLater(plugin, () -> shuaQiCooldown.remove(player), (long) (1.5*20));
         e.setCancelled(true);
