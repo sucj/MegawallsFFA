@@ -21,7 +21,7 @@ object AOTR : AbstractSpecialItem() {
     override val id: String
         get() = "aotr"
     override val material: Material
-        get() = Material.GOLD_SWORD
+        get() = Material.DIAMOND_SPADE
     override val enchantments: Map<Enchantment, Int>
         get() = mapOf(Enchantment.PROTECTION_EXPLOSIONS to 10)
     override val displayName: String
