@@ -123,7 +123,7 @@ public class MWSkeleton extends MWClass {
             if (player.getWorld() != victim.getWorld()) continue;
 
             if (player != victim && !victim.isDead() && proj.getLocation().distance(victim.getLocation()) < 6) {
-                victim.damage(6, player);
+                mwhealth.trueDamage(victim, 6, player);
             }
         }
     }

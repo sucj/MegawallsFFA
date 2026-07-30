@@ -409,8 +409,8 @@ public class SpecialEventsManager implements Listener {
             return;
         }
         Player closestEnemy = PlayerUtils.getClosestEnemy(p);
-        if ((closestEnemy != null && closestEnemy.getLocation().distance(p.getLocation()) < 50)) {
-            p.sendMessage("There's at least an enemy in 50 blocks!");
+        if ((closestEnemy != null && closestEnemy.getLocation().distance(p.getLocation()) < 20)) {
+            p.sendMessage("There's at least an enemy in 20 blocks!");
             return;
         }
         aotrCD.add(p);

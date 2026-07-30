@@ -195,7 +195,7 @@ class MWMagician : MWClass() {
 
         val swordEnch: MutableMap<Enchantment, Int> = HashMap()
         swordEnch[Enchantment.DURABILITY] = 10
-        swordEnch[Enchantment.DAMAGE_ALL] = 1
+        swordEnch[Enchantment.DAMAGE_ALL] = 2
 
 
         val helmetench: MutableMap<Enchantment, Int> = HashMap()

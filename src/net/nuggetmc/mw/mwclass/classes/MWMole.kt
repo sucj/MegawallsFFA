@@ -106,7 +106,7 @@ class MWMole : MWClass() {
                         plugin.breakDiamond(player)
                     }
                 }
-                for (nearby in getNearbyEnemies(player, 5.toDouble())!!) {
+                for (nearby in getNearbyEnemies(player,  5.toDouble())) {
                     if (damaged.contains(nearby)) {
                         continue
                     }
