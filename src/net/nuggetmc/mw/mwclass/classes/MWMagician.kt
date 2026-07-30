@@ -183,7 +183,7 @@ class MWMagician : MWClass() {
                         energyCostExemption.remove(victim)
                     }
 
-                }.runTaskLater(plugin,2)
+                }.runTaskLater(plugin,10)
                 if (e is EntityDamageByEntityEvent){
                     e.damager.sendMessage("Your damage dealt to ${ChatColor.RED.toString()+ChatColor.BOLD+victim.displayName+ChatColor.RESET} was cancelled due to their ${ChatColor.AQUA.toString()+ChatColor.BOLD+"Magical Cloak"+ChatColor.RESET} ability!")
                 }
