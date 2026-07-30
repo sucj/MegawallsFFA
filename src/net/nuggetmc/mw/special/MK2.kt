@@ -87,7 +87,7 @@ class MK2 : Listener {
         if (e.damager is Fireball&&(e.damager as Fireball).shooter is Player){
             if (e.entity.type== EntityType.PIG){
                 val uuid = ((e.damager as Fireball).shooter as Player).uniqueId
-                if (e.entity.passenger.uniqueId.equals(uuid)){
+                if (e.entity?.passenger?.uniqueId?.equals(uuid) == true){
                     e.isCancelled = true
                 }
             }

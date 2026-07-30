@@ -69,6 +69,10 @@ public class CoinsManager implements Listener {
             return;
         }
         Player killer = plugin.getEnergyManager().validate(e);
+        if (killer.getUniqueId().equals(e.getEntity().getUniqueId())){
+            return;
+        }
+
         //
         plugin.getCoinsManager().add(killer, 200);
         killer.sendMessage(ChatColor.YELLOW + "+ 200 Coins (Kill Player)!");
