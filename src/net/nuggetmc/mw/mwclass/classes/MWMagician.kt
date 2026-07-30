@@ -1,6 +1,8 @@
 package net.nuggetmc.mw.mwclass.classes
 
 import net.citizensnpcs.api.CitizensAPI
+import net.citizensnpcs.api.npc.NPC
+import net.citizensnpcs.trait.Gravity
 import net.md_5.bungee.api.ChatColor
 import net.minecraft.server.v1_8_R3.EnumParticle
 import net.nuggetmc.mw.MegaWalls
@@ -33,6 +35,10 @@ import org.bukkit.metadata.FixedMetadataValue
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import org.bukkit.scheduler.BukkitRunnable
+import org.bukkit.util.Vector
+import kotlin.math.PI
+import kotlin.math.cos
+import kotlin.math.sin
 
 class MWMagician : MWClass() {
     val plugin: MegaWalls = MegaWalls.getInstance()!!
@@ -40,6 +46,7 @@ class MWMagician : MWClass() {
     val usedBluffOut=HashSet<Player> ()
     val bluffOutCache=HashSet<Player> ()
     val bluffOutCooldownCache=HashSet<Player> ()
+    val energyCostExemption = HashSet<Player>()
 
 
     init {
@@ -98,7 +105,7 @@ class MWMagician : MWClass() {
         }else{
             veilCreeper(player)
             inCloakCache.add(player)
-            player.walkSpeed=0.3f
+            player.walkSpeed=0.45f
             player.sendMessage(ChatColor.GREEN.toString()+ChatColor.BOLD+"You activated your ${ChatColor.RESET.toString()+ ChatColor.YELLOW+"Magical Cloak"+ChatColor.GREEN.toString()+ChatColor.BOLD} ability!")
         }
     }
@@ -129,12 +136,12 @@ class MWMagician : MWClass() {
             }
         }
     }
-    @EventHandler
+    /*@EventHandler
     fun onCreeperDamaged(e: EntityDamageByEntityEvent) {
         if (e.entity !is Creeper) return
         if (!(e.entity as Creeper).isPowered) return
         if (!e.entity.hasMetadata("OwnerName")) return
-        if (!(e.damager is Player)) return
+        if (e.damager !is Player) return
         val owner=Bukkit.getPlayerExact(e.entity.getMetadata("OwnerName")[0].asString()) ?: return
         if (owner.uniqueId.equals(e.damager.uniqueId)) return
         if ((e.damager as Player).itemInHand.type.equals(Material.BOW)&&manager[e.damager as Player]==this){
@@ -149,7 +156,7 @@ class MWMagician : MWClass() {
                 owner.sendMessage(ChatColor.RED.toString() +ChatColor.BOLD+"You didn't block a hit because you don't have enough energy!")
             }
         }
-    }
+    }*/
     @EventHandler
     fun onDamaged(e:EntityDamageEvent){
         if (e.entity !is Player) return
@@ -161,9 +168,22 @@ class MWMagician : MWClass() {
             return
         }
         if (inCloakCache.contains(victim)){
-            if (victim.consumeEnergy(20)){
+            if (energyCostExemption.contains(victim)){
                 e.isCancelled=true
                 victim.world.playSound(victim.location,Sound.CREEPER_HISS,1.5f,1f)
+                if (e is EntityDamageByEntityEvent){
+                    e.damager.sendMessage("Your damage dealt to ${ChatColor.RED.toString()+ChatColor.BOLD+victim.displayName+ChatColor.RESET} was cancelled due to their ${ChatColor.AQUA.toString()+ChatColor.BOLD+"Magical Cloak"+ChatColor.RESET} ability!")
+                }
+            }else if (victim.consumeEnergy(20)){
+                e.isCancelled=true
+                victim.world.playSound(victim.location,Sound.CREEPER_HISS,1.5f,1f)
+                energyCostExemption.add(victim)
+                object : BukkitRunnable(){
+                    override fun run() {
+                        energyCostExemption.remove(victim)
+                    }
+
+                }.runTaskLater(plugin,2)
                 if (e is EntityDamageByEntityEvent){
                     e.damager.sendMessage("Your damage dealt to ${ChatColor.RED.toString()+ChatColor.BOLD+victim.displayName+ChatColor.RESET} was cancelled due to their ${ChatColor.AQUA.toString()+ChatColor.BOLD+"Magical Cloak"+ChatColor.RESET} ability!")
                 }
@@ -253,23 +273,77 @@ class MWMagician : MWClass() {
         }
     }
 
+    /**
+     * 计算在指定位置周围，以给定半径均匀分布的位置集合
+     * 所有位置到中心的距离都严格等于 radius，相邻位置之间的弧长相等
+     *
+     * @param location   中心位置
+     * @param radius     圆的半径（单位：方块）
+     * @param amount     位置数量
+     * @param startAngle 起始角度（弧度），默认 0.0（正东方向）
+     * @return 均匀分布在圆上的 Location 列表
+     */
+    fun getLocationsOnCircle(
+        location: Location,
+        radius: Double,
+        amount: Int,
+        startAngle: Double = 0.0
+    ): List<Location> {
+        if (amount <= 0) return emptyList()
+        val world = location.world ?: return emptyList()
+
+        val angleStep = 2 * PI / amount
+        val result = mutableListOf<Location>()
+
+        for (i in 0 until amount) {
+            val angle = startAngle + i * angleStep
+
+            val x = location.x + radius * cos(angle)
+            val z = location.z + radius * sin(angle)
+            val y = location.y
+
+            result.add(Location(world, x, y, z))
+        }
+
+        return result
+    }
     fun veilCreeper(player: Player) {
-        val creeper= CitizensAPI.getNPCRegistry().createNPC(EntityType.CREEPER,"Veil Creeper")
-        creeper.spawn(player.location)
-        creeper.setUseMinecraftAI(false)
-        (creeper.entity as Creeper).isPowered=true;
-        (creeper.entity as Creeper).addPotionEffect(PotionEffect(PotionEffectType.INVISIBILITY,9999,255))
-        creeper.entity.setMetadata("OwnerName",FixedMetadataValue(plugin,player.name))
+        val radius = 3.5
+        val amount = 6
+        fun createVeilCreeper(location: Location): NPC {
+            val creeper = CitizensAPI.getNPCRegistry().createNPC(EntityType.CREEPER, "Veil Creeper")
+            creeper.spawn(location)
+            creeper.setUseMinecraftAI(false)
+            (creeper.entity as Creeper).isPowered = true;
+            (creeper.entity as Creeper).addPotionEffect(PotionEffect(PotionEffectType.INVISIBILITY, 9999, 255))
+            val gravityTrait = creeper.getOrAddTrait(Gravity::class.java)
+            gravityTrait.toggle()
+            creeper.entity.setMetadata("OwnerName", FixedMetadataValue(plugin, player.name))
+            return creeper
+        }
+        val creeperLocations = getLocationsOnCircle(player.location,radius,amount)
+        val creepers = ArrayList<NPC>()
+        for (loc in creeperLocations){
+            creepers.add(createVeilCreeper(loc))
+        }
         object :BukkitRunnable(){
             override fun run() {
                 if (!inCloakCache.contains(player)){
-                    creeper.destroy()
+                    creepers.forEach { it.destroy() }
                     cancel()
                 }else {
-                    creeper.teleport(player.location, PlayerTeleportEvent.TeleportCause.PLUGIN)
+                    creepers.zip(getLocationsOnCircle(player.location,radius,amount)).forEach { (creeper,location)->
+                        run {
+                            creeper.teleport(
+                                location,
+                                PlayerTeleportEvent.TeleportCause.PLUGIN
+                            )
+                            creeper.entity.velocity = Vector(0, 0, 0)
+                        }
+                    }
                 }
             }
-        }.runTaskTimer(plugin,5,5)
+        }.runTaskTimer(plugin,0,0)
     }
     @EventHandler
     fun onDeath(e:PlayerDeathEvent){
@@ -329,6 +403,5 @@ class MWMagician : MWClass() {
         }
         ParticleUtils.play(EnumParticle.SMOKE_LARGE,location, 0.1, 0.1, 0.1, 0.0, 3)
     }
-
 
 }

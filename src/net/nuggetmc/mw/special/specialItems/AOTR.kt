@@ -32,7 +32,7 @@ object AOTR : AbstractSpecialItem() {
             lor.add("")
 
             lor.add(ChatColor.GOLD.toString() + "Ability:Speed Boost " + ChatColor.YELLOW + ChatColor.BOLD + "RIGHT CLICK")
-            lor.add(ChatColor.GRAY.toString() + "Grants you a walk speed boost for " + ChatColor.GREEN + "5s" + ChatColor.GRAY + ".")
+            lor.add(ChatColor.GRAY.toString() + "Grants you a walk speed boost for " + ChatColor.GREEN + "10s" + ChatColor.GRAY + ".")
             lor.add(ChatColor.RED.toString() + ChatColor.BOLD + "CANT BE USED WHEN THERE'S ANY ENEMY WITHIN " + ChatColor.GREEN + ChatColor.BOLD + "20 " + ChatColor.RED + ChatColor.BOLD + "blocks!")
             lor.add("Cooldown:40s")
             lor.add("")
@@ -96,6 +96,6 @@ object AOTR : AbstractSpecialItem() {
                     p.sendMessage("Your " + ChatColor.GOLD + "Speed Boost " + ChatColor.RESET + "expired!")
                 }
             }
-        }, (5 * 20).toLong())
+        }, (10 * 20).toLong())
     }
 }

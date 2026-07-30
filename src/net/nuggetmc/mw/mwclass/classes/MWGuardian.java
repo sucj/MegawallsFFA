@@ -1,6 +1,8 @@
 package net.nuggetmc.mw.mwclass.classes;
 
 import net.md_5.bungee.api.ChatColor;
+import net.minecraft.server.v1_8_R3.BlockPosition;
+import net.minecraft.server.v1_8_R3.BlockStationary;
 import net.nuggetmc.mw.mwclass.MWClass;
 import net.nuggetmc.mw.mwclass.info.Diamond;
 import net.nuggetmc.mw.mwclass.info.MWClassInfo;
@@ -8,17 +10,24 @@ import net.nuggetmc.mw.mwclass.info.Playstyle;
 import net.nuggetmc.mw.mwclass.items.MWItem;
 import net.nuggetmc.mw.mwclass.items.MWKit;
 import net.nuggetmc.mw.mwclass.items.MWPotions;
+import net.nuggetmc.mw.special.specialItems.MegaBreaker;
 import net.nuggetmc.mw.utils.ActionBar;
+import net.nuggetmc.mw.utils.ItemUtils;
+import net.nuggetmc.mw.utils.MathUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -29,6 +38,7 @@ public class MWGuardian extends MWClass {
     Set<Player> suckList = new HashSet<>();
     Set<Player> waterList = new HashSet<>();
     Set<Player> multiplyList = new HashSet<>();
+    Map<Player, Long> shuaQiCooldown = new HashMap<>();
 
 
     public MWGuardian() {
@@ -43,7 +53,7 @@ public class MWGuardian extends MWClass {
 
         this.diamonds = new Diamond[]{
                 Diamond.BOOTS,
-                Diamond.SWORD
+                //Diamond.SWORD
         };
 
         this.classInfo = new MWClassInfo(
@@ -53,8 +63,9 @@ public class MWGuardian extends MWClass {
                 "Once you are below 20 HP,every hit will heal you &a3&r HP in &a8&r seconds,you gain &a4&r seconds of resistance &aII&r.\nIf that damage cause you to be dead,it will be cancelled.\nCooldown: &a13 &rseconds.",
                 "Ruins guardian",
                 "If you are in water, you will deal &a+75%&r damage for &a5&r seconds,gaining regeneration &aI&r for the next &a3&r seconds.\nCooldown:&a30&r seconds.",
-                "Stupid dev",
-                "There is no gathering talent because this kit is made for mwffa."
+                "耍起",
+                "Once you break a block by your pickaxe(except Mega Breaker),the block will be turned into water instead.It will be turned into air after 5s." +
+                        "\nCooldown:1.5s."
         );
 
         this.classInfo.addEnergyGainType("Melee", 15);
@@ -65,7 +76,32 @@ public class MWGuardian extends MWClass {
     public String getActionBar(Player player) {
         String ext = this.getColor() + "Extrimity " + (extrimityList.contains(player) ? ChatColor.RED + "✖" : ChatColor.GREEN + "✔") + ChatColor.RESET;
         String rg = this.getColor() + "Ruins Guardian " + (waterList.contains(player) ? ChatColor.RED + "✖" : ChatColor.GREEN + "✔") + ChatColor.RESET;
-        return ext + "       " + rg;
+        String sq = this.getColor() + "耍起 " + (((!shuaQiCooldown.containsKey(player))||System.currentTimeMillis()-shuaQiCooldown.get(player)>=1500) ? ChatColor.GREEN + "✔" : ChatColor.RED + Double.toString(MathUtils.round((1500-(System.currentTimeMillis()-shuaQiCooldown.get(player)))/1000.0,1))+"s") + ChatColor.RESET;
+        return ActionBar.joinActionBar(ext,rg,sq);
+    }
+    @EventHandler
+    public void onGathering(BlockBreakEvent e) {
+        Player player = e.getPlayer();
+        if (manager.get(player) != this) {
+            return;
+        }
+        if (MegaBreaker.INSTANCE.check(player.getItemInHand())){
+            return;
+        }
+        if (shuaQiCooldown.containsKey(player)){
+            return;
+        }
+        shuaQiCooldown.put(player,System.currentTimeMillis());
+        Bukkit.getScheduler().runTaskLater(plugin, () -> shuaQiCooldown.remove(player), (long) (1.5*20));
+        e.setCancelled(true);
+        Block block = e.getBlock();
+        for (ItemStack drop:block.getDrops()){
+            block.getWorld().dropItem(block.getLocation(),drop);
+        }
+        e.getBlock().setType(Material.STATIONARY_WATER,false);
+
+        Bukkit.getScheduler().runTaskLater(plugin, () -> block.setType(Material.AIR),5*20);
+
     }
 
     @EventHandler
@@ -201,7 +237,7 @@ public class MWGuardian extends MWClass {
         armorEnch.put(Enchantment.DEPTH_STRIDER, 5);
         armorEnch.put(Enchantment.DURABILITY, 10);
 
-        ItemStack sword = MWItem.createSword(this, Material.DIAMOND_SWORD, swordEnch, player);
+        ItemStack sword = MWItem.createSword(this, Material.IRON_SWORD, swordEnch, player);
         ItemStack tool = MWItem.createTool(this, Material.DIAMOND_PICKAXE);
         ItemStack boots = MWItem.createArmor(this, Material.DIAMOND_BOOTS, armorEnch);
 

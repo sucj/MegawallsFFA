@@ -2,6 +2,8 @@ package net.nuggetmc.mw.utils;
 
 import org.bukkit.util.Vector;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Random;
 
 public class MathUtils {
@@ -17,5 +19,10 @@ public class MathUtils {
 
     public static int randomIntInRange(int min, int max) {
         return new Random().nextInt((max - min) + 1) + min;
+    }
+    public static double round(double number,int scale){
+        BigDecimal bd = new BigDecimal(Double.toString(number));
+        bd = bd.setScale(scale, RoundingMode.HALF_UP);
+        return bd.doubleValue();
     }
 }
