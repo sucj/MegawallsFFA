@@ -29,7 +29,7 @@ object Terminator : AbstractSpecialItem() {
         get() = arrayListOf("",ChatColor.GOLD.toString() + ChatColor.BOLD + "LEGENDARY BOW")
 
     var canfire: HashMap<Player?, Boolean?> = HashMap<Player?, Boolean?>()
-    private fun termClick(player: Player) {
+    public fun termClick(player: Player) {
         if (!canfire.containsKey(player)) {
             canfire.put(player, true)
         }

@@ -10,6 +10,7 @@ import net.nuggetmc.mw.MegaWalls;
 import net.nuggetmc.mw.mwclass.classes.MWCow;
 import net.nuggetmc.mw.mwclass.classes.MWMole;
 import net.nuggetmc.mw.mwclass.items.MWItem;
+import net.nuggetmc.mw.special.specialItems.AOTR;
 import net.nuggetmc.mw.special.specialItems.Terminator;
 import net.nuggetmc.mw.utils.ItemUtils;
 import net.nuggetmc.mw.utils.PlayerUtils;
@@ -41,8 +42,7 @@ import java.util.*;
 public class SpecialEventsManager implements Listener {
     MegaWalls plugin;
     public static RegionPreservePlugin rp;
-    Set<Player> aotrCD = new HashSet<>();
-    public Set<Player> inAotr = new HashSet<>();
+
     static SpecialEventsManager instance;
 
     public static SpecialEventsManager getInstance() {
@@ -394,50 +394,6 @@ public class SpecialEventsManager implements Listener {
         }
     }
 
-    /////AOTR
-    @EventHandler
-    public void onAOTR(PlayerInteractEvent e) {
-        Player p = e.getPlayer();
-        if (!e.getAction().name().contains("RIGHT")) return;
-        if (p.getItemInHand() == null || p.getItemInHand().getType() == Material.AIR) return;
-        if (!p.getItemInHand().getItemMeta().hasDisplayName()) return;
-        if (!p.getItemInHand().getItemMeta().getDisplayName().toLowerCase().contains("rogues")) return;
-        if (!ItemUtils.isKitItem(p.getItemInHand())) return;
-        e.setCancelled(true);
-        if (aotrCD.contains(p)) {
-            p.sendMessage("this item is in cooldown!");
-            return;
-        }
-        Player closestEnemy = PlayerUtils.getClosestEnemy(p);
-        if ((closestEnemy != null && closestEnemy.getLocation().distance(p.getLocation()) < 20)) {
-            p.sendMessage("There's at least an enemy in 20 blocks!");
-            return;
-        }
-        aotrCD.add(p);
-        p.sendMessage("You have used your " + ChatColor.GOLD + "Speed Boost " + ChatColor.RESET + "ability!");
-        inAotr.add(p);
-        p.setWalkSpeed(0.9f);
-        UUID uuid = p.getUniqueId();
-        Bukkit.getScheduler().runTaskLater(MegaWalls.getInstance(), new BukkitRunnable() {
-            @Override
-            public void run() {
-                aotrCD.remove(p);
-            }
-        }, 40 * 20);
-        Bukkit.getScheduler().runTaskLater(MegaWalls.getInstance(), new BukkitRunnable() {
-            @Override
-            public void run() {
-                if (Bukkit.getPlayer(uuid) != null) {
-                    p.setWalkSpeed(0.2f);
-                    inAotr.remove(p);
-                    p.sendMessage("Your " + ChatColor.GOLD + "Speed Boost " + ChatColor.RESET + "expired!");
-                }
-            }
-        }, 5 * 20);
-
-
-    }
-
     ////////Junk Apple
     @EventHandler
     public void onJunkApple(PlayerItemConsumeEvent e) {
@@ -493,7 +449,7 @@ public class SpecialEventsManager implements Listener {
         if (verify(newSlotItem)&& newSlotItem.getType().equals(Material.BOW)&&!Terminator.INSTANCE.check(newSlotItem)){
             for (int i = 0; i < player.getInventory().getSize(); i++) {
                 ItemStack itemStack = player.getInventory().getItem(i);
-                if (verify(itemStack)&& itemStack.getItemMeta()!=null&&itemStack.getItemMeta().hasDisplayName()&& itemStack.getItemMeta().getDisplayName().toLowerCase().contains("rogues")){
+                if (verify(itemStack)&& itemStack.getItemMeta()!=null&&itemStack.getItemMeta().hasDisplayName()&& AOTR.INSTANCE.check(itemStack)){
                     player.getInventory().setItem(i,specialItemUtils.getQuiverArrow());
                     break;
                 }
@@ -505,7 +461,7 @@ public class SpecialEventsManager implements Listener {
                 net.minecraft.server.v1_8_R3.ItemStack nmsItem = CraftItemStack.asNMSCopy(itemStack);
                 if (nmsItem == null) continue;
                 if (verify(itemStack)&& itemStack.getItemMeta()!=null&&itemStack.getItemMeta().hasDisplayName()&& itemStack.getItemMeta().getDisplayName().equals("Quiver Arrow")){
-                    ItemStack AOTR=MWItem.createAOTR();
+                    ItemStack AOTR= net.nuggetmc.mw.special.specialItems.AOTR.INSTANCE.buildItem();
                     if (plugin.getClassManager().get(player)!=null&&plugin.getClassManager().get(player) instanceof MWMole){
                         AOTR.setType(Material.IRON_SPADE);
                     }

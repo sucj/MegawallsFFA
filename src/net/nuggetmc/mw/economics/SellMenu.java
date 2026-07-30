@@ -30,6 +30,7 @@ public class SellMenu implements Listener {
 
     public SellMenu() {
         things.put(new ItemStack(Material.COBBLESTONE), 1);
+        things.put(new ItemStack(Material.DIRT), 1);
         //things.put(new ItemStack(Material.COBBLESTONE),1);
     }
 
@@ -38,7 +39,7 @@ public class SellMenu implements Listener {
         Inventory inv = Bukkit.createInventory(null, 54, menuTitle);
 
 
-        for (int i = 0; i < things.keySet().size(); i++) {
+        for (int i = 0; i < things.size(); i++) {
             inv.setItem(i + 10, (ItemStack) things.keySet().toArray()[i]);
         }
 

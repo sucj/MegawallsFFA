@@ -183,6 +183,10 @@ public class MegaWalls extends JavaPlugin {
         resetMap.clear();
     }
 
+    @Override
+    public void onDisable() {
+        super.onDisable();
+    }
 
     @Override
     public void onEnable() {

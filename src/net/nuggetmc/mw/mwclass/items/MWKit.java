@@ -4,6 +4,7 @@ package net.nuggetmc.mw.mwclass.items;
 import net.nuggetmc.mw.MegaWalls;
 import net.nuggetmc.mw.mwclass.MWClass;
 import net.nuggetmc.mw.mwclass.classes.MWMole;
+import net.nuggetmc.mw.special.specialItems.AOTR;
 import net.nuggetmc.mw.special.specialItems.MegaBreaker;
 import net.nuggetmc.mw.utils.ItemStackCreator;
 import net.nuggetmc.mw.utils.ItemUtils;
@@ -57,7 +58,7 @@ public class MWKit {
         contents.add(compass);
         contents.add(enderchest);
         //contents.add(toolShovel);
-        ItemStack is = MWItem.createAOTR();
+        ItemStack is = AOTR.INSTANCE.buildItem();
         if (mwclass instanceof MWMole) {
             is.setType(Material.IRON_SPADE);
         }
@@ -67,7 +68,7 @@ public class MWKit {
         contents.add(megaBreaker);
         //contents.add(new ItemStack(Material.ARROW, 48));
         contents.add(new ItemStack(Material.STONE, 64));
-        contents.add(new ItemStack(Material.DIRT, 64));
+        contents.add(new ItemStack(Material.GRASS, 64));
         contents.add(new ItemStack(Material.LOG, 64));
         contents.add(new ItemStack(Material.LOG, 64));
         contents.add(new ItemStack(Material.LOG, 64));

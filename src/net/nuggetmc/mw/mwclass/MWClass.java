@@ -8,6 +8,7 @@ import net.nuggetmc.mw.mwclass.info.Diamond;
 import net.nuggetmc.mw.mwclass.info.MWClassInfo;
 import net.nuggetmc.mw.mwclass.info.Playstyle;
 import net.nuggetmc.mw.special.SpecialEventsManager;
+import net.nuggetmc.mw.special.specialItems.AOTR;
 import net.nuggetmc.mw.utils.MWHealth;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -124,10 +125,10 @@ public abstract class MWClass implements Listener {
         if (MegaWalls.getInstance().getTeamsManager().isOnSameTeam(player, victim)) {
             e.setCancelled(true);
         }
-        if (SpecialEventsManager.getInstance().inAotr.contains(player)) {
-            player.sendMessage("You hit an ememy,so disabled your " + ChatColor.GOLD + "Speed Boost " + ChatColor.RESET + "ability!");
+        if (AOTR.INSTANCE.getInAotr().contains(player)) {
+            player.sendMessage("You hit an enemy,so disabled your " + ChatColor.GOLD + "Speed Boost " + ChatColor.RESET + "ability!");
             player.setWalkSpeed(0.2f);
-            SpecialEventsManager.getInstance().inAotr.remove(player);
+            AOTR.INSTANCE.getInAotr().remove(player);
         }
     }
 

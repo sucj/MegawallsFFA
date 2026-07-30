@@ -27,9 +27,9 @@ object AOTV : AbstractSpecialItem() {
     fun onAOTV(e: PlayerInteractEvent) {
         val p = e.getPlayer()
         if (!e.getAction().name.contains("RIGHT")) return
-        if (p.getItemInHand() == null || p.getItemInHand().getType() == Material.AIR) return
+        if (p.itemInHand == null || p.itemInHand.getType() == Material.AIR) return
         if (!check(e.getItem())) return
-        if (p.isSneaking()) {
+        if (p.isSneaking) {
             val block = p.getTargetBlock(null as HashSet<Byte?>?, 56)
             if (block == null) return
             if (PlayerUtils.checkValid(block)) {
@@ -41,7 +41,7 @@ object AOTV : AbstractSpecialItem() {
         } else {
             PlayerUtils.teleport(p)
         }
-        p.playSound(p.getLocation(), Sound.ENDERMAN_TELEPORT, 0.2f, 2f)
+        p.playSound(p.location, Sound.ENDERMAN_TELEPORT, 0.2f, 2f)
     }
 
 }

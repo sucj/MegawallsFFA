@@ -1,6 +1,8 @@
 package net.nuggetmc.mw.special
 
+import net.minecraft.server.v1_8_R3.Items
 import net.nuggetmc.mw.MegaWalls
+import net.nuggetmc.mw.special.specialItems.Terminator
 import net.nuggetmc.mw.utils.PlayerUtils
 import net.nuggetmc.mw.utils.PlayerUtils.getNearbyEnemies
 import net.nuggetmc.mw.utils.PlayerUtils.getNearbyMobs
@@ -9,17 +11,19 @@ import org.bukkit.entity.*
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.entity.EntityDamageByEntityEvent
+import org.bukkit.event.player.PlayerDropItemEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.scheduler.BukkitRunnable
 import org.bukkit.util.Vector
 
 
 class MK2 : Listener {
-    val onPig : Map<Player, Pig> = HashMap()
+    val onPig : HashMap<Player, Pig> = HashMap()
     val inCD : HashSet<Player> = HashSet()
     fun launchPig(player: Player){
         val pig = PigManager.spawnInvinciblePig(player.location)
         pig.passenger = player
+        onPig[player] = pig
         object : BukkitRunnable() {
             var ticks = 0
             var damaged: MutableList<Player> = ArrayList()
@@ -30,6 +34,7 @@ class MK2 : Listener {
                     player.inventory.remove(Material.CARROT_STICK)
                     pig.remove()
                     pig.velocity = Vector(0.0, 0.0, 0.0)
+                    onPig.remove(player)
                     cancel()
                     return
                 }
@@ -106,5 +111,20 @@ class MK2 : Listener {
         fireball.setDirection(direction)
         fireball.setYield(2.5f) // 爆炸威力（恶魂默认值为 1.0）
         fireball.setIsIncendiary(true) // 是否产生火焰（设置为 true 会在爆炸处着火）
+    }
+    @EventHandler
+    fun onDrop(e: PlayerDropItemEvent){
+        val player = e.getPlayer()
+        if (!MegaWalls.getInstance().classManager.isMW(player)) {
+            return
+        }
+        if (!onPig.containsKey(player)){
+            return
+        }
+        if (e.itemDrop.itemStack.type.equals(Material.CARROT_STICK)){
+            e.isCancelled=true
+            Terminator.termClick(player)
+        }
+        println("Ffc")
     }
 }
