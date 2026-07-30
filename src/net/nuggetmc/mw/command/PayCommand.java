@@ -34,13 +34,22 @@ public class PayCommand implements CommandExecutor {
                         return true;
                     }
                     int amount=-1;
-                    amount=Integer.parseInt(args[0]);
+                    try {
+                        amount=Integer.parseInt(args[1]);
+                    } catch (NumberFormatException e) {
+                        sender.sendMessage("Cannot read number!It must be a integer bigger than 0.");
+                        return true;
+                    }
                     if (amount==-1){
                         sender.sendMessage("Cannot read number!It must be a integer bigger than 0.");
                         return true;
                     }
                     if (MegaWalls.getInstance().getCoinsManager().get(player)<amount){
                         sender.sendMessage("You do not have that many coins.");
+                        return true;
+                    }
+                    if (target.getUniqueId().equals(player.getUniqueId())){
+                        sender.sendMessage("Why would you pay yourself?.");
                         return true;
                     }
                     MegaWalls.getInstance().getCoinsManager().add(player,-amount);
@@ -52,7 +61,7 @@ public class PayCommand implements CommandExecutor {
 
 
             }else {
-                player.sendMessage("wrong usage:/pay <player> <amount>");
+                player.sendMessage("Wrong usage!/pay <player> <amount>");
             }
 
 
