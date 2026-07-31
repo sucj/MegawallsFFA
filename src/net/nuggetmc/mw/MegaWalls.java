@@ -447,7 +447,7 @@ public class MegaWalls extends JavaPlugin {
                 pet=PotionEffectType.INCREASE_DAMAGE;
                 break;
             case 5:
-                pet=PotionEffectType.FAST_DIGGING;
+                pet=PotionEffectType.HEALTH_BOOST;
                 break;
         }
         player.addPotionEffect(new PotionEffect(pet,120*20,1));
