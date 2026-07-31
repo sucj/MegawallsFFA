@@ -165,7 +165,7 @@ public class MWArcanist extends MWClass {
                                 continue;
                             }
                         }
-                        ((Player) ent).damage(2);
+                        mwhealth.trueDamage((Player) ent,2.0,player);
                     }
                 }
             }
@@ -280,7 +280,7 @@ public class MWArcanist extends MWClass {
                             continue;
                         }
                     }
-                    nearby.damage(damage, p);
+                    mwhealth.trueDamage(nearby,damage,p);
                 }
             }
         }

@@ -110,7 +110,7 @@ class MWMole : MWClass() {
                     if (damaged.contains(nearby)) {
                         continue
                     }
-                    nearby.damage(6.0, player as Entity)
+                    mwhealth.trueDamage(nearby,6.0,player)
                     damaged.add(nearby)
                 }
                 ++ticks

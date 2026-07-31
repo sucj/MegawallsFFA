@@ -44,7 +44,7 @@ class MK2 : Listener {
                     if (damaged.contains(nearby)) {
                         continue
                     }
-                    nearby.damage(6.0, player as Entity)
+                    MegaWalls.getInstance().mwHealth.trueDamage(nearby,7.0,player)
                     damaged.add(nearby)
                 }
                 for (nearby in getNearbyMobs(player.location, 5.toDouble())!!) {
