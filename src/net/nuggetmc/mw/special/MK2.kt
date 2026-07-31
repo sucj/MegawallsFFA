@@ -2,7 +2,6 @@ package net.nuggetmc.mw.special
 
 import net.md_5.bungee.api.ChatColor
 import net.nuggetmc.mw.MegaWalls
-import net.nuggetmc.mw.special.specialItems.MK2Stick
 import net.nuggetmc.mw.utils.MathUtils
 import net.nuggetmc.mw.utils.PlayerUtils.getNearbyEnemies
 import net.nuggetmc.mw.utils.PlayerUtils.getNearbyMobs
@@ -18,7 +17,7 @@ import org.bukkit.util.Vector
 
 
 class MK2 : Listener {
-    val onPig : HashMap<Player, Pig> = HashMap()
+    val onPig : HashMap<Player, Horse> = HashMap()
     val inCD : HashSet<Player> = HashSet()
     val inAccelerate= HashSet<Player>()
     val accelerateCD= HashMap<Player, Long>()
@@ -33,14 +32,14 @@ class MK2 : Listener {
             override fun run() {
                 if (pig.isDead || player.isDead || pig.passenger==null||(!player.isOnline) /*|| ticks >= 600*/
                 ) {
-                    player.inventory.forEachIndexed { index, stack -> if (MK2Stick.check(stack)) player.inventory.clear(index) }
+                    //player.inventory.forEachIndexed { index, stack -> if (MK2Stick.check(stack)) player.inventory.clear(index) }
                     pig.remove()
                     pig.velocity = Vector(0.0, 0.0, 0.0)
                     onPig.remove(player)
                     cancel()
                     return
                 }
-                pig.velocity = player.eyeLocation.direction.multiply(if(inAccelerate.contains(player))0.8 else 0.5)
+                pig.velocity = player.eyeLocation.direction.multiply(if(inAccelerate.contains(player))1.5 else 1.0)
                 for (nearby in getNearbyEnemies(player, 5.toDouble())!!) {
                     if (damaged.contains(nearby)) {
                         continue
@@ -73,7 +72,7 @@ class MK2 : Listener {
         if (inCD.contains(player)){
             return
         }
-        if (MK2Stick.check(player.itemInHand)){
+        if (onPig.containsKey(player)){
             launchGhastFireball(player)
             inCD.add(player)
             object : BukkitRunnable() {
@@ -86,7 +85,7 @@ class MK2 : Listener {
     @EventHandler
     fun antiHitSelfPig(e: EntityDamageByEntityEvent){
         if (e.damager is Fireball&&(e.damager as Fireball).shooter is Player){
-            if (e.entity.type== EntityType.PIG){
+            if (e.entity.type== EntityType.HORSE){
                 val uuid = ((e.damager as Fireball).shooter as Player).uniqueId
                 if (e.entity?.passenger?.uniqueId?.equals(uuid) == true){
                     e.isCancelled = true
@@ -100,17 +99,17 @@ class MK2 : Listener {
 
 
         // 2. 设置火球的生成位置略高于玩家头部，避免一生成就撞到玩家自身
-        //fireball.teleport(player.getEyeLocation().add(player.getLocation().getDirection().multiply(1.5)))
+        fireball.teleport(player.eyeLocation.add(player.location.direction.multiply(1.5)))
 
 
         // 3. 设置火球的飞行速度和方向（朝向玩家视线方向）
-        val direction: Vector = player.getLocation().getDirection()
-        fireball.velocity = direction.multiply(1.1) // 1.5 为速度系数，可自由调整
+        val direction: Vector = player.location.direction
+        fireball.velocity = direction.multiply(if(inAccelerate.contains(player)) 1.5 else 1.1) // 1.5 为速度系数，可自由调整
 
 
         // 4. 设置恶魂火球特有的属性：方向向量与爆炸威力
-        fireball.setDirection(direction)
-        fireball.setYield(2.5f) // 爆炸威力（恶魂默认值为 1.0）
+        fireball.direction = direction
+        fireball.yield = 2.5f // 爆炸威力（恶魂默认值为 1.0）
         fireball.setIsIncendiary(true) // 是否产生火焰（设置为 true 会在爆炸处着火）
     }
     @EventHandler
@@ -119,10 +118,7 @@ class MK2 : Listener {
         if (!MegaWalls.getInstance().classManager.isMW(player)) {
             return
         }
-        if (!onPig.containsKey(player)){
-            return
-        }
-        if (MK2Stick.check(e.itemDrop.itemStack)){
+        if (onPig.containsKey(player)){
             e.isCancelled=true
 
             if (accelerateCD.containsKey(player)){

@@ -189,7 +189,7 @@ public class MegaWalls extends JavaPlugin {
     public void onEnable() {
         INSTANCE = this;
 
-        MixinPlugin mixinPlugin = MixBukkit.registerMixinPlugin(this, AutoMapper.getMappingAsStream());
+        /*MixinPlugin mixinPlugin = MixBukkit.registerMixinPlugin(this, AutoMapper.getMappingAsStream());
         try {
             mixinPlugin.registerMixin(
                     "Test Mixin",  // 命名空间，随便起，用于防止重复注入
@@ -197,7 +197,7 @@ public class MegaWalls extends JavaPlugin {
                             new ShellCodeReflectionMixinPluginMethodCall(
                                     MixinEntity.class.getDeclaredMethod("a",
                                             Entity.class, Item.class,int.class, CallbackInfo.class)
-                                    /*false*/
+                                    *//*false*//*
                             ),
                             new HLocatorHead()  // 注入到方法顶部
                     ),
@@ -209,7 +209,7 @@ public class MegaWalls extends JavaPlugin {
             );
         } catch (NoSuchMethodException e) {
             throw new RuntimeException(e);
-        }
+        }*/
 
 
         System.out.println("-----------------------------------");
