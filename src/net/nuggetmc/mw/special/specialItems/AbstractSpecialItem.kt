@@ -27,6 +27,7 @@ abstract class AbstractSpecialItem: Listener {
         if (itemStack==null) return false
         val nmsItem = CraftItemStack.asNMSCopy(itemStack)
         if (nmsItem == null) return false
+        if (itemStack.type== Material.AIR) return false
 
         val compound = if (nmsItem.hasTag()) nmsItem.getTag() else NBTTagCompound()
         return compound.getBoolean(id)

@@ -370,6 +370,7 @@ public class MegaWalls extends JavaPlugin {
             e.printStackTrace();
         }
     }
+
     public void saveSwordNames(){
         try {
             swordNames.save(file);

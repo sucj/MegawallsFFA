@@ -1,9 +1,9 @@
 package net.nuggetmc.mw.special
 
-import net.minecraft.server.v1_8_R3.Items
+import net.md_5.bungee.api.ChatColor
 import net.nuggetmc.mw.MegaWalls
-import net.nuggetmc.mw.special.specialItems.Terminator
-import net.nuggetmc.mw.utils.PlayerUtils
+import net.nuggetmc.mw.special.specialItems.MK2Stick
+import net.nuggetmc.mw.utils.MathUtils
 import net.nuggetmc.mw.utils.PlayerUtils.getNearbyEnemies
 import net.nuggetmc.mw.utils.PlayerUtils.getNearbyMobs
 import org.bukkit.Material
@@ -20,6 +20,8 @@ import org.bukkit.util.Vector
 class MK2 : Listener {
     val onPig : HashMap<Player, Pig> = HashMap()
     val inCD : HashSet<Player> = HashSet()
+    val inAccelerate= HashSet<Player>()
+    val accelerateCD= HashMap<Player, Long>()
     fun launchPig(player: Player){
         val pig = PigManager.spawnInvinciblePig(player.location)
         pig.passenger = player
@@ -29,16 +31,16 @@ class MK2 : Listener {
             var damaged: MutableList<Player> = ArrayList()
             var damagedMobs: MutableList<LivingEntity> = ArrayList()
             override fun run() {
-                if (pig.isDead || player.isDead || pig.passenger==null /*|| ticks >= 600*/
+                if (pig.isDead || player.isDead || pig.passenger==null||(!player.isOnline) /*|| ticks >= 600*/
                 ) {
-                    player.inventory.remove(Material.CARROT_STICK)
+                    player.inventory.forEachIndexed { index, stack -> if (MK2Stick.check(stack)) player.inventory.clear(index) }
                     pig.remove()
                     pig.velocity = Vector(0.0, 0.0, 0.0)
                     onPig.remove(player)
                     cancel()
                     return
                 }
-                pig.velocity = player.eyeLocation.direction.multiply(0.5)
+                pig.velocity = player.eyeLocation.direction.multiply(if(inAccelerate.contains(player))0.8 else 0.5)
                 for (nearby in getNearbyEnemies(player, 5.toDouble())!!) {
                     if (damaged.contains(nearby)) {
                         continue
@@ -65,14 +67,13 @@ class MK2 : Listener {
     @EventHandler
     fun onRC(e: PlayerInteractEvent){
         val player = e.getPlayer()
-        if (!MegaWalls.getInstance().getClassManager().isMW(player)) {
+        if (!MegaWalls.getInstance().classManager.isMW(player)) {
             return
         }
-        if (player.itemInHand == null || player.itemInHand.type == Material.AIR) return
         if (inCD.contains(player)){
             return
         }
-        if (player.itemInHand.type.equals(Material.CARROT_STICK)){
+        if (MK2Stick.check(player.itemInHand)){
             launchGhastFireball(player)
             inCD.add(player)
             object : BukkitRunnable() {
@@ -104,7 +105,7 @@ class MK2 : Listener {
 
         // 3. 设置火球的飞行速度和方向（朝向玩家视线方向）
         val direction: Vector = player.getLocation().getDirection()
-        fireball.velocity = direction.multiply(1) // 1.5 为速度系数，可自由调整
+        fireball.velocity = direction.multiply(1.1) // 1.5 为速度系数，可自由调整
 
 
         // 4. 设置恶魂火球特有的属性：方向向量与爆炸威力
@@ -121,10 +122,30 @@ class MK2 : Listener {
         if (!onPig.containsKey(player)){
             return
         }
-        if (e.itemDrop.itemStack.type.equals(Material.CARROT_STICK)){
+        if (MK2Stick.check(e.itemDrop.itemStack)){
             e.isCancelled=true
-            Terminator.termClick(player)
+
+            if (accelerateCD.containsKey(player)){
+                player.sendMessage("This is still in a cooldown of ${MathUtils.getCooldownNumber(20000,accelerateCD[player]!!,1)} seconds.")
+                return
+            }
+            if (inAccelerate.contains(player)){
+                return
+            }
+            accelerateCD[player]= System.currentTimeMillis()
+            object : BukkitRunnable(){
+                override fun run() {
+                    accelerateCD.remove(player)
+                }
+            }.runTaskLater(MegaWalls.getInstance(),20*20)
+            player.sendMessage("You accelerated your pig!")
+            inAccelerate.add(player)
+            object : BukkitRunnable(){
+                override fun run() {
+                    inAccelerate.remove(player)
+                }
+            }.runTaskLater(MegaWalls.getInstance(),5*20)
+
         }
-        println("Ffc")
     }
 }

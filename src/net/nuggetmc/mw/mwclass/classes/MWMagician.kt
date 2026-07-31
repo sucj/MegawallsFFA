@@ -164,6 +164,7 @@ class MWMagician : MWClass() {
         val victim=e.entity as Player
         if (manager[victim]==null) return
         if (manager[victim]!=this) return
+        if (e.cause== EntityDamageEvent.DamageCause.SUICIDE) return
         if (e is EntityDamageByEntityEvent && inCloakCache.contains(e.damager)){
             return
         }
@@ -328,6 +329,11 @@ class MWMagician : MWClass() {
         }
         object :BukkitRunnable(){
             override fun run() {
+
+                if (manager[player]!=this){
+                    inCloakCache.remove(player)
+                }
+
                 if (!inCloakCache.contains(player)){
                     creepers.forEach { it.destroy() }
                     cancel()

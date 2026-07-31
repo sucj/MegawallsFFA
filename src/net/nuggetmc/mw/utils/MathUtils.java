@@ -1,5 +1,6 @@
 package net.nuggetmc.mw.utils;
 
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.util.Vector;
 
 import java.math.BigDecimal;
@@ -24,5 +25,10 @@ public class MathUtils {
         BigDecimal bd = new BigDecimal(Double.toString(number));
         bd = bd.setScale(scale, RoundingMode.HALF_UP);
         return bd.doubleValue();
+    }
+    public static double getCooldownNumber(long cooldown,long thenTimeMillis,int scale){
+        long timePassed=(System.currentTimeMillis()-thenTimeMillis);
+        long rest= cooldown-timePassed;
+        return round(rest/1000.0,scale);
     }
 }

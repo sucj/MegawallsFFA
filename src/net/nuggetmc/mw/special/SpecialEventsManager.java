@@ -254,7 +254,14 @@ public class SpecialEventsManager implements Listener {
     @EventHandler
     public void onDeath(PlayerDeathEvent e) {
         Player killer = plugin.getEnergyManager().validate(e);
+        Player victim = e.getEntity();
         if (killer == null) {
+            return;
+        }
+        if (killer.getUniqueId().equals(victim.getUniqueId())){
+            return;
+        }
+        if (killer.getItemInHand()==null||killer.getItemInHand().getItemMeta()==null||killer.getItemInHand().getItemMeta().getDisplayName()==null){
             return;
         }
         e.setDeathMessage(String.format("%s%s%s was killed by %s%s with %s", ChatColor.GREEN, e.getEntity().getName(), ChatColor.WHITE, ChatColor.RED, killer.getName(), killer.getItemInHand().getItemMeta().getDisplayName()));

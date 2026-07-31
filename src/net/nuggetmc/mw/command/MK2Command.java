@@ -2,6 +2,7 @@ package net.nuggetmc.mw.command;
 
 import net.nuggetmc.mw.MegaWalls;
 import net.nuggetmc.mw.special.MK2;
+import net.nuggetmc.mw.special.specialItems.MK2Stick;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -22,7 +23,10 @@ public class MK2Command implements CommandExecutor {
             if (!MegaWalls.getInstance().getClassManager().isMW(player)){
                 return true;
             }
-            player.setItemInHand(new ItemStack(Material.CARROT_STICK));
+            if (MegaWalls.getInstance().mk2.getOnPig().containsKey(player)){
+                return true;
+            }
+            player.setItemInHand(MK2Stick.INSTANCE.buildItem());
             MegaWalls.getInstance().mk2.launchPig(player);
             return true;
         }
