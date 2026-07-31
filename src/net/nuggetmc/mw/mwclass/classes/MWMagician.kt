@@ -330,7 +330,7 @@ class MWMagician : MWClass() {
         object :BukkitRunnable(){
             override fun run() {
 
-                if (manager[player]!=this){
+                if (manager[player]!=this@MWMagician){
                     inCloakCache.remove(player)
                 }
 
