@@ -25,6 +25,10 @@ public class MK2Command implements CommandExecutor {
             if (MegaWalls.getInstance().mk2.getOnPig().containsKey(player)){
                 return true;
             }
+            if (!sender.hasPermission("mw.admin")){
+                sender.sendMessage("Please use /mwshop to buy and use it.");
+                return true;
+            }
             //player.setItemInHand(MK2Stick.INSTANCE.buildItem());
             MegaWalls.getInstance().mk2.launchPig(player);
             return true;
