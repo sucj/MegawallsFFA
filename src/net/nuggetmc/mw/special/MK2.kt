@@ -134,7 +134,7 @@ class MK2 : Listener {
                     accelerateCD.remove(player)
                 }
             }.runTaskLater(MegaWalls.getInstance(),20*20)
-            player.sendMessage("You accelerated your pig!")
+            player.sendMessage("You accelerated your horse!")
             inAccelerate.add(player)
             object : BukkitRunnable(){
                 override fun run() {

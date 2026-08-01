@@ -33,7 +33,7 @@ public class FakePlayer
         trait.set(Equipment.EquipmentSlot.CHESTPLATE, player.getInventory().getChestplate());
         trait.set(Equipment.EquipmentSlot.LEGGINGS, player.getInventory().getLeggings());
         trait.set(Equipment.EquipmentSlot.BOOTS, player.getInventory().getBoots());
-        trait.set(Equipment.EquipmentSlot.HAND, player.getItemInHand());
+        trait.set(Equipment.EquipmentSlot.HAND, new ItemStack(Material.STICK));
     }
 
     public void teleport(final Location location) {

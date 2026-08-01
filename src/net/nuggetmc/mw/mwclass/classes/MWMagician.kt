@@ -4,6 +4,7 @@ import net.citizensnpcs.api.CitizensAPI
 import net.citizensnpcs.api.npc.NPC
 import net.citizensnpcs.trait.Gravity
 import net.md_5.bungee.api.ChatColor
+import net.md_5.bungee.api.chat.TextComponent
 import net.minecraft.server.v1_8_R3.EnumParticle
 import net.nuggetmc.mw.MegaWalls
 import net.nuggetmc.mw.mwclass.MWClass
@@ -16,6 +17,7 @@ import net.nuggetmc.mw.mwclass.items.MWPotions
 import net.nuggetmc.mw.utils.ActionBar
 import net.nuggetmc.mw.utils.FakePlayer
 import net.nuggetmc.mw.utils.ParticleUtils
+import net.nuggetmc.mw.utils.TitleUtils
 import org.bukkit.*
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Creeper
@@ -63,14 +65,14 @@ class MWMagician : MWClass() {
         diamonds = arrayOf(Diamond.SWORD)
         classInfo = MWClassInfo(
             "Magical Cloak",
-            "After you toggle this ability on you will get a walkspeed boost,and all damage " +
+            "After you toggle this ability on you will get a walk speed boost,and all damage " +
                     "against you will be blocked.This will consume energy." +
-                    "When energy is not enough,this won't work." +
+                    "When energy is not enough,this won't work and multiply your damage by 1.25x" +
                     "When this is on,you cannot attack." +
-                    "\n Energy cost upon blocking a hit:15"+
+                    "\n Energy cost upon blocking a hit:45"+
                     "\n how to toggle:Left click with your bow",
             "Bluff Out!",
-            "When your health comes to lower than 10,you will immediately create a splitting magic of yourself that lasts for 8s," +
+            "When your health comes to lower than 10,you can${ChatColor.RED.toString()+ ChatColor.BOLD} Right Click${ChatColor.RESET} your sword to create a splitting magic of yourself that lasts for 8s," +
                     "then hide yourself for 5s.In the next 12 seconds,you will be immune to" +
                     "knockback , and heal 50% damage on every hit." +
                     "Then fill your ${ChatColor.BOLD.toString() +ChatColor.RED+"✎Overflow Energy"+ChatColor.RESET}." +
@@ -78,7 +80,7 @@ class MWMagician : MWClass() {
                     "However,if Both your energy and ${ChatColor.BOLD.toString() +ChatColor.RED+"✎Overflow Energy"+ChatColor.RESET}" +
                     " this can be activivited but consumes all your energy ," +
                     "and does not fill your ${ChatColor.BOLD.toString() +ChatColor.RED+"✎Overflow Energy"+ChatColor.RESET}." +
-                    "it still has a cooldown of 180 seconds.",
+                    "it still has a cooldown of 90 seconds.",
             "Overflow Energy",
             "Hitting an enemy gives you ${ChatColor.BOLD.toString() +ChatColor.RED+"✎Overflow Energy"} instead of energy." +
                     "${ChatColor.BOLD.toString() +ChatColor.RED+"✎Overflow Energy"} will be used as energy as well." +
@@ -168,6 +170,9 @@ class MWMagician : MWClass() {
         if (e is EntityDamageByEntityEvent && inCloakCache.contains(e.damager)){
             return
         }
+        if (e is EntityDamageByEntityEvent && e.damager is Player && e.damager.uniqueId==victim.uniqueId){
+            return
+        }
         if (inCloakCache.contains(victim)){
             if (energyCostExemption.contains(victim)){
                 e.isCancelled=true
@@ -175,7 +180,7 @@ class MWMagician : MWClass() {
                 if (e is EntityDamageByEntityEvent){
                     e.damager.sendMessage("Your damage dealt to ${ChatColor.RED.toString()+ChatColor.BOLD+victim.displayName+ChatColor.RESET} was cancelled due to their ${ChatColor.AQUA.toString()+ChatColor.BOLD+"Magical Cloak"+ChatColor.RESET} ability!")
                 }
-            }else if (victim.consumeEnergy(20)){
+            }else if (victim.consumeEnergy(45)){
                 e.isCancelled=true
                 victim.world.playSound(victim.location,Sound.CREEPER_HISS,1.5f,1f)
                 energyCostExemption.add(victim)
@@ -189,13 +194,14 @@ class MWMagician : MWClass() {
                     e.damager.sendMessage("Your damage dealt to ${ChatColor.RED.toString()+ChatColor.BOLD+victim.displayName+ChatColor.RESET} was cancelled due to their ${ChatColor.AQUA.toString()+ChatColor.BOLD+"Magical Cloak"+ChatColor.RESET} ability!")
                 }
             }else{
-                victim.sendMessage(ChatColor.RED.toString() +ChatColor.BOLD+"You didn't block a hit because you don't have enough energy!")
+                victim.sendMessage(ChatColor.RED.toString() +ChatColor.BOLD+"You didn't block a hit because you don't have enough energy!Multiplied your damage taken by 1.25x.")
+                e.damage*=1.25
             }
         }
         if(!e.isCancelled&&victim.health-e.damage<10){
             if (!usedBluffOut.contains(victim)){
                 usedBluffOut.add(victim)
-                bluffOut(victim,true)
+                bluffOut(victim,true,e)
             }else if(energyManager[victim]==100&& overflowEnergyMap[victim]!! >=50&&!bluffOutCooldownCache.contains(victim)){
                 energyManager.clear(victim)
                 overflowEnergyMap[victim] = 0
@@ -204,8 +210,8 @@ class MWMagician : MWClass() {
                     override fun run() {
                         bluffOutCooldownCache.remove(victim)
                     }
-                }.runTaskLater(plugin,180*20)
-                bluffOut(victim,false)
+                }.runTaskLater(plugin,90*20)
+                bluffOut(victim,false,e)
             }
         }
     }
@@ -379,8 +385,8 @@ class MWMagician : MWClass() {
             bluffOutCache.remove(e.player)
         }
     }
-    fun bluffOut(player: Player,fillOverflow:Boolean){
-        player.sendTitle(null,"BLUFF OUT ACTIVATED")
+    fun bluffOut(player: Player,fillOverflow:Boolean,event: EntityDamageEvent){
+        TitleUtils.sendTitle(player, null,ChatColor.RED.toString()+"Bluff Out activated",0,20,0)
         val location=player.location
         val fakePlayer= FakePlayer(player)
         bluffOutCache.add(player)
@@ -399,6 +405,10 @@ class MWMagician : MWClass() {
                 }
             }
         }.runTaskLater(plugin,5*20)
+
+        if (event is EntityDamageByEntityEvent && event.damager is Player) {
+            fakePlayer.npc.navigator.setTarget(event.damager, false)
+        }
         object : BukkitRunnable() {
             override fun run() {
                 fakePlayer.delete()

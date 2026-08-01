@@ -24,7 +24,7 @@ public class Good {
     public Good(ItemStack displayItem, String displayname, int price, ItemStack theItem, @Nullable String extralore) {
         this.displayItem = displayItem;
         this.price = price;
-        this.displayname = displayname;
+        this.displayname = ChatColor.stripColor(displayname);
         this.theItem = theItem;
         this.extralore = extralore;
     }

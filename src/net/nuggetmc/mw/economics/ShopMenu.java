@@ -5,6 +5,7 @@ import net.nuggetmc.mw.MegaWalls;
 import net.nuggetmc.mw.energy.EnergyManager;
 import net.nuggetmc.mw.mwclass.MWClassManager;
 import net.nuggetmc.mw.special.SpecialItemUtils;
+import net.nuggetmc.mw.special.specialItems.Mk2Spawner;
 import net.nuggetmc.mw.utils.ItemUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -41,6 +42,7 @@ public class ShopMenu implements Listener {
     Good ironChestplate = new Good(new ItemStack(Material.IRON_CHESTPLATE, 1), "Iron Chestplate", 1, new ItemStack(Material.IRON_CHESTPLATE, 1), null);
     Good ironLeggings = new Good(new ItemStack(Material.IRON_LEGGINGS, 1), "Iron Leggings", 1, new ItemStack(Material.IRON_LEGGINGS, 1), null);
     Good ironBoots = new Good(new ItemStack(Material.IRON_BOOTS, 1), "Iron Boots", 1, new ItemStack(Material.IRON_BOOTS, 1), null);
+    Good mk2Spawner = new Good(Mk2Spawner.INSTANCE.buildItem(),Mk2Spawner.INSTANCE.getDisplayName(),100,Mk2Spawner.INSTANCE.buildItem(), null);
 
     private void registergood(Good... GoodArray) {
         for (Good good : GoodArray) {
@@ -64,7 +66,8 @@ public class ShopMenu implements Listener {
                 ironChestplate,
                 ironBoots,
                 ironLeggings,
-                phxpot
+                phxpot,
+                mk2Spawner
         );
     }
 
@@ -79,6 +82,7 @@ public class ShopMenu implements Listener {
         loadPriceOrDefault(this.ironBoots, 1);
         loadPriceOrDefault(this.ironLeggings, 1);
         loadPriceOrDefault(this.phxpot, 20);
+        loadPriceOrDefault(this.mk2Spawner, 100);
     }
 
     private void loadPriceOrDefault(Good good, int defaulta) {
@@ -100,6 +104,7 @@ public class ShopMenu implements Listener {
         inv.setItem(19, ironLeggings.getMenuItem());
         inv.setItem(20, ironBoots.getMenuItem());
         inv.setItem(21, phxpot.getMenuItem());
+        inv.setItem(22, mk2Spawner.getMenuItem());
         //  inv.setItem(11, example);
 
 
@@ -142,7 +147,7 @@ public class ShopMenu implements Listener {
             player.sendMessage("your inventory is full!");
         } else {
             plugin.getCoinsManager().add(player, -(good.getPrice() * amount));
-            player.sendMessage("You have purchased " + amount + " " + ChatColor.YELLOW + good.getDisplayName() + ChatColor.RESET + " with " + ChatColor.GREEN + (good.getPrice() * amount) + ChatColor.RESET + " coins.");
+            player.sendMessage("You have purchased " + amount + " " + ChatColor.YELLOW + good.getDisplayName() + ChatColor.RESET + " for " + ChatColor.GREEN + (good.getPrice() * amount) + ChatColor.RESET + " coins.");
             ItemStack itemStack = good.getTheItem().clone();
             itemStack.setAmount(itemStack.getAmount() * amount);
             player.getInventory().addItem(itemStack);

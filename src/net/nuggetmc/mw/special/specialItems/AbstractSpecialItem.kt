@@ -12,7 +12,7 @@ import org.bukkit.inventory.ItemStack
 abstract class AbstractSpecialItem: Listener {
     abstract val id: String
     abstract val material: Material
-    abstract val enchantments:Map<Enchantment, Int>
+    abstract val enchantments:Map<Enchantment, Int>?
     abstract val displayName: String
     abstract val lore: ArrayList<String>
     open val unbreakable = true
@@ -34,9 +34,9 @@ abstract class AbstractSpecialItem: Listener {
     }
     open fun buildItem(): ItemStack {
         val item = ItemStack(material)
-
-        item.addUnsafeEnchantments(enchantments)
-
+        if (enchantments!=null) {
+            item.addUnsafeEnchantments(enchantments)
+        }
 
         val meta = item.getItemMeta()
         meta.setDisplayName(displayName)
