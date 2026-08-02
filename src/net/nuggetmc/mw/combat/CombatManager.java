@@ -17,7 +17,8 @@ public class CombatManager {
     }
 
     public boolean isInCombat(Player player) {
-        return inCombatPlayers.contains(player);
+        return true;
+        //return inCombatPlayers.contains(player);
     }
 
     public void removeInCombat(Player player) {

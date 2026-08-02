@@ -25,8 +25,10 @@ public class FakePlayer
         this.thePlayer = player;
         this.location = player.getLocation().clone();
         this.npc=CitizensAPI.getNPCRegistry().createNPC(EntityType.PLAYER,player.getPlayerListName(),player.getLocation());
-        SkinTrait skinTrait=npc.getOrAddTrait(SkinTrait.class);
-        skinTrait.setSkinName(player.getName());
+        if (!NpcSkinUtil.applySkinsRestorerSkin(npc, player.getName())) {
+            SkinTrait skinTrait = npc.getOrAddTrait(SkinTrait.class);
+            skinTrait.setSkinName(player.getName());
+        }
         this.npc.spawn(this.location);
         final Equipment trait = (Equipment)this.npc.getTrait((Class)Equipment.class);
         trait.set(Equipment.EquipmentSlot.HELMET, player.getInventory().getHelmet());
