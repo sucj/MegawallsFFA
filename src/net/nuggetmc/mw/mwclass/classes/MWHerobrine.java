@@ -9,6 +9,7 @@ import net.nuggetmc.mw.mwclass.items.MWItem;
 import net.nuggetmc.mw.mwclass.items.MWKit;
 import net.nuggetmc.mw.mwclass.items.MWPotions;
 import net.nuggetmc.mw.utils.ActionBar;
+import net.nuggetmc.mw.utils.PlayerSafeSet;
 import net.nuggetmc.mw.utils.PotionUtils;
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
@@ -24,7 +25,7 @@ import java.util.*;
 public class MWHerobrine extends MWClass {
 
     private final Map<Player, Integer> increment = new HashMap<>();
-    private final Set<Player> wrathList = new HashSet<>();
+    private final PlayerSafeSet wrathList = new PlayerSafeSet();
 
     public MWHerobrine() {
         this.name = new String[]{"Herobrine", "HBR"};
@@ -62,7 +63,7 @@ public class MWHerobrine extends MWClass {
 
         boolean pass = false;
 
-        Set<Player> cache = new HashSet<>();
+        PlayerSafeSet cache = new PlayerSafeSet();
 
         for (Player victim : Bukkit.getOnlinePlayers()) {
             if (player.getWorld() != victim.getWorld()) continue;

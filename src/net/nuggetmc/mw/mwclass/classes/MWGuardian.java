@@ -14,6 +14,7 @@ import net.nuggetmc.mw.special.specialItems.MegaBreaker;
 import net.nuggetmc.mw.utils.ActionBar;
 import net.nuggetmc.mw.utils.ItemUtils;
 import net.nuggetmc.mw.utils.MathUtils;
+import net.nuggetmc.mw.utils.PlayerSafeSet;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -34,10 +35,10 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.*;
 
 public class MWGuardian extends MWClass {
-    Set<Player> extrimityList = new HashSet<>();
-    Set<Player> suckList = new HashSet<>();
-    Set<Player> waterList = new HashSet<>();
-    Set<Player> multiplyList = new HashSet<>();
+    PlayerSafeSet extrimityList = new PlayerSafeSet();
+    PlayerSafeSet suckList = new PlayerSafeSet();
+    PlayerSafeSet waterList = new PlayerSafeSet();
+    PlayerSafeSet multiplyList = new PlayerSafeSet();
     Map<Player, Long> shuaQiCooldown = new HashMap<>();
 
 
@@ -192,7 +193,7 @@ public class MWGuardian extends MWClass {
 
     @Override
     public void ability(Player player) {
-        Set<Player> targets = new HashSet<>();
+        PlayerSafeSet targets = new PlayerSafeSet();
         for (Player player1 : Bukkit.getOnlinePlayers()) {
             if (!(!plugin.getCombatManager().isInCombat(player1) || player1.isDead() || player1.getGameMode() == GameMode.CREATIVE || (player1.getLocation().distance(player.getLocation()) > 15) || player1.equals(player))) {
                 targets.add(player1);
@@ -205,7 +206,7 @@ public class MWGuardian extends MWClass {
             player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 5 * 20, 1));
             ArrayList<Player> arrayList = new ArrayList<>(targets.size());
             for (int i = 0; i < targets.size(); i++) {
-                arrayList.add((Player) targets.toArray()[i]);
+                arrayList.add(targets.toArray()[i]);
             }
             arrayList.sort(Comparator.comparingDouble(player2 -> player.getEyeLocation().distance(player2.getLocation())));
             mwhealth.trueDamage(arrayList.get(0), 5d, player);

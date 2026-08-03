@@ -9,6 +9,7 @@ import net.nuggetmc.mw.mwclass.items.MWItem;
 import net.nuggetmc.mw.mwclass.items.MWKit;
 import net.nuggetmc.mw.mwclass.items.MWPotions;
 import net.nuggetmc.mw.utils.ActionBar;
+import net.nuggetmc.mw.utils.PlayerSafeSet;
 import net.nuggetmc.mw.utils.PlayerUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -28,8 +29,8 @@ import java.util.*;
 
 public class MWDriver extends MWClass {
 
-    private final Set<Player> runnerList = new HashSet<>();
-    private final Set<Player> abilitycache = new HashSet<>();
+    private final PlayerSafeSet runnerList = new PlayerSafeSet();
+    private final PlayerSafeSet abilitycache = new PlayerSafeSet();
 
 
     public MWDriver() {

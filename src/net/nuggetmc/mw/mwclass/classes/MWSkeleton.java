@@ -10,6 +10,7 @@ import net.nuggetmc.mw.mwclass.items.MWItem;
 import net.nuggetmc.mw.mwclass.items.MWKit;
 import net.nuggetmc.mw.mwclass.items.MWPotions;
 import net.nuggetmc.mw.utils.ParticleUtils;
+import net.nuggetmc.mw.utils.PlayerSafeSet;
 import net.nuggetmc.mw.utils.PotionUtils;
 import net.nuggetmc.mw.utils.WorldUtils;
 import org.bukkit.*;
@@ -34,7 +35,7 @@ public class MWSkeleton extends MWClass {
 
     private final Map<Arrow, Player> explosiveArrows = new HashMap<>();
     private final Map<Arrow, Float> arrowForce = new HashMap<>();
-    private final Set<Player> cooldownCache = new HashSet<>();
+    private final PlayerSafeSet cooldownCache = new PlayerSafeSet();
 
     public MWSkeleton() {
         this.name = new String[]{"Skeleton", "SKE"};

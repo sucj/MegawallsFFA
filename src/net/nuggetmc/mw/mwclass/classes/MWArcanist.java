@@ -13,10 +13,7 @@ import net.nuggetmc.mw.mwclass.items.MWKit;
 import net.nuggetmc.mw.mwclass.items.MWPotions;
 import net.nuggetmc.mw.special.SpecialEventsManager;
 import net.nuggetmc.mw.special.TeamsManager;
-import net.nuggetmc.mw.utils.FireworkEffectPlayer;
-import net.nuggetmc.mw.utils.LocationUtils;
-import net.nuggetmc.mw.utils.ParticleEffect;
-import net.nuggetmc.mw.utils.PlayerUtils;
+import net.nuggetmc.mw.utils.*;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
@@ -36,7 +33,7 @@ import java.util.*;
 public class MWArcanist extends MWClass {
 
     Map<Player, Integer> dmgcount = new HashMap<>();
-    Set<Player> cooldownCache = new HashSet<>();
+    PlayerSafeSet cooldownCache = new PlayerSafeSet();
 
 
     public MWArcanist() {

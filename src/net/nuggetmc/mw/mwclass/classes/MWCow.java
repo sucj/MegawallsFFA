@@ -10,6 +10,7 @@ import net.nuggetmc.mw.mwclass.items.MWItem;
 import net.nuggetmc.mw.mwclass.items.MWKit;
 import net.nuggetmc.mw.mwclass.items.MWPotions;
 import net.nuggetmc.mw.utils.ItemUtils;
+import net.nuggetmc.mw.utils.PlayerSafeSet;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -31,7 +32,7 @@ public class MWCow extends MWClass {
 
     Map<Player, Integer> mine = new HashMap<>();
     final int cowBucketValue = 30;
-    private final Set<Player> willpowerList = new HashSet<>();
+    private final PlayerSafeSet willpowerList = new PlayerSafeSet();
     Map<Player, Integer> dmgcount = new HashMap<>();
 
     public MWCow() {

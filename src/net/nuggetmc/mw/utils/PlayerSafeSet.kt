@@ -52,4 +52,20 @@ class PlayerSafeSet : Iterable<Player>{
     override fun iterator(): Iterator<Player> {
         return getOnlinePlayers().iterator()
     }
+    /**
+     * 无参 toArray：直接获取在线玩家的 Array<Player> / Player[] 数组
+     */
+    fun toArray(): Array<Player> {
+        return getOnlinePlayers().toTypedArray()
+    }
+
+    /**
+     * 兼容 Java Collection.toArray(T[] a) 规范的重载
+     */
+    @Suppress("UNCHECKED_CAST")
+    fun <T> toArray(array: Array<T>): Array<T> {
+        val onlineList = getOnlinePlayers()
+        // 借助 Java 集合的 API 原生转换
+        return (onlineList as java.util.Collection<*>).toArray(array) as Array<T>
+    }
 }

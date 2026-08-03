@@ -11,6 +11,7 @@ import net.nuggetmc.mw.mwclass.items.MWKit;
 import net.nuggetmc.mw.mwclass.items.MWPotions;
 import net.nuggetmc.mw.utils.ItemUtils;
 import net.nuggetmc.mw.utils.ParticleUtils;
+import net.nuggetmc.mw.utils.PlayerSafeSet;
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -28,7 +29,7 @@ import java.util.*;
 
 public class MWSquid extends MWClass {
 
-    private final Set<Player> rejuvenateList = new HashSet<>();
+    private final PlayerSafeSet rejuvenateList = new PlayerSafeSet();
 
     public MWSquid() {
         this.name = new String[]{"Squid", "SQU"};

@@ -10,6 +10,7 @@ import net.nuggetmc.mw.mwclass.items.MWItem;
 import net.nuggetmc.mw.mwclass.items.MWKit;
 import net.nuggetmc.mw.mwclass.items.MWPotions;
 import net.nuggetmc.mw.utils.ParticleUtils;
+import net.nuggetmc.mw.utils.PlayerSafeSet;
 import net.nuggetmc.mw.utils.PotionUtils;
 import net.nuggetmc.mw.utils.WorldUtils;
 import org.bukkit.*;
@@ -37,7 +38,7 @@ public class MWCreeper extends MWClass {
 
     private final Map<BukkitRunnable, Integer> tasks = new HashMap<>();
     private final Map<TNTPrimed, Player> miniTNTList = new HashMap<>();
-    private final Set<Player> willpowerList = new HashSet<>();
+    private final PlayerSafeSet willpowerList = new PlayerSafeSet();
 
     public MWCreeper() {
         this.name = new String[]{"Creeper", "CRE"};

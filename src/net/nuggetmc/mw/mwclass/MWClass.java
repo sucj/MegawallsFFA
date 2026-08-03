@@ -10,6 +10,7 @@ import net.nuggetmc.mw.mwclass.info.Playstyle;
 import net.nuggetmc.mw.special.SpecialEventsManager;
 import net.nuggetmc.mw.special.specialItems.AOTR;
 import net.nuggetmc.mw.utils.MWHealth;
+import net.nuggetmc.mw.utils.PlayerSafeSet;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -51,10 +52,10 @@ public abstract class MWClass implements Listener {
         return name[0];
     }
 
-    protected Set<Player> inRange(Player player, double radius) {
+    protected PlayerSafeSet inRange(Player player, double radius) {
         World world = player.getWorld();
         Location locUp = player.getEyeLocation();
-        Set<Player> result = new HashSet<>();
+        PlayerSafeSet result = new PlayerSafeSet();
 
         for (Player victim : Bukkit.getOnlinePlayers()) {
             if (world != victim.getWorld()) continue;

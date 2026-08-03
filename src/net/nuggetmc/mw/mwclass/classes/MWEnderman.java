@@ -9,10 +9,7 @@ import net.nuggetmc.mw.mwclass.info.Playstyle;
 import net.nuggetmc.mw.mwclass.items.MWItem;
 import net.nuggetmc.mw.mwclass.items.MWKit;
 import net.nuggetmc.mw.mwclass.items.MWPotions;
-import net.nuggetmc.mw.utils.ActionBar;
-import net.nuggetmc.mw.utils.ParticleUtils;
-import net.nuggetmc.mw.utils.PlayerUtils;
-import net.nuggetmc.mw.utils.PotionUtils;
+import net.nuggetmc.mw.utils.*;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
@@ -31,7 +28,7 @@ import java.util.stream.Collectors;
 public class MWEnderman extends MWClass {
 
     private final Map<Player, Wrapper> cooldownCacheAbility = new HashMap<>();
-    private final Set<Player> cooldownCacheRegen = new HashSet<>();
+    private final PlayerSafeSet cooldownCacheRegen = new PlayerSafeSet();
     private final Map<Player, Integer> incrementGathering = new HashMap<>();
     private final Map<Player, Integer> incrementEChest = new HashMap<>();
 

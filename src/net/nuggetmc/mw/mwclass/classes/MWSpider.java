@@ -12,6 +12,7 @@ import net.nuggetmc.mw.mwclass.items.MWKit;
 import net.nuggetmc.mw.mwclass.items.MWPotions;
 import net.nuggetmc.mw.utils.ActionBar;
 import net.nuggetmc.mw.utils.ParticleUtils;
+import net.nuggetmc.mw.utils.PlayerSafeSet;
 import net.nuggetmc.mw.utils.PotionUtils;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -33,7 +34,7 @@ import java.util.*;
 public class MWSpider extends MWClass {
 
     private final Set<Material> leapExceptions;
-    private final Set<Player> leapingCache = new HashSet<>();
+    private final PlayerSafeSet leapingCache = new PlayerSafeSet();
     private final Map<Player, SkitterData> skitterData = new HashMap<>();
     private final Map<Player, Integer> increment = new HashMap<>();
 
