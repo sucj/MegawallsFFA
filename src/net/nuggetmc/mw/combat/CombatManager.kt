@@ -1,6 +1,7 @@
 package net.nuggetmc.mw.combat
 
 import net.nuggetmc.mw.MegaWalls
+import net.nuggetmc.mw.utils.PlayerSafeSet
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -34,5 +35,5 @@ object CombatManager : Listener {
     fun onJoin(e: PlayerJoinEvent){
         removeInCombat(e.player)
     }
-    var inCombatPlayers = ArrayList<Player>()
+    var inCombatPlayers = PlayerSafeSet()
 }

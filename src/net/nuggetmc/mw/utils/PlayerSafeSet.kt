@@ -4,14 +4,26 @@ import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import java.util.*
 
-class PlayerSafeSet {
+class PlayerSafeSet : Iterable<Player>{
     @PublishedApi
     internal val storage = hashSetOf<UUID>()
 
-    // 支持 Player
-    fun add(player: Player): Boolean = storage.add(player.uniqueId)
-    fun remove(player: Player): Boolean = storage.remove(player.uniqueId)
-    operator fun contains(player: Player): Boolean = storage.contains(player.uniqueId)
+    fun add(player: Player?): Boolean {
+        if (player == null) return false
+        return storage.add(player.uniqueId)
+    }
+
+    // 将参数类型改为 Player?
+    fun remove(player: Player?): Boolean {
+        if (player == null) return false
+        return storage.remove(player.uniqueId)
+    }
+
+    // 将参数类型改为 Player?
+    operator fun contains(player: Player?): Boolean {
+        if (player == null) return false
+        return storage.contains(player.uniqueId)
+    }
 
     // 支持 UUID
     fun add(uuid: UUID): Boolean = storage.add(uuid)
@@ -36,5 +48,8 @@ class PlayerSafeSet {
             val player = Bukkit.getPlayer(uuid) ?: continue
             block(player)
         }
+    }
+    override fun iterator(): Iterator<Player> {
+        return getOnlinePlayers().iterator()
     }
 }
