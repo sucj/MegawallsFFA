@@ -46,7 +46,7 @@ object DiamondCounter {
                 (player as CraftPlayer).sendTitle(ChatColor.GOLD.toString()+ ChatColor.BOLD+"A wither has spawned nearby!", ChatColor.GRAY.toString()+"Kill it to become a Psychopath")
             }
         }else {
-            player.sendMessage("Diamond count: ${untilNow}/3 until a wither summons")
+            Bukkit.broadcastMessage("Diamond count: ${untilNow}/3 until a wither summons")
         }
     }
 }
