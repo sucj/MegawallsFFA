@@ -2,21 +2,19 @@ package net.nuggetmc.mw.special;
 
 import com.earth2me.essentials.Essentials;
 import com.joshargent.RegionPreserve.RegionPreservePlugin;
-import fr.bukkit.effectkill.utils.Particle;
 import io.isles.nametagapi.NametagAPI;
 import net.md_5.bungee.api.ChatColor;
-import net.minecraft.server.v1_8_R3.BlockPosition;
 import net.nuggetmc.mw.MegaWalls;
+import net.nuggetmc.mw.events.DiamondCounter;
 import net.nuggetmc.mw.mwclass.classes.MWCow;
 import net.nuggetmc.mw.mwclass.classes.MWMole;
-import net.nuggetmc.mw.mwclass.items.MWItem;
 import net.nuggetmc.mw.special.specialItems.AOTR;
 import net.nuggetmc.mw.special.specialItems.Terminator;
 import net.nuggetmc.mw.utils.ItemUtils;
+import net.nuggetmc.mw.utils.ParticleUtils;
 import net.nuggetmc.mw.utils.PlayerUtils;
 import org.bukkit.*;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -26,17 +24,18 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.CraftItemEvent;
-import org.bukkit.event.inventory.PrepareItemCraftEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.*;
-import org.bukkit.inventory.*;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.util.Vector;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.*;
+import java.util.Objects;
 
 
 public class SpecialEventsManager implements Listener {
@@ -335,7 +334,7 @@ public class SpecialEventsManager implements Listener {
         if (material == Material.DIAMOND_ORE) {
             e.setCancelled(true);
             e.getBlock().setType(Material.AIR);
-            plugin.breakDiamond(e.getPlayer());
+            DiamondCounter.INSTANCE.breakDiamond(e.getPlayer(),e.getBlock().getLocation());
         }
         if(!plugin.resetMap.containsKey(e.getBlock())) {
             plugin.resetMap.put(e.getBlock(), material);
@@ -453,6 +452,10 @@ public class SpecialEventsManager implements Listener {
         ItemStack newSlotItem=player.getInventory().getItem(e.getNewSlot());
         ItemStack previousItem=player.getInventory().getItem(e.getPreviousSlot());
 
+        doHeldChange(newSlotItem, player, previousItem);
+    }
+
+    private void doHeldChange(ItemStack newSlotItem, Player player, ItemStack previousItem) {
         if (verify(newSlotItem)&& newSlotItem.getType().equals(Material.BOW)&&!Terminator.INSTANCE.check(newSlotItem)){
             for (int i = 0; i < player.getInventory().getSize(); i++) {
                 ItemStack itemStack = player.getInventory().getItem(i);
@@ -461,7 +464,7 @@ public class SpecialEventsManager implements Listener {
                     break;
                 }
             }
-        } else if (verify(previousItem)&&previousItem.getType().equals(Material.BOW)&&!Terminator.INSTANCE.check(previousItem)) {
+        } else if (verify(previousItem)&& previousItem.getType().equals(Material.BOW)&&!Terminator.INSTANCE.check(previousItem)) {
             for (int i = 0; i < player.getInventory().getSize(); i++) {
                 ItemStack itemStack = player.getInventory().getItem(i);
                 if (itemStack == null) continue;
@@ -478,6 +481,37 @@ public class SpecialEventsManager implements Listener {
             }
         }
     }
+
+    @EventHandler
+    public void onInventoryClick(InventoryClickEvent event) {
+        if (!(event.getWhoClicked() instanceof Player)) return;
+        Player player = (Player) event.getWhoClicked();
+
+        // 先记录下点击前手持的物品（或其 Snapshot/Type）
+        ItemStack itemBefore = player.getItemInHand() != null ? player.getItemInHand().clone() : null;
+
+        // 延迟 1 tick 检查物品是否发生了改变
+        // 这样无论玩家是用 Shift 键移入、鼠标拖拽替换、还是数字键快捷交换，都能精准捕捉！
+        Bukkit.getScheduler().runTask(plugin, () -> {
+            ItemStack itemAfter = player.getItemInHand();
+
+            // 比较点击前后手持物品是否有变化
+            if (!isSameItem(itemBefore, itemAfter)) {
+                doHeldChange(itemAfter,player,itemBefore);
+            }
+        });
+    }
+
+    /**
+     * 辅助方法：比较两个 ItemStack 是否相同（处理 null 和 AIR）
+     */
+    private boolean isSameItem(ItemStack item1, ItemStack item2) {
+        if (item1 == null || item1.getType() == Material.AIR) {
+            return item2 == null || item2.getType() == Material.AIR;
+        }
+        return item1.isSimilar(item2) && item1.getAmount() == item2.getAmount();
+    }
+
     public boolean verify(ItemStack itemStack){
         if (itemStack == null) {
             return false;

@@ -2,6 +2,7 @@ package net.nuggetmc.mw.mwclass.classes
 
 import net.md_5.bungee.api.ChatColor
 import net.minecraft.server.v1_8_R3.BlockPosition
+import net.nuggetmc.mw.events.DiamondCounter
 import net.nuggetmc.mw.mwclass.MWClass
 import net.nuggetmc.mw.mwclass.info.Diamond
 import net.nuggetmc.mw.mwclass.info.MWClassInfo
@@ -103,7 +104,7 @@ class MWMole : MWClass() {
                             plugin.resetMap[block1] = material
                         }
                     } else {
-                        plugin.breakDiamond(player)
+                        DiamondCounter.breakDiamond(player,block1.location)
                     }
                 }
                 for (nearby in getNearbyEnemies(player,  5.toDouble())) {

@@ -3,6 +3,7 @@ package net.nuggetmc.mw.mwclass.classes;
 import net.md_5.bungee.api.ChatColor;
 import net.nuggetmc.mw.MegaWalls;
 import net.nuggetmc.mw.combat.CombatManager;
+import net.nuggetmc.mw.events.DiamondCounter;
 import net.nuggetmc.mw.mwclass.MWClass;
 import net.nuggetmc.mw.mwclass.info.Diamond;
 import net.nuggetmc.mw.mwclass.info.MWClassInfo;
@@ -98,7 +99,7 @@ public class MWArcanist extends MWClass {
                             plugin.resetMap.put(block2, material);
                         }
                     } else {
-                        plugin.breakDiamond(player);
+                        DiamondCounter.INSTANCE.breakDiamond(player,block2.getLocation());
                     }
 
                         block2.setType(Material.AIR);

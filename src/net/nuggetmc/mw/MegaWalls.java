@@ -9,6 +9,7 @@ import com.dragoncommissions.mixbukkit.api.locator.impl.HLocatorHead;
 import com.dragoncommissions.mixbukkit.api.shellcode.impl.api.CallbackInfo;
 import com.dragoncommissions.mixbukkit.api.shellcode.impl.api.ShellCodeReflectionMixinPluginMethodCall;
 import net.citizensnpcs.api.CitizensAPI;
+import net.citizensnpcs.api.trait.TraitInfo;
 import net.minecraft.server.v1_8_R3.*;
 import net.nuggetmc.mw.combat.CombatManager;
 import net.nuggetmc.mw.command.*;
@@ -16,6 +17,7 @@ import net.nuggetmc.mw.economics.CoinsManager;
 import net.nuggetmc.mw.economics.SellMenu;
 import net.nuggetmc.mw.economics.ShopMenu;
 import net.nuggetmc.mw.energy.EnergyManager;
+import net.nuggetmc.mw.events.PsychopathManager;
 import net.nuggetmc.mw.killeffects.KEMenu;
 import net.nuggetmc.mw.killeffects.KillEffectManager;
 import net.nuggetmc.mw.mixins.MixinEntity;
@@ -177,7 +179,9 @@ public class MegaWalls extends JavaPlugin {
             }
         }
         for (Block block:resetMap.keySet()){
-            block.setType(resetMap.get(block));
+            if (!block.getType().equals(Material.DIAMOND_ORE)) {
+                block.setType(resetMap.get(block));
+            }
         }
         resetMap.clear();
     }
@@ -355,7 +359,8 @@ public class MegaWalls extends JavaPlugin {
                 this.teamsManager,
                 this.keMenu,
                 new WorldUtils(),
-                this.mk2
+                this.mk2,
+                PsychopathManager.INSTANCE
         );
 
         // this.restore();
@@ -374,7 +379,7 @@ public class MegaWalls extends JavaPlugin {
         }
 
         CitizensAPI.getTraitFactory()
-                .registerTrait(net.citizensnpcs.api.trait.TraitInfo.create(RemoveOnDeathTrait.class));
+                .registerTrait(TraitInfo.create(RemoveOnDeathTrait.class));
     }
 
     public void saveSwordNames(){
@@ -432,33 +437,6 @@ public class MegaWalls extends JavaPlugin {
         Arrays.stream(mwclasses).forEach(this::registerEvents);
     }
 
-
-    public void breakDiamond(Player player){
-        int i=random.nextInt(6);
-        PotionEffectType pet=null;
-        switch (i){
-            case 0:
-                pet=PotionEffectType.JUMP;
-                break;
-            case 1:
-                pet=PotionEffectType.DAMAGE_RESISTANCE;
-                break;
-            case 2:
-                pet=PotionEffectType.SPEED;
-                break;
-            case 3:
-                pet=PotionEffectType.REGENERATION;
-                break;
-            case 4:
-                pet=PotionEffectType.INCREASE_DAMAGE;
-                break;
-            case 5:
-                pet=PotionEffectType.HEALTH_BOOST;
-                break;
-        }
-        player.addPotionEffect(new PotionEffect(pet,120*20,1));
-        player.sendMessage("You were given "+pet.getName()+" for breaking a diamond ore!");
-    }
 }
 
 

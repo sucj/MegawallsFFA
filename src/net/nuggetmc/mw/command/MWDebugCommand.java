@@ -1,7 +1,7 @@
 package net.nuggetmc.mw.command;
 
-import net.nuggetmc.mw.MegaWalls;
-import net.nuggetmc.mw.special.entities.WitherNPCUtil;
+import net.nuggetmc.mw.events.PsychopathManager;
+import net.nuggetmc.mw.special.entities.wither.WitherNPCUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -18,9 +18,7 @@ public class MWDebugCommand implements CommandExecutor {
             if (!sender.hasPermission("mw.admin")){
                 return true;
             }
-
-            WitherNPCUtil.INSTANCE.spawnKnockbackResistantWither(player.getLocation(), ChatColor.RED.toString()+ChatColor.BOLD+"Nicron");
-
+            PsychopathManager.INSTANCE.addPsychopath(player);
             return true;
         }
         sender.sendMessage("this can only be used by player!");

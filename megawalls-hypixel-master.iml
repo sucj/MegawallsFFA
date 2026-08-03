@@ -31,5 +31,6 @@
     <orderEntry type="library" name="KotlinJavaRuntime" level="project" />
     <orderEntry type="library" name="MixBukkit-1.0-SNAPSHOT" level="project" />
     <orderEntry type="library" name="SkinsRestorer" level="project" />
+    <orderEntry type="library" name="Sentry" level="project" />
   </component>
 </module>

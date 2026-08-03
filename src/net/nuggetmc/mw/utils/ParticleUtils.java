@@ -28,4 +28,23 @@ public class ParticleUtils {
             ((CraftPlayer) player).getHandle().playerConnection.sendPacket(particles);
         }
     }
+    public static void play(EnumParticle type, Location loc, double offsetX, double offsetY, double offsetZ, double speed, int count, int... data) {
+        PacketPlayOutWorldParticles particles = new PacketPlayOutWorldParticles(
+                type,
+                true,
+                (float) loc.getX(),
+                (float) loc.getY(),
+                (float) loc.getZ(),
+                (float) offsetX,
+                (float) offsetY,
+                (float) offsetZ,
+                (float) speed,
+                count,
+                data
+        );
+
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            ((CraftPlayer) player).getHandle().playerConnection.sendPacket(particles);
+        }
+    }
 }
