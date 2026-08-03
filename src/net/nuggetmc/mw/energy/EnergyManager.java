@@ -117,36 +117,6 @@ public class EnergyManager implements Listener {
         }
     }
 
-    public Player validate(EntityDamageByEntityEvent event) {
-        if (!(event.getEntity() instanceof Player)) return null;
-        if (!(event.getDamager() instanceof Player) && !(event.getDamager() instanceof Arrow)) return null;
-
-        Player player;
-
-        if (event.getDamager() instanceof Arrow) {
-            Arrow arrow = (Arrow) event.getDamager();
-
-            if (arrow.getShooter() instanceof Player) {
-                player = (Player) arrow.getShooter();
-
-                if (player == event.getEntity()) return null;
-            } else {
-                return null;
-            }
-
-        } else {
-            player = (Player) event.getDamager();
-        }
-
-        if (((Player) event.getEntity()).getNoDamageTicks() >= 12) return null;
-        if (event.getDamage() == 0 || event.isCancelled()) return null;
-
-        if (manager.isMW(player)) {
-            return player;
-        }
-
-        return null;
-    }
 
     public Player validate(PlayerDeathEvent event) {
         if (!(event.getEntity() instanceof Player)) return null;

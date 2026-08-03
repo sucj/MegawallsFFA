@@ -100,7 +100,7 @@ class MWWereWolf : MWClass() {
     override fun hit(event: EntityDamageByEntityEvent) {
         super.hit(event)
         if (event.isCancelled) return
-        val player = energyManager.validate(event) ?: return
+        val player = event.damager as? Player ?: return
         val victim = event.entity as Player
         if (manager[player] == this) {
 

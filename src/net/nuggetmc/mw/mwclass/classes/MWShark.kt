@@ -111,7 +111,7 @@ class MWShark : MWClass() {
     override fun hit(event: EntityDamageByEntityEvent) {
         super.hit(event)
         if (event.isCancelled) return
-        val player = energyManager.validate(event) ?: return
+        val player = event.damager as? Player ?: return
         if (manager[player] !== this) return
         energyManager.add(player, 20)
     }
@@ -190,7 +190,7 @@ class MWShark : MWClass() {
     fun onBloodRageSelf(event: EntityDamageByEntityEvent) {
         super.hit(event)
         if (event.isCancelled) return
-        val player = energyManager.validate(event) ?: return
+        val player = event.damager as? Player ?: return
         if (manager[player] !== this) return
         var increaceAmount = 0.0
         if (player.health < 15) increaceAmount += 0.215

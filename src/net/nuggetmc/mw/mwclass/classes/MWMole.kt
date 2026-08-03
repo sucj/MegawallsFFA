@@ -136,7 +136,7 @@ class MWMole : MWClass() {
     override fun hit(event: EntityDamageByEntityEvent) {
         super.hit(event)
         if (event.isCancelled) return
-        val player = energyManager.validate(event) ?: return
+        val player = event.damager as? Player ?: return
         if (manager[player] !== this) return
         energyManager.add(player, 10)
     }

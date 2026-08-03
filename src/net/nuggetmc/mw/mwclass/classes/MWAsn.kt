@@ -135,7 +135,7 @@ class MWAsn : MWClass() {
     fun onShadowStep(e: EntityDamageByEntityEvent) {
         super.hit(e)
         if (e.isCancelled) return
-        val player = energyManager.validate(e) ?: return
+        val player = e.damager as? Player ?: return
         val victim = e.entity as Player
         if (manager[victim] !== this) return
         if (sc.containsKey(victim)) return
@@ -222,7 +222,7 @@ class MWAsn : MWClass() {
     override fun hit(event: EntityDamageByEntityEvent) {
         super.hit(event)
         if (event.isCancelled) return
-        val player = energyManager.validate(event) ?: return
+        val player = event.damager as? Player ?: return
         val victim = event.entity as Player
         if (manager[player] !== this) return
         energyManager.add(player, 10)

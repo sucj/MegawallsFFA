@@ -140,7 +140,8 @@ public class MWGuardian extends MWClass {
     public void onSuck(EntityDamageByEntityEvent e) {
         if (e.isCancelled()) return;
         if (!(e.getEntity() instanceof Player)) return;
-        Player player = energyManager.validate(e);
+        
+        Player player = (Player) e.getDamager();
         if (player == null) return;
         if (plugin.getTeamsManager().isOnSameTeam(player, (Player) e.getEntity())) return;
         if (manager.get(player) != this) {
@@ -180,7 +181,8 @@ public class MWGuardian extends MWClass {
     public void onMultiply(EntityDamageByEntityEvent e) {
         if (e.isCancelled()) return;
         if (!(e.getEntity() instanceof Player)) return;
-        Player player = energyManager.validate(e);
+        
+        Player player = (Player) e.getDamager();
         if (player == null) return;
         if (manager.get(player) != this) {
             return;
@@ -218,7 +220,8 @@ public class MWGuardian extends MWClass {
     public void hit(EntityDamageByEntityEvent event) {
         super.hit(event);
         if (event.isCancelled()) return;
-        Player player = energyManager.validate(event);
+        
+        Player player = (Player) event.getDamager();
         if (player == null) return;
 
         if (manager.get(player) != this) return;

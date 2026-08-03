@@ -9,14 +9,18 @@ import net.nuggetmc.mw.mwclass.info.MWClassInfo;
 import net.nuggetmc.mw.mwclass.info.Playstyle;
 import net.nuggetmc.mw.special.SpecialEventsManager;
 import net.nuggetmc.mw.special.specialItems.AOTR;
+import net.nuggetmc.mw.targeting.TargetManager;
+import net.nuggetmc.mw.utils.EventDumper;
 import net.nuggetmc.mw.utils.MWHealth;
 import net.nuggetmc.mw.utils.PlayerSafeSet;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
@@ -78,9 +82,23 @@ public abstract class MWClass implements Listener {
             }
         }
     }*/
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onHit(EntityDamageByEntityEvent e) {
-        this.hit(e);
+        if (e.isCancelled()) return;
+        Entity damager = EventDumper.INSTANCE.dumpDamager(e);
+        if (damager==null) return;
+        Player victim = (Player) e.getEntity();
+        if (TargetManager.INSTANCE.isEnemy(victim,damager, TargetManager.TargetSelector.PLAYER)){
+            assert e.getDamager() instanceof Player;
+            this.hit(e);
+        }
+        if (damager instanceof Player && AOTR.INSTANCE.getInAotr().contains(damager.getUniqueId())) {
+            Player damagerPlayer = (Player) damager;
+            damagerPlayer.sendMessage("You hit an enemy,so disabled your " + ChatColor.GOLD + "Speed Boost " + ChatColor.RESET + "ability!");
+            damagerPlayer.setWalkSpeed(0.2f);
+            AOTR.INSTANCE.getInAotr().remove(damagerPlayer);
+        }
+
     }
 
     public Material getIcon() {
@@ -115,23 +133,7 @@ public abstract class MWClass implements Listener {
 
     public abstract void assign(Player player);
 
-    public void hit(EntityDamageByEntityEvent e) {
-        if (e.isCancelled()) return;
-        Player player = energyManager.validate(e);
-        if (player == null) return;
-        Player victim = (Player) e.getEntity();
-        if (!combatManager.isInCombat(player) || !combatManager.isInCombat(victim)) {
-            return;
-        }
-        if (MegaWalls.getInstance().getTeamsManager().isOnSameTeam(player, victim)) {
-            e.setCancelled(true);
-        }
-        if (AOTR.INSTANCE.getInAotr().contains(player)) {
-            player.sendMessage("You hit an enemy,so disabled your " + ChatColor.GOLD + "Speed Boost " + ChatColor.RESET + "ability!");
-            player.setWalkSpeed(0.2f);
-            AOTR.INSTANCE.getInAotr().remove(player);
-        }
-    }
+    public void hit(EntityDamageByEntityEvent e) {}
 
     public int getPrice() {
         return 0;

@@ -188,7 +188,8 @@ public class MWCreeper extends MWClass {
     public void hit(EntityDamageByEntityEvent event) {
         super.hit(event);
         if (event.isCancelled()) return;
-        Player player = energyManager.validate(event);
+        
+        Player player = (Player) event.getDamager();
         if (player == null) return;
 
         if (manager.get(player) == this) {

@@ -124,7 +124,7 @@ class MWMagician : MWClass() {
     override fun hit(event: EntityDamageByEntityEvent) {
         super.hit(event)
         if (event.isCancelled) return
-        val player = energyManager.validate(event) ?: return
+        val player = event.damager as? Player ?: return
         if (manager[player] == this) {
             if (inCloakCache.contains(player)){
                 event.isCancelled=true
