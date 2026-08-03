@@ -55,8 +55,8 @@ object WitherNPCUtil {
             nbt.setInt("NoAI", 1)
             nmsEntity.f(nbt)
         }
-        (npc.entity as CraftLivingEntity).maxHealth= 800.0
-        (npc.entity as CraftLivingEntity).health=800.0
+        (npc.entity as CraftLivingEntity).maxHealth= 500.0
+        (npc.entity as CraftLivingEntity).health=500.0
         (npc.entity as CraftLivingEntity).customName = name
         (npc.entity as CraftLivingEntity).isCustomNameVisible = true
         (npc.entity as CraftLivingEntity).maximumNoDamageTicks = 5
