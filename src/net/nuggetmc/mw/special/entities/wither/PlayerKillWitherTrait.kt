@@ -4,6 +4,9 @@ import net.citizensnpcs.api.event.NPCDeathEvent
 import net.citizensnpcs.api.trait.Trait
 import net.citizensnpcs.api.trait.TraitName
 import net.minecraft.server.v1_8_R3.NBTTagCompound
+import net.nuggetmc.mw.events.PsychopathManager
+import org.bukkit.Bukkit
+import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack
 import org.bukkit.entity.LivingEntity
@@ -36,6 +39,8 @@ class PlayerKillWitherTrait : Trait("player_kill_wither_listener") {
      * 当 NPC 被玩家击杀时的处理逻辑
      */
     private fun handleNPCKilledByPlayer(killer: Player) {
+        PsychopathManager.addPsychopath(killer)
+        Bukkit.broadcastMessage(ChatColor.LIGHT_PURPLE.toString()+ ChatColor.BOLD+"${killer.name} has became a psychopath!")
         convertAllEquipmentAndSwordsToDiamond(killer)
     }
     fun convertAllEquipmentAndSwordsToDiamond(player: Player) {
