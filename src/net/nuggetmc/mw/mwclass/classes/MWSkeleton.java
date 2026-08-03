@@ -9,10 +9,7 @@ import net.nuggetmc.mw.mwclass.info.Playstyle;
 import net.nuggetmc.mw.mwclass.items.MWItem;
 import net.nuggetmc.mw.mwclass.items.MWKit;
 import net.nuggetmc.mw.mwclass.items.MWPotions;
-import net.nuggetmc.mw.utils.ParticleUtils;
-import net.nuggetmc.mw.utils.PlayerSafeSet;
-import net.nuggetmc.mw.utils.PotionUtils;
-import net.nuggetmc.mw.utils.WorldUtils;
+import net.nuggetmc.mw.utils.*;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
@@ -133,9 +130,8 @@ public class MWSkeleton extends MWClass {
     public void hit(EntityDamageByEntityEvent event) {
         super.hit(event);
         if (event.isCancelled()) return;
-        
-        Player player = (Player) event.getDamager();
 
+        Player player = (Player) EventDumper.INSTANCE.dumpDamager(event);
         if (player == null) return;
         if (manager.get(player) != this) return;
         if (!(event.getDamager() instanceof Arrow)) return;
