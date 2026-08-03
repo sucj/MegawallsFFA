@@ -19,6 +19,7 @@ import net.nuggetmc.mw.utils.FakePlayer
 import net.nuggetmc.mw.utils.ParticleUtils
 import net.nuggetmc.mw.utils.TitleUtils
 import org.bukkit.*
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Creeper
 import org.bukkit.entity.EntityType
@@ -386,7 +387,7 @@ class MWMagician : MWClass() {
         }
     }
     fun bluffOut(player: Player,fillOverflow:Boolean,event: EntityDamageEvent){
-        TitleUtils.sendTitle(player, null,ChatColor.RED.toString()+"Bluff Out activated",0,20,0)
+        (player as CraftPlayer).sendTitle("", ChatColor.RED.toString()+"Bluff Out activated")
         val location=player.location
         val fakePlayer= FakePlayer(player)
         bluffOutCache.add(player)
