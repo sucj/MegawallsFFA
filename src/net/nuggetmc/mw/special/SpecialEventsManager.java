@@ -128,7 +128,7 @@ public class SpecialEventsManager implements Listener {
                 }
 
 
-                if (!plugin.getCompassManager().getCompassTargetMap().get(plr).equals(plugin.getTeamsManager().getTeamOfPlayer(p))) {
+                if (!Objects.equals(plugin.getCompassManager().getCompassTargetMap().get(plr), plugin.getTeamsManager().getTeamOfPlayer(p))) {
                     continue;
                 }
 

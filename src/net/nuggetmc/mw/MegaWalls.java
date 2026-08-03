@@ -8,6 +8,7 @@ import com.dragoncommissions.mixbukkit.api.action.impl.MActionInsertShellCode;
 import com.dragoncommissions.mixbukkit.api.locator.impl.HLocatorHead;
 import com.dragoncommissions.mixbukkit.api.shellcode.impl.api.CallbackInfo;
 import com.dragoncommissions.mixbukkit.api.shellcode.impl.api.ShellCodeReflectionMixinPluginMethodCall;
+import net.citizensnpcs.api.CitizensAPI;
 import net.minecraft.server.v1_8_R3.*;
 import net.nuggetmc.mw.combat.CombatManager;
 import net.nuggetmc.mw.command.*;
@@ -23,6 +24,7 @@ import net.nuggetmc.mw.mwclass.MWClassManager;
 import net.nuggetmc.mw.mwclass.MWClassMenu;
 import net.nuggetmc.mw.mwclass.classes.*;
 import net.nuggetmc.mw.special.*;
+import net.nuggetmc.mw.special.entities.RemoveOnDeathTrait;
 import net.nuggetmc.mw.utils.ItemUtils;
 import net.nuggetmc.mw.utils.MWHealth;
 import net.nuggetmc.mw.utils.WorldUtils;
@@ -314,6 +316,7 @@ public class MegaWalls extends JavaPlugin {
         setExecutor("pay",new PayCommand());
         setExecutor("walkspeed",new WalkSpeedCommand());
         setExecutor("mk2",new MK2Command());
+        setExecutor("mwdebug",new MWDebugCommand());
         setExecutorAndTabCompleter("mwitem", new GetItemCommand());
         setExecutorAndTabCompleter("megawalls", new MegaWallsCommand());
 
@@ -369,6 +372,9 @@ public class MegaWalls extends JavaPlugin {
             System.out.println("-------------------------------------------------------------");
             e.printStackTrace();
         }
+
+        CitizensAPI.getTraitFactory()
+                .registerTrait(net.citizensnpcs.api.trait.TraitInfo.create(RemoveOnDeathTrait.class));
     }
 
     public void saveSwordNames(){

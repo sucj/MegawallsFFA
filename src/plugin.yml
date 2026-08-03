@@ -74,6 +74,9 @@ commands:
   mk2:
     description: ride on a mk2.
     usage: /mk2
+  mwdebug:
+    description: debugger
+    usage: /mwdebug
 permissions:
   mw.*:
     description: MegaWalls parent permission.
