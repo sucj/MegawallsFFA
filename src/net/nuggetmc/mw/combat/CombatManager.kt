@@ -1,30 +1,38 @@
-package net.nuggetmc.mw.combat;
+package net.nuggetmc.mw.combat
 
-import org.bukkit.entity.Player;
+import net.nuggetmc.mw.MegaWalls
+import org.bukkit.entity.Player
+import org.bukkit.event.EventHandler
+import org.bukkit.event.Listener
+import org.bukkit.event.entity.PlayerDeathEvent
+import org.bukkit.event.player.PlayerJoinEvent
 
-import java.util.ArrayList;
-import java.util.List;
+object CombatManager : Listener {
+    init {
 
-public class CombatManager {
-    public List<Player> getInCombatPlayers() {
-        return inCombatPlayers;
     }
 
-    public static List<Player> inCombatPlayers = new ArrayList<>();
-
-    public void addInCombat(Player player) {
-        inCombatPlayers.add(player);
+    fun addInCombat(player: Player) {
+        inCombatPlayers.add(player)
     }
 
-    public boolean isInCombat(Player player) {
-        return false;
-        //return inCombatPlayers.contains(player);
+    fun isInCombat(player: Player?): Boolean {
+        return MegaWalls.getInstance().getClassManager().isMW(player)
     }
 
-    public void removeInCombat(Player player) {
+    fun removeInCombat(player: Player?) {
         if (isInCombat(player)) {
-            inCombatPlayers.remove(player);
+            inCombatPlayers.remove(player)
         }
     }
 
+    @EventHandler
+    fun onDeath(e: PlayerDeathEvent) {
+        removeInCombat(e.getEntity())
+    }
+    @EventHandler
+    fun onJoin(e: PlayerJoinEvent){
+        removeInCombat(e.player)
+    }
+    var inCombatPlayers = ArrayList<Player>()
 }

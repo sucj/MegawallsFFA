@@ -105,7 +105,6 @@ public class MegaWalls extends JavaPlugin {
         return specialItemUtils;
     }
 
-    private CombatManager combatManager;
 
 
     public static MegaWalls getInstance() {
@@ -136,9 +135,6 @@ public class MegaWalls extends JavaPlugin {
         return this.coinsManager;
     }
 
-    public CombatManager getCombatManager() {
-        return combatManager;
-    }
     public KEMenu getKeMenu() {
         return keMenu;
     }
@@ -163,6 +159,10 @@ public class MegaWalls extends JavaPlugin {
     static Random random=new Random();
     File file;
     public Map<Block, Material> resetMap=new HashMap<>();
+    public CombatManager combatManager = CombatManager.INSTANCE;
+    public CombatManager getCombatManager(){
+        return combatManager;
+    }
     public void tickBlockReset(){
         if (resetMap.isEmpty()) {
             return;
@@ -292,7 +292,6 @@ public class MegaWalls extends JavaPlugin {
         this.coinsManager = new CoinsManager();
         this.specialEventsManager = new SpecialEventsManager();
         this.mwClassMenu = new MWClassMenu(this, "Class Selector");
-        this.combatManager = new CombatManager();
         this.specialItemUtils = new SpecialItemUtils();
         this.teamsManager = new TeamsManager();
         this.mwhealth = new MWHealth();
@@ -360,7 +359,8 @@ public class MegaWalls extends JavaPlugin {
                 this.keMenu,
                 new WorldUtils(),
                 this.mk2,
-                PsychopathManager.INSTANCE
+                PsychopathManager.INSTANCE,
+                CombatManager.INSTANCE
         );
 
         // this.restore();
