@@ -3,6 +3,7 @@ package net.nuggetmc.mw.special
 import net.nuggetmc.mw.MegaWalls
 import net.nuggetmc.mw.special.TeamsManager.Team.*
 import net.nuggetmc.mw.utils.MathUtils
+import net.nuggetmc.mw.utils.PlayerSafeSet
 import org.bukkit.ChatColor
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -119,14 +120,14 @@ class TeamsManager : Listener {
         var list = ArrayList<Team>()
         list.addAll(Team.values())
         list.sortWith(java.util.Comparator { team, t1 ->
-            if (MegaWalls.getInstance().teamsManager.getTeamMembers(team!!).size < MegaWalls.getInstance().teamsManager.getTeamMembers(
+            if (MegaWalls.getInstance().teamsManager.getTeamMembers(team!!).size() < MegaWalls.getInstance().teamsManager.getTeamMembers(
                     t1!!
-                ).size
+                ).size()
             ) {
                 return@Comparator -1
-            } else if (MegaWalls.getInstance().teamsManager.getTeamMembers(team).size > MegaWalls.getInstance().teamsManager.getTeamMembers(
+            } else if (MegaWalls.getInstance().teamsManager.getTeamMembers(team).size() > MegaWalls.getInstance().teamsManager.getTeamMembers(
                     t1
-                ).size
+                ).size()
             ) {
                 return@Comparator 1
             }
@@ -162,8 +163,8 @@ class TeamsManager : Listener {
     /**
      * get all the members of a team.
      */
-    fun getTeamMembers(team: Team): HashSet<Player> {
-        var result = HashSet<Player>()
+    fun getTeamMembers(team: Team): PlayerSafeSet {
+        var result = PlayerSafeSet()
         for (player: Player in teamsMap.keys) {
             if (teamsMap.get(player) == team) result.add(player)
         }

@@ -3,6 +3,7 @@ package net.nuggetmc.mw.mwclass.classes
 import net.md_5.bungee.api.ChatColor
 import net.nuggetmc.mw.MegaWalls
 import net.nuggetmc.mw.mwclass.MWClass
+import net.nuggetmc.mw.mwclass.classes.MWMagician.Companion.inCloakCache
 import net.nuggetmc.mw.mwclass.info.Diamond
 import net.nuggetmc.mw.mwclass.info.MWClassInfo
 import net.nuggetmc.mw.mwclass.info.Playstyle
@@ -10,20 +11,24 @@ import net.nuggetmc.mw.mwclass.items.MWItem
 import net.nuggetmc.mw.mwclass.items.MWKit
 import net.nuggetmc.mw.mwclass.items.MWPotions
 import net.nuggetmc.mw.utils.ItemUtils
+import net.nuggetmc.mw.utils.PlayerSafeSet
 import org.bukkit.Bukkit
 import org.bukkit.DyeColor
+import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Arrow
 import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
+import org.bukkit.event.EventPriority
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import org.bukkit.scheduler.BukkitRunnable
+import org.bukkit.util.Vector
 import kotlin.math.absoluteValue
 import kotlin.math.cos
 import kotlin.math.sin
@@ -32,8 +37,8 @@ class MWAsn : MWClass() {
     var sc = HashMap<Player, Int>()
     var plugin = MegaWalls.getInstance()
     val dmgHandle = HashMap<Player, Double>()
-    private val shadowStepCache: HashSet<Player> = HashSet()
-    private val maCache: HashSet<Player> = HashSet()
+    private val shadowStepCache=PlayerSafeSet()
+    private val maCache=PlayerSafeSet()
 
     init {
         Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, { this.tickArrowCatch() }, 0, 1)
@@ -57,14 +62,14 @@ class MWAsn : MWClass() {
             "Master Alchemist",
             "When losing over 10 HP§7 within 1 §7second, you automatically drink a restorative shot §7granting Regeneration §aIII§7 for §a5§7 seconds.\n§7Cooldown: §a12s",
             "§7Arrow Catch",
-            " §7You will catch any arrows that are shot in §7the direction you are facing from an opponent, catching 1 arrow adds §a3§7 arrows to §7your inventory if it is not full"
+            " §7You will catch any arrows that are shot in §7the direction you are facing from an opponent."
         )
         classInfo.addEnergyGainType("Melee", 10)
         classInfo.addEnergyGainType("Bow", 10)
     }
 
     fun tickArrowCatch() {
-        for (p in plugin.combatManager.inCombatPlayers) {
+        /*for (p in plugin.combatManager.inCombatPlayers) {
             if (manager[p] == this) {
                 if (ItemUtils.isFullInventory(p.inventory)) {
                     continue
@@ -75,10 +80,54 @@ class MWAsn : MWClass() {
                             continue
                         }
                         e.remove()
-                        p.inventory.addItem(ItemStack(Material.ARROW, 1))
+                        //p.inventory.addItem(ItemStack(Material.ARROW, 1))
                     }
                 }
             }
+        }*/
+    }
+    companion object {
+        // 迎面角判定阈值：-0.5 对应前方约为 120° 扇形范围 (cos(120°) = -0.5)
+        private const val DOT_THRESHOLD = -0.5
+    }
+
+    @EventHandler
+    public fun onEntityDamageByEntity(e: EntityDamageByEntityEvent) {
+        if (e.entity !is Player) return
+        if (e.isCancelled) return
+        val victim= e.entity as? Player ?:return
+        if (manager[victim]==null) return
+        if (manager[victim]!=this) return
+        if (e.cause== EntityDamageEvent.DamageCause.SUICIDE) return
+        if (e.damager is Player && e.damager.uniqueId==victim.uniqueId){
+            return
+        }
+        if (e.isCancelled) return
+        // 3. 检查伤害来源是否为箭矢
+        val arrow = e.damager as? Arrow ?: return
+
+        // 4. 检查射手是否为敌方玩家
+        val shooter = arrow.shooter as? Player ?: return
+        if (shooter.uniqueId == victim.uniqueId ||(plugin.teamsManager.isOnSameTeam(shooter,victim))) return
+
+        // 5. 向量运算与角度判定
+        val arrowVelocity = arrow.velocity
+        // 忽略速度极小或静止的箭
+        if (arrowVelocity.lengthSquared() < 0.001) return
+
+        val playerFacing = victim.eyeLocation.direction.normalize()
+        val arrowDir = arrowVelocity.normalize()
+
+        // 点积计算：小于 -0.5 说明玩家视角与箭矢运动方向正对 (夹角大于 120°)
+        if (playerFacing.dot(arrowDir) < DOT_THRESHOLD) {
+            // 取消伤害事件
+            e.isCancelled = true
+
+            // 销毁飞来的箭矢
+            arrow.remove()
+
+            // 触发接箭成功反馈
+            //onCatchArrowSuccess(victim, shooter)
         }
     }
 
@@ -99,30 +148,8 @@ class MWAsn : MWClass() {
         if (!victim.isSneaking) return
         e.isCancelled = true
         shadowStepCache.add(victim)
-        val loc = player.location.clone()
-        val yaw = loc.yaw
-        val abs = yaw.absoluteValue
-        val amount = 2
-        when (abs) {
-            0.toFloat() -> loc.x -= amount
-            180.toFloat(), -180.toFloat() -> loc.x += amount
-            90.toFloat() -> loc.z -= amount
-            -90.toFloat() -> loc.z += amount
-        }
-        if (yaw < 0 && yaw > -90) {
-            loc.z -= sin(yaw)
-            loc.x -= cos(amount.toDouble())
-        } else if (yaw > 90 && yaw < 180) {
-            loc.z -= sin(yaw)
-            loc.x += cos(amount.toDouble())
-        } else if (yaw > 0 && yaw < 90) {
-            loc.z += sin(yaw)
-            loc.x -= cos(amount.toDouble())
-        } else if (yaw < -90 && yaw > -180) {
-            loc.z += sin(yaw)
-            loc.x += cos(amount.toDouble())
-        }
-        victim.teleport(loc)
+        val location = getLocationBehindPlayer(player,1.0)
+        victim.teleport(location)
         object : BukkitRunnable() {
             override fun run() {
                 shadowStepCache.remove(victim)
@@ -238,6 +265,22 @@ class MWAsn : MWClass() {
         dmgHandle.remove(player)
 
 
+    }
+    fun getLocationBehindPlayer(player: Player, distance: Double): Location {
+        // 1. 获取玩家当前的 Location（深拷贝）
+        val loc: Location = player.getLocation().clone()
+
+
+        // 2. 获取玩家朝向的单位向量
+        val direction: Vector = loc.getDirection()
+
+
+        // 3. 将 Y 轴归零并重新单位化，确保只在水平 X-Z 平面上移动
+        direction.setY(0).normalize()
+
+
+        // 4. 用玩家位置减去方向向量（即反方向移动 distance 格）
+        return loc.subtract(direction.multiply(distance))
     }
 
 

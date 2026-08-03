@@ -17,6 +17,7 @@ import net.nuggetmc.mw.mwclass.items.MWPotions
 import net.nuggetmc.mw.utils.ActionBar
 import net.nuggetmc.mw.utils.FakePlayer
 import net.nuggetmc.mw.utils.ParticleUtils
+import net.nuggetmc.mw.utils.PlayerSafeSet
 import net.nuggetmc.mw.utils.TitleUtils
 import org.bukkit.*
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer
@@ -46,10 +47,10 @@ import kotlin.math.sin
 class MWMagician : MWClass() {
     val plugin: MegaWalls = MegaWalls.getInstance()!!
     val energyManager = plugin.energyManager!!
-    val usedBluffOut=HashSet<Player> ()
-    val bluffOutCache=HashSet<Player> ()
-    val bluffOutCooldownCache=HashSet<Player> ()
-    val energyCostExemption = HashSet<Player>()
+    val usedBluffOut= PlayerSafeSet()
+    val bluffOutCache=PlayerSafeSet ()
+    val bluffOutCooldownCache=PlayerSafeSet ()
+    val energyCostExemption = PlayerSafeSet()
 
 
     init {
@@ -263,7 +264,7 @@ class MWMagician : MWClass() {
         return ActionBar.joinActionBar(echo,bluffOut,overflow)
     }
     companion object {
-        val inCloakCache = HashSet<Player>()
+        val inCloakCache = PlayerSafeSet()
         val overflowEnergyMap = HashMap<Player,Int>()
         @JvmStatic
         fun Player.consumeEnergy (amount:Int) :Boolean {

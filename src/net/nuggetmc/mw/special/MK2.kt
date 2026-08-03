@@ -3,6 +3,7 @@ package net.nuggetmc.mw.special
 import net.md_5.bungee.api.ChatColor
 import net.nuggetmc.mw.MegaWalls
 import net.nuggetmc.mw.utils.MathUtils
+import net.nuggetmc.mw.utils.PlayerSafeSet
 import net.nuggetmc.mw.utils.PlayerUtils.getNearbyEnemies
 import net.nuggetmc.mw.utils.PlayerUtils.getNearbyMobs
 import org.bukkit.Material
@@ -18,8 +19,8 @@ import org.bukkit.util.Vector
 
 class MK2 : Listener {
     val onPig : HashMap<Player, Horse> = HashMap()
-    val inCD : HashSet<Player> = HashSet()
-    val inAccelerate= HashSet<Player>()
+    val inCD =PlayerSafeSet()
+    val inAccelerate= PlayerSafeSet()
     val accelerateCD= HashMap<Player, Long>()
     fun launchPig(player: Player){
         val pig = PigManager.spawnInvinciblePig(player.location)

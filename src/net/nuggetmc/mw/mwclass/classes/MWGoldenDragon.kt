@@ -8,6 +8,7 @@ import net.nuggetmc.mw.mwclass.info.Playstyle
 import net.nuggetmc.mw.mwclass.items.MWItem
 import net.nuggetmc.mw.mwclass.items.MWKit
 import net.nuggetmc.mw.mwclass.items.MWPotions
+import net.nuggetmc.mw.utils.PlayerSafeSet
 import net.nuggetmc.mw.utils.PlayerUtils
 import org.bukkit.Material
 import org.bukkit.enchantments.Enchantment
@@ -24,7 +25,7 @@ class MWGoldenDragon : MWClass() {
     val energyManager = plugin.energyManager!!
 
     @get:Synchronized
-    val cdCache = HashSet<Player>()
+    val cdCache = PlayerSafeSet()
 
     init {
         name = arrayOf("GoldenDragon", "GOD")

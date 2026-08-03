@@ -10,6 +10,7 @@ import net.nuggetmc.mw.mwclass.info.Playstyle
 import net.nuggetmc.mw.mwclass.items.MWItem
 import net.nuggetmc.mw.mwclass.items.MWKit
 import net.nuggetmc.mw.mwclass.items.MWPotions
+import net.nuggetmc.mw.utils.PlayerSafeSet
 import org.bukkit.Bukkit
 import org.bukkit.Effect
 import org.bukkit.Material
@@ -28,10 +29,10 @@ import org.bukkit.scheduler.BukkitRunnable
 import kotlin.math.max
 
 class MWWereWolf : MWClass() {
-    val inAbility = HashSet<Player>()
+    val inAbility = PlayerSafeSet()
     val combo = HashMap<Player, Int>()
     val plugin = MegaWalls.getInstance()
-    val devourCooldown = HashSet<Player>()
+    val devourCooldown = PlayerSafeSet()
 
     init {
         name = arrayOf("WereWolf", "WER")
@@ -74,7 +75,7 @@ class MWWereWolf : MWClass() {
         Particle.play(player.location.add(0.0, 0.5, 0.0), Effect.EXPLOSION_LARGE)
         player.world.playSound(player.location, Sound.EXPLODE, 0.4f, 1.2f)
         var pass = false
-        val cache = HashSet<Player>()
+        val cache = PlayerSafeSet()
         for (victim in Bukkit.getOnlinePlayers()) {
             if (player.world !== victim.world) continue
             val loc = victim.location
@@ -89,7 +90,7 @@ class MWWereWolf : MWClass() {
         }
 
         if (pass) {
-            val heal = max(cache.size * 4, 12)
+            val heal = max(cache.size() * 4, 12)
             cache.forEach { p1 -> mwhealth.heal(p1, heal.toDouble()) }
 
             return

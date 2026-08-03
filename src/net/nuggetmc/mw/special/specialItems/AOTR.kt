@@ -4,6 +4,7 @@ import net.md_5.bungee.api.ChatColor
 import net.nuggetmc.mw.MegaWalls
 import net.nuggetmc.mw.special.SpecialEventsManager
 import net.nuggetmc.mw.utils.LocationUtils
+import net.nuggetmc.mw.utils.PlayerSafeSet
 import net.nuggetmc.mw.utils.PlayerUtils
 import org.bukkit.Bukkit
 import org.bukkit.Material
@@ -45,8 +46,8 @@ object AOTR : AbstractSpecialItem() {
         }
 
 
-    var aotrCD = HashSet<Player?>()
-    var inAotr = HashSet<Player?>()
+    var aotrCD = PlayerSafeSet()
+    var inAotr = PlayerSafeSet()
     @EventHandler
     fun onAOTR(e: PlayerInteractEvent) {
         val p = e.getPlayer()

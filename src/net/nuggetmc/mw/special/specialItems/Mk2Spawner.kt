@@ -1,6 +1,7 @@
 package net.nuggetmc.mw.special.specialItems
 
 import net.nuggetmc.mw.MegaWalls
+import net.nuggetmc.mw.utils.PlayerSafeSet
 import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.enchantments.Enchantment
@@ -21,7 +22,7 @@ object Mk2Spawner : AbstractSpecialItem() {
         get() = ChatColor.RED.toString()+ ChatColor.BOLD+"MK2 Spawner"
     override val lore: ArrayList<String>
         get() = arrayListOf("Right Click to spawn and ride a mk2!")
-    val inCooldown = HashSet<Player>()
+    val inCooldown = PlayerSafeSet()
     @EventHandler
     fun onClick(e: PlayerInteractEvent){
         val p = e.player
