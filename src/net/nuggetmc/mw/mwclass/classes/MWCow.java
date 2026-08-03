@@ -9,6 +9,7 @@ import net.nuggetmc.mw.mwclass.info.Playstyle;
 import net.nuggetmc.mw.mwclass.items.MWItem;
 import net.nuggetmc.mw.mwclass.items.MWKit;
 import net.nuggetmc.mw.mwclass.items.MWPotions;
+import net.nuggetmc.mw.utils.EventDumper;
 import net.nuggetmc.mw.utils.ItemUtils;
 import net.nuggetmc.mw.utils.PlayerSafeSet;
 import org.bukkit.Bukkit;
