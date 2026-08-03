@@ -1,8 +1,8 @@
 package net.nuggetmc.mw.utils
 
-import org.bukkit.entity.Arrow
 import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
+import org.bukkit.entity.Projectile
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 
 object EventDumper {
@@ -10,9 +10,9 @@ object EventDumper {
 
         val damager: Entity?
 
-        if (event.damager is Arrow) {
-            val arrow = event.damager as Arrow
-            damager = arrow.shooter as Entity?
+        if (event.damager is Projectile) {
+            val projectile = event.damager as Projectile
+            damager = projectile.shooter as Entity?
         } else {
             damager=event.damager
         }
@@ -21,11 +21,16 @@ object EventDumper {
 
         return damager
     }
-    fun dumpDamagerPlayer(event: EntityDamageByEntityEvent): Player?{
+    @JvmOverloads
+    fun dumpDamagerPlayer(event: EntityDamageByEntityEvent,requireVictimAlsoPlayer: Boolean =true): Player?{
         if (dumpDamager(event) !is Player){
             return null
         }else{
-            return dumpDamager(event) as Player
+            if (requireVictimAlsoPlayer&& event.entity !is Player){
+                return null
+            }
+
+            return dumpDamager(event) as? Player
         }
     }
 }

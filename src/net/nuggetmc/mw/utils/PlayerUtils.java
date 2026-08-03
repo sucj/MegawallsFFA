@@ -34,7 +34,7 @@ public class PlayerUtils {
         List<LivingEntity> mobs = new ArrayList<>();
         for (Entity e : location.getWorld()
                 .getNearbyEntities(location, radius, radius, radius)) {
-            if (e instanceof LivingEntity && e.getLocation().distance(location) <= radius)
+            if (e instanceof LivingEntity&&(!(e instanceof Player)) && e.getLocation().distance(location) <= radius)
                 mobs.add((LivingEntity) e);
         }
         return mobs;

@@ -69,7 +69,9 @@ class TeamsManager : Listener {
      * tell if players are in the same team.
      */
     fun isOnSameTeam(player: Player, player1: Player): Boolean {
-        if ((!plugin.combatManager.isInCombat(player)) || (!plugin.combatManager.isInCombat(player1))) return false
+        if ((!plugin.combatManager.isInCombat(player)) || (!plugin.combatManager.isInCombat(player1))) {
+            return false
+        }
         return getTeamOfPlayer(player) == getTeamOfPlayer(player1)
     }
 
@@ -150,7 +152,7 @@ class TeamsManager : Listener {
      * add a player in a team directly.
      */
     fun addTeam(player: Player, team: Team) {
-        teamsMap.put(player, team)
+        teamsMap[player] = team
     }
 
     /**

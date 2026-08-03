@@ -131,7 +131,7 @@ public class MWSkeleton extends MWClass {
         super.hit(event);
         if (event.isCancelled()) return;
 
-        Player player = (Player) EventDumper.INSTANCE.dumpDamager(event);
+        Player player = (Player) EventDumper.INSTANCE.dumpDamagerPlayer(event);
         if (player == null) return;
         if (manager.get(player) != this) return;
         if (!(event.getDamager() instanceof Arrow)) return;

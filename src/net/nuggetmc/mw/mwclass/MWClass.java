@@ -85,18 +85,17 @@ public abstract class MWClass implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onHit(EntityDamageByEntityEvent e) {
         if (e.isCancelled()) return;
-        Entity damager = EventDumper.INSTANCE.dumpDamager(e);
+        Player damager = EventDumper.INSTANCE.dumpDamagerPlayer(e);
         if (damager==null) return;
-        Player victim = (Player) e.getEntity();
-        if (manager.get((Player) damager)==this&& TargetManager.INSTANCE.isEnemy(victim,damager, TargetManager.TargetSelector.PLAYER)){
+        Entity victim = e.getEntity();
+        if (manager.get(damager)==this&& TargetManager.INSTANCE.isEnemy(damager,victim, TargetManager.TargetSelector.PLAYER)){
             assert e.getDamager() instanceof Player;
             this.hit(e);
         }
         if (AOTR.INSTANCE.getInAotr().contains(damager.getUniqueId())) {
-            Player damagerPlayer = (Player) damager;
-            damagerPlayer.sendMessage("You hit an enemy,so disabled your " + ChatColor.GOLD + "Speed Boost " + ChatColor.RESET + "ability!");
-            damagerPlayer.setWalkSpeed(0.2f);
-            AOTR.INSTANCE.getInAotr().remove(damagerPlayer);
+            damager.sendMessage("You hit an enemy,so disabled your " + ChatColor.GOLD + "Speed Boost " + ChatColor.RESET + "ability!");
+            damager.setWalkSpeed(0.2f);
+            AOTR.INSTANCE.getInAotr().remove(damager);
         }
 
     }

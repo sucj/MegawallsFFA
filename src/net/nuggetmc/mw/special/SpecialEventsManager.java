@@ -10,6 +10,7 @@ import net.nuggetmc.mw.mwclass.classes.MWCow;
 import net.nuggetmc.mw.mwclass.classes.MWMole;
 import net.nuggetmc.mw.special.specialItems.AOTR;
 import net.nuggetmc.mw.special.specialItems.Terminator;
+import net.nuggetmc.mw.utils.EventDumper;
 import net.nuggetmc.mw.utils.ItemUtils;
 import net.nuggetmc.mw.utils.ParticleUtils;
 import net.nuggetmc.mw.utils.PlayerUtils;
@@ -382,21 +383,8 @@ public class SpecialEventsManager implements Listener {
             return;
 
 
-        if (e.getDamager() instanceof Projectile) {
-            Projectile projectile = (Projectile) e.getDamager();
-            if (projectile.getShooter() instanceof Player) {
-
-                if (e.getEntity() instanceof Player) {
-                    if (plugin.getTeamsManager().isOnSameTeam(((Player) projectile.getShooter()).getPlayer(), ((Player) e.getEntity()).getPlayer())) {
-                        e.setCancelled(true);
-                    }
-                    if (projectile instanceof WitherSkull) {
-                        if (projectile.hasMetadata(MegaWalls.getMetadataValue())) {
-                            e.setCancelled(true);
-                        }
-                    }
-                }
-            }
+        if (Objects.requireNonNull(EventDumper.INSTANCE.dumpDamager(e)).getUniqueId().equals(e.getEntity().getUniqueId())){
+            e.setCancelled(true);
         }
     }
 

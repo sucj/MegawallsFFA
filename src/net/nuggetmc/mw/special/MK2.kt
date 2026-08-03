@@ -28,8 +28,6 @@ class MK2 : Listener {
         onPig[player] = pig
         object : BukkitRunnable() {
             var ticks = 0
-            var damaged: MutableList<Player> = ArrayList()
-            var damagedMobs: MutableList<LivingEntity> = ArrayList()
             override fun run() {
                 if (pig.isDead || player.isDead || pig.passenger==null||(!player.isOnline) /*|| ticks >= 600*/
                 ) {
@@ -42,22 +40,13 @@ class MK2 : Listener {
                 }
                 pig.velocity = player.eyeLocation.direction.multiply(if(inAccelerate.contains(player))1.5 else 1.0)
                 for (nearby in getNearbyEnemies(player, 5.toDouble())!!) {
-                    if (damaged.contains(nearby)) {
-                        continue
-                    }
-                    MegaWalls.getInstance().mwHealth.trueDamage(nearby,7.0,player)
-                    damaged.add(nearby)
+                    nearby.damage(6.0, player as Entity)
                 }
                 for (nearby in getNearbyMobs(player.location, 5.toDouble())!!) {
-                    if (damagedMobs.contains(nearby)) {
-                        continue
-                    }
                     if (nearby.uniqueId.equals(pig.uniqueId)){
                         continue
                     }
                     nearby.damage(6.0, player as Entity)
-                    //damagedMobs.add(nearby)
-                    //Bu
                 }
                 ++ticks
             }

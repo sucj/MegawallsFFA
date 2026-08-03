@@ -138,7 +138,7 @@ public class MWGuardian extends MWClass {
         if (e.isCancelled()) return;
         if (!(e.getEntity() instanceof Player)) return;
         
-        Player player = (Player) EventDumper.INSTANCE.dumpDamager(e);
+        Player player = EventDumper.INSTANCE.dumpDamagerPlayer(e);
         if (player == null) return;
         if (plugin.getTeamsManager().isOnSameTeam(player, (Player) e.getEntity())) return;
         if (manager.get(player) != this) {
@@ -179,7 +179,7 @@ public class MWGuardian extends MWClass {
         if (e.isCancelled()) return;
         if (!(e.getEntity() instanceof Player)) return;
 
-        Player player = (Player) EventDumper.INSTANCE.dumpDamager(e);
+        Player player = (Player) EventDumper.INSTANCE.dumpDamagerPlayer(e);
         if (player == null) return;
         if (manager.get(player) != this) {
             return;
