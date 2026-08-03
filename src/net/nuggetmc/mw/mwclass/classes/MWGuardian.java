@@ -11,10 +11,7 @@ import net.nuggetmc.mw.mwclass.items.MWItem;
 import net.nuggetmc.mw.mwclass.items.MWKit;
 import net.nuggetmc.mw.mwclass.items.MWPotions;
 import net.nuggetmc.mw.special.specialItems.MegaBreaker;
-import net.nuggetmc.mw.utils.ActionBar;
-import net.nuggetmc.mw.utils.ItemUtils;
-import net.nuggetmc.mw.utils.MathUtils;
-import net.nuggetmc.mw.utils.PlayerSafeSet;
+import net.nuggetmc.mw.utils.*;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -141,7 +138,7 @@ public class MWGuardian extends MWClass {
         if (e.isCancelled()) return;
         if (!(e.getEntity() instanceof Player)) return;
         
-        Player player = (Player) e.getDamager();
+        Player player = (Player) EventDumper.INSTANCE.dumpDamager(e);
         if (player == null) return;
         if (plugin.getTeamsManager().isOnSameTeam(player, (Player) e.getEntity())) return;
         if (manager.get(player) != this) {
@@ -181,8 +178,8 @@ public class MWGuardian extends MWClass {
     public void onMultiply(EntityDamageByEntityEvent e) {
         if (e.isCancelled()) return;
         if (!(e.getEntity() instanceof Player)) return;
-        
-        Player player = (Player) e.getDamager();
+
+        Player player = (Player) EventDumper.INSTANCE.dumpDamager(e);
         if (player == null) return;
         if (manager.get(player) != this) {
             return;
@@ -221,7 +218,7 @@ public class MWGuardian extends MWClass {
         super.hit(event);
         if (event.isCancelled()) return;
         
-        Player player = (Player) event.getDamager();
+        Player player = (Player) EventDumper.INSTANCE.dumpDamagerPlayer(event);
         if (player == null) return;
 
         if (manager.get(player) != this) return;

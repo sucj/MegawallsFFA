@@ -174,7 +174,7 @@ public class MWEnderman extends MWClass {
     public void hit(EntityDamageByEntityEvent event) {
         super.hit(event);
         if (event.isCancelled()) return;
-        Player player = (Player) event.getDamager();
+        Player player = (Player) EventDumper.INSTANCE.dumpDamagerPlayer(event);
         if (player == null) return;
 
         if (manager.get(player) != this) return;

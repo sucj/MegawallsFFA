@@ -44,27 +44,21 @@ public class MWHealth implements Listener {
     private void healthSetup(Player player) {
         energyManager.clear(player);
 
-        final Scoreboard board = Bukkit.getScoreboardManager().getNewScoreboard();
+        // 使用全局唯一的 Main Scoreboard，而不是 getNewScoreboard()
+        final Scoreboard board = Bukkit.getScoreboardManager().getMainScoreboard();
 
-        if (board.getObjective("health") != null) {
-            board.getObjective("health").unregister();
+        Objective obj = board.getObjective("hp");
+        if (obj == null) {
+            obj = board.registerNewObjective("hp", "health");
+            obj.setDisplayName(ChatColor.RED + "HP");
+            obj.setDisplaySlot(DisplaySlot.BELOW_NAME);
         }
 
-        final Objective obj = board.registerNewObjective("hp", "health");
-        obj.setDisplayName(ChatColor.RED + "HP");
-        obj.setDisplaySlot(DisplaySlot.BELOW_NAME);
+        // 注意：如果是 Main Scoreboard，原生 health 准则会自动更新血量，
+        // 通常不需要手动遍历所有人 setScore，系统会自动同步！
 
-        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
-            for (Player others : Bukkit.getOnlinePlayers()) {
-                Score health = obj.getScore(others.getName());
-
-                if (health.getScore() == 0) {
-                    health.setScore((int) others.getHealth());
-                }
-            }
-        }, 1);
-
-        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> player.setScoreboard(board), 2);
+        // 确保玩家应用了主计分板
+        player.setScoreboard(board);
     }
 
     @EventHandler

@@ -86,7 +86,7 @@ public class MWCow extends MWClass {
         super.hit(event);
         if (event.isCancelled()) return;
         
-        Player player = (Player) event.getDamager();
+        Player player = (Player) EventDumper.INSTANCE.dumpDamagerPlayer(event);
         if (player == null) return;
 
         if (manager.get(player) != this) return;

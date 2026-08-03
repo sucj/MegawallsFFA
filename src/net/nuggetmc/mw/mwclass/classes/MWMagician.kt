@@ -15,6 +15,7 @@ import net.nuggetmc.mw.mwclass.items.MWItem
 import net.nuggetmc.mw.mwclass.items.MWKit
 import net.nuggetmc.mw.mwclass.items.MWPotions
 import net.nuggetmc.mw.utils.ActionBar
+import net.nuggetmc.mw.utils.EventDumper
 import net.nuggetmc.mw.utils.FakePlayer
 import net.nuggetmc.mw.utils.ParticleUtils
 import net.nuggetmc.mw.utils.PlayerSafeSet
@@ -124,7 +125,7 @@ class MWMagician : MWClass() {
     override fun hit(event: EntityDamageByEntityEvent) {
         super.hit(event)
         if (event.isCancelled) return
-        val player = event.damager as? Player ?: return
+        val player = EventDumper.dumpDamagerPlayer(event) ?: return
         if (manager[player] == this) {
             if (inCloakCache.contains(player)){
                 event.isCancelled=true

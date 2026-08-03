@@ -10,6 +10,7 @@ import net.nuggetmc.mw.mwclass.info.Playstyle
 import net.nuggetmc.mw.mwclass.items.MWItem
 import net.nuggetmc.mw.mwclass.items.MWKit
 import net.nuggetmc.mw.mwclass.items.MWPotions
+import net.nuggetmc.mw.utils.EventDumper
 import net.nuggetmc.mw.utils.PlayerSafeSet
 import org.bukkit.Bukkit
 import org.bukkit.Effect
@@ -100,7 +101,7 @@ class MWWereWolf : MWClass() {
     override fun hit(event: EntityDamageByEntityEvent) {
         super.hit(event)
         if (event.isCancelled) return
-        val player = event.damager as? Player ?: return
+        val player = EventDumper.dumpDamagerPlayer(event) ?: return
         val victim = event.entity as Player
         if (manager[player] == this) {
 

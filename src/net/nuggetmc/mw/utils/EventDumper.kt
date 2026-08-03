@@ -21,4 +21,11 @@ object EventDumper {
 
         return damager
     }
+    fun dumpDamagerPlayer(event: EntityDamageByEntityEvent): Player?{
+        if (dumpDamager(event) !is Player){
+            return null
+        }else{
+            return dumpDamager(event) as Player
+        }
+    }
 }

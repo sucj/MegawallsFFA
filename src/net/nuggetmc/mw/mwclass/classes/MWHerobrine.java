@@ -9,6 +9,7 @@ import net.nuggetmc.mw.mwclass.items.MWItem;
 import net.nuggetmc.mw.mwclass.items.MWKit;
 import net.nuggetmc.mw.mwclass.items.MWPotions;
 import net.nuggetmc.mw.utils.ActionBar;
+import net.nuggetmc.mw.utils.EventDumper;
 import net.nuggetmc.mw.utils.PlayerSafeSet;
 import net.nuggetmc.mw.utils.PotionUtils;
 import org.bukkit.*;
@@ -98,7 +99,7 @@ public class MWHerobrine extends MWClass {
         super.hit(event);
         if (event.isCancelled()) return;
         
-        Player player = (Player) event.getDamager();
+        Player player = (Player) EventDumper.INSTANCE.dumpDamagerPlayer(event);
         if (player == null) return;
 
         if (manager.get(player) != this) return;

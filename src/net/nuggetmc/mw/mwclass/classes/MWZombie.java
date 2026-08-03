@@ -10,6 +10,7 @@ import net.nuggetmc.mw.mwclass.info.Playstyle;
 import net.nuggetmc.mw.mwclass.items.MWItem;
 import net.nuggetmc.mw.mwclass.items.MWKit;
 import net.nuggetmc.mw.mwclass.items.MWPotions;
+import net.nuggetmc.mw.utils.EventDumper;
 import net.nuggetmc.mw.utils.ParticleUtils;
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
@@ -105,7 +106,7 @@ public class MWZombie extends MWClass {
         super.hit(event);
         if (event.isCancelled()) return;
         
-        Player player = (Player) event.getDamager();
+        Player player = (Player) EventDumper.INSTANCE.dumpDamagerPlayer(event);
         if (player == null) return;
 
         if (manager.get(player) == this) {
