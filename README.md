@@ -26,7 +26,7 @@
 
 原因包括但可能不限于（这些是我能想起来的）：
 
-1. NametagAPI插件是经过修改的（为了应付插件更改Nametag的需求）。如果我还能找到原项目文件的话，以后会在这里补上仓库链接；
+1. NametagAPI插件是经过修改的（为了应付插件更改Nametag的需求）。请自行参考和比对[keaidehuangpi/NameTagAPIFORMWFFA](https://github.com/keaidehuangpi/NameTagAPIFORMWFFA)；
 
 2. spigot.jar服务端经过修改（全部都是对NMS作出的）。其中包括：
 
@@ -38,7 +38,7 @@
 
    - 对DataWatcher和EntityTrackerEntry两个类进行了修改，通过在数据发送的时候把血量放缩到合法范围内的方式修复了当凋灵血量太高时血条会溢出框内的问题。
 
-3. Scoreboardplus插件是经过修改的，为了能在计分板里正常显示需要的Megawalls数据。
+3. Scoreboardplus插件是经过修改的，为了能在计分板里正常显示需要的Megawalls数据。呃，经过查找我当时似乎是从字节码修改的，所以还是自行比对吧。
 
 ###### //well，这实在是太酷了，很符合我对过去生活的想象，原始并带着野蛮，不是吗？
 
