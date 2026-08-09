@@ -1,6 +1,6 @@
 # 本项目已开源并且可能不会再更新。
 
-这是一个由[horsenuggets (HorseNuggets)](https://github.com/horsenuggets)在2021年开发的项目，并由我在2022年fork并开始发展。中间经历了不到一年的开源在[keaidehuangpi/megawalls-hypixel: veryyyyyyy advanced Megawalls FFA plugin](https://github.com/keaidehuangpi/megawalls-hypixel)，随后原项目地址被archive，然后转向Gitee托管的闭源。
+这是一个由[horsenuggets (HorseNuggets)](https://github.com/horsenuggets)在2021年开发的项目，并由我在2022年fork并开始发展。中间经历了不到一年的开源在[keaidehuangpi/megawalls-hypixel: veryyyyyyy advanced Megawalls FFA plugin](https://github.com/keaidehuangpi/megawalls-hypixel)，随后原项目仓库被archive，然后转向Gitee托管的闭源。
 
 在它被放在服务器实例上运行的时间里，大部分时间都跑在mc.huiwow.top上，而后者几乎半公开地作为一个hvh服务器存在着，玩家群体很小，不超过百人。
 
@@ -65,6 +65,8 @@
 7. 构建工具与项目结构：完全基于IDEA，没有使用现代化的gradle。奇异搞笑地，这也是我懒得搞造成的。
 
 8. CombatManager并未完善：开发过程中因未知原因中道崩殂的一个设计，本意是防止玩家在与人战斗时打一半就切换职业，但由于出了bug且功能调用不明确，其调用实际上暂时由传统的manager.isMW（Player player）托管。
+
+9. PlayerSafeSet是为了防止内存溢出，需要使用UUID存储玩家而编写的类。然而，目前只实现了Set，而PlayerSafeMap只是编写了，而并没有得到测试和应用。
 
 ## 版权声明/提醒
 
