@@ -32,7 +32,7 @@
 
    - net.minecraft.server.v1_8_R3.ItemMilkBucket中原生删除了返还桶的机制;
 
-   - ItemPotion原生删除了返回药水的机制；
+   - ItemPotion原生删除了返回瓶子的机制；
 
    - EntityWither删除了半血以下免疫箭矢的机制；
 
